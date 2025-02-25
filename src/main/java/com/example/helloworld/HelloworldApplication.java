@@ -9,9 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 
 class Listing{
+  public String name;
   public String description;
-  public Listing(String desc){
+  public String location;
+  public float price;
+  public Listing(String name, String desc, String location, float price){
+    this.name=name;
     description=desc;
+    this.location=location;
+    this.price=price;
   }
 }
 
@@ -39,9 +45,10 @@ public class HelloworldApplication {
       }
     }
 
-    @RequestMapping(value="/listings", method = RequestMethod.GET)
-    List<Listing> listings(){
-      return Arrays.asList(new Listing("Lorem"), new Listing("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"));
+    @RequestMapping(value="/listings/{keyword}", method = RequestMethod.GET)
+    List<Listing> listings(@PathVariable("keyword") String keyword){
+      return Arrays.asList(new Listing("Castello di Hogwarts", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
+                            new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f));
     }
   }
 
