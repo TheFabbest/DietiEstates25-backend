@@ -15,8 +15,8 @@ public class HelloworldApplication {
   @RestController
   class HelloworldController {
     @GetMapping("/")
-    String hello() {
-      return "Hello " + name + "!";
+    String hello(String user) {
+      return "Hello " + user + "!";
     }
   }
 
