@@ -15,8 +15,19 @@ public class HelloworldApplication {
   @RestController
   class HelloworldController {
     @GetMapping("/")
-    String hello(String user) {
-      return "Hello " + user + "!";
+    String hello() {
+      return "Hello " + name + "!";
+    }
+
+    @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
+    String login(@PathVariable("user") String user, @PathVariable("password") String password){
+      if (user=="fab")
+      {
+        return "Login Success";
+      }
+      else {
+        return "Login Fail";
+      }
     }
   }
 
