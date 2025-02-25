@@ -5,6 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+class Listing{
+  public String description;
+  public Listing(String desc){
+    description=desc;
+  }
+}
+
 @SpringBootApplication
 public class HelloworldApplication {
 
@@ -27,6 +34,11 @@ public class HelloworldApplication {
       else {
         return "Username o password errati.";
       }
+    }
+
+    @RequestMapping(value="/listings", method = RequestMethod.GET)
+    List<Listing> listings(){
+      return Arrays.asList(new Listing("Lorem"), new Listing("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"));
     }
   }
 
