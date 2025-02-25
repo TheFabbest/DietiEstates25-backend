@@ -20,12 +20,12 @@ public class HelloworldApplication {
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
     String login(@PathVariable("user") String user, @PathVariable("password") String password){
-      if (user=="fab")
+      if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
-        return "Login Success";
+        return "OK";
       }
       else {
-        return "Login Fail";
+        return "Username o password errati.";
       }
     }
   }
