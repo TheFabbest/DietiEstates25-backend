@@ -59,8 +59,9 @@ public class HelloworldApplication {
 
     @GetMapping("/thumbnails/{filename}")
     public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws Exception {
-        Path path = Paths.get("./thumbnails/"+filename+".jpg");
-        Resource resource = new UrlResource(path.toUri());
+        // Path path = Paths.get("./thumbnails/"+filename+".jpg");
+        // Resource resource = new UrlResource(path.toUri());
+        Resource resource = new UrlResource("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hogwarts_(29353868725).jpg/1200px-Hogwarts_(29353868725).jpg");
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(resource);
