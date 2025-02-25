@@ -5,6 +5,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,10 +39,6 @@ public class HelloworldApplication {
 
   @RestController
   class HelloworldController {
-    @GetMapping("/")
-    String hello() {
-      return "Hello " + name + "!";
-    }
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
     String login(@PathVariable("user") String user, @PathVariable("password") String password){
@@ -46,9 +52,18 @@ public class HelloworldApplication {
     }
 
     @RequestMapping(value="/listings/{keyword}", method = RequestMethod.GET)
-    List<Listing> listings(@PathVariable("keyword") String keyword){
+    List<Listing> getListings(@PathVariable("keyword") String keyword){
       return Arrays.asList(new Listing("Castello di Hogwarts", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
                             new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f));
+    }
+
+    @GetMapping("/thumbnails/{filename}")
+    public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws Exception {
+        Path path = Paths.get("./thumbnails/"+filename+".jpg");
+        Resource resource = new UrlResource(path.toUri());
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(resource);
     }
   }
 
