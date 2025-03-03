@@ -42,30 +42,35 @@ class Listing{
 }
 
 class TokenHelper {
-  public static boolean validateToken(String token, UserDetails userDetails) {
+  private String secretKey;
+  public TokenHelper(String secretKey){
+    this.secretKey = secretKey;
+  }
+
+  public boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
     
-  private static boolean isTokenExpired(String token) {
+  private boolean isTokenExpired(String token) {
       final Date expiration = getExpirationDateFromToken(token);
       return expiration.before(new Date());
   }
   
-  public static String getUsernameFromToken(String token) {
+  public String getUsernameFromToken(String token) {
       return getClaimFromToken(token, Claims::getSubject);
   }
   
-  public static Date getExpirationDateFromToken(String token) {
+  public Date getExpirationDateFromToken(String token) {
       return getClaimFromToken(token, Claims::getExpiration);
   }
   
-  public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+  public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
       final Claims claims = getAllClaimsFromToken(token);
       return claimsResolver.apply(claims);
   }
   
-  private static Claims getAllClaimsFromToken(String token) {
+  private Claims getAllClaimsFromToken(String token) {
       return Jwts.parser()
               .setSigningKey(secretKey)
               .parseClaimsJws(token)
@@ -74,13 +79,14 @@ class TokenHelper {
 }
 
 class RefreshTokenRepository {
-  ArrayList<String> tokens = {};
-  public void Save(String newtoken) {
+  private ArrayList<String> static tokens = {};
+  protected static void Save(String newtoken) {
     tokens.Add(newtoken);
   }
 
-  public void deleteByUserId (String username) {
-    tokens.removeIf((String token) -> {return TokenHelper.getUsernameFromToken(token) == username;});
+  protected static void deleteByUserId (String username, String secretKey) {
+    TokenHelper helper = new TokenHelper(secretKey);
+    tokens.removeIf((String token) -> {return helper.getUsernameFromToken(token) == username;});
   }
 }
 
@@ -114,9 +120,10 @@ class AccessTokenProvider {
 
 @Component
 class RefreshTokenProvider {
-    @Autowired
-    private static RefreshTokenRepository refreshTokenRepository;
     
+    @Value("${jwt.secret}")
+    private static String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+
     @Value("${jwt.refresh.expiration}")
     private static Long refreshTokenDurationMs = 604800000l; // 7 days
     
@@ -137,9 +144,9 @@ class RefreshTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
         
-        refreshTokenRepository.deleteByUserId(username);
+        RefreshTokenRepository.deleteByUserId(username, secretKey);
         
-        return refreshTokenRepository.save(refreshToken);
+        return RefreshTokenRepository.save(refreshToken);
     }
     
     private static String generateSecureRandomString() {
