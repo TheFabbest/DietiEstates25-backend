@@ -189,8 +189,8 @@ public class HelloworldApplication {
     ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password){
       if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
-        String accessToken = accessTokenProvider.generateAccessToken(user);
-        String refreshToken = refreshTokenProvider.generateRefreshToken(user);
+        String accessToken = AccessTokenProvider.generateAccessToken(user);
+        String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       else {
