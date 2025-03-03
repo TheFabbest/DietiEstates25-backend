@@ -1,33 +1,27 @@
 package com.example.helloworld;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -47,8 +41,8 @@ class Listing{
 }
 
 class AuthResponse {
-    private String accessToken;
-    private String refreshToken;
+    private final String accessToken;
+    private final String refreshToken;
     
     public AuthResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
@@ -65,7 +59,7 @@ class AuthResponse {
 }
 
 class TokenHelper {
-  private String secretKey;
+  private final String secretKey;
   public TokenHelper(String secretKey){
     this.secretKey = secretKey;
   }
@@ -109,7 +103,7 @@ class RefreshTokenRepository {
 
   protected static void deleteByUserId (String username, String secretKey) {
     TokenHelper helper = new TokenHelper(secretKey);
-    tokens.removeIf((String token) -> {return helper.getUsernameFromToken(token) == username;});
+    tokens.removeIf((String token) -> {return helper.getUsernameFromToken(token).equals(username);});
   }
 }
 
@@ -117,10 +111,10 @@ class RefreshTokenRepository {
 class AccessTokenProvider {
 
     @Value("${jwt.secret}")
-    private static String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
 
     @Value("${jwt.access.expiration}")
-    private static Long accessTokenDurationMs = 3600000l; // 1 hour
+    private final static Long accessTokenDurationMs = 3600000l; // 1 hour
     
     public static String generateAccessToken(String username) {
         Date now = new Date();
@@ -145,10 +139,10 @@ class AccessTokenProvider {
 class RefreshTokenProvider {
     
     @Value("${jwt.secret}")
-    private static String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
 
     @Value("${jwt.refresh.expiration}")
-    private static Long refreshTokenDurationMs = 604800000l; // 7 days
+    private static final Long refreshTokenDurationMs = 604800000l; // 7 days
     
     public static String generateRefreshToken(String username) {
         Date now = new Date();
@@ -170,12 +164,6 @@ class RefreshTokenProvider {
         RefreshTokenRepository.deleteByUserId(username, secretKey);
         RefreshTokenRepository.save(refreshToken);
         return refreshToken;
-    }
-    
-    private static String generateSecureRandomString() {
-        byte[] randomBytes = new byte[64];
-        new SecureRandom().nextBytes(randomBytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 }
 
