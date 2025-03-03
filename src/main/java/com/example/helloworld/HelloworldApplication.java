@@ -80,7 +80,7 @@ class RefreshTokenRepository {
   }
 
   public void deleteByUserId (String username) {
-    tokens.removeIf((String token) => {return TokenHelper.getUsernameFromToken(token) == username;})
+    tokens.removeIf((String token) -> {return TokenHelper.getUsernameFromToken(token) == username;})
   }
 }
 
