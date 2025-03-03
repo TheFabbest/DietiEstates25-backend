@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.security.SecureRandom;
 import javafx.util.Pair;
 
 import io.jsonwebtoken.Claims;
@@ -80,8 +81,8 @@ class TokenHelper {
 
 class RefreshTokenRepository {
   private static ArrayList<String> tokens = {};
-  protected static void Save(String newtoken) {
-    tokens.Add(newtoken);
+  protected static void save(String newtoken) {
+    tokens.add(newtoken);
   }
 
   protected static void deleteByUserId (String username, String secretKey) {
