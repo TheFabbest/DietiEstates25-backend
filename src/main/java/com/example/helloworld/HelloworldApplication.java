@@ -79,7 +79,7 @@ class TokenHelper {
 }
 
 class RefreshTokenRepository {
-  private ArrayList<String> static tokens = {};
+  private static ArrayList<String> tokens = {};
   protected static void Save(String newtoken) {
     tokens.Add(newtoken);
   }
