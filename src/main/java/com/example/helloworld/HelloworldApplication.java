@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,49 @@ class Listing{
     description=desc;
     this.location=location;
     this.price=price;
+  }
+}
+
+class TokenHelper {
+  public static boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+  private static boolean isTokenExpired(String token) {
+      final Date expiration = getExpirationDateFromToken(token);
+      return expiration.before(new Date());
+  }
+  
+  public static String getUsernameFromToken(String token) {
+      return getClaimFromToken(token, Claims::getSubject);
+  }
+  
+  public static Date getExpirationDateFromToken(String token) {
+      return getClaimFromToken(token, Claims::getExpiration);
+  }
+  
+  public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+      final Claims claims = getAllClaimsFromToken(token);
+      return claimsResolver.apply(claims);
+  }
+  
+  private static Claims getAllClaimsFromToken(String token) {
+      return Jwts.parser()
+              .setSigningKey(secretKey)
+              .parseClaimsJws(token)
+              .getBody();
+  }
+}
+
+class RefreshTokenRepository {
+  ArrayList<String> tokens = {};
+  public void Save(String newtoken) {
+    tokens.Add(newtoken);
+  }
+
+  public void deleteByUserId (String username) {
+    tokens.removeIf((String token) => {return TokenHelper.getUsernameFromToken(token) == username;})
   }
 }
 
@@ -66,36 +110,6 @@ class AccessTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
-    
-    public static boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-    
-    private static boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-    
-    public static String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
-    }
-    
-    public static Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
-    }
-    
-    public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
-    
-    private static Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
-    }
 }
 
 @Component
@@ -106,15 +120,22 @@ class RefreshTokenProvider {
     @Value("${jwt.refresh.expiration}")
     private static Long refreshTokenDurationMs = 604800000l; // 7 days
     
-    public static RefreshToken generateRefreshToken(String username) {
-        String tokenValue = generateSecureRandomString();
+    public static String generateRefreshToken(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + refreshTokenDurationMs);
         
-        Instant expiryDate = Instant.now().plusMillis(refreshTokenDurationMs);
+        Map<String, Object> claims = new HashMap<>();
         
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(tokenValue);
-        refreshToken.setUserId(username);
-        refreshToken.setExpiryDate(expiryDate);
+        // claims.put("roles", userDetails.getAuthorities());
+        // claims.put("userId", user.getId());
+
+        String refreshToken = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
         
         refreshTokenRepository.deleteByUserId(username);
         
@@ -126,8 +147,6 @@ class RefreshTokenProvider {
         new SecureRandom().nextBytes(randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
-    
-    // Other refresh token methods (verify, find, etc.)
 }
 
 @SpringBootApplication
@@ -137,13 +156,13 @@ public class HelloworldApplication {
   class HelloworldController {
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
-    Pair<String,RefreshToken> login(@PathVariable("user") String user, @PathVariable("password") String password){
+    Pair<String,String> login(@PathVariable("user") String user, @PathVariable("password") String password){
       if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
-        return new Pair<String, RefreshToken> (AccessTokenProvider.generateAccessToken(user), RefreshTokenProvider.generateRefreshToken(user));
+        return new Pair<String, String> (AccessTokenProvider.generateAccessToken(user), RefreshTokenProvider.generateRefreshToken(user));
       }
       else {
-        return new Pair<String, RefreshToken> ("","");
+        return new Pair<String, String> ("","");
       }
     }
 
