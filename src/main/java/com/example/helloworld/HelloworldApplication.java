@@ -11,10 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -23,7 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.security.SecureRandom;
-import javafx.util.Pair;
+import java.util.Base64;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -42,6 +46,24 @@ class Listing{
   }
 }
 
+class AuthResponse {
+    private String accessToken;
+    private String refreshToken;
+    
+    public AuthResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+    
+    public String getAccessToken() {
+        return accessToken;
+    }
+    
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+}
+
 class TokenHelper {
   private String secretKey;
   public TokenHelper(String secretKey){
@@ -49,38 +71,38 @@ class TokenHelper {
   }
 
   public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
+    final String username = getUsernameFromToken(token);
+    return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  }
     
   private boolean isTokenExpired(String token) {
-      final Date expiration = getExpirationDateFromToken(token);
-      return expiration.before(new Date());
+    final Date expiration = getExpirationDateFromToken(token);
+    return expiration.before(new Date());
   }
   
   public String getUsernameFromToken(String token) {
-      return getClaimFromToken(token, Claims::getSubject);
+    return getClaimFromToken(token, Claims::getSubject);
   }
   
   public Date getExpirationDateFromToken(String token) {
-      return getClaimFromToken(token, Claims::getExpiration);
+    return getClaimFromToken(token, Claims::getExpiration);
   }
   
   public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-      final Claims claims = getAllClaimsFromToken(token);
-      return claimsResolver.apply(claims);
+    final Claims claims = getAllClaimsFromToken(token);
+    return claimsResolver.apply(claims);
   }
   
   private Claims getAllClaimsFromToken(String token) {
-      return Jwts.parser()
-              .setSigningKey(secretKey)
-              .parseClaimsJws(token)
-              .getBody();
+    return Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody();
   }
 }
 
 class RefreshTokenRepository {
-  private static ArrayList<String> tokens = {};
+  private final static ArrayList<String> tokens = new ArrayList();
   protected static void save(String newtoken) {
     tokens.add(newtoken);
   }
@@ -146,8 +168,8 @@ class RefreshTokenProvider {
                 .compact();
         
         RefreshTokenRepository.deleteByUserId(username, secretKey);
-        
-        return RefreshTokenRepository.save(refreshToken);
+        RefreshTokenRepository.save(refreshToken);
+        return refreshToken;
     }
     
     private static String generateSecureRandomString() {
@@ -164,13 +186,15 @@ public class HelloworldApplication {
   class HelloworldController {
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
-    Pair<String,String> login(@PathVariable("user") String user, @PathVariable("password") String password){
+    ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password){
       if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
-        return new Pair<String, String> (AccessTokenProvider.generateAccessToken(user), RefreshTokenProvider.generateRefreshToken(user));
+        String accessToken = accessTokenProvider.generateAccessToken(user);
+        String refreshToken = refreshTokenProvider.generateRefreshToken(user);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       else {
-        return new Pair<String, String> ("","");
+        return ResponseEntity.status(401).body("Invalid credentials");
       }
     }
 
