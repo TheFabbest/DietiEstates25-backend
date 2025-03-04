@@ -193,7 +193,7 @@ public class HelloworldApplication {
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenziali non valide");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.TEXT_PLAIN).body("Credenziali non valide");
       }
     }
 
