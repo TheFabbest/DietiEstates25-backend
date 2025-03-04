@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -184,7 +185,7 @@ public class HelloworldApplication {
   class HelloworldController {
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
-    ResponseEntity login(@PathVariable("user") String user, @PathVariable("password") String password){
+    ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password){
       if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
         String accessToken = AccessTokenProvider.generateAccessToken(user);
@@ -192,11 +193,7 @@ public class HelloworldApplication {
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       else {
-        ResponseEntity response = ResponseEntity.status(401).body("Credenziali non valide");
-        System.out.println("HERE RESPONSE");
-        System.out.println(response);
-        System.out.println(response.getBody());
-        return response;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenziali non valide");
       }
     }
 
