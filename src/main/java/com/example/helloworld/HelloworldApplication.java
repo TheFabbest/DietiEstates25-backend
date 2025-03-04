@@ -16,7 +16,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,9 +64,9 @@ class TokenHelper {
     this.secretKey = secretKey;
   }
 
-  public boolean validateToken(String token, UserDetails userDetails) {
+  public boolean validateToken(String token, String supposedUsername) {
     final String username = getUsernameFromToken(token);
-    return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    return (username.equals(supposedUsername) && !isTokenExpired(token));
   }
     
   private boolean isTokenExpired(String token) {
