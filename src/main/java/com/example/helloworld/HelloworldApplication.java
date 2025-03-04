@@ -121,7 +121,7 @@ class RefreshTokenRepository {
 class AccessTokenProvider {
 
     @Value("${jwt.secret}")
-    private static final String SECRET_KEY = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String SECRET_KEY = "UjRoSEFoSVNtQzVUcGJaZVRJMmgxaVhlSm81THhHajVob0M4SWFsaUJ6YnNvZzZ1WklSNkxTUnhaUjJ6UEMzVQ==";
 
     @Value("${jwt.access.expiration}")
     private final static Long ACCESS_TOKEN_DURATION_MS = 3600000l; // 1 hour
@@ -149,7 +149,7 @@ class AccessTokenProvider {
 class RefreshTokenProvider {
     
     @Value("${jwt.secret}")
-    private static final String SECRET_KEY = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String SECRET_KEY = "UjRoSEFoSVNtQzVUcGJaZVRJMmgxaVhlSm81THhHajVob0M4SWFsaUJ6YnNvZzZ1WklSNkxTUnhaUjJ6UEMzVQ==";
 
     @Value("${jwt.refresh.expiration}")
     private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
