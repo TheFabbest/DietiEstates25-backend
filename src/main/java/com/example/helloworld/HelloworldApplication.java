@@ -1,8 +1,5 @@
 package com.example.helloworld;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +22,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 class Listing{
   public String name;
@@ -182,7 +184,7 @@ public class HelloworldApplication {
   class HelloworldController {
 
     @RequestMapping(value="/login/{user}/{password}", method = RequestMethod.GET)
-    ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password){
+    ResponseEntity login(@PathVariable("user") String user, @PathVariable("password") String password){
       if (user.equalsIgnoreCase("fab") && password.equals("fab"))
       {
         String accessToken = AccessTokenProvider.generateAccessToken(user);
@@ -190,7 +192,7 @@ public class HelloworldApplication {
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       else {
-        return ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.status(401).body("Credenziali non valide");
       }
     }
 
