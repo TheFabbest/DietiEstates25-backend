@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,6 +68,11 @@ class TokenHelper {
   public boolean validateToken(String token, String supposedUsername) {
     final String username = getUsernameFromToken(token);
     return (username.equals(supposedUsername) && !isTokenExpired(token));
+  }
+
+  // TODO check safety
+  public boolean validateToken(String token) {
+    return !isTokenExpired(token);
   }
     
   private boolean isTokenExpired(String token) {
@@ -132,9 +138,6 @@ class AccessTokenProvider {
         
         Map<String, Object> claims = new HashMap<>();
         
-        // claims.put("roles", userDetails.getAuthorities());
-        // claims.put("userId", user.getId());
-        
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
@@ -142,6 +145,11 @@ class AccessTokenProvider {
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+
+    public static boolean validateToken(String token){
+      TokenHelper th = new TokenHelper(SECRET_KEY);
+      return th.validateToken(token);
     }
 }
 
@@ -154,14 +162,11 @@ class RefreshTokenProvider {
     @Value("${jwt.refresh.expiration}")
     private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
     
-    public static String generateRefreshToken(String username) {
+    protected static String generateRefreshToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_DURATION_MS);
         
         Map<String, Object> claims = new HashMap<>();
-        
-        // claims.put("roles", userDetails.getAuthorities());
-        // claims.put("userId", user.getId());
 
         String refreshToken = Jwts.builder()
                 .setClaims(claims)
@@ -174,6 +179,16 @@ class RefreshTokenProvider {
         RefreshTokenRepository.deleteByUserId(username, SECRET_KEY);
         RefreshTokenRepository.save(refreshToken);
         return refreshToken;
+    }
+
+    protected static boolean validateToken(String token){
+      TokenHelper th = new TokenHelper(SECRET_KEY);
+      return th.validateToken(token);
+    }
+
+    protected static String getUsernameFromToken(String token){
+      TokenHelper helper = new TokenHelper(SECRET_KEY);
+      return helper.getUsernameFromToken(token);
     }
 }
 
@@ -195,9 +210,29 @@ public class HelloworldApplication {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.TEXT_PLAIN).body("Credenziali non valide");
       }
     }
+    
+    @RequestMapping(value="/signupcredentials/{user}/{password}", method = RequestMethod.POST)
+    ResponseEntity<?> signupCredentials(@PathVariable("user") String user, @PathVariable("password") String password){
+      // TODO verify email and check for existence, create user.
+      String accessToken = AccessTokenProvider.generateAccessToken(user);
+      String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
+      return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+    }
+
+    @RequestMapping(value="/refresh", method = RequestMethod.POST)
+    ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader){
+      String oldRefreshToken = authorizationHeader.replace("Bearer ", "");
+      String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
+      String accessToken = AccessTokenProvider.generateAccessToken(user);
+      return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
+    }
 
     @RequestMapping(value="/listings/{keyword}", method = RequestMethod.GET)
-    List<Listing> getListings(@PathVariable("keyword") String keyword){
+    List<Listing> getListings(@PathVariable("keyword") String keyword, @RequestHeader("Authorization") String authorizationHeader){
+      String accessToken = authorizationHeader.replace("Bearer ", "");
+      if (!AccessTokenProvider.validateToken(accessToken)) {
+        return Arrays.asList();
+      }
       return Arrays.asList(new Listing("Castello di Hogwarts", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
                             new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f));
     }
