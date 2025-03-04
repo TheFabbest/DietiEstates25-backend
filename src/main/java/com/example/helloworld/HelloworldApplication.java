@@ -1,5 +1,8 @@
 package com.example.helloworld;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -7,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +24,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 class Listing{
   public String name;
@@ -96,7 +94,7 @@ class TokenHelper {
 }
 
 class RefreshTokenRepository {
-  private final static ArrayList<String> tokens = new ArrayList();
+  private final static ArrayList<String> tokens = new ArrayList<>();
   protected static void save(String newtoken) {
     tokens.add(newtoken);
   }
@@ -105,20 +103,30 @@ class RefreshTokenRepository {
     TokenHelper helper = new TokenHelper(secretKey);
     tokens.removeIf((String token) -> {return helper.getUsernameFromToken(token).equals(username);});
   }
+
+  protected static String getTokenByUserId(String username, String secretKey) {
+    TokenHelper helper = new TokenHelper(secretKey);
+    for (String t: tokens){
+      if (helper.getUsernameFromToken(t).equals(username)){
+        return t;
+      }
+    }
+    return null;
+  }
 }
 
 @Component
 class AccessTokenProvider {
 
     @Value("${jwt.secret}")
-    private static final String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String SECRET_KEY = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
 
     @Value("${jwt.access.expiration}")
-    private final static Long accessTokenDurationMs = 3600000l; // 1 hour
+    private final static Long ACCESS_TOKEN_DURATION_MS = 3600000l; // 1 hour
     
     public static String generateAccessToken(String username) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + accessTokenDurationMs);
+        Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_DURATION_MS);
         
         Map<String, Object> claims = new HashMap<>();
         
@@ -130,7 +138,7 @@ class AccessTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
 }
@@ -139,14 +147,14 @@ class AccessTokenProvider {
 class RefreshTokenProvider {
     
     @Value("${jwt.secret}")
-    private static final String secretKey = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
+    private static final String SECRET_KEY = "R4hHAhISmC5TpbZeTI2h1iXeJo5LxGj5hoC8IaliBzbsog6uZIR6LSRxZR2zPC3U";
 
     @Value("${jwt.refresh.expiration}")
-    private static final Long refreshTokenDurationMs = 604800000l; // 7 days
+    private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
     
     public static String generateRefreshToken(String username) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + refreshTokenDurationMs);
+        Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_DURATION_MS);
         
         Map<String, Object> claims = new HashMap<>();
         
@@ -158,10 +166,10 @@ class RefreshTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
         
-        RefreshTokenRepository.deleteByUserId(username, secretKey);
+        RefreshTokenRepository.deleteByUserId(username, SECRET_KEY);
         RefreshTokenRepository.save(refreshToken);
         return refreshToken;
     }
