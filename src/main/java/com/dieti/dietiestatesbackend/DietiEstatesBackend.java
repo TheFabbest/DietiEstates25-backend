@@ -30,7 +30,7 @@ class DietiEstatesBackend {
   class Controller {
 
     @RequestMapping(value = "/login/{user}/{password}", method = RequestMethod.GET)
-    ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password) {
+    public ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password) {
       if (user.equalsIgnoreCase("fab") && password.equals("fab")) {
         String accessToken = AccessTokenProvider.generateAccessToken(user);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
@@ -42,7 +42,7 @@ class DietiEstatesBackend {
     }
 
     @RequestMapping(value = "/signupcredentials/{user}/{password}", method = RequestMethod.POST)
-    ResponseEntity<?> signupCredentials(@PathVariable("user") String user, @PathVariable("password") String password) {
+    public ResponseEntity<?> signupCredentials(@PathVariable("user") String user, @PathVariable("password") String password) {
       // TODO verify email and check for existence, create user.
       String accessToken = AccessTokenProvider.generateAccessToken(user);
       String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
@@ -50,7 +50,7 @@ class DietiEstatesBackend {
     }
     
     @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
-    ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
       try {
         GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
         
@@ -67,7 +67,7 @@ class DietiEstatesBackend {
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
-    ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader) {
       String oldRefreshToken = authorizationHeader.replace("Bearer ", ""); // TODO this gets access token, not refresh one
       String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
       if (RefreshTokenProvider.isTokenOf(user,oldRefreshToken)){
@@ -79,7 +79,7 @@ class DietiEstatesBackend {
     }
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
-    List<Listing> getListings(@PathVariable("keyword") String keyword,
+    public List<Listing> getListings(@PathVariable("keyword") String keyword,
         @RequestHeader("Authorization") String authorizationHeader) {
       String accessToken = authorizationHeader.replace("Bearer ", "");
       if (!AccessTokenProvider.validateToken(accessToken)) {
@@ -91,7 +91,7 @@ class DietiEstatesBackend {
     }
 
     @GetMapping("/thumbnails/{filename}")
-    ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws Exception {
+    public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws Exception {
       // Path path = Paths.get("./thumbnails/"+filename+".jpg");
       // Resource resource = new UrlResource(path.toUri());
       Resource resource = new UrlResource(
