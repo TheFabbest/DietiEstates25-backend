@@ -1,5 +1,7 @@
 package com.dieti.dietiestatesbackend;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,9 +26,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+class GoogleTokenValidator {
+  public static GoogleIdToken.Payload validateToken(String idTokenString) throws GeneralSecurityException, IOException {
+    final String ANDROID_ID = "68500182941-q8cp0sg6nvpq4tpr3ct30invplj34ets.apps.googleusercontent.com";
+    final String WEB_ID = "68500182941-19rccqu4iigg9mcj062rf3t9blgjg5h5.apps.googleusercontent.com";
+    List<String> audience = Arrays.asList(WEB_ID, ANDROID_ID);
+    
+    GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+        new NetHttpTransport(),
+        new GsonFactory())
+        .setAudience(audience)
+        .build();
+
+    GoogleIdToken idToken = verifier.verify(idTokenString);
+    if (idToken != null) {
+      return idToken.getPayload();
+    } else {
+      throw new SecurityException("Invalid ID token.");
+    }
+  }
+}
 
 class Listing {
   private final String name;
@@ -238,10 +266,28 @@ public class DietiEstatesBackend {
       String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
       return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
+    
+    @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
+    ResponseEntity<?> authWithGoogle(@RequestHeader("Authorization") String authorizationHeader) {
+      try {
+        String token = authorizationHeader.replace("Bearer ", "");
+        GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(token);
+        
+        // TODO create user if needed
+        String email = payload.getEmail();
+        String accessToken = AccessTokenProvider.generateAccessToken(email);
+        String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+      } catch (IOException | GeneralSecurityException e) {
+          System.err.println("Token validation failed: " + e.getMessage());
+          return ResponseEntity.status(498)
+            .body("Token Google non valido.");
+      }
+    }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader) {
-      String oldRefreshToken = authorizationHeader.replace("Bearer ", "");
+      String oldRefreshToken = authorizationHeader.replace("Bearer ", ""); // TODO this gets access token, not refresh one
       String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
       String accessToken = AccessTokenProvider.generateAccessToken(user);
       return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
