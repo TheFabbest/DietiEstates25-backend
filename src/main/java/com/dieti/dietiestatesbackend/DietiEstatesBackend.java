@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -268,9 +269,8 @@ public class DietiEstatesBackend {
     }
     
     @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
-    ResponseEntity<?> authWithGoogle(@RequestHeader("Authorization") String authorizationHeader) {
+    ResponseEntity<?> authWithGoogle(@RequestBody String token) {
       try {
-        String token = authorizationHeader.replace("Bearer ", "");
         GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(token);
         
         // TODO create user if needed
