@@ -29,11 +29,13 @@ public class DietiEstatesBackend {
   @RestController
   class Controller {
 
-    @RequestMapping(value = "/login/{user}/{password}", method = RequestMethod.GET)
-    public ResponseEntity<?> login(@PathVariable("user") String user, @PathVariable("password") String password) {
-      if (user.equalsIgnoreCase("fab") && password.equals("fab")) {
-        String accessToken = AccessTokenProvider.generateAccessToken(user);
-        String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+      String email = body.get("email");
+      String password = body.get("password");
+      if (email.equalsIgnoreCase("fab") && password.equals("fab")) {
+        String accessToken = AccessTokenProvider.generateAccessToken(email);
+        String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       } else {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.TEXT_PLAIN)

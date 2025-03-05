@@ -1,14 +1,17 @@
 package com.dieti.dietiestatesbackend;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 class RefreshTokenProvider {
@@ -24,13 +27,14 @@ class RefreshTokenProvider {
     Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_DURATION_MS);
 
     Map<String, Object> claims = new HashMap<>();
+    SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     String refreshToken = Jwts.builder()
         .setClaims(claims)
         .setSubject(username)
         .setIssuedAt(now)
         .setExpiration(expiryDate)
-        .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+        .signWith(key)
         .compact();
 
     RefreshTokenRepository.deleteByUserId(username, SECRET_KEY);
