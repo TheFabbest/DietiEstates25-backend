@@ -8,11 +8,11 @@
 		<version>3.3.5</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>helloworld</artifactId>
+	<groupId>com.dieti</groupId>
+	<artifactId>dietiestatesbackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>helloworld</name>
-	<description>Demo project for Spring Boot</description>
+	<name>DietiEstatesBackend</name>
+	<description>Backend for DietiEstates25</description>
 	<url/>
 	<licenses>
 		<license/>
