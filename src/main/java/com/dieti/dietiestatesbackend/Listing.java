@@ -12,4 +12,20 @@ class Listing {
     this.location = location;
     this.price = price;
   }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public float getPrice() {
+        return price;
+    }
 }

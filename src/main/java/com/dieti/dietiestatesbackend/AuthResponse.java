@@ -8,4 +8,12 @@ class AuthResponse {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
   }
+
+  public String getAccessToken() {
+    return accessToken;
+  }
+
+  public String getRefreshToken() {
+    return refreshToken;
+  }
 }
