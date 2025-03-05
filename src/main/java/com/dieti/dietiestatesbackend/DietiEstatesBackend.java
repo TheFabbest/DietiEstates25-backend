@@ -269,9 +269,9 @@ public class DietiEstatesBackend {
     }
     
     @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
-    ResponseEntity<?> authWithGoogle(@RequestBody String token) {
+    ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
       try {
-        GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(token);
+        GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
         
         // TODO create user if needed
         String email = payload.getEmail();
