@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 @SpringBootApplication
-class DietiEstatesBackend {
+public class DietiEstatesBackend {
 
   @RestController
   class Controller {
