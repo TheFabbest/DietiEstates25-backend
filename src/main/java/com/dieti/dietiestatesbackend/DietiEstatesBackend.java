@@ -67,8 +67,8 @@ public class DietiEstatesBackend {
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
-    public ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader) {
-      String oldRefreshToken = authorizationHeader.replace("Bearer ", ""); // TODO this gets access token, not refresh one
+    public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> body) {
+      String oldRefreshToken = body.get("refreshToken");
       String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
       if (RefreshTokenProvider.isTokenOf(user,oldRefreshToken)){
         String accessToken = AccessTokenProvider.generateAccessToken(user);
