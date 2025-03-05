@@ -17,7 +17,7 @@ class AccessTokenProvider {
   private final static String SECRET_KEY = "UjRoSEFoSVNtQzVUcGJaZVRJMmgxaVhlSm81THhHajVob0M4SWFsaUJ6YnNvZzZ1WklSNkxTUnhaUjJ6UEMzVQ==";
 
   @Value("${jwt.access.expiration}")
-  private final static Long ACCESS_TOKEN_DURATION_MS = 3600000l; // 1 hour
+  private final static Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
 
   static String generateAccessToken(String username) {
     Date now = new Date();

@@ -70,8 +70,12 @@ class DietiEstatesBackend {
     ResponseEntity<?> refreshAccessToken(@RequestHeader("Authorization") String authorizationHeader) {
       String oldRefreshToken = authorizationHeader.replace("Bearer ", ""); // TODO this gets access token, not refresh one
       String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-      String accessToken = AccessTokenProvider.generateAccessToken(user);
-      return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
+      if (RefreshTokenProvider.isTokenOf(user,oldRefreshToken)){
+        String accessToken = AccessTokenProvider.generateAccessToken(user);
+        return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
+      }
+      return ResponseEntity.status(498)
+      .body("Il refresh token non appartiene a questo utente.");
     }
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
