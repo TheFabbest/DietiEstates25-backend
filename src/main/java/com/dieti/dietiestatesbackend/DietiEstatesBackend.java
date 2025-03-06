@@ -43,11 +43,13 @@ public class DietiEstatesBackend {
       }
     }
 
-    @RequestMapping(value = "/signupcredentials/{user}/{password}", method = RequestMethod.POST)
-    public ResponseEntity<?> signupCredentials(@PathVariable("user") String user, @PathVariable("password") String password) {
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
+      String email = body.get("email");
+      String password = body.get("password");
       // TODO verify email and check for existence, create user.
-      String accessToken = AccessTokenProvider.generateAccessToken(user);
-      String refreshToken = RefreshTokenProvider.generateRefreshToken(user);
+      String accessToken = AccessTokenProvider.generateAccessToken(email);
+      String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
       return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
     
