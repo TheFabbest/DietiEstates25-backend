@@ -5,7 +5,7 @@
 -- Dumped from database version 16.1
 -- Dumped by pg_dump version 16.1
 
--- Started on 2025-03-05 23:48:06
+-- Started on 2025-03-06 22:49:42
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,7 +29,7 @@ CREATE SCHEMA "DietiEstates2025";
 ALTER SCHEMA "DietiEstates2025" OWNER TO postgres;
 
 --
--- TOC entry 5081 (class 0 OID 0)
+-- TOC entry 5076 (class 0 OID 0)
 -- Dependencies: 7
 -- Name: SCHEMA "DietiEstates2025"; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -99,7 +99,8 @@ CREATE TYPE "DietiEstates2025".stato_offerta AS ENUM (
     'In attesa',
     'Accettata',
     'Rifiutata',
-    'Ribattuta'
+    'Ribattuta',
+    'Ritirata'
 );
 
 
@@ -162,7 +163,7 @@ CREATE SEQUENCE "DietiEstates2025"."Agenzia_idagenzia_seq"
 ALTER SEQUENCE "DietiEstates2025"."Agenzia_idagenzia_seq" OWNER TO postgres;
 
 --
--- TOC entry 5082 (class 0 OID 0)
+-- TOC entry 5077 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: Agenzia_idagenzia_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -171,22 +172,7 @@ ALTER SEQUENCE "DietiEstates2025"."Agenzia_idagenzia_seq" OWNED BY "DietiEstates
 
 
 --
--- TOC entry 250 (class 1259 OID 83086)
--- Name: appartamento; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
---
-
-CREATE TABLE "DietiEstates2025".appartamento (
-    id integer NOT NULL,
-    piano character varying NOT NULL,
-    "è_ultimo_piano" boolean DEFAULT false,
-    ha_ascensore boolean DEFAULT false
-);
-
-
-ALTER TABLE "DietiEstates2025".appartamento OWNER TO postgres;
-
---
--- TOC entry 254 (class 1259 OID 83135)
+-- TOC entry 252 (class 1259 OID 83135)
 -- Name: autorimessa; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -200,21 +186,6 @@ CREATE TABLE "DietiEstates2025".autorimessa (
 
 
 ALTER TABLE "DietiEstates2025".autorimessa OWNER TO postgres;
-
---
--- TOC entry 251 (class 1259 OID 83100)
--- Name: casa; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
---
-
-CREATE TABLE "DietiEstates2025".casa (
-    id integer NOT NULL,
-    piani character varying[] NOT NULL,
-    numero_piani integer DEFAULT 1,
-    CONSTRAINT valid_numero_piani CHECK ((numero_piani > 0))
-);
-
-
-ALTER TABLE "DietiEstates2025".casa OWNER TO postgres;
 
 --
 -- TOC entry 244 (class 1259 OID 82851)
@@ -248,7 +219,7 @@ CREATE SEQUENCE "DietiEstates2025".categoria_immobile_id_seq
 ALTER SEQUENCE "DietiEstates2025".categoria_immobile_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5083 (class 0 OID 0)
+-- TOC entry 5078 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: categoria_immobile_id_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -287,7 +258,7 @@ CREATE SEQUENCE "DietiEstates2025".contratto_idcontratto_seq
 ALTER SEQUENCE "DietiEstates2025".contratto_idcontratto_seq OWNER TO postgres;
 
 --
--- TOC entry 5084 (class 0 OID 0)
+-- TOC entry 5079 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: contratto_idcontratto_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -302,7 +273,6 @@ ALTER SEQUENCE "DietiEstates2025".contratto_idcontratto_seq OWNED BY "DietiEstat
 
 CREATE TABLE "DietiEstates2025".immobile (
     id integer NOT NULL,
-    todoindirizzo character varying NOT NULL,
     description text,
     prezzo numeric(12,2) NOT NULL,
     superficie integer NOT NULL,
@@ -311,9 +281,11 @@ CREATE TABLE "DietiEstates2025".immobile (
     stato_immobile "DietiEstates2025".stato_immobile NOT NULL,
     classe_energetica "DietiEstates2025".classe_energetica NOT NULL,
     "tipologia_proprietà" "DietiEstates2025"."tipologia_proprietà",
-    punti_di_interesse character varying[],
     caratteristiche_addizionali text[],
     id_agente_immobiliare integer NOT NULL,
+    id_indirizzo integer NOT NULL,
+    immagini character varying[] NOT NULL,
+    ultima_modifica timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT valid_prezzo CHECK ((prezzo > (0)::numeric)),
     CONSTRAINT valid_superficie CHECK ((superficie > 0))
 );
@@ -322,20 +294,21 @@ CREATE TABLE "DietiEstates2025".immobile (
 ALTER TABLE "DietiEstates2025".immobile OWNER TO postgres;
 
 --
--- TOC entry 252 (class 1259 OID 83112)
+-- TOC entry 250 (class 1259 OID 83112)
 -- Name: immobile_commerciale; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
 --
 
 CREATE TABLE "DietiEstates2025".immobile_commerciale (
     id integer NOT NULL,
-    numero_locali integer,
+    numero_locali integer NOT NULL,
     piani character varying[] NOT NULL,
-    numero_bagni integer,
-    numero_piani integer,
-    ha_accesso_disabili boolean DEFAULT false NOT NULL,
+    numero_bagni integer NOT NULL,
+    numero_piani_totali integer NOT NULL,
+    ha_accesso_disabili boolean DEFAULT false,
+    numero_vetrine integer DEFAULT 0,
     CONSTRAINT valid_numero_bagni CHECK ((numero_bagni > 0)),
     CONSTRAINT valid_numero_locali CHECK ((numero_locali > 0)),
-    CONSTRAINT valid_numero_piani CHECK ((numero_piani > 0))
+    CONSTRAINT valid_numero_piani CHECK ((numero_piani_totali > 0))
 );
 
 
@@ -358,7 +331,7 @@ CREATE SEQUENCE "DietiEstates2025".immobile_id_seq
 ALTER SEQUENCE "DietiEstates2025".immobile_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5085 (class 0 OID 0)
+-- TOC entry 5080 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: immobile_id_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -373,12 +346,15 @@ ALTER SEQUENCE "DietiEstates2025".immobile_id_seq OWNED BY "DietiEstates2025".im
 
 CREATE TABLE "DietiEstates2025".immobile_residenziale (
     id integer NOT NULL,
-    numero_locali integer,
-    numero_bagni integer,
-    posti_auto integer,
-    id_riscaldamento integer,
-    giardino "DietiEstates2025".giardino,
+    numero_locali integer NOT NULL,
+    numero_bagni integer NOT NULL,
+    posti_auto integer DEFAULT 0,
+    id_riscaldamento integer NOT NULL,
+    giardino "DietiEstates2025".giardino NOT NULL,
     "è_arredato" boolean DEFAULT false,
+    piani character varying[] NOT NULL,
+    numero_piani_totali integer NOT NULL,
+    ha_ascensore boolean DEFAULT false,
     CONSTRAINT valid_numero_bagni CHECK ((numero_bagni > 0)),
     CONSTRAINT valid_numero_locali CHECK ((numero_locali > 0)),
     CONSTRAINT valid_posti_auto CHECK ((posti_auto >= 0))
@@ -388,7 +364,52 @@ CREATE TABLE "DietiEstates2025".immobile_residenziale (
 ALTER TABLE "DietiEstates2025".immobile_residenziale OWNER TO postgres;
 
 --
--- TOC entry 256 (class 1259 OID 83149)
+-- TOC entry 256 (class 1259 OID 90787)
+-- Name: indirizzo; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
+--
+
+CREATE TABLE "DietiEstates2025".indirizzo (
+    id integer NOT NULL,
+    paese character varying NOT NULL,
+    provincia character varying NOT NULL,
+    "città" character varying NOT NULL,
+    via character varying NOT NULL,
+    civico character varying,
+    edificio character varying,
+    latitudine numeric(10,8) NOT NULL,
+    longitudine numeric(11,8) NOT NULL
+);
+
+
+ALTER TABLE "DietiEstates2025".indirizzo OWNER TO postgres;
+
+--
+-- TOC entry 255 (class 1259 OID 90786)
+-- Name: indirizzo_id_seq; Type: SEQUENCE; Schema: DietiEstates2025; Owner: postgres
+--
+
+CREATE SEQUENCE "DietiEstates2025".indirizzo_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE "DietiEstates2025".indirizzo_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5081 (class 0 OID 0)
+-- Dependencies: 255
+-- Name: indirizzo_id_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
+--
+
+ALTER SEQUENCE "DietiEstates2025".indirizzo_id_seq OWNED BY "DietiEstates2025".indirizzo.id;
+
+
+--
+-- TOC entry 254 (class 1259 OID 83149)
 -- Name: offerta; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -406,7 +427,7 @@ CREATE TABLE "DietiEstates2025".offerta (
 ALTER TABLE "DietiEstates2025".offerta OWNER TO postgres;
 
 --
--- TOC entry 255 (class 1259 OID 83148)
+-- TOC entry 253 (class 1259 OID 83148)
 -- Name: offerta_id_seq; Type: SEQUENCE; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -422,8 +443,8 @@ CREATE SEQUENCE "DietiEstates2025".offerta_id_seq
 ALTER SEQUENCE "DietiEstates2025".offerta_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5086 (class 0 OID 0)
--- Dependencies: 255
+-- TOC entry 5082 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: offerta_id_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -461,7 +482,7 @@ CREATE SEQUENCE "DietiEstates2025".riscaldamento_id_seq
 ALTER SEQUENCE "DietiEstates2025".riscaldamento_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5087 (class 0 OID 0)
+-- TOC entry 5083 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: riscaldamento_id_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -470,7 +491,7 @@ ALTER SEQUENCE "DietiEstates2025".riscaldamento_id_seq OWNED BY "DietiEstates202
 
 
 --
--- TOC entry 253 (class 1259 OID 83124)
+-- TOC entry 251 (class 1259 OID 83124)
 -- Name: terreno; Type: TABLE; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -494,12 +515,12 @@ CREATE TABLE "DietiEstates2025".utente (
     username character varying NOT NULL,
     nome character varying NOT NULL,
     cognome character varying NOT NULL,
-    "è_agente" boolean DEFAULT false NOT NULL,
-    licenza character(8),
-    "è_gestore" boolean DEFAULT false NOT NULL,
+    "è_agente" boolean DEFAULT false,
+    licenza character varying(8),
+    "è_gestore" boolean DEFAULT false,
     id_agenzia integer,
     CONSTRAINT valid_email CHECK (((email)::text ~ '^[a-z0-9._-]+@[a-z0-9]+(\.[a-z]{2,})+$'::text)),
-    CONSTRAINT valid_licenza CHECK ((licenza ~ '^[A-Z]{2}[0-9]{6}$'::text)),
+    CONSTRAINT valid_licenza CHECK (((licenza)::text ~ '^[A-Z]{2}[0-9]{6}$'::text)),
     CONSTRAINT valid_username CHECK (((username)::text ~ '^[A-Za-z0-9._-]+$'::text))
 );
 
@@ -523,7 +544,7 @@ CREATE SEQUENCE "DietiEstates2025".utente_idutente_seq
 ALTER SEQUENCE "DietiEstates2025".utente_idutente_seq OWNER TO postgres;
 
 --
--- TOC entry 5088 (class 0 OID 0)
+-- TOC entry 5084 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: utente_idutente_seq; Type: SEQUENCE OWNED BY; Schema: DietiEstates2025; Owner: postgres
 --
@@ -532,7 +553,7 @@ ALTER SEQUENCE "DietiEstates2025".utente_idutente_seq OWNED BY "DietiEstates2025
 
 
 --
--- TOC entry 4845 (class 2604 OID 82554)
+-- TOC entry 4842 (class 2604 OID 82554)
 -- Name: agenzia id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -540,7 +561,7 @@ ALTER TABLE ONLY "DietiEstates2025".agenzia ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 4851 (class 2604 OID 82854)
+-- TOC entry 4848 (class 2604 OID 82854)
 -- Name: categoria_immobile id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -548,7 +569,7 @@ ALTER TABLE ONLY "DietiEstates2025".categoria_immobile ALTER COLUMN id SET DEFAU
 
 
 --
--- TOC entry 4849 (class 2604 OID 82674)
+-- TOC entry 4846 (class 2604 OID 82674)
 -- Name: contratto id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -556,7 +577,7 @@ ALTER TABLE ONLY "DietiEstates2025".contratto ALTER COLUMN id SET DEFAULT nextva
 
 
 --
--- TOC entry 4855 (class 2604 OID 82878)
+-- TOC entry 4852 (class 2604 OID 82878)
 -- Name: immobile id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -564,7 +585,15 @@ ALTER TABLE ONLY "DietiEstates2025".immobile ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- TOC entry 4864 (class 2604 OID 83152)
+-- TOC entry 4864 (class 2604 OID 90790)
+-- Name: indirizzo id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
+--
+
+ALTER TABLE ONLY "DietiEstates2025".indirizzo ALTER COLUMN id SET DEFAULT nextval('"DietiEstates2025".indirizzo_id_seq'::regclass);
+
+
+--
+-- TOC entry 4862 (class 2604 OID 83152)
 -- Name: offerta id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -572,7 +601,7 @@ ALTER TABLE ONLY "DietiEstates2025".offerta ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 4853 (class 2604 OID 82866)
+-- TOC entry 4850 (class 2604 OID 82866)
 -- Name: riscaldamento id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -580,7 +609,7 @@ ALTER TABLE ONLY "DietiEstates2025".riscaldamento ALTER COLUMN id SET DEFAULT ne
 
 
 --
--- TOC entry 4846 (class 2604 OID 82566)
+-- TOC entry 4843 (class 2604 OID 82566)
 -- Name: utente id; Type: DEFAULT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -588,7 +617,7 @@ ALTER TABLE ONLY "DietiEstates2025".utente ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4881 (class 2606 OID 82559)
+-- TOC entry 4879 (class 2606 OID 82559)
 -- Name: agenzia Agenzia_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -597,16 +626,7 @@ ALTER TABLE ONLY "DietiEstates2025".agenzia
 
 
 --
--- TOC entry 4909 (class 2606 OID 83094)
--- Name: appartamento appartamento_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
---
-
-ALTER TABLE ONLY "DietiEstates2025".appartamento
-    ADD CONSTRAINT appartamento_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4917 (class 2606 OID 83142)
+-- TOC entry 4911 (class 2606 OID 83142)
 -- Name: autorimessa autorimessa_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -615,16 +635,7 @@ ALTER TABLE ONLY "DietiEstates2025".autorimessa
 
 
 --
--- TOC entry 4911 (class 2606 OID 83106)
--- Name: casa casa_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
---
-
-ALTER TABLE ONLY "DietiEstates2025".casa
-    ADD CONSTRAINT casa_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4897 (class 2606 OID 82859)
+-- TOC entry 4895 (class 2606 OID 82859)
 -- Name: categoria_immobile categoria_immobile_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -633,7 +644,7 @@ ALTER TABLE ONLY "DietiEstates2025".categoria_immobile
 
 
 --
--- TOC entry 4899 (class 2606 OID 82861)
+-- TOC entry 4897 (class 2606 OID 82861)
 -- Name: categoria_immobile categoria_immobile_sottocategoria_key; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -642,7 +653,7 @@ ALTER TABLE ONLY "DietiEstates2025".categoria_immobile
 
 
 --
--- TOC entry 4893 (class 2606 OID 82679)
+-- TOC entry 4891 (class 2606 OID 82679)
 -- Name: contratto contratto_nome_key; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -651,7 +662,7 @@ ALTER TABLE ONLY "DietiEstates2025".contratto
 
 
 --
--- TOC entry 4895 (class 2606 OID 82677)
+-- TOC entry 4893 (class 2606 OID 82677)
 -- Name: contratto contratto_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -660,7 +671,7 @@ ALTER TABLE ONLY "DietiEstates2025".contratto
 
 
 --
--- TOC entry 4913 (class 2606 OID 83118)
+-- TOC entry 4907 (class 2606 OID 83118)
 -- Name: immobile_commerciale immobile_commerciale_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -669,7 +680,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile_commerciale
 
 
 --
--- TOC entry 4905 (class 2606 OID 82882)
+-- TOC entry 4903 (class 2606 OID 82882)
 -- Name: immobile immobile_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -678,7 +689,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile
 
 
 --
--- TOC entry 4907 (class 2606 OID 83075)
+-- TOC entry 4905 (class 2606 OID 83075)
 -- Name: immobile_residenziale immobile_residenziale_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -687,7 +698,16 @@ ALTER TABLE ONLY "DietiEstates2025".immobile_residenziale
 
 
 --
--- TOC entry 4919 (class 2606 OID 83155)
+-- TOC entry 4915 (class 2606 OID 90794)
+-- Name: indirizzo indirizzo_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
+--
+
+ALTER TABLE ONLY "DietiEstates2025".indirizzo
+    ADD CONSTRAINT indirizzo_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4913 (class 2606 OID 83155)
 -- Name: offerta offerta_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -696,7 +716,7 @@ ALTER TABLE ONLY "DietiEstates2025".offerta
 
 
 --
--- TOC entry 4901 (class 2606 OID 82873)
+-- TOC entry 4899 (class 2606 OID 82873)
 -- Name: riscaldamento riscaldamento_nome_key; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -705,7 +725,7 @@ ALTER TABLE ONLY "DietiEstates2025".riscaldamento
 
 
 --
--- TOC entry 4903 (class 2606 OID 82871)
+-- TOC entry 4901 (class 2606 OID 82871)
 -- Name: riscaldamento riscaldamento_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -714,7 +734,7 @@ ALTER TABLE ONLY "DietiEstates2025".riscaldamento
 
 
 --
--- TOC entry 4915 (class 2606 OID 83129)
+-- TOC entry 4909 (class 2606 OID 83129)
 -- Name: terreno terreno_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -723,16 +743,16 @@ ALTER TABLE ONLY "DietiEstates2025".terreno
 
 
 --
--- TOC entry 4883 (class 2606 OID 82561)
--- Name: agenzia uniqueCompanyName; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
+-- TOC entry 4881 (class 2606 OID 82561)
+-- Name: agenzia unique_agenzia_nome; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
 ALTER TABLE ONLY "DietiEstates2025".agenzia
-    ADD CONSTRAINT "uniqueCompanyName" UNIQUE (nome);
+    ADD CONSTRAINT unique_agenzia_nome UNIQUE (nome);
 
 
 --
--- TOC entry 4885 (class 2606 OID 82577)
+-- TOC entry 4883 (class 2606 OID 82577)
 -- Name: utente unique_email; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -741,7 +761,7 @@ ALTER TABLE ONLY "DietiEstates2025".utente
 
 
 --
--- TOC entry 4887 (class 2606 OID 82581)
+-- TOC entry 4885 (class 2606 OID 90755)
 -- Name: utente unique_licenza; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -750,7 +770,7 @@ ALTER TABLE ONLY "DietiEstates2025".utente
 
 
 --
--- TOC entry 4889 (class 2606 OID 82579)
+-- TOC entry 4887 (class 2606 OID 82579)
 -- Name: utente unique_username; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -759,7 +779,7 @@ ALTER TABLE ONLY "DietiEstates2025".utente
 
 
 --
--- TOC entry 4891 (class 2606 OID 82575)
+-- TOC entry 4889 (class 2606 OID 82575)
 -- Name: utente utente_pkey; Type: CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -768,16 +788,16 @@ ALTER TABLE ONLY "DietiEstates2025".utente
 
 
 --
--- TOC entry 4926 (class 2606 OID 83095)
--- Name: appartamento appartamento_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
+-- TOC entry 4917 (class 2606 OID 90795)
+-- Name: immobile Immobile_id_indirizzo_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
-ALTER TABLE ONLY "DietiEstates2025".appartamento
-    ADD CONSTRAINT appartamento_id_fkey FOREIGN KEY (id) REFERENCES "DietiEstates2025".immobile_residenziale(id);
+ALTER TABLE ONLY "DietiEstates2025".immobile
+    ADD CONSTRAINT "Immobile_id_indirizzo_fkey" FOREIGN KEY (id_indirizzo) REFERENCES "DietiEstates2025".indirizzo(id) NOT VALID;
 
 
 --
--- TOC entry 4930 (class 2606 OID 83143)
+-- TOC entry 4925 (class 2606 OID 83143)
 -- Name: autorimessa autorimessa_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -786,16 +806,7 @@ ALTER TABLE ONLY "DietiEstates2025".autorimessa
 
 
 --
--- TOC entry 4927 (class 2606 OID 83107)
--- Name: casa casa_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
---
-
-ALTER TABLE ONLY "DietiEstates2025".casa
-    ADD CONSTRAINT casa_id_fkey FOREIGN KEY (id) REFERENCES "DietiEstates2025".immobile_residenziale(id);
-
-
---
--- TOC entry 4928 (class 2606 OID 83119)
+-- TOC entry 4923 (class 2606 OID 83119)
 -- Name: immobile_commerciale immobile_commerciale_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -804,7 +815,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile_commerciale
 
 
 --
--- TOC entry 4921 (class 2606 OID 82893)
+-- TOC entry 4918 (class 2606 OID 82893)
 -- Name: immobile immobile_id_agente_immobiliare_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -813,7 +824,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile
 
 
 --
--- TOC entry 4922 (class 2606 OID 82888)
+-- TOC entry 4919 (class 2606 OID 82888)
 -- Name: immobile immobile_id_categoria_immobile_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -822,7 +833,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile
 
 
 --
--- TOC entry 4923 (class 2606 OID 82883)
+-- TOC entry 4920 (class 2606 OID 82883)
 -- Name: immobile immobile_id_contratto_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -831,7 +842,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile
 
 
 --
--- TOC entry 4924 (class 2606 OID 83076)
+-- TOC entry 4921 (class 2606 OID 83076)
 -- Name: immobile_residenziale immobile_residenziale_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -840,7 +851,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile_residenziale
 
 
 --
--- TOC entry 4925 (class 2606 OID 83081)
+-- TOC entry 4922 (class 2606 OID 83081)
 -- Name: immobile_residenziale immobile_residenziale_id_riscaldamento_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -849,7 +860,7 @@ ALTER TABLE ONLY "DietiEstates2025".immobile_residenziale
 
 
 --
--- TOC entry 4931 (class 2606 OID 83156)
+-- TOC entry 4926 (class 2606 OID 83156)
 -- Name: offerta offerta_id_immobile_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -858,7 +869,7 @@ ALTER TABLE ONLY "DietiEstates2025".offerta
 
 
 --
--- TOC entry 4932 (class 2606 OID 83161)
+-- TOC entry 4927 (class 2606 OID 83161)
 -- Name: offerta offerta_id_utente_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -867,7 +878,7 @@ ALTER TABLE ONLY "DietiEstates2025".offerta
 
 
 --
--- TOC entry 4929 (class 2606 OID 83130)
+-- TOC entry 4924 (class 2606 OID 83130)
 -- Name: terreno terreno_id_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -876,7 +887,7 @@ ALTER TABLE ONLY "DietiEstates2025".terreno
 
 
 --
--- TOC entry 4920 (class 2606 OID 82582)
+-- TOC entry 4916 (class 2606 OID 82582)
 -- Name: utente utente_idagenzia_fkey; Type: FK CONSTRAINT; Schema: DietiEstates2025; Owner: postgres
 --
 
@@ -884,7 +895,7 @@ ALTER TABLE ONLY "DietiEstates2025".utente
     ADD CONSTRAINT utente_idagenzia_fkey FOREIGN KEY (id_agenzia) REFERENCES "DietiEstates2025".agenzia(id);
 
 
--- Completed on 2025-03-05 23:48:06
+-- Completed on 2025-03-06 22:49:42
 
 --
 -- PostgreSQL database dump complete
