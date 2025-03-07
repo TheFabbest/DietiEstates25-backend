@@ -1,10 +1,14 @@
 package com.dieti.dietiestatesbackend;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 class TokenHelper {
   private final String secretKey;
@@ -42,8 +46,10 @@ class TokenHelper {
   }
 
   private Claims getAllClaimsFromToken(String token) {
-    return Jwts.parser()
-        .setSigningKey(secretKey)
+    SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    return Jwts.parserBuilder()
+        .setSigningKey(key)
+        .build()
         .parseClaimsJws(token)
         .getBody();
   }
