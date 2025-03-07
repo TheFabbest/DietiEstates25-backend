@@ -3,7 +3,6 @@ package com.dieti.dietiestatesbackend;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
@@ -83,15 +82,15 @@ public class DietiEstatesBackend {
     }
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
-    public List<Listing> getListings(@PathVariable("keyword") String keyword,
+    public ResponseEntity<?> getListings(@PathVariable("keyword") String keyword,
         @RequestHeader("Authorization") String authorizationHeader) {
       String accessToken = authorizationHeader.replace("Bearer ", "");
       if (!AccessTokenProvider.validateToken(accessToken)) {
-        return Arrays.asList();
+        return ResponseEntity.status(498).body("Token scaduto o non valido");
       }
-      return Arrays.asList(new Listing("Castello di Hogwarts",
+      return ResponseEntity.ok(Arrays.asList(new Listing("Castello di Hogwarts",
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
-          new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f));
+          new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f)));
     }
 
     @GetMapping("/thumbnails/{filename}")
