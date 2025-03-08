@@ -2,9 +2,6 @@ package com.dieti.dietiestatesbackend;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -27,8 +24,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 @SpringBootApplication
 public class DietiEstatesBackend {
-
-  private static Connection myConnection;
 
   @RestController
   class Controller {
@@ -110,33 +105,7 @@ public class DietiEstatesBackend {
     }
   }
 
-  private static void openConnection() throws ClassNotFoundException, SQLException {
-		
-		Class.forName("org.postgresql.Driver");
-		String url = "jdbc:postgresql://10.95.16.3:5432/postgres?currentSchema=uninadelivery";
-		myConnection = DriverManager.getConnection(url, "postgres", "Mari&Fab");
-		System.out.println("Connessione OK");
-	}
-
-  private static void attemptConnection() {
-		try
-		{
-			openConnection();
-		}
-		catch(ClassNotFoundException e)
-		{
-			System.err.println("Driver non trovato");
-			e.printStackTrace();
-		}
-		catch(SQLException e)
-		{
-			System.err.println("Connessione fallita");
-			e.printStackTrace();
-		}
-	}
-
   public static void main(String[] args) {
-    attemptConnection();
     SpringApplication.run(DietiEstatesBackend.class, args);
   }
 }
