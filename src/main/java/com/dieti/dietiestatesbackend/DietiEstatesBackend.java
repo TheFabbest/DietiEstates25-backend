@@ -136,7 +136,7 @@ public class DietiEstatesBackend {
 	}
 
   public static void main(String[] args) {
-    attemptConnection();
+    //attemptConnection();
     SpringApplication.run(DietiEstatesBackend.class, args);
   }
 }
