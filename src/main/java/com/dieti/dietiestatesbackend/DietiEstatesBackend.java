@@ -2,8 +2,15 @@ package com.dieti.dietiestatesbackend;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,6 +31,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 @SpringBootApplication
 public class DietiEstatesBackend {
+  private static Connection myConnection;
 
   @RestController
   class Controller {
@@ -51,20 +59,20 @@ public class DietiEstatesBackend {
       String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
       return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
-    
+
     @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
     public ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
       try {
         GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
-        
+
         // TODO create user if needed
         String email = payload.getEmail();
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       } catch (IOException | GeneralSecurityException e) {
-          System.err.println("Token validation failed: " + e.getMessage());
-          return ResponseEntity.status(498)
+        System.err.println("Token validation failed: " + e.getMessage());
+        return ResponseEntity.status(498)
             .body("Token Google non valido.");
       }
     }
@@ -73,12 +81,12 @@ public class DietiEstatesBackend {
     public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> body) {
       String oldRefreshToken = body.get("refreshToken");
       String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-      if (RefreshTokenProvider.isTokenOf(user,oldRefreshToken)){
+      if (RefreshTokenProvider.isTokenOf(user, oldRefreshToken)) {
         String accessToken = AccessTokenProvider.generateAccessToken(user);
         return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
       }
       return ResponseEntity.status(498)
-      .body("Il refresh token non appartiene a questo utente.");
+          .body("Il refresh token non appartiene a questo utente.");
     }
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
@@ -105,7 +113,51 @@ public class DietiEstatesBackend {
     }
   }
 
+
+  protected boolean isOperatoreValid(String email, String password) {
+		
+		try
+		{
+			String query = "SELECT * FROM operatore WHERE email = ? AND password = ?";
+			PreparedStatement ps = myConnection.prepareStatement(query);
+			ps.setString(1, email);
+			ps.setString(2, password);
+			
+			ResultSet rs = ps.executeQuery();
+			boolean hasResults = rs.isBeforeFirst();
+			return hasResults;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e, "Errore", JOptionPane.ERROR_MESSAGE);
+		}
+		return false;
+	}
+
+  private static void openConnection() throws ClassNotFoundException, SQLException {
+    Class.forName("org.postgresql.Driver");
+    String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
+    myConnection = DriverManager.getConnection(url, "postgres", "MariFab");
+    System.out.println("Connessione OK");
+  }
+
+  private static boolean attemptConnection() {
+    try {
+      openConnection();
+      return true;
+    } catch (ClassNotFoundException e) {
+      System.err.println("Driver non trovato");
+      e.printStackTrace();
+    } catch (SQLException e) {
+      System.err.println("Connessione fallita");
+      e.printStackTrace();
+    }
+    return false;
+  }
+
   public static void main(String[] args) {
+    attemptConnection();
     SpringApplication.run(DietiEstatesBackend.class, args);
   }
 }
