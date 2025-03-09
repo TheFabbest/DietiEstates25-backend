@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
@@ -137,7 +135,6 @@ public class DietiEstatesBackend {
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e, "Errore", JOptionPane.ERROR_MESSAGE);
 		}
 		return false;
 	}
@@ -157,7 +154,6 @@ public class DietiEstatesBackend {
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e, "Errore", JOptionPane.ERROR_MESSAGE);
 		}
 		return false;
 	}
