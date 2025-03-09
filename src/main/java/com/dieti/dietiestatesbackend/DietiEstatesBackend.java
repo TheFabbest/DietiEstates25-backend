@@ -40,7 +40,7 @@ public class DietiEstatesBackend {
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
       String email = body.get("email");
       String password = body.get("password");
-      if (email.equalsIgnoreCase("fab") && password.equals("fab")) {
+      if (doesUserExist(email, password)) {
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
@@ -53,11 +53,18 @@ public class DietiEstatesBackend {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
       String email = body.get("email");
-      String password = body.get("password");
-      // TODO verify email and check for existence, create user.
-      String accessToken = AccessTokenProvider.generateAccessToken(email);
-      String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
-      return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+      // TODO verify email
+      if (doesUserExist(email)) {
+        return ResponseEntity.status(409).contentType(MediaType.TEXT_PLAIN)
+            .body("Utente gia' registrato");
+      }
+      else {
+        String password = body.get("password");
+        // TODO create user
+        String accessToken = AccessTokenProvider.generateAccessToken(email);
+        String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+      }
     }
 
     @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
@@ -114,14 +121,34 @@ public class DietiEstatesBackend {
   }
 
 
-  protected boolean isOperatoreValid(String email, String password) {
-		
+  private boolean doesUserExist(String email, String password) {
+		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM operatore WHERE email = ? AND password = ?";
+			String query = "SELECT * FROM utente WHERE email = ? AND password = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
 			ps.setString(2, password);
+			
+			ResultSet rs = ps.executeQuery();
+			boolean hasResults = rs.isBeforeFirst();
+			return hasResults;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e, "Errore", JOptionPane.ERROR_MESSAGE);
+		}
+		return false;
+	}
+
+  private boolean doesUserExist(String email) {
+		email=email.toLowerCase();
+		try
+		{
+			String query = "SELECT * FROM utente WHERE email = ?";
+			PreparedStatement ps = myConnection.prepareStatement(query);
+			ps.setString(1, email);
 			
 			ResultSet rs = ps.executeQuery();
 			boolean hasResults = rs.isBeforeFirst();
