@@ -164,7 +164,9 @@ public class DietiEstatesBackend {
 
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
-    String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
+    String url = String.format("jdbc:postgresql://google/%s??currentSchema=DietiEstates2025&cloudSqlInstance=%s&socketFactory=com.google.cloud.sql.mysql.SocketFactory",
+                    "dietiestates2025",
+                    "third-oarlock-449614-m8:europe-west8:dietiestates2025");
     myConnection = DriverManager.getConnection(url, "postgres", "MariFab");
     System.out.println("Connessione OK");
   }
