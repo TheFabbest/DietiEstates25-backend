@@ -123,7 +123,7 @@ public class DietiEstatesBackend {
 		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM DietiEstates2025.utente WHERE email = ? AND password = ?";
+			String query = "SELECT * FROM \"DietiEstates2025\".utente WHERE email = ? AND password = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
 			ps.setString(2, password);
@@ -143,7 +143,7 @@ public class DietiEstatesBackend {
 		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM DietiEstates2025.utente WHERE email = ?";
+			String query = "SELECT * FROM \"DietiEstates2025\".utente WHERE email = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
 			
