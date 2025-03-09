@@ -123,7 +123,7 @@ public class DietiEstatesBackend {
 		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM utente WHERE email = ? AND password = ?";
+			String query = "SELECT * FROM \"utente\" WHERE email = ? AND password = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
 			ps.setString(2, password);
@@ -143,7 +143,7 @@ public class DietiEstatesBackend {
 		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM utente WHERE email = ?";
+			String query = "SELECT * FROM \"DietiEstates2025\".\"utente\" WHERE email = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
 			
@@ -162,7 +162,6 @@ public class DietiEstatesBackend {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
     myConnection = DriverManager.getConnection(url, "postgres", "MariFab");
-    System.out.println("Connessione OK");
   }
 
   private static boolean attemptConnection() {
