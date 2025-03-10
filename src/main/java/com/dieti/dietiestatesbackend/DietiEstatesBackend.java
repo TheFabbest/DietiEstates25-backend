@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,8 +52,7 @@ public class DietiEstatesBackend {
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.TEXT_PLAIN)
-            .body("Credenziali non valide");
+        return new ResponseEntity<>("Credenziali non valide", HttpStatus.UNAUTHORIZED);
       }
     }
 
@@ -61,8 +61,7 @@ public class DietiEstatesBackend {
       String email = body.get("email");
       // TODO verify email
       if (doesUserExist(email)) {
-        return ResponseEntity.status(409).contentType(MediaType.TEXT_PLAIN)
-            .body("Utente gia' registrato");
+        return new ResponseEntity<>("Utente gia' registrato", HttpStatusCode.valueOf(409));
       }
       else {
         String password = body.get("password");
@@ -86,8 +85,7 @@ public class DietiEstatesBackend {
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       } catch (IOException | GeneralSecurityException e) {
         System.err.println("Token validation failed: " + e.getMessage());
-        return ResponseEntity.status(498)
-            .body("Token Google non valido.");
+        return new ResponseEntity<>("Token google non valido", HttpStatusCode.valueOf(498));
       }
     }
 
@@ -101,8 +99,7 @@ public class DietiEstatesBackend {
         scheduler.schedule(()->{RefreshTokenRepository.deleteUserToken(email, oldRefreshToken);}, 10, TimeUnit.SECONDS);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
-      return ResponseEntity.status(498)
-          .body("Il refresh token non appartiene a questo utente.");
+      return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
     }
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
@@ -110,7 +107,7 @@ public class DietiEstatesBackend {
         @RequestHeader("Authorization") String authorizationHeader) {
       String accessToken = authorizationHeader.replace("Bearer ", "");
       if (!AccessTokenProvider.validateToken(accessToken)) {
-        return ResponseEntity.status(498).body("Token scaduto o non valido");
+        return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
       }
       return ResponseEntity.ok(Arrays.asList(new Listing("Castello di Hogwarts",
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
@@ -193,7 +190,7 @@ public class DietiEstatesBackend {
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
-    myConnection = DriverManager.getConnection(url, "postgres", "MariFab");
+    myConnection = DriverManager.getConnection(url, "postgres", System.getenv("DATABASE_CREDENTIALS"));
   }
 
   private static boolean attemptConnection() {
