@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +32,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 @SpringBootApplication
 public class DietiEstatesBackend {
   private static Connection myConnection;
+  private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
   @RestController
   class Controller {
@@ -58,6 +61,7 @@ public class DietiEstatesBackend {
       }
       else {
         String password = body.get("password");
+        createUser(email, password, "prova", "prova", "prova");
         // TODO create user
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
@@ -123,14 +127,20 @@ public class DietiEstatesBackend {
 		email=email.toLowerCase();
 		try
 		{
-			String query = "SELECT * FROM \"DietiEstates2025\".utente WHERE email = ? AND password = ?";
+			String query = "SELECT password FROM \"DietiEstates2025\".utente WHERE email = ?";
 			PreparedStatement ps = myConnection.prepareStatement(query);
 			ps.setString(1, email);
-			ps.setString(2, password);
 			
 			ResultSet rs = ps.executeQuery();
 			boolean hasResults = rs.isBeforeFirst();
-			return hasResults;
+      if (hasResults) {
+        rs.next();
+        String storedPassword = rs.getString("password");
+        return passwordEncoder.matches(password, storedPassword);
+      }
+      else {
+        return false;
+      }
 		}
 		catch (SQLException e)
 		{
@@ -157,6 +167,21 @@ public class DietiEstatesBackend {
 		}
 		return false;
 	}
+
+  private void createUser(String email, String password, String username, String nome, String cognome) {
+    password = passwordEncoder.encode(password);
+    String unformattedQuery = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES ('%s','%s','%s','%s','%s')";
+    String query = String.format(unformattedQuery, email, password, username, nome, cognome);
+    try
+		{
+      Statement st = myConnection.createStatement();
+      st.executeUpdate(query);
+    }
+		catch (SQLException e)
+		{
+      System.err.println("non e' stato possibile creare l'utente");
+		}
+  }
 
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
