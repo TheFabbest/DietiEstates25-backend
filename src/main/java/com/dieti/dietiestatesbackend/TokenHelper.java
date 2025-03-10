@@ -11,10 +11,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 class TokenHelper {
-  private final String secretKey;
+  private final SecretKey key;
 
   TokenHelper(String secretKey) {
-    this.secretKey = secretKey;
+    key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
   }
 
   boolean validateToken(String token, String supposedUsername) {
@@ -46,7 +46,6 @@ class TokenHelper {
   }
 
   private Claims getAllClaimsFromToken(String token) {
-    SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()

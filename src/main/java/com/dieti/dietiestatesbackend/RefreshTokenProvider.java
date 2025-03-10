@@ -17,7 +17,7 @@ import io.jsonwebtoken.security.Keys;
 class RefreshTokenProvider {
 
   @Value("${jwt.secret}")
-  private static final String SECRET_KEY = "UjRoSEFoSVNtQzVUcGJaZVRJMmgxaVhlSm81THhHajVob0M4SWFsaUJ6YnNvZzZ1WklSNkxTUnhaUjJ6UEMzVQ==";
+  private static final String SECRET_KEY = System.getenv("REFRESH_TOKEN_SECRET_KEY");
 
   @Value("${jwt.refresh.expiration}")
   private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
