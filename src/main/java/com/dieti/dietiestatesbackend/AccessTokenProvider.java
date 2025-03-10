@@ -17,7 +17,7 @@ import io.jsonwebtoken.security.Keys;
 class AccessTokenProvider {
 
   @Value("${jwt.secret}")
-  private final static String SECRET_KEY = "UjRoSEFoSVNtQzVUcGJaZVRJMmgxaVhlSm81THhHajVob0M4SWFsaUJ6YnNvZzZ1WklSNkxTUnhaUjJ6UEMzVQ==";
+  private final static String SECRET_KEY = System.getenv("AccessTokenSecretKey");
 
   @Value("${jwt.access.expiration}")
   private final static Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
