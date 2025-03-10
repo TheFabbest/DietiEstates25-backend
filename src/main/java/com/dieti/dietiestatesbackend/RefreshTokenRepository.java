@@ -1,28 +1,28 @@
 package com.dieti.dietiestatesbackend;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 class RefreshTokenRepository {
-  private final static ArrayList<String> tokens = new ArrayList<>();
+  private final static HashMap<String, ArrayList<String>> tokens = new HashMap<>();
 
-  static void save(String newtoken) {
-    tokens.add(newtoken);
-  }
-
-  static void deleteByUserId(String username, String secretKey) {
-    TokenHelper helper = new TokenHelper(secretKey);
-    tokens.removeIf((String token) -> {
-      return helper.getUsernameFromToken(token).equals(username);
-    });
-  }
-
-  static String getTokenByUserId(String username, String secretKey) {
-    TokenHelper helper = new TokenHelper(secretKey);
-    for (String t : tokens) {
-      if (helper.getUsernameFromToken(t).equals(username)) {
-        return t;
-      }
+  static void save(String username, String newtoken) {
+    if (tokens.containsKey(username)){
+      tokens.get(username).add(newtoken);
     }
-    return null;
+    else {
+      tokens.put(username, new ArrayList<>(Arrays.asList(newtoken)));
+    }
+  }
+
+  static void deleteUserToken(String username, String removeToken) {
+    if (tokens.containsKey(username)){
+      tokens.get(username).remove(removeToken);
+    }
+  }
+
+  static ArrayList<String> getTokensByUserId(String username) {
+    return tokens.get(username);
   }
 }

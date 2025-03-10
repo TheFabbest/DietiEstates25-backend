@@ -37,8 +37,7 @@ class RefreshTokenProvider {
         .signWith(key)
         .compact();
 
-    RefreshTokenRepository.deleteByUserId(username, SECRET_KEY);
-    RefreshTokenRepository.save(refreshToken);
+    RefreshTokenRepository.save(username, refreshToken);
     return refreshToken;
   }
 
@@ -52,7 +51,7 @@ class RefreshTokenProvider {
     return helper.getUsernameFromToken(token);
   }
 
-    static boolean isTokenOf(final String user, final String oldRefreshToken) {
-        return RefreshTokenRepository.getTokenByUserId(user, SECRET_KEY).equals(oldRefreshToken);
-    }
+  static boolean isTokenOf(final String user, final String oldRefreshToken) {
+      return RefreshTokenRepository.getTokensByUserId(user).contains(oldRefreshToken);
+  }
 }

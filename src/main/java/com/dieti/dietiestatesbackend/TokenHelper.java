@@ -17,12 +17,6 @@ class TokenHelper {
     key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
   }
 
-  boolean validateToken(String token, String supposedUsername) {
-    final String username = getUsernameFromToken(token);
-    return (username.equals(supposedUsername) && !isTokenExpired(token));
-  }
-
-  // TODO check safety
   boolean validateToken(String token) {
     return !isTokenExpired(token);
   }

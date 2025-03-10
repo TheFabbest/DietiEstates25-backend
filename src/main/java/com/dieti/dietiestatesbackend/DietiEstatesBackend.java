@@ -90,10 +90,12 @@ public class DietiEstatesBackend {
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> body) {
       String oldRefreshToken = body.get("refreshToken");
-      String user = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-      if (RefreshTokenProvider.isTokenOf(user, oldRefreshToken)) {
-        String accessToken = AccessTokenProvider.generateAccessToken(user);
-        return ResponseEntity.ok(new AuthResponse(accessToken, oldRefreshToken));
+      String email = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
+      if (RefreshTokenProvider.isTokenOf(email, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
+        String accessToken = AccessTokenProvider.generateAccessToken(email);
+        String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+        RefreshTokenRepository.deleteUserToken(email, oldRefreshToken);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       return ResponseEntity.status(498)
           .body("Il refresh token non appartiene a questo utente.");
