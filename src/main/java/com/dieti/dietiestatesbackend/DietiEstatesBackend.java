@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +37,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 public class DietiEstatesBackend {
   private static Connection myConnection;
   private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
 
   @RestController
   class Controller {
@@ -94,7 +98,7 @@ public class DietiEstatesBackend {
       if (RefreshTokenProvider.isTokenOf(email, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
-        RefreshTokenRepository.deleteUserToken(email, oldRefreshToken);
+        scheduler.schedule(()->{RefreshTokenRepository.deleteUserToken(email, oldRefreshToken);}, 10, TimeUnit.SECONDS);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
       }
       return ResponseEntity.status(498)
