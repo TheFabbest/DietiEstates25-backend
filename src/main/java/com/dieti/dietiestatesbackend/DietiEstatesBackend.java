@@ -65,12 +65,12 @@ public class DietiEstatesBackend {
       String email = body.get("email");
       // TODO verify email
       if (doesUserExist(email)) {
-        return new ResponseEntity<>("Utente gia' registrato", HttpStatusCode.valueOf(409));
+        return ResponseEntity.status(409).body("Utente gia' registrato");
       }
       else {
         String password = body.get("password");
         if (!isPasswordStrong(password)){
-          return new ResponseEntity<>("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).", HttpStatusCode.valueOf(400));
+          return ResponseEntity.status(400).body("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).");
         }
         createUser(email, password, "prova", "prova", "prova");
         // TODO create user
