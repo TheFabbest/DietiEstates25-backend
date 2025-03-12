@@ -201,7 +201,7 @@ public class DietiEstatesBackend {
 
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
-    String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
+    String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory";
     myConnection = DriverManager.getConnection(url, "postgres", System.getenv("DATABASE_CREDENTIALS"));
   }
 
