@@ -7,7 +7,10 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 class TokenHelper {
@@ -35,11 +38,18 @@ class TokenHelper {
   }
 
   <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = getAllClaimsFromToken(token);
-    return claimsResolver.apply(claims);
+    try {
+      final Claims claims = getAllClaimsFromToken(token);
+      return claimsResolver.apply(claims);
+    } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+      return null;
+    }
   }
 
-  private Claims getAllClaimsFromToken(String token) {
+  private Claims getAllClaimsFromToken(String token) throws ExpiredJwtException,
+                                    UnsupportedJwtException,
+                                    MalformedJwtException,
+                                    IllegalArgumentException {
     return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()
