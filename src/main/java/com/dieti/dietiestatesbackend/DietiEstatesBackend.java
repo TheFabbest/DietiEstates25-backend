@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -65,12 +66,16 @@ public class DietiEstatesBackend {
       String email = body.get("email");
       // TODO verify email
       if (doesUserExist(email)) {
-        return ResponseEntity.status(409).body("Utente gia' registrato");
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message", "Utente gia' registrato");
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
       }
       else {
         String password = body.get("password");
         if (!isPasswordStrong(password)){
-          return ResponseEntity.status(400).body("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).");
+          Map<String, String> errorResponse = new HashMap<>();
+          errorResponse.put("message", "Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).");
+          return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
         createUser(email, password, "prova", "prova", "prova");
         // TODO create user
