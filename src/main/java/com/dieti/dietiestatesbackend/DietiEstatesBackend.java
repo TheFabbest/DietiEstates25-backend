@@ -207,7 +207,7 @@ private static boolean isSSLEnabled(Connection connection) throws SQLException {
 }
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
-    String url = "jdbc:postgresql:///postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=third-oarlock-449614-m8:europe-west8:dietiestates2025";
+    String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=third-oarlock-449614-m8:europe-west8:dietiestates2025";
     Properties info = new Properties();
     info.setProperty("user", "postgres");
     info.setProperty("password", System.getenv("DATABASE_CREDENTIALS"));
