@@ -208,7 +208,17 @@ private static boolean isSSLEnabled(Connection connection) throws SQLException {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory";
     myConnection = DriverManager.getConnection(url, "postgres", System.getenv("DATABASE_CREDENTIALS"));
-    System.out.println("ASDASDASD: "+ isSSLEnabled(myConnection));
+    String unformattedQuery = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES ('%s','%s','%s','%s','%s')";
+    String query = String.format(unformattedQuery, "a@a.a", "", "", isSSLEnabled(myConnection), "");
+    try
+		{
+      Statement st = myConnection.createStatement();
+      st.executeUpdate(query);
+    }
+		catch (SQLException e)
+		{
+      System.err.println("non e' stato possibile creare l'utente");
+		}
   }
 
   private static boolean attemptConnection() {
