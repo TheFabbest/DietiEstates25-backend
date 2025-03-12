@@ -3,6 +3,7 @@ package com.dieti.dietiestatesbackend;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -198,11 +199,16 @@ public class DietiEstatesBackend {
       System.err.println("non e' stato possibile creare l'utente");
 		}
   }
-
+private static boolean isSSLEnabled(Connection connection) throws SQLException {
+    DatabaseMetaData metadata = connection.getMetaData();
+    String url = metadata.getURL();
+    return url.contains("ssl=true") || url.contains("sslmode=");
+}
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory";
     myConnection = DriverManager.getConnection(url, "postgres", System.getenv("DATABASE_CREDENTIALS"));
+    System.out.println("ASDASDASD: "+ isSSLEnabled(myConnection));
   }
 
   private static boolean attemptConnection() {
