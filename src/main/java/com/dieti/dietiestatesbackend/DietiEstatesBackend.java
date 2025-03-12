@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -38,7 +40,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 public class DietiEstatesBackend {
   private static Connection myConnection;
   private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
+  private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
+  private final static String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
+  private final static Pattern PASSWORD_COMPILED_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
   @RestController
   class Controller {
@@ -65,6 +69,9 @@ public class DietiEstatesBackend {
       }
       else {
         String password = body.get("password");
+        if (!isPasswordStrong(password)){
+          return new ResponseEntity<>("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).", HttpStatusCode.valueOf(400));
+        }
         createUser(email, password, "prova", "prova", "prova");
         // TODO create user
         String accessToken = AccessTokenProvider.generateAccessToken(email);
@@ -77,9 +84,10 @@ public class DietiEstatesBackend {
     public ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
       try {
         GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
-
-        // TODO create user if needed
         String email = payload.getEmail();
+        if (doesUserExist(email)) {
+          createUser(email, "", "prova", "prova", "prova");
+        }
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
@@ -126,6 +134,10 @@ public class DietiEstatesBackend {
     }
   }
 
+  private boolean isPasswordStrong(String password){
+    final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
+    return matcher.matches();
+  }
 
   private boolean doesUserExist(String email, String password) {
 		email=email.toLowerCase();
