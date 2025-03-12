@@ -3,7 +3,6 @@ package com.dieti.dietiestatesbackend;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,7 +73,14 @@ public class DietiEstatesBackend {
         if (!isPasswordStrong(password)){
           return new ResponseEntity<>("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).", HttpStatus.BAD_REQUEST);
         }
-        createUser(email, password, "prova", "prova", "prova");
+
+        try {
+          createUser(email, password, "prova", "prova", "prova");
+        } catch (SQLException e) {
+          System.err.println(e);
+          return new ResponseEntity<>("Non è stato possibile creare l'utente: controlla la validità dell'email.", HttpStatus.BAD_REQUEST);
+        }
+        
         // TODO create user
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
@@ -88,7 +94,12 @@ public class DietiEstatesBackend {
         GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
         String email = payload.getEmail();
         if (doesUserExist(email)) {
-          createUser(email, "", "prova", "prova", "prova");
+          try {
+            createUser(email, "", "prova", "prova", "prova");
+          }
+          catch (SQLException e){
+            return new ResponseEntity<>("Non è stato possibile creare l'utente: errore sconosciuto.", HttpStatus.BAD_REQUEST);
+          }
         }
         String accessToken = AccessTokenProvider.generateAccessToken(email);
         String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
@@ -186,40 +197,21 @@ public class DietiEstatesBackend {
     return false;
   }
 
-  private void createUser(String email, String password, String username, String nome, String cognome) {
+  private void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
     password = passwordEncoder.encode(password);
     String unformattedQuery = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES ('%s','%s','%s','%s','%s')";
     String query = String.format(unformattedQuery, email, password, username, nome, cognome);
-    try
-    {
-      Statement st = myConnection.createStatement();
-      st.executeUpdate(query);
-    }
-    catch (SQLException e)
-    {
-      System.err.println("non e' stato possibile creare l'utente: "+e);
-    }
+    Statement st = myConnection.createStatement();
+    st.executeUpdate(query);
   }
-private static boolean isSSLEnabled(Connection connection) throws SQLException {
-    DatabaseMetaData metadata = connection.getMetaData();
-    String url = metadata.getURL();
-    return url.contains("ssl=true") || url.contains("sslmode=");
-}
+
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql://google/postgres?currentSchema=DietiEstates2025&socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=third-oarlock-449614-m8:europe-west8:dietiestates2025";
     Properties info = new Properties();
     info.setProperty("user", "postgres");
     info.setProperty("password", System.getenv("DATABASE_CREDENTIALS"));
-    
-    //url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
     myConnection = DriverManager.getConnection(url, info);
-    if(isSSLEnabled(myConnection)){
-      System.err.println("SSL enabled.");
-    }
-    else {
-      System.err.println("SSL not enabled.");
-    }
   }
 
   private static boolean attemptConnection() {
