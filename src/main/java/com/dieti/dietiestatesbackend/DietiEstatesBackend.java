@@ -207,6 +207,7 @@ private static boolean isSSLEnabled(Connection connection) throws SQLException {
   private static void openConnection() throws ClassNotFoundException, SQLException {
     Class.forName("org.postgresql.Driver");
     String url = "jdbc:postgresql:///postgres?currentSchema=DietiEstates2025&sslmode=verify-ca&sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=third-oarlock-449614-m8:europe-west8:dietiestates2025";
+    //url = "jdbc:postgresql://34.154.28.76:5432/postgres?currentSchema=DietiEstates2025";
     myConnection = DriverManager.getConnection(url, "postgres", System.getenv("DATABASE_CREDENTIALS"));
     String unformattedQuery = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES ('%s','%s','%s','%s','%s')";
     String query = String.format(unformattedQuery, "a@a.a", "", "", isSSLEnabled(myConnection), "");
@@ -228,7 +229,7 @@ private static boolean isSSLEnabled(Connection connection) throws SQLException {
     } catch (ClassNotFoundException e) {
       System.err.println("Driver non trovato");
     } catch (SQLException e) {
-      System.err.println("Connessione fallita");
+      System.err.println("Connessione fallita" + e.toString());
     }
     return false;
   }
