@@ -70,15 +70,18 @@ public class DietiEstatesBackend {
       }
       else {
         String password = body.get("password");
+        String username = body.get("username");
+        String name = body.get("name");
+        String surname = body.get("surname");
         if (!isPasswordStrong(password)){
           return new ResponseEntity<>("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).", HttpStatus.BAD_REQUEST);
         }
 
         try {
-          createUser(email, password, "prova", "prova", "prova");
+          createUser(email, password, username, name, surname);
         } catch (SQLException e) {
           System.err.println(e);
-          return new ResponseEntity<>("Non è stato possibile creare l'utente: controlla la validità dell'email.", HttpStatus.BAD_REQUEST);
+          return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
         }
         
         // TODO create user
@@ -95,10 +98,10 @@ public class DietiEstatesBackend {
         String email = payload.getEmail();
         if (doesUserExist(email)) {
           try {
-            createUser(email, "", "prova", "prova", "prova");
+            createUser(email, "", email, "prova", "prova"); // TODO fix
           }
           catch (SQLException e){
-            return new ResponseEntity<>("Non è stato possibile creare l'utente: errore sconosciuto.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
           }
         }
         String accessToken = AccessTokenProvider.generateAccessToken(email);
@@ -195,6 +198,19 @@ public class DietiEstatesBackend {
       System.err.println("uncaught SQL exception");
     }
     return false;
+  }
+
+  private String getErrorMessageUserCreation(SQLException e){
+    String message = e.getMessage();
+    if (message.contains("valid_email")) {
+      return "Email non valida.";
+    }
+    else if (message.contains("unique_username")) {
+      return "Username già esistente, scegline un altro.";
+    }
+    else {
+      return "Errore sconosciuto";
+    }
   }
 
   private void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
