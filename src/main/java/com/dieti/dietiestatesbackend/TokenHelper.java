@@ -14,46 +14,46 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 class TokenHelper {
-  private final SecretKey key;
+    private final SecretKey key;
 
-  TokenHelper(String secretKey) {
-    key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-  }
-
-  boolean validateToken(String token) {
-    return !isTokenExpired(token);
-  }
-
-  boolean isTokenExpired(String token) {
-    final Date expiration = getExpirationDateFromToken(token);
-    return expiration == null || expiration.before(new Date());
-  }
-
-  String getUsernameFromToken(String token) {
-    return getClaimFromToken(token, Claims::getSubject);
-  }
-
-  Date getExpirationDateFromToken(String token) {
-    return getClaimFromToken(token, Claims::getExpiration);
-  }
-
-  <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-    try {
-      final Claims claims = getAllClaimsFromToken(token);
-      return claimsResolver.apply(claims);
-    } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      return null;
+    TokenHelper(String secretKey) {
+        key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-  }
 
-  private Claims getAllClaimsFromToken(String token) throws ExpiredJwtException,
-                                    UnsupportedJwtException,
-                                    MalformedJwtException,
-                                    IllegalArgumentException {
-    return Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
-  }
+    boolean validateToken(String token) {
+        return !isTokenExpired(token);
+    }
+
+    boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration == null || expiration.before(new Date());
+    }
+
+    String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        try {
+            final Claims claims = getAllClaimsFromToken(token);
+            return claimsResolver.apply(claims);
+        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    private Claims getAllClaimsFromToken(String token) throws ExpiredJwtException,
+                                        UnsupportedJwtException,
+                                        MalformedJwtException,
+                                        IllegalArgumentException {
+        return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
 }
