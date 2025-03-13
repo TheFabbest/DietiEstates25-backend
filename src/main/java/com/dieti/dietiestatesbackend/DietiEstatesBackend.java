@@ -128,9 +128,8 @@ public class DietiEstatesBackend {
 
     @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
     public ResponseEntity<?> getListings(@PathVariable("keyword") String keyword,
-        @RequestHeader("Authorization") String authorizationHeader) {
-      String accessToken = authorizationHeader.replace("Bearer ", "");
-      if (!AccessTokenProvider.validateToken(accessToken)) {
+    @RequestHeader(value = "Bearer", required = false) String accessToken) {
+      if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
         return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
       }
       return ResponseEntity.ok(Arrays.asList(new Listing("Castello di Hogwarts",
