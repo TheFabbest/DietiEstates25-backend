@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
@@ -16,11 +15,13 @@ import io.jsonwebtoken.security.Keys;
 @Component
 class AccessTokenProvider {
 
-  @Value("${jwt.secret}")
-  private final static String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET_KEY");
+    private AccessTokenProvider() {
+        throw new IllegalStateException("Utility class");
+    }
 
-  @Value("${jwt.access.expiration}")
-  private final static Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
+  private static final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET_KEY");
+
+  private static final Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
 
   static String generateAccessToken(String username) {
     Date now = new Date();
