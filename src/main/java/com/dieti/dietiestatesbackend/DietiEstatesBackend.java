@@ -1,13 +1,13 @@
 package com.dieti.dietiestatesbackend;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
@@ -16,6 +16,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,9 +33,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
@@ -44,12 +46,15 @@ public class DietiEstatesBackend {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
     private static final Pattern PASSWORD_COMPILED_PATTERN = Pattern.compile(PASSWORD_REGEX);
+    private static final Logger logger = Logger.getLogger(DietiEstatesBackend.class.getName());
 
     @RestController
     class Controller {
 
-        @RequestMapping(value = "/login", method = RequestMethod.POST)
-        public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        Logger logger = Logger.getLogger(getClass().getName());
+
+        @PostMapping("/login")
+        public ResponseEntity<Object> login(@RequestBody Map<String, String> body) {
             String email = body.get("email");
             String password = body.get("password");
             if (doesUserExist(email, password)) {
@@ -61,8 +66,8 @@ public class DietiEstatesBackend {
             }
         }
 
-        @RequestMapping(value = "/signup", method = RequestMethod.POST)
-        public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
+        @PostMapping("/signup")
+        public ResponseEntity<Object> signup(@RequestBody Map<String, String> body) {
             String email = body.get("email");
             // TODO verify email
             if (doesUserExist(email)) {
@@ -80,7 +85,7 @@ public class DietiEstatesBackend {
                 try {
                     createUser(email, password, username, name, surname);
                 } catch (SQLException e) {
-                    System.err.println(e);
+                    logger.log(Level.SEVERE, "Errore! {0}", e.getMessage());
                     return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
                 }
             
@@ -91,8 +96,8 @@ public class DietiEstatesBackend {
             }
         }
 
-        @RequestMapping(value = "/authwithgoogle", method = RequestMethod.POST)
-        public ResponseEntity<?> authWithGoogle(@RequestBody Map<String, String> body) {
+        @PostMapping("/authwithgoogle")
+        public ResponseEntity<Object> authWithGoogle(@RequestBody Map<String, String> body) {
             try {
                 GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
                 String email = payload.getEmail();
@@ -108,26 +113,26 @@ public class DietiEstatesBackend {
                 String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             } catch (IOException | GeneralSecurityException e) {
-                System.err.println("Token validation failed: " + e.getMessage());
+                logger.log(Level.SEVERE, "Validazione token fallita! {0}", e.getMessage());
                 return new ResponseEntity<>("Token google non valido", HttpStatusCode.valueOf(498));
             }
         }
 
-        @RequestMapping(value = "/refresh", method = RequestMethod.POST)
-        public ResponseEntity<?> refreshAccessToken(@RequestBody Map<String, String> body) {
+        @PostMapping("/refresh")
+        public ResponseEntity<Object> refreshAccessToken(@RequestBody Map<String, String> body) {
             String oldRefreshToken = body.get("refreshToken");
             String email = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
             if (RefreshTokenProvider.isTokenOf(email, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
                 String accessToken = AccessTokenProvider.generateAccessToken(email);
                 String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
-                scheduler.schedule(()->{RefreshTokenRepository.deleteUserToken(email, oldRefreshToken);}, 10, TimeUnit.SECONDS);
+                scheduler.schedule(()->RefreshTokenRepository.deleteUserToken(email, oldRefreshToken), 10, TimeUnit.SECONDS);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             }
             return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
 
-        @RequestMapping(value = "/listings/{keyword}", method = RequestMethod.GET)
-        public ResponseEntity<?> getListings(@PathVariable("keyword") String keyword,
+        @GetMapping("/listings/{keyword}")
+        public ResponseEntity<Object> getListings(@PathVariable("keyword") String keyword,
         @RequestHeader(value = "Bearer", required = false) String accessToken) {
             if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
                 return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
@@ -138,86 +143,95 @@ public class DietiEstatesBackend {
         }
 
         @GetMapping("/thumbnails/{filename}")
-        public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws Exception {
-        // Path path = Paths.get("./thumbnails/"+filename+".jpg");
-        // Resource resource = new UrlResource(path.toUri());
-            Resource resource = new UrlResource(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hogwarts_(29353868725).jpg/1200px-Hogwarts_(29353868725).jpg");
+        public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws ResponseStatusException {
+            // Path path = Paths.get("./thumbnails/"+filename+".jpg"); TODO remove and check if safe
+            // Resource resource = new UrlResource(path.toUri());
+            Resource resource = null; 
+            try {
+                resource = new UrlResource(
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hogwarts_(29353868725).jpg/1200px-Hogwarts_(29353868725).jpg");
+            } catch (MalformedURLException e) {
+                logger.log(Level.SEVERE, "URL malformato! {0}", e.getMessage());
+            }
             return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(resource);
         }
-    }
 
-    private boolean isPasswordStrong(String password){
-        final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
-        return matcher.matches();
-    }
 
-    private boolean doesUserExist(String email, String password) {
-        email=email.toLowerCase();
-        try {
+        private boolean isPasswordStrong(String password){
+            final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
+            return matcher.matches();
+        }
+    
+        private boolean doesUserExist(String email, String password) {
+            email=email.toLowerCase();
             String query = "SELECT password FROM \"DietiEstates2025\".utente WHERE email = ?";
-            PreparedStatement ps = myConnection.prepareStatement(query);
-            ps.setString(1, email);
-            
-            ResultSet rs = ps.executeQuery();
-            boolean hasResults = rs.isBeforeFirst();
-            if (hasResults) {
-                rs.next();
-                String storedPassword = rs.getString("password");
-                return passwordEncoder.matches(password, storedPassword);
-            }
-            else {
+            try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+                ps.setString(1, email);
+                
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.isBeforeFirst()) {
+                        rs.next();
+                        String storedPassword = rs.getString("password");
+                        return passwordEncoder.matches(password, storedPassword);
+                    } else {
+                        return false;
+                    }
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
                 return false;
             }
         }
-        catch (SQLException e) {
-            System.err.println("uncaught SQL exception");
-        }
-        return false;
-    }
 
-    private boolean doesUserExist(String email) {
-        email=email.toLowerCase();
-        try {
-            String query = "SELECT * FROM \"DietiEstates2025\".utente WHERE email = ?";
-            PreparedStatement ps = myConnection.prepareStatement(query);
-            ps.setString(1, email);
+        private boolean doesUserExist(String email) {
+            email = email.toLowerCase();
+            String query = "SELECT id FROM \"DietiEstates2025\".utente WHERE email = ?";
             
-            ResultSet rs = ps.executeQuery();
-            boolean hasResults = rs.isBeforeFirst();
-            return hasResults;
+            try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+                ps.setString(1, email);
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.isBeforeFirst();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
+                return false;
+            }
         }
-        catch (SQLException e) {
-            System.err.println("uncaught SQL exception");
+        
+    
+        private String getErrorMessageUserCreation(SQLException e){
+            String message = e.getMessage();
+            if (message.contains("valid_email")) {
+                return "Email non valida.";
+            }
+            else if (message.contains("unique_username")) {
+                return "Username già esistente, scegline un altro.";
+            }
+            else {
+                return "Errore sconosciuto";
+            }
         }
-        return false;
+
+        private void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
+            String query = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
+            password = passwordEncoder.encode(password);
+        
+            try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+                ps.setString(1, email);
+                ps.setString(2, password);
+                ps.setString(3, username);
+                ps.setString(4, nome);
+                ps.setString(5, cognome);
+        
+                ps.executeUpdate();
+            }
+        }
+        
     }
 
-    private String getErrorMessageUserCreation(SQLException e){
-        String message = e.getMessage();
-        if (message.contains("valid_email")) {
-            return "Email non valida.";
-        }
-        else if (message.contains("unique_username")) {
-            return "Username già esistente, scegline un altro.";
-        }
-        else {
-            return "Errore sconosciuto";
-        }
-    }
-
-    private void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
-        password = passwordEncoder.encode(password);
-        String unformattedQuery = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES ('%s','%s','%s','%s','%s')";
-        String query = String.format(unformattedQuery, email, password, username, nome, cognome);
-        Statement st = myConnection.createStatement();
-        st.executeUpdate(query);
-    }
-
-    private static void openConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.postgresql.Driver");
+    private static void openConnection() throws SQLException {
         String url = "jdbc:postgresql://google/postgres?currentSchema=DietiEstates2025&socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=third-oarlock-449614-m8:europe-west8:dietiestates2025";
         Properties info = new Properties();
         info.setProperty("user", "postgres");
@@ -229,10 +243,8 @@ public class DietiEstatesBackend {
         try {
             openConnection();
             return true;
-        } catch (ClassNotFoundException e) {
-            System.err.println("Driver non trovato");
         } catch (SQLException e) {
-            System.err.println("Connessione fallita" + e.toString());
+            logger.log(Level.SEVERE, "Connessione al database fallita! {0}", e.getMessage());
         }
         return false;
     }
