@@ -12,12 +12,9 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@SuppressWarnings("java:S1118")
 @Component
 class AccessTokenProvider {
-
-    private AccessTokenProvider() {
-        throw new IllegalStateException("Utility class");
-    }
 
   private static final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET_KEY");
 
