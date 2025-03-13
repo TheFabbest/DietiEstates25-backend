@@ -1,10 +1,10 @@
 package com.dieti.dietiestatesbackend;
 
 class Listing {
-  private final String name;
-  private final String description;
-  private final String location;
-  private final float price;
+  public final String name;
+  public final String description;
+  public final String location;
+  public final float price;
 
   Listing(String name, String desc, String location, float price) {
     this.name = name;
