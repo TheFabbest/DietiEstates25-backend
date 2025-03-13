@@ -26,7 +26,7 @@ class TokenHelper {
 
   boolean isTokenExpired(String token) {
     final Date expiration = getExpirationDateFromToken(token);
-    return expiration.before(new Date());
+    return expiration != null && expiration.before(new Date());
   }
 
   String getUsernameFromToken(String token) {
