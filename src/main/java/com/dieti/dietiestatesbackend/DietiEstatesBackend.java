@@ -100,24 +100,26 @@ public class DietiEstatesBackend {
             try {
                 GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
                 String email = payload.getEmail();
-                if (doesUserExist(email)) {
-                    return new ResponseEntity<>("Utente gia' registrato", HttpStatus.CONFLICT);}
-                else {
-                    String username = body.get("username");
-                    String name = body.get("name");
-                    String surname = body.get("surname");
-                    try {
-                        createUser(email, "", username, name, surname);
+                if (!doesUserExist(email)) {
+                    if (body.containsKey("username")) {
+                        String username = body.get("username");
+                        String name = body.get("name");
+                        String surname = body.get("surname");
+                        try {
+                            createUser(email, "", username, name, surname);
+                        }
+                        catch (SQLException e){
+                            return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
+                        }
                     }
-                    catch (SQLException e){
-                        return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
+                    else {
+                        return new ResponseEntity<>("L'utente non esiste", HttpStatus.NOT_FOUND);
                     }
                 }
                 String accessToken = AccessTokenProvider.generateAccessToken(email);
                 String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             } catch (IOException | GeneralSecurityException e) {
-                logger.log(Level.SEVERE, "Validazione token fallita! {0}", e.getMessage());
                 return new ResponseEntity<>("Token google non valido", HttpStatusCode.valueOf(498));
             }
         }
@@ -145,26 +147,6 @@ public class DietiEstatesBackend {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
             new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f)));
         }
-
-
-        @PostMapping("/doesuserexistbygoogletoken/")
-        public ResponseEntity<Object> doesUserExistByGoogleToken(@RequestBody Map<String, String> body) {
-            GoogleIdToken.Payload payload;
-            try {
-                payload = GoogleTokenValidator.validateToken(body.get("token"));
-            } catch (GeneralSecurityException e) {
-                return new ResponseEntity<>("Token Google non valido", HttpStatusCode.valueOf(498));
-            } catch (IOException e) {
-                return new ResponseEntity<>("Non è stato possibile leggere il token", HttpStatusCode.valueOf(400));
-            }
-            if (payload != null) {
-                String email = payload.getEmail();
-                boolean exists = doesUserExist(email);
-                return ResponseEntity.ok(exists);
-            }
-            return new ResponseEntity<>("Non è stato possibile leggere il token", HttpStatusCode.valueOf(400));
-        }
-
 
         @GetMapping("/thumbnails/{filename}")
         public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws ResponseStatusException {
