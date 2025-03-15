@@ -89,7 +89,6 @@ public class DietiEstatesBackend {
                     return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
                 }
             
-                // TODO create user
                 String accessToken = AccessTokenProvider.generateAccessToken(email);
                 String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
@@ -102,6 +101,8 @@ public class DietiEstatesBackend {
                 GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
                 String email = payload.getEmail();
                 if (doesUserExist(email)) {
+                    return new ResponseEntity<>("Utente gia' registrato", HttpStatus.CONFLICT);}
+                else {
                     String username = body.get("username");
                     String name = body.get("name");
                     String surname = body.get("surname");
