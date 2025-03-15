@@ -14,10 +14,10 @@ import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,11 +31,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
@@ -102,8 +102,11 @@ public class DietiEstatesBackend {
                 GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
                 String email = payload.getEmail();
                 if (doesUserExist(email)) {
+                    String username = body.get("username");
+                    String name = body.get("name");
+                    String surname = body.get("surname");
                     try {
-                        createUser(email, "", email, "prova", "prova"); // TODO fix
+                        createUser(email, "", username, name, surname);
                     }
                     catch (SQLException e){
                         return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
