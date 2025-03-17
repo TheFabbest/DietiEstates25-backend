@@ -1,6 +1,5 @@
 package com.dieti.dietiestatesbackend;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -153,11 +152,8 @@ public class DietiEstatesBackend {
 
         @GetMapping("/thumbnails/{id}")
         public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long listingID) throws ResponseStatusException {
-            File file = new File(".");
-            String[] directories = file.list((File current, String name) -> new File(current, name).isDirectory());
-            logger.log(Level.SEVERE, Arrays.toString(directories));
-            Path path = Paths.get("./data/listings/"+listingID+"/01.jpg");
-            Resource resource = null; 
+            Path path = Paths.get("data/resources/listings/"+listingID+"/01.jpg");
+            Resource resource = null;
             try {
                 resource = new UrlResource(path.toUri());
             } catch (MalformedURLException e) {
