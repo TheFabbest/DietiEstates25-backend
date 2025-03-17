@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.cloud.storage.*;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class DietiEstatesBackend {
@@ -152,7 +153,7 @@ public class DietiEstatesBackend {
 
         @GetMapping("/thumbnails/{id}")
         public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long listingID) throws ResponseStatusException {
-            Path path = Paths.get("data/resources/listings/"+listingID+"/01.jpg");
+            Path path = Paths.get("/data/resources/listings/1/01.jpg");
             Resource resource = null;
             try {
                 resource = new UrlResource(path.toUri());
