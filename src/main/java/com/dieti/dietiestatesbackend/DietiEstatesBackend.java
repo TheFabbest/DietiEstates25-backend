@@ -2,6 +2,8 @@ package com.dieti.dietiestatesbackend;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -150,12 +152,10 @@ public class DietiEstatesBackend {
 
         @GetMapping("/thumbnails/{filename}")
         public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws ResponseStatusException {
-            // Path path = Paths.get("./thumbnails/"+filename+".jpg"); TODO remove and check if safe
-            // Resource resource = new UrlResource(path.toUri());
+            Path path = Paths.get("./data/1/01.jpg");
             Resource resource = null; 
             try {
-                resource = new UrlResource(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hogwarts_(29353868725).jpg/1200px-Hogwarts_(29353868725).jpg");
+                resource = new UrlResource(path.toUri());
             } catch (MalformedURLException e) {
                 logger.log(Level.SEVERE, "URL malformato! {0}", e.getMessage());
             }
