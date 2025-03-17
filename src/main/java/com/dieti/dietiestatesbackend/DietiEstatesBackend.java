@@ -152,7 +152,7 @@ public class DietiEstatesBackend {
 
         @GetMapping("/thumbnails/{id}")
         public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long listingID) throws ResponseStatusException {
-            Path path = Paths.get("/data/resources/listings/1/01.jpg");
+            Path path = Paths.get("/data/resources/listings/"+listingID+"/01.jpg");
             Resource resource = null;
             try {
                 resource = new UrlResource(path.toUri());
