@@ -1,12 +1,14 @@
 package com.dieti.dietiestatesbackend;
 
 class Listing {
+    public final long id;
     public final String name;
     public final String description;
     public final String location;
     public final float price;
 
-    Listing(String name, String desc, String location, float price) {
+    Listing(long id, String name, String desc, String location, float price) {
+        this.id = id;
         this.name = name;
         description = desc;
         this.location = location;

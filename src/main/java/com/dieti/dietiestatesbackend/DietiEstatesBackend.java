@@ -145,14 +145,14 @@ public class DietiEstatesBackend {
             if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
                 return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
             }
-            return ResponseEntity.ok(Arrays.asList(new Listing("Castello di Hogwarts",
+            return ResponseEntity.ok(Arrays.asList(new Listing(1,"Castello di Hogwarts",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", "Napoli (NA)", 3500000f),
-            new Listing("Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f)));
+            new Listing(1,"Casa dello Hobbit", "Lorem ipsum", "Pioppaino (NA)", 1350000f)));
         }
 
-        @GetMapping("/thumbnails/{filename}")
-        public ResponseEntity<Resource> getThumbnails(@PathVariable("filename") String filename) throws ResponseStatusException {
-            Path path = Paths.get("./data/1/01.jpg");
+        @GetMapping("/thumbnails/{id}")
+        public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long listingID) throws ResponseStatusException {
+            Path path = Paths.get("./data/"+listingID+"/01.jpg");
             Resource resource = null; 
             try {
                 resource = new UrlResource(path.toUri());
