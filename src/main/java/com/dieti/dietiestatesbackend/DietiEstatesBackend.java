@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.cloud.storage.*;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class DietiEstatesBackend {
