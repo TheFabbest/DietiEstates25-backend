@@ -60,8 +60,9 @@ public class DietiEstatesBackend {
             String email = body.get("email");
             String password = body.get("password");
             if (doesUserExist(email, password)) {
-                String accessToken = AccessTokenProvider.generateAccessToken(email);
-                String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+                String username = getUsernameFromEmail(email);
+                String accessToken = AccessTokenProvider.generateAccessToken(username);
+                String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             } else {
                 return new ResponseEntity<>("Credenziali non valide", HttpStatus.UNAUTHORIZED);
@@ -71,13 +72,13 @@ public class DietiEstatesBackend {
         @PostMapping("/signup")
         public ResponseEntity<Object> signup(@RequestBody Map<String, String> body) {
             String email = body.get("email");
+            String username = body.get("username");
             // TODO verify email
             if (doesUserExist(email)) {
                 return new ResponseEntity<>("Utente gia' registrato", HttpStatus.CONFLICT);
             }
             else {
                 String password = body.get("password");
-                String username = body.get("username");
                 String name = body.get("name");
                 String surname = body.get("surname");
                 if (!isPasswordStrong(password)){
@@ -91,8 +92,8 @@ public class DietiEstatesBackend {
                     return new ResponseEntity<>(getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
                 }
             
-                String accessToken = AccessTokenProvider.generateAccessToken(email);
-                String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+                String accessToken = AccessTokenProvider.generateAccessToken(username);
+                String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             }
         }
@@ -102,9 +103,9 @@ public class DietiEstatesBackend {
             try {
                 GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
                 String email = payload.getEmail();
+                String username = body.get("username");
                 if (!doesUserExist(email)) {
                     if (body.containsKey("username")) {
-                        String username = body.get("username");
                         String name = body.get("name");
                         String surname = body.get("surname");
                         try {
@@ -118,8 +119,8 @@ public class DietiEstatesBackend {
                         return new ResponseEntity<>("L'utente non esiste", HttpStatus.NOT_FOUND);
                     }
                 }
-                String accessToken = AccessTokenProvider.generateAccessToken(email);
-                String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
+                String accessToken = AccessTokenProvider.generateAccessToken(username);
+                String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             } catch (IOException | GeneralSecurityException e) {
                 return new ResponseEntity<>("Token google non valido", HttpStatusCode.valueOf(498));
@@ -129,11 +130,11 @@ public class DietiEstatesBackend {
         @PostMapping("/refresh")
         public ResponseEntity<Object> refreshAccessToken(@RequestBody Map<String, String> body) {
             String oldRefreshToken = body.get("refreshToken");
-            String email = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-            if (RefreshTokenProvider.isTokenOf(email, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
-                String accessToken = AccessTokenProvider.generateAccessToken(email);
-                String refreshToken = RefreshTokenProvider.generateRefreshToken(email);
-                scheduler.schedule(()->RefreshTokenRepository.deleteUserToken(email, oldRefreshToken), 10, TimeUnit.SECONDS);
+            String username = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
+            if (RefreshTokenProvider.isTokenOf(username, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
+                String accessToken = AccessTokenProvider.generateAccessToken(username);
+                String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
+                scheduler.schedule(()->RefreshTokenRepository.deleteUserToken(username, oldRefreshToken), 10, TimeUnit.SECONDS);
                 return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
             }
             return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
@@ -188,6 +189,25 @@ public class DietiEstatesBackend {
             } catch (SQLException e) {
                 logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
                 return false;
+            }
+        }
+
+        private String getUsernameFromEmail(String email) {
+            String query = "SELECT username FROM \"DietiEstates2025\".utente WHERE email = ?";
+            try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+                ps.setString(1, email);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.isBeforeFirst()) {
+                        rs.next();
+                        String username = rs.getString("username");
+                        return username;
+                    } else {
+                        return "";
+                    }
+                }
+            } catch(SQLException e) {
+                logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
+                return "";
             }
         }
 
