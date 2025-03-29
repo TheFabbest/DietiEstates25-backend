@@ -47,6 +47,12 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 
+		<!-- Validation Starter -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 		<!-- Spring Data JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -100,8 +106,6 @@
 			<artifactId>postgres-socket-factory</artifactId>
 			<version>1.15.0</version>
 		</dependency>
-
-
 
 		<!-- Optional: For development tools -->
 		<dependency>
