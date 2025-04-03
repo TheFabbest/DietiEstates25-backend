@@ -1,4 +1,4 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -12,13 +12,13 @@ import io.jsonwebtoken.security.Keys;
 
 @SuppressWarnings("java:S1118")
 @Component
-class RefreshTokenProvider {
+public class RefreshTokenProvider {
 
     private static final String SECRET_KEY = System.getenv("REFRESH_TOKEN_SECRET_KEY");
 
     private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
 
-    static String generateRefreshToken(final String username) {
+    public static String generateRefreshToken(final String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_DURATION_MS);
 
@@ -35,17 +35,17 @@ class RefreshTokenProvider {
         return refreshToken;
     }
 
-    static boolean validateToken(final String token) {
+    public static boolean validateToken(final String token) {
         TokenHelper th = new TokenHelper(SECRET_KEY);
         return th.validateToken(token);
     }
 
-    static String getUsernameFromToken(final String token) {
+    public static String getUsernameFromToken(final String token) {
         TokenHelper helper = new TokenHelper(SECRET_KEY);
         return helper.getUsernameFromToken(token);
     }
 
-    static boolean isTokenOf(final String user, final String oldRefreshToken) {
+    public static boolean isTokenOf(final String user, final String oldRefreshToken) {
         return RefreshTokenRepository.getTokensByUserId(user).contains(oldRefreshToken);
     }
 }

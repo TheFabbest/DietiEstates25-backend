@@ -1,4 +1,4 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -13,31 +13,31 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
-class TokenHelper {
+public class TokenHelper {
     private final SecretKey key;
 
-    TokenHelper(String secretKey) {
+    public TokenHelper(String secretKey) {
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
 
-    boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration == null || expiration.before(new Date());
     }
 
-    String getUsernameFromToken(String token) {
+    public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         try {
             final Claims claims = getAllClaimsFromToken(token);
             return claimsResolver.apply(claims);

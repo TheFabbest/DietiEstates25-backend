@@ -1,12 +1,12 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.dietiestates.enums.ClasseEnergetica;
-import com.dietiestates.enums.StatoImmobile;
-import com.dietiestates.enums.TipologiaProprieta;
+import com.dieti.dietiestatesbackend.enums.ClasseEnergetica;
+import com.dieti.dietiestatesbackend.enums.StatoImmobile;
+import com.dieti.dietiestatesbackend.enums.TipologiaProprieta;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;

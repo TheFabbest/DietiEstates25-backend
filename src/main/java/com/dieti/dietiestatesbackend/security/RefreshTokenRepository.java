@@ -1,13 +1,13 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.security;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-class RefreshTokenRepository {
+public class RefreshTokenRepository {
     private static final HashMap<String, ArrayList<String>> tokens = new HashMap<>();
 
-    static void save(String username, String newtoken) {
+    public static void save(String username, String newtoken) {
         if (tokens.containsKey(username)){
             tokens.get(username).add(newtoken);
         }
@@ -16,13 +16,13 @@ class RefreshTokenRepository {
         }
     }
 
-    static void deleteUserToken(String username, String removeToken) {
+    public static void deleteUserToken(String username, String removeToken) {
         if (tokens.containsKey(username)){
             tokens.get(username).remove(removeToken);
         }
     }
 
-    static ArrayList<String> getTokensByUserId(String username) {
+    public static ArrayList<String> getTokensByUserId(String username) {
         return tokens.get(username);
     }
 }

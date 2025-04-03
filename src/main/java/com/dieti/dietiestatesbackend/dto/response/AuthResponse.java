@@ -1,10 +1,10 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.dto.response;
 
-class AuthResponse {
+public class AuthResponse {
     private final String accessToken;
     private final String refreshToken;
 
-    AuthResponse(String accessToken, String refreshToken) {
+    public AuthResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

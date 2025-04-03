@@ -1,4 +1,4 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,13 +7,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "contratto", schema = "DietiEstates2025")
+@Table(name = "riscaldamento", schema = "DietiEstates2025")
 @SequenceGenerator(
-    name = "contratto_seq",
-    sequenceName = "DietiEstates2025.contratto_idcontratto_seq",
+    name = "riscaldamento_seq",
+    sequenceName = "DietiEstates2025.riscaldamento_id_seq",
     allocationSize = 1
 )
-public class Contratto extends BaseEntity {
+//LOOK-UP TABLE
+public class Riscaldamento extends BaseEntity {
 
     @NotBlank
     @Column(name = "nome", unique = true, nullable = false)

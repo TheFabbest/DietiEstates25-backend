@@ -1,4 +1,4 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -12,13 +12,13 @@ import io.jsonwebtoken.security.Keys;
 
 @SuppressWarnings("java:S1118")
 @Component
-class AccessTokenProvider {
+public class AccessTokenProvider {
 
   private static final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET_KEY");
 
   private static final Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
 
-  static String generateAccessToken(String username) {
+  public static String generateAccessToken(String username) {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_DURATION_MS);
 
@@ -32,7 +32,7 @@ class AccessTokenProvider {
         .compact();
   }
 
-  static boolean validateToken(String token) {
+  public static boolean validateToken(String token) {
     TokenHelper th = new TokenHelper(SECRET_KEY);
     return th.validateToken(token);
   }

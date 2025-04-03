@@ -1,9 +1,9 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.dietiestates.enums.StatoOfferta;
+import com.dieti.dietiestatesbackend.enums.StatoOfferta;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

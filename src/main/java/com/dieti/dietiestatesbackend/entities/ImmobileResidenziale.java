@@ -1,8 +1,8 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import java.util.List;
 
-import com.dietiestates.enums.Giardino;
+import com.dieti.dietiestatesbackend.enums.Giardino;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

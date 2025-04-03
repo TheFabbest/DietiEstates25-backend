@@ -1,4 +1,4 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
 

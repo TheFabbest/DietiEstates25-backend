@@ -1,4 +1,4 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.dietiestates.enums;
+package com.dieti.dietiestatesbackend.enums;
 
 public enum ClasseEnergetica {
     A4,

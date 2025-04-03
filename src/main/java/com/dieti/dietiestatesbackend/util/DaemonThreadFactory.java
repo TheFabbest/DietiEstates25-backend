@@ -1,4 +1,4 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.util;
 
 import java.util.concurrent.ThreadFactory;
 
@@ -9,4 +9,4 @@ public class DaemonThreadFactory implements ThreadFactory {
         thread.setDaemon(true);
         return thread;
     }
-  }
+}

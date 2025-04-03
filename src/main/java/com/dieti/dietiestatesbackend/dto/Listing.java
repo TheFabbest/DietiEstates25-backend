@@ -1,13 +1,13 @@
-package com.dieti.dietiestatesbackend;
+package com.dieti.dietiestatesbackend.dto;
 
-class Listing {
+public class Listing {
     public final long id;
     public final String name;
     public final String description;
     public final String location;
     public final float price;
 
-    Listing(long id, String name, String desc, String location, float price) {
+    public Listing(long id, String name, String desc, String location, float price) {
         this.id = id;
         this.name = name;
         description = desc;

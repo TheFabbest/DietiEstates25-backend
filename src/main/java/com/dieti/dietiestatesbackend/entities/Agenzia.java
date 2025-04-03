@@ -1,4 +1,4 @@
-package com.dietiestates.entities;
+package com.dieti.dietiestatesbackend.entities;
 
 import java.util.ArrayList;
 import java.util.List;
