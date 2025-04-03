@@ -6,16 +6,21 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "agenzia", schema = "DietiEstates2025")
 @SequenceGenerator(
     name = "agenzia_seq",
-    sequenceName = "DietiEstates2025.\"agenzia_id_seq\"",
+    sequenceName = "DietiEstates2025.\"Agenzia_idagenzia_seq\"",
     allocationSize = 1
 )
 public class Agenzia extends BaseEntity {
@@ -24,23 +29,10 @@ public class Agenzia extends BaseEntity {
     @Column(name = "nome", unique = true, nullable = false)
     private String nome;
 
-    @NotBlank
-    @Column(name = "citta", nullable = false)
-    private String citta;
-
-    @NotBlank
-    @Column(name = "via", nullable = false)
-    private String via;
-
-    @Column(name = "civico")
-    private String civico;
-
-    @Column(name = "edificio")
-    private String edificio;
-
-    @NotBlank
-    @Column(name = "provincia", nullable = false)
-    private String provincia;
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_indirizzo", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_agenzia_indirizzo"))
+    private Indirizzo indirizzo;
 
     @OneToMany(mappedBy = "agenzia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Utente> utenti = new ArrayList<>();
@@ -49,20 +41,8 @@ public class Agenzia extends BaseEntity {
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
-    public String getCitta() { return citta; }
-    public void setCitta(String citta) { this.citta = citta; }
-
-    public String getVia() { return via; }
-    public void setVia(String via) { this.via = via; }
-
-    public String getCivico() { return civico; }
-    public void setCivico(String civico) { this.civico = civico; }
-
-    public String getEdificio() { return edificio; }
-    public void setEdificio(String edificio) { this.edificio = edificio; }
-
-    public String getProvincia() { return provincia; }
-    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public Indirizzo getIndirizzo() { return indirizzo; }
+    public void setIndirizzo(Indirizzo indirizzo) { this.indirizzo = indirizzo; }
 
     public List<Utente> getUtenti() { return utenti; }
     public void setUtenti(List<Utente> utenti) { this.utenti = utenti; }
