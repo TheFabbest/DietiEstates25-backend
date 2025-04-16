@@ -38,7 +38,7 @@ public class ListingController {
             new Listing(1, "Castello di Hogwarts",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", 
                 "Napoli (NA)", 3500000f),
-            new Listing(1, "Casa dello Hobbit", 
+            new Listing(2, "Casa dello Hobbit", 
                 "Lorem ipsum", 
                 "Pioppaino (NA)", 1350000f)
         ));
