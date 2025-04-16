@@ -23,6 +23,6 @@ public class RefreshTokenRepository {
     }
 
     public static ArrayList<String> getTokensByUserId(String username) {
-        return tokens.get(username);
+        return (tokens.get(username) == null) ? new ArrayList<>() : tokens.get(username);
     }
 }

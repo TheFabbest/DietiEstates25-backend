@@ -115,7 +115,7 @@ public class AuthController {
     public ResponseEntity<Object> refreshAccessToken(@RequestBody Map<String, String> body) {
         String oldRefreshToken = body.get("refreshToken");
         String username = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-        if (RefreshTokenProvider.isTokenOf(username, oldRefreshToken) && RefreshTokenProvider.validateToken(oldRefreshToken)) {
+        if (RefreshTokenProvider.validateToken(oldRefreshToken) && RefreshTokenProvider.isTokenOf(username, oldRefreshToken)) {
             String accessToken = AccessTokenProvider.generateAccessToken(username);
             String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
             scheduler.schedule(()->RefreshTokenRepository.deleteUserToken(username, oldRefreshToken), 10, TimeUnit.SECONDS);
