@@ -16,7 +16,7 @@ public class AccessTokenProvider {
 
   private static final String SECRET_KEY = System.getenv("ACCESS_TOKEN_SECRET_KEY");
 
-  private static final Long ACCESS_TOKEN_DURATION_MS = 60000l; //900000l; // 15 minutes TODO
+  private static final Long ACCESS_TOKEN_DURATION_MS = 900000l; // 15 minutes
 
   public static String generateAccessToken(String username) {
     Date now = new Date();
