@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "immobile_residenziale", schema = "DietiEstates2025")
+@Table(name = "immobile_residenziale")
 public class ImmobileResidenziale {
 
     @Id

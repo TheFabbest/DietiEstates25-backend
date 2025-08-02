@@ -28,7 +28,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "immobile", schema = "DietiEstates2025")
+@Table(name = "immobile")
 @SequenceGenerator(
     name = "immobile_seq",
     sequenceName = "DietiEstates2025.immobile_id_seq",

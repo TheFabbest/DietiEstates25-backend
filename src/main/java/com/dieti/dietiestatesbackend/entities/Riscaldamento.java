@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "riscaldamento", schema = "DietiEstates2025")
+@Table(name = "riscaldamento")
 @SequenceGenerator(
     name = "riscaldamento_seq",
     sequenceName = "DietiEstates2025.riscaldamento_id_seq",

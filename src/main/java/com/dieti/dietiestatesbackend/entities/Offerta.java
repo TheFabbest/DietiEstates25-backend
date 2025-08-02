@@ -19,7 +19,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "offerta", schema = "DietiEstates2025")
+@Table(name = "offerta")
 @SequenceGenerator(
     name = "offerta_seq",
     sequenceName = "DietiEstates2025.offerta_id_seq",
