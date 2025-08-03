@@ -37,3 +37,6 @@ build/
 
 # macOS stuff
 .DS_Store
+
+# Roo
+.roo
