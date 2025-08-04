@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "indirizzo")
 @SequenceGenerator(
     name = "indirizzo_seq",
-    sequenceName = "DietiEstates2025.indirizzo_id_seq",
+    sequenceName = "dieti_estates.indirizzo_id_seq",
     allocationSize = 1
 )
 public class Indirizzo extends BaseEntity {

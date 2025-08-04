@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Pattern;
 @Table(name = "utente")
 @SequenceGenerator(
     name = "utente_seq",
-    sequenceName = "DietiEstates2025.utente_id_seq",
+    sequenceName = "dieti_estates.utente_id_seq",
     allocationSize = 1
 )
 public class Utente extends BaseEntity {

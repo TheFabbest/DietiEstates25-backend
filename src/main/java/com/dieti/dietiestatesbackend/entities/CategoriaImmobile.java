@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "categoria_immobile")
 @SequenceGenerator(
     name = "categoria_immobile_seq",
-    sequenceName = "DietiEstates2025.categoria_immobile_id_seq",
+    sequenceName = "dieti_estates.categoria_immobile_id_seq",
     allocationSize = 1
 )
 //LOOK-UP TABLE

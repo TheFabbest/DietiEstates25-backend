@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "contratto")
 @SequenceGenerator(
     name = "contratto_seq",
-    sequenceName = "DietiEstates2025.contratto_idcontratto_seq",
+    sequenceName = "dieti_estates.contratto_idcontratto_seq",
     allocationSize = 1
 )
 public class Contratto extends BaseEntity {

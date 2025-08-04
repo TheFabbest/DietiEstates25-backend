@@ -31,7 +31,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "immobile")
 @SequenceGenerator(
     name = "immobile_seq",
-    sequenceName = "DietiEstates2025.immobile_id_seq",
+    sequenceName = "dieti_estates.immobile_id_seq",
     allocationSize = 1
 )
 public class Immobile extends BaseEntity {

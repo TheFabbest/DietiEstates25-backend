@@ -29,12 +29,13 @@ public class UserService {
 
     public boolean isPasswordStrong(String password) {
         final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
+        System.out.println(password);
         return matcher.matches();
     }
 
     public boolean doesUserExist(String email, String password) {
         email = email.toLowerCase();
-        String query = "SELECT password FROM \"DietiEstates2025\".utente WHERE email = ?";
+        String query = "SELECT password FROM \"dieti_estates\".utente WHERE email = ?";
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
             
@@ -54,7 +55,7 @@ public class UserService {
     }
 
     public String getUsernameFromEmail(String email) {
-        String query = "SELECT username FROM \"DietiEstates2025\".utente WHERE email = ?";
+        String query = "SELECT username FROM \"dieti_estates\".utente WHERE email = ?";
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
@@ -73,7 +74,7 @@ public class UserService {
 
     public boolean doesUserExist(String email) {
         email = email.toLowerCase();
-        String query = "SELECT id FROM \"DietiEstates2025\".utente WHERE email = ?";
+        String query = "SELECT id FROM \"dieti_estates\".utente WHERE email = ?";
         
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
@@ -100,7 +101,7 @@ public class UserService {
     }
 
     public void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
-        String query = "INSERT INTO \"DietiEstates2025\".utente (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO \"dieti_estates\".utente (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
         password = passwordEncoder.encode(password);
     
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {

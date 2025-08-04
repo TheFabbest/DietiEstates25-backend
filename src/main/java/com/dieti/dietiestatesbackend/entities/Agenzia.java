@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "agenzia")
 @SequenceGenerator(
     name = "agenzia_seq",
-    sequenceName = "DietiEstates2025.\"Agenzia_idagenzia_seq\"",
+    sequenceName = "dieti_estates.\"Agenzia_idagenzia_seq\"",
     allocationSize = 1
 )
 public class Agenzia extends BaseEntity {
