@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
-    private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
     private static final Pattern PASSWORD_COMPILED_PATTERN = Pattern.compile(PASSWORD_REGEX);
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
@@ -29,7 +29,6 @@ public class UserService {
 
     public boolean isPasswordStrong(String password) {
         final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
-        System.out.println(password);
         return matcher.matches();
     }
 

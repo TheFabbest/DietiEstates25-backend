@@ -3,10 +3,13 @@ package com.dieti.dietiestatesbackend.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatusCode;
@@ -21,11 +24,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.dieti.dietiestatesbackend.dto.Listing;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
+import com.dieti.dietiestatesbackend.service.ImmobileService;
 
 @RestController
 @RequestMapping("/api")
 public class ListingController {
     private static final Logger logger = Logger.getLogger(ListingController.class.getName());
+    private final ImmobileService immobileService;
+
+    @Autowired
+    public ListingController(ImmobileService immobileService) {
+        this.immobileService = immobileService;
+    }
 
     @GetMapping("/listings/{keyword}")
     public ResponseEntity<Object> getListings(
@@ -56,5 +66,15 @@ public class ListingController {
         return ResponseEntity.ok()
             .contentType(MediaType.IMAGE_JPEG)
             .body(resource);
+    }
+
+    @GetMapping("/properties/featured")
+    public ResponseEntity<Object> getFeatured() throws ResponseStatusException {
+        try {
+            return ResponseEntity.ok(immobileService.getFeatured());
+        }
+        catch (SQLException e) {
+            return ResponseEntity.internalServerError().body(new ArrayList<Listing>());
+        }
     }
 }

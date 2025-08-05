@@ -43,7 +43,6 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
-        System.out.println("LOGIN REQUEST");
         if (userService.doesUserExist(email, password)) {
             String username = userService.getUsernameFromEmail(email);
             String accessToken = AccessTokenProvider.generateAccessToken(username);
