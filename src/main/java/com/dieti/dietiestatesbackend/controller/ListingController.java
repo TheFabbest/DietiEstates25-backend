@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,21 +36,20 @@ public class ListingController {
         this.immobileService = immobileService;
     }
 
-    @GetMapping("/listings/{keyword}")
+    @GetMapping("/properties/search/{keyword}")
     public ResponseEntity<Object> getListings(
             @PathVariable("keyword") String keyword,
             @RequestHeader(value = "Bearer", required = false) String accessToken) {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        return ResponseEntity.ok(Arrays.asList(
-            new Listing(1, "Castello di Hogwarts",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor", 
-                "Napoli (NA)", 3500000f),
-            new Listing(2, "Casa dello Hobbit", 
-                "Lorem ipsum", 
-                "Pioppaino (NA)", 1350000f)
-        ));
+        try {
+            return ResponseEntity.ok(immobileService.searchImmobili(keyword));
+        }
+        catch (SQLException e) {
+            logger.log(Level.SEVERE, "Errore durante la ricerca degli immobili: {0}", e.getMessage());
+            return ResponseEntity.internalServerError().body(new ArrayList<Listing>());
+        }
     }
 
     @GetMapping("/thumbnails/{id}")

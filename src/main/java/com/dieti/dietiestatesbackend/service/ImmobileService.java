@@ -43,7 +43,35 @@ public class ImmobileService {
 
     // // Common operations
     // Page<ImmobileResponse> getImmobili(Pageable pageable);
-    // Page<ImmobileResponse> searchImmobili(String keyword, Pageable pageable);
+    public List<ImmobileResponse> searchImmobili(String keyword) throws SQLException {
+        String query = "SELECT * FROM dieti_estates.immobile WHERE descrizione LIKE ?";
+        PreparedStatement ps = myConnection.prepareStatement(query);
+        ps.setString(1, "%"+keyword+"%");
+        ResultSet rs = ps.executeQuery();
+
+        List<ImmobileResponse> results = new ArrayList<>();
+        while (rs.next()) {
+            ImmobileResponse response = new ImmobileResponse();
+            response.setId(rs.getLong("id"));
+            response.setDescrizione(rs.getString("descrizione"));
+            response.setPrezzo(rs.getBigDecimal("prezzo"));
+            response.setSuperficie(rs.getInt("superficie"));
+            response.setAgenteImmobiliare(rs.getInt("id_agente_immobiliare"));
+            response.setIndirizzo(rs.getInt("id_indirizzo"));
+            response.setUltimaModifica(rs.getTimestamp("ultima_modifica").toLocalDateTime());
+            response.setContratto(rs.getInt("id_contratto"));
+            //response.setCaratteristicheAddizionali(rs.); // TODO see
+            // response.setCategoriaImmobile(rs.getInt("categoria_immobile")); // TODO see id or String or enum ?
+            // response.setStatoImmobile(rs.getInt("stato_immobile"));
+            // response.setClasseEnergetica(rs.getInt("classe_energetica"));
+            // response.setTipologiaProprieta(rs.getInt("tipologia_proprieta"));
+            //response.setCreatedAt(null); // TODO see if needed
+
+            // Set other fields as necessary
+            results.add(response);
+        }
+        return results;
+    }
     // ImmobileResponse getImmobile(Long id) throws EntityNotFoundException;
     // void deleteImmobile(Long id, String username);
     // Page<ImmobileResponse> getImmobiliByAgente(String username, Pageable pageable);

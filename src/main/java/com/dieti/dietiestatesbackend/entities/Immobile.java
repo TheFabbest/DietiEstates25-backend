@@ -24,7 +24,6 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -36,8 +35,8 @@ import jakarta.validation.constraints.NotNull;
 )
 public class Immobile extends BaseEntity {
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "descrizione")
+    private String descrizione;
 
     @NotNull
     @DecimalMin(value = "0.01")
@@ -88,18 +87,13 @@ public class Immobile extends BaseEntity {
     @JoinColumn(name = "id_indirizzo", nullable = false, foreignKey = @ForeignKey(name = "fk_immobile_indirizzo"))
     private Indirizzo indirizzo;
 
-    @NotEmpty
-    @ElementCollection
-    @CollectionTable(name = "immobile_immagini", joinColumns = @JoinColumn(name = "immobile_id"))
-    @Column(name = "immagine_url", nullable = false)
-    private List<String> immagini;
 
     @Column(name = "ultima_modifica", nullable = false)
     private LocalDateTime ultimaModifica = LocalDateTime.now();
 
     // Getters and setters
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescrizione() { return descrizione; }
+    public void setDescrizione(String description) { this.descrizione = description; }
 
     public BigDecimal getPrezzo() { return prezzo; }
     public void setPrezzo(BigDecimal prezzo) { this.prezzo = prezzo; }
@@ -130,9 +124,6 @@ public class Immobile extends BaseEntity {
 
     public Indirizzo getIndirizzo() { return indirizzo; }
     public void setIndirizzo(Indirizzo indirizzo) { this.indirizzo = indirizzo; }
-
-    public List<String> getImmagini() { return immagini; }
-    public void setImmagini(List<String> immagini) { this.immagini = immagini; }
 
     public LocalDateTime getUltimaModifica() { return ultimaModifica; }
     public void setUltimaModifica(LocalDateTime ultimaModifica) { this.ultimaModifica = ultimaModifica; }
