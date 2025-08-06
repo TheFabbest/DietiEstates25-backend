@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
@@ -14,10 +13,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "commercial_property")
-public class CommercialProperty {
-
-    @Id
-    private Long id;
+public class CommercialProperty extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
@@ -52,8 +48,6 @@ public class CommercialProperty {
     private Integer numeroVetrine = 0;
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public Property getProperty() { return property; }
     public void setProperty(Property property) { this.property = property; }
