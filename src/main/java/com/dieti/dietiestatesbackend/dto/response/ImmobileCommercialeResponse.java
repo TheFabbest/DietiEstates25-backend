@@ -2,7 +2,7 @@ package com.dieti.dietiestatesbackend.dto.response;
 
 import java.util.List;
 
-public class ImmobileCommercialeResponse extends ImmobileResponse {
+public class ImmobileCommercialeResponse extends PropertyResponse {
     private Integer numeroLocali;
     private List<String> piani;
     private Integer numeroBagni;

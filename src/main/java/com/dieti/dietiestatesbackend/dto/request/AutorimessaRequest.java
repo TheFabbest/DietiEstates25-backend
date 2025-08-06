@@ -5,7 +5,7 @@ import java.util.List;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
-public class AutorimessaRequest extends ImmobileRequest {
+public class AutorimessaRequest extends PropertyRequest {
     private boolean haSorveglianza = false;
     
     @NotEmpty

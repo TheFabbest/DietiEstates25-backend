@@ -2,7 +2,7 @@ package com.dieti.dietiestatesbackend.dto.response;
 
 import java.util.List;
 
-public class AutorimessaResponse extends ImmobileResponse {
+public class AutorimessaResponse extends PropertyResponse {
     private boolean haSorveglianza;
     private List<String> piani;
     private Integer numeroPiani;

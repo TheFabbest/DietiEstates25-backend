@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
-public class TerrenoRequest extends ImmobileRequest {
+public class TerrenoRequest extends PropertyRequest {
     private boolean haIngressoDallaStrada = true;
 
     // Getters and setters

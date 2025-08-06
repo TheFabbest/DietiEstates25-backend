@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class ImmobileCommercialeRequest extends ImmobileRequest {
+public class ImmobileCommercialeRequest extends PropertyRequest {
     @NotNull @Min(1)
     private Integer numeroLocali;
     

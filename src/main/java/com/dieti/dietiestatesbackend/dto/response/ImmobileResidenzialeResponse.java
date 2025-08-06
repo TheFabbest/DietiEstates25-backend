@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.Giardino;
 
-public class ImmobileResidenzialeResponse extends ImmobileResponse {
+public class ImmobileResidenzialeResponse extends PropertyResponse {
     private Integer numeroLocali;
     private Integer numeroBagni;
     private Integer postiAuto;

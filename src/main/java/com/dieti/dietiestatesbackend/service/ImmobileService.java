@@ -6,29 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.dieti.dietiestatesbackend.dto.request.ImmobileRequest;
-import com.dieti.dietiestatesbackend.dto.request.ImmobileResidenzialeRequest;
-import com.dieti.dietiestatesbackend.dto.request.ImmobileCommercialeRequest;
-import com.dieti.dietiestatesbackend.dto.request.TerrenoRequest;
 import com.dieti.dietiestatesbackend.dto.Listing;
-import com.dieti.dietiestatesbackend.dto.request.AutorimessaRequest;
-import com.dieti.dietiestatesbackend.dto.response.ImmobileResponse;
-import com.dieti.dietiestatesbackend.dto.response.ImmobileResidenzialeResponse;
-import com.dieti.dietiestatesbackend.dto.response.ImmobileCommercialeResponse;
-import com.dieti.dietiestatesbackend.dto.response.TerrenoResponse;
-import com.dieti.dietiestatesbackend.dto.response.AutorimessaResponse;
-import com.dieti.dietiestatesbackend.entities.Property;
-import jakarta.persistence.EntityNotFoundException;
+import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 
 @Service
 public class ImmobileService {
@@ -43,23 +27,23 @@ public class ImmobileService {
 
     // // Common operations
     // Page<ImmobileResponse> getImmobili(Pageable pageable);
-    public List<ImmobileResponse> searchImmobili(String keyword) throws SQLException {
+    public List<PropertyResponse> searchImmobili(String keyword) throws SQLException {
         String query = "SELECT * FROM dieti_estates.immobile WHERE descrizione LIKE ?";
         PreparedStatement ps = myConnection.prepareStatement(query);
         ps.setString(1, "%"+keyword+"%");
         ResultSet rs = ps.executeQuery();
 
-        List<ImmobileResponse> results = new ArrayList<>();
+        List<PropertyResponse> results = new ArrayList<>();
         while (rs.next()) {
-            ImmobileResponse response = new ImmobileResponse();
+            PropertyResponse response = new PropertyResponse();
             response.setId(rs.getLong("id"));
-            response.setDescrizione(rs.getString("descrizione"));
-            response.setPrezzo(rs.getBigDecimal("prezzo"));
-            response.setSuperficie(rs.getInt("superficie"));
-            response.setAgenteImmobiliare(rs.getInt("id_agente_immobiliare"));
-            response.setIndirizzo(rs.getInt("id_indirizzo"));
+            response.setDescription(rs.getString("descrizione"));
+            response.setPrice(rs.getBigDecimal("prezzo"));
+            response.setArea(rs.getInt("superficie"));
+            response.setId_agent(rs.getInt("id_agente_immobiliare"));
+            response.setId_address(rs.getInt("id_indirizzo"));
             response.setUltimaModifica(rs.getTimestamp("ultima_modifica").toLocalDateTime());
-            response.setContratto(rs.getInt("id_contratto"));
+            response.setId_contract(rs.getInt("id_contratto"));
             //response.setCaratteristicheAddizionali(rs.); // TODO see
             // response.setCategoriaImmobile(rs.getInt("categoria_immobile")); // TODO see id or String or enum ?
             // response.setStatoImmobile(rs.getInt("stato_immobile"));
