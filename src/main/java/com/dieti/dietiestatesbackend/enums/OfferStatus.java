@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.enums;
 
-public enum StatoOfferta {
+public enum OfferStatus {
     IN_ATTESA,
     ACCETTATA,
     RIFIUTATA,

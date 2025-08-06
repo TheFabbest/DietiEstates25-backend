@@ -5,19 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "utente")
-@SequenceGenerator(
-    name = "utente_seq",
-    sequenceName = "dieti_estates.utente_id_seq",
-    allocationSize = 1
-)
+@Table(name = "user")
 public class User extends BaseEntity {
     
     @NotBlank
@@ -34,26 +28,26 @@ public class User extends BaseEntity {
     private String username;
 
     @NotBlank
-    @Column(name = "nome", nullable = false)
-    private String nome;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
     @NotBlank
-    @Column(name = "cognome", nullable = false)
-    private String cognome;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    @Column(name = "is_agente")
-    private boolean isAgente = false;
+    @Column(name = "is_agent")
+    private boolean isAgent = false;
 
     @Pattern(regexp = "^[A-Z]{2}\\d{6}$")
-    @Column(name = "licenza")
-    private String licenza;
+    @Column(name = "license")
+    private String license;
 
-    @Column(name = "is_gestore")
-    private boolean isGestore = false;
+    @Column(name = "is_manager")
+    private boolean isManager = false;
 
     @ManyToOne
-    @JoinColumn(name = "id_agenzia", foreignKey = @ForeignKey(name = "fk_utente_agenzia"))
-    private Agenzia agenzia;
+    @JoinColumn(name = "id_agency", foreignKey = @ForeignKey(name = "fk_user_agency"))
+    private Agency agency;
 
     // Getters and setters
     public String getEmail() { return email; }
@@ -65,21 +59,21 @@ public class User extends BaseEntity {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String nome) { this.firstName = nome; }
 
-    public String getCognome() { return cognome; }
-    public void setCognome(String cognome) { this.cognome = cognome; }
+    public String getLastName() { return lastName; }
+    public void setLastName(String cognome) { this.lastName = cognome; }
 
-    public boolean isAgente() { return isAgente; }
-    public void setAgente(boolean agente) { isAgente = agente; }
+    public boolean isAgent() { return isAgent; }
+    public void setAgent(boolean isAgent) { this.isAgent = isAgent; }
 
-    public String getLicenza() { return licenza; }
-    public void setLicenza(String licenza) { this.licenza = licenza; }
+    public String getLicense() { return license; }
+    public void setLicense(String license) { this.license = license; }
 
-    public boolean isGestore() { return isGestore; }
-    public void setGestore(boolean gestore) { isGestore = gestore; }
+    public boolean isManager() { return isManager; }
+    public void setManager(boolean isManager) { this.isManager = isManager; }
 
-    public Agenzia getAgenzia() { return agenzia; }
-    public void setAgenzia(Agenzia agenzia) { this.agenzia = agenzia; }
+    public Agency getAgency() { return agency; }
+    public void setAgency(Agency agenzia) { this.agency = agenzia; }
 }
