@@ -33,12 +33,12 @@ import com.dieti.dietiestatesbackend.service.PropertyService;
 @RequestMapping("/api")
 public class ListingController {
     private static final Logger logger = Logger.getLogger(ListingController.class.getName());
-    private final PropertyService immobileService;
+    private final PropertyService propertyService;
     private final AddressService addressService;
 
     @Autowired
-    public ListingController(PropertyService immobileService, AddressService addressService) {
-        this.immobileService = immobileService;
+    public ListingController(PropertyService propertyService, AddressService addressService) {
+        this.propertyService = propertyService;
         this.addressService = addressService;
     }
 
@@ -50,7 +50,7 @@ public class ListingController {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
         try {
-            List<PropertyResponse> list = immobileService.searchProperties(keyword);
+            List<PropertyResponse> list = propertyService.searchProperties(keyword);
             for (PropertyResponse p : list) {
                 Address a = addressService.getAddress(p.getId_address());
                 p.setAddress(a.toString());
@@ -82,7 +82,7 @@ public class ListingController {
     @GetMapping("/properties/featured")
     public ResponseEntity<Object> getFeatured() throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(immobileService.getFeatured());
+            return ResponseEntity.ok(propertyService.getFeatured());
         }
         catch (SQLException e) {
             return ResponseEntity.internalServerError().body(new ArrayList<Listing>());

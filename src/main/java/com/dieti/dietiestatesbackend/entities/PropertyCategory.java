@@ -2,38 +2,32 @@ package com.dieti.dietiestatesbackend.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "categoria_immobile")
-@SequenceGenerator(
-    name = "categoria_immobile_seq",
-    sequenceName = "dieti_estates.categoria_immobile_id_seq",
-    allocationSize = 1
-)
+@Table(name = "PropertyCategory")
 //LOOK-UP TABLE
 public class PropertyCategory extends BaseEntity {
 
     @NotBlank
-    @Column(name = "categoria", nullable = false)
-    private String categoria;
+    @Column(name = "category", nullable = false)
+    private String category;
 
     @NotBlank
-    @Column(name = "sottocategoria", unique = true, nullable = false)
-    private String sottocategoria;
+    @Column(name = "subcategory", unique = true, nullable = false)
+    private String subcategory;
 
-    @Column(name = "is_attivo")
-    private boolean isAttivo = true;
+    @Column(name = "is_active")
+    private boolean isActive = true;
 
     // Getters and setters
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getSottocategoria() { return sottocategoria; }
-    public void setSottocategoria(String sottocategoria) { this.sottocategoria = sottocategoria; }
+    public String getSubcategory() { return subcategory; }
+    public void setSubcategory(String subcategory) { this.subcategory = subcategory; }
 
-    public boolean isAttivo() { return isAttivo; }
-    public void setAttivo(boolean attivo) { isAttivo = attivo; }
+    public boolean getIsActive() { return isActive; }
+    public void setIsActive(boolean isActive) { this.isActive = isActive; }
 }

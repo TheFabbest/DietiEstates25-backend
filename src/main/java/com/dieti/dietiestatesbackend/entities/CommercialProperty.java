@@ -56,7 +56,7 @@ public class CommercialProperty {
     public void setId(Long id) { this.id = id; }
 
     public Property getProperty() { return property; }
-    public void setProperty(Property immobile) { this.property = immobile; }
+    public void setProperty(Property property) { this.property = property; }
 
     public Integer getNumberOfRooms() { return numberOfRooms; }
     public void setNumberOfRooms(Integer numeroLocali) { this.numberOfRooms = numeroLocali; }

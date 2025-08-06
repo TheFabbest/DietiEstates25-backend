@@ -19,20 +19,20 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+// TODO translate
 @Entity
-@Table(name = "immobile_residenziale")
-public class ImmobileResidenziale {
+@Table(name = "residential_property")
+public class ResidentialProperty {
 
     @Id
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_residenziale_immobile"))
-    private Property immobile;
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_residentialproperty_property"))
+    private Property property;
 
     @NotNull
     @Min(1)
@@ -61,12 +61,6 @@ public class ImmobileResidenziale {
     @Column(name = "is_arredato")
     private boolean isArredato = false;
 
-    @NotEmpty
-    @ElementCollection
-    @CollectionTable(name = "immobile_residenziale_piani", joinColumns = @JoinColumn(name = "immobile_id"))
-    @Column(name = "piano", nullable = false)
-    private List<String> piani;
-
     @NotNull
     @Min(1)
     @Column(name = "numero_piani_totali", nullable = false)
@@ -79,8 +73,8 @@ public class ImmobileResidenziale {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Property getImmobile() { return immobile; }
-    public void setImmobile(Property immobile) { this.immobile = immobile; }
+    public Property getProperty() { return property; }
+    public void setProperty(Property immobile) { this.property = immobile; }
 
     public Integer getNumeroLocali() { return numeroLocali; }
     public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }
@@ -99,9 +93,6 @@ public class ImmobileResidenziale {
 
     public boolean isArredato() { return isArredato; }
     public void setArredato(boolean arredato) { isArredato = arredato; }
-
-    public List<String> getPiani() { return piani; }
-    public void setPiani(List<String> piani) { this.piani = piani; }
 
     public Integer getNumeroPianiTotali() { return numeroPianiTotali; }
     public void setNumeroPianiTotali(Integer numeroPianiTotali) { this.numeroPianiTotali = numeroPianiTotali; }

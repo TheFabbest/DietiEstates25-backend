@@ -47,14 +47,14 @@ public class PropertyRequest {
     public Integer getArea() { return area; }
     public void setArea(Integer superficie) { this.area = superficie; }
 
-    public Long getIdContratto() { return id_contract; }
-    public void setIdContratto(Long id_contract) { this.id_contract = id_contract; }
+    public Long getIdContract() { return id_contract; }
+    public void setIdContract(Long id_contract) { this.id_contract = id_contract; }
 
-    public Long getIdCategoriaImmobile() { return id_propertyCategory; }
-    public void setIdCategoriaImmobile(Long id_propertyCategory) { this.id_propertyCategory = id_propertyCategory; }
+    public Long getIdPropertyCategory() { return id_propertyCategory; }
+    public void setIdPropertyCategory(Long id_propertyCategory) { this.id_propertyCategory = id_propertyCategory; }
 
     public Long getId_status() { return id_status; }
-    public void setStatoImmobile(Long id_status) { this.id_status = id_status; }
+    public void setId_status(Long id_status) { this.id_status = id_status; }
 
     public Long getId_energyClass() { return id_energyClass; }
     public void setId_energyClass(Long id_energyClass) { this.id_energyClass = id_energyClass; }

@@ -1,10 +1,6 @@
 package com.dieti.dietiestatesbackend.entities;
 
-import java.util.List;
-
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -14,7 +10,6 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "autorimessa")
@@ -31,12 +26,6 @@ public class Autorimessa {
     @Column(name = "ha_sorveglianza")
     private boolean haSorveglianza = false;
 
-    @NotEmpty
-    @ElementCollection
-    @CollectionTable(name = "autorimessa_piani", joinColumns = @JoinColumn(name = "immobile_id"))
-    @Column(name = "piano", nullable = false)
-    private List<String> piani;
-
     @Min(1)
     @Column(name = "numero_piani")
     private Integer numeroPiani = 1;
@@ -50,9 +39,6 @@ public class Autorimessa {
 
     public boolean isHaSorveglianza() { return haSorveglianza; }
     public void setHaSorveglianza(boolean haSorveglianza) { this.haSorveglianza = haSorveglianza; }
-
-    public List<String> getPiani() { return piani; }
-    public void setPiani(List<String> piani) { this.piani = piani; }
 
     public Integer getNumeroPiani() { return numeroPiani; }
     public void setNumeroPiani(Integer numeroPiani) { this.numeroPiani = numeroPiani; }

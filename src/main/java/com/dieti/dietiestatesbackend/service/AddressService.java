@@ -25,7 +25,7 @@ public class AddressService {
 
     public Address getAddress(Long id) throws SQLException {
         String query = "SELECT id, country, province, city, street, street_number, building, latitude, longitude " +
-                    "FROM dieti_estates.indirizzo WHERE id = ?";
+                    "FROM dieti_estates.address WHERE id = ?";
         PreparedStatement ps = myConnection.prepareStatement(query);
         ps.setLong(1, id);
         ResultSet rs = ps.executeQuery();

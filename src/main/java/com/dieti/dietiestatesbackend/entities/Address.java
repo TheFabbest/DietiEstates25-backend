@@ -4,19 +4,13 @@ import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "indirizzo")
-@SequenceGenerator(
-    name = "indirizzo_seq",
-    sequenceName = "dieti_estates.indirizzo_id_seq",
-    allocationSize = 1
-)
+@Table(name = "address")
 public class Address extends BaseEntity {
 
     @NotBlank
