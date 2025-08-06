@@ -1,10 +1,6 @@
 package com.dieti.dietiestatesbackend.entities;
 
-import java.util.List;
-
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -14,7 +10,6 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -31,27 +26,26 @@ public class CommercialProperty {
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_locali", nullable = false)
-    private Integer numeroLocali; // TODO tradurre
-
-    @NotEmpty
-    @ElementCollection
-    @CollectionTable(name = "immobile_commerciale_piani", joinColumns = @JoinColumn(name = "immobile_id"))
-    @Column(name = "piano", nullable = false)
-    private List<String> piani;
+    @Column(name = "number_of_rooms", nullable = false)
+    private Integer numberOfRooms;
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_bagni", nullable = false)
-    private Integer numeroBagni;
+    @Column(name = "floor", nullable = false)
+    private Integer floor;
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_piani_totali", nullable = false)
-    private Integer numeroPianiTotali;
+    @Column(name = "number_of_bathrooms", nullable = false)
+    private Integer numberOfBathrooms;
 
-    @Column(name = "ha_accesso_disabili")
-    private boolean haAccessoDisabili = false;
+    @NotNull
+    @Min(1)
+    @Column(name = "number_of_floors", nullable = false)
+    private Integer numberOfFloors;
+
+    @Column(name = "wheelchair_access")
+    private boolean hasWheelchairAccess = false;
 
     @Min(0)
     @Column(name = "numero_vetrine")
@@ -64,20 +58,20 @@ public class CommercialProperty {
     public Property getProperty() { return property; }
     public void setProperty(Property immobile) { this.property = immobile; }
 
-    public Integer getNumeroLocali() { return numeroLocali; }
-    public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }
+    public Integer getNumberOfRooms() { return numberOfRooms; }
+    public void setNumberOfRooms(Integer numeroLocali) { this.numberOfRooms = numeroLocali; }
 
-    public List<String> getPiani() { return piani; }
-    public void setPiani(List<String> piani) { this.piani = piani; }
+    public Integer getFloor() { return floor; }
+    public void setFloor(Integer floor) { this.floor = floor; }
 
-    public Integer getNumeroBagni() { return numeroBagni; }
-    public void setNumeroBagni(Integer numeroBagni) { this.numeroBagni = numeroBagni; }
+    public Integer getNumberOfBathrooms() { return numberOfBathrooms; }
+    public void setNumberOfBathrooms(Integer numeroBagni) { this.numberOfBathrooms = numeroBagni; }
 
-    public Integer getNumeroPianiTotali() { return numeroPianiTotali; }
-    public void setNumeroPianiTotali(Integer numeroPianiTotali) { this.numeroPianiTotali = numeroPianiTotali; }
+    public Integer getNumberOfFloors() { return numberOfFloors; }
+    public void setNumberOfFloors(Integer numberOfFloors) { this.numberOfFloors = numberOfFloors; }
 
-    public boolean isHaAccessoDisabili() { return haAccessoDisabili; }
-    public void setHaAccessoDisabili(boolean haAccessoDisabili) { this.haAccessoDisabili = haAccessoDisabili; }
+    public boolean getHasWheelchairAccess() { return hasWheelchairAccess; }
+    public void setHasWheelchairAccess(boolean hasAccess) { this.hasWheelchairAccess = hasAccess; }
 
     public Integer getNumeroVetrine() { return numeroVetrine; }
     public void setNumeroVetrine(Integer numeroVetrine) { this.numeroVetrine = numeroVetrine; }

@@ -7,12 +7,16 @@ public class PropertyResponse {
     private String description;
     private BigDecimal price;
     private Integer area;
+    private Integer yearBuilt;
     private String contract;
     private String propertyCategory;
     private String status;
     private String energyClass;
     // TODO see private List<String> caratteristicheAddizionali;
     private Long id_agent;
+    private Long id_address;
+    private BigDecimal longitude;
+    private BigDecimal latitude;
     private String address;
     // TODO see private LocalDateTime createdAt;
     // TODO add images
@@ -30,6 +34,9 @@ public class PropertyResponse {
     public Integer getArea() { return area; }
     public void setArea(Integer area) { this.area = area; }
 
+    public Integer getYearBuilt() { return yearBuilt; }
+    public void setYearBuilt(Integer year) { this.yearBuilt = year; }
+
     public String getContract() { return contract; }
     public void setContract(String contract) { this.contract = contract; }
 
@@ -45,6 +52,15 @@ public class PropertyResponse {
     public Long getId_agent() { return id_agent; }
     public void setId_agent(Long agent) { this.id_agent = agent; }
 
+    public Long getId_address() { return id_address; }
+    public void setId_address(Long id_address) { this.id_address = id_address; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+
+    public BigDecimal getLongitude() { return longitude; }
+    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
+
+    public BigDecimal getLatitude() { return latitude; }
+    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
 }

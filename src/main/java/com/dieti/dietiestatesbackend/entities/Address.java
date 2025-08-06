@@ -75,4 +75,15 @@ public class Address extends BaseEntity {
 
     public BigDecimal getLongitude() { return longitude; }
     public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (street != null) sb.append(street);
+        if (street_number != null && !street_number.isEmpty()) sb.append(" ").append(street_number);
+        if (building != null && !building.isEmpty()) sb.append(", ").append(building);
+        if (city != null) sb.append(", ").append(city);
+        if (province != null) sb.append(", ").append(province);
+        if (country != null) sb.append(", ").append(country);
+        return sb.toString();
+    }
 }

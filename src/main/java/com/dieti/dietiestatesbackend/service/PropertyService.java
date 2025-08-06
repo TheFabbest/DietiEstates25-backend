@@ -55,7 +55,7 @@ public class PropertyService {
                     response.setStatus(rs.getString("status"));
                     response.setEnergyClass(rs.getString("energy_rating"));
                     response.setId_agent(rs.getLong("id_agent"));
-                    response.setAddress(rs.getString("address"));
+                    response.setId_address(rs.getLong("id_address"));
                     // TODO add images
                     results.add(response);
                 }
@@ -127,7 +127,7 @@ public class PropertyService {
 
     // More specific methods
     public List<PropertyResponse> getFeatured() throws SQLException {
-        String query = "SELECT * FROM dieti_estates.immobile WHERE id BETWEEN 1 AND 4";
+        String query = "SELECT * FROM dieti_estates.property WHERE id BETWEEN 1 AND 4";
         List<PropertyResponse> results = new ArrayList<>();
         PreparedStatement ps = myConnection.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -142,7 +142,8 @@ public class PropertyService {
             response.setStatus(rs.getString("status"));
             response.setEnergyClass(rs.getString("energy_rating"));
             response.setId_agent(rs.getLong("id_agent"));
-            response.setAddress(rs.getString("address"));
+            response.setId_address(rs.getLong("id_address"));
+
             // TODO add images
             results.add(response);
         }

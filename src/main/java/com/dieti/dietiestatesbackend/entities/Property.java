@@ -34,6 +34,10 @@ public class Property extends BaseEntity {
     @Min(1)
     @Column(name = "area", nullable = false)
     private Integer area;
+    
+    @Min(1)
+    @Column(name = "year_built", nullable = true)
+    private Integer yearBuilt;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
