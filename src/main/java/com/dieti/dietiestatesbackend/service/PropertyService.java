@@ -126,20 +126,26 @@ public class PropertyService {
     // Immobile validateOwnership(Long immobileId, String username) throws EntityNotFoundException;
 
     // More specific methods
-    public List<Listing> getFeatured() throws SQLException {
+    public List<PropertyResponse> getFeatured() throws SQLException {
         String query = "SELECT * FROM dieti_estates.immobile WHERE id BETWEEN 1 AND 4";
-        List<Listing> listings = new ArrayList<>();
-        // PreparedStatement ps = myConnection.prepareStatement(query);
-        // ResultSet rs = ps.executeQuery();
-        // while (rs.next()) {
-        //     listings.add(new Listing(
-        //         rs.getLong("id"),
-        //         rs.getString("name"),
-        //         rs.getString("description"),
-        //         rs.getString("location"),
-        //         rs.getFloat("price")
-        //     ));
-        // }
-        return listings;
+        List<PropertyResponse> results = new ArrayList<>();
+        PreparedStatement ps = myConnection.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            PropertyResponse response = new PropertyResponse();
+            response.setId(rs.getLong("id"));
+            response.setDescription(rs.getString("description"));
+            response.setPrice(rs.getBigDecimal("price"));
+            response.setArea(rs.getInt("area"));
+            response.setContract(rs.getString("contract_name"));
+            response.setPropertyCategory(rs.getString("category_name"));
+            response.setStatus(rs.getString("status"));
+            response.setEnergyClass(rs.getString("energy_rating"));
+            response.setId_agent(rs.getLong("id_agent"));
+            response.setAddress(rs.getString("address"));
+            // TODO add images
+            results.add(response);
+        }
+        return results;
     }
 }

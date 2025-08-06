@@ -18,21 +18,21 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "immobile_commerciale")
-public class ImmobileCommerciale {
+@Table(name = "commercial_property")
+public class CommercialProperty {
 
     @Id
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_commerciale_immobile"))
-    private Property immobile;
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_commercialproperty_property"))
+    private Property property;
 
     @NotNull
     @Min(1)
     @Column(name = "numero_locali", nullable = false)
-    private Integer numeroLocali;
+    private Integer numeroLocali; // TODO tradurre
 
     @NotEmpty
     @ElementCollection
@@ -61,8 +61,8 @@ public class ImmobileCommerciale {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Property getImmobile() { return immobile; }
-    public void setImmobile(Property immobile) { this.immobile = immobile; }
+    public Property getProperty() { return property; }
+    public void setProperty(Property immobile) { this.property = immobile; }
 
     public Integer getNumeroLocali() { return numeroLocali; }
     public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }

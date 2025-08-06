@@ -20,59 +20,59 @@ import jakarta.validation.constraints.NotNull;
 public class Address extends BaseEntity {
 
     @NotBlank
-    @Column(name = "paese", nullable = false)
-    private String paese;
+    @Column(name = "country", nullable = false)
+    private String country;
 
     @NotBlank
-    @Column(name = "provincia", nullable = false)
-    private String provincia;
+    @Column(name = "province", nullable = false)
+    private String province;
 
     @NotBlank
-    @Column(name = "citta", nullable = false)
-    private String citta;
+    @Column(name = "city", nullable = false)
+    private String city;
 
     @NotBlank
-    @Column(name = "via", nullable = false)
-    private String via;
+    @Column(name = "street", nullable = false)
+    private String street;
 
-    @Column(name = "civico")
-    private String civico;
+    @Column(name = "street_number")
+    private String street_number;
 
-    @Column(name = "edificio")
-    private String edificio;
+    @Column(name = "building")
+    private String building;
 
     @NotNull
     @Digits(integer = 10, fraction = 8)
-    @Column(name = "latitudine", nullable = false, precision = 10, scale = 8)
-    private BigDecimal latitudine;
+    @Column(name = "latitude", nullable = false, precision = 10, scale = 8)
+    private BigDecimal latitude;
 
     @NotNull
     @Digits(integer = 11, fraction = 8)
-    @Column(name = "longitudine", nullable = false, precision = 11, scale = 8)
-    private BigDecimal longitudine;
+    @Column(name = "longitude", nullable = false, precision = 11, scale = 8)
+    private BigDecimal longitude;
 
     // Getters and setters
-    public String getPaese() { return paese; }
-    public void setPaese(String paese) { this.paese = paese; }
+    public String getCountry() { return country; }
+    public void setCountry(String country) { this.country = country; }
 
-    public String getProvincia() { return provincia; }
-    public void setProvincia(String provincia) { this.provincia = provincia; }
+    public String getProvince() { return province; }
+    public void setProvince(String province) { this.province = province; }
 
-    public String getCitta() { return citta; }
-    public void setCitta(String citta) { this.citta = citta; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public String getVia() { return via; }
-    public void setVia(String via) { this.via = via; }
+    public String getStreet() { return street; }
+    public void setStreet(String street) { this.street = street; }
 
-    public String getCivico() { return civico; }
-    public void setCivico(String civico) { this.civico = civico; }
+    public String getStreet_number() { return street_number; }
+    public void setStreet_number(String street_number) { this.street_number = street_number; }
 
-    public String getEdificio() { return edificio; }
-    public void setEdificio(String edificio) { this.edificio = edificio; }
+    public String getBuilding() { return building; }
+    public void setBuilding(String building) { this.building = building; }
 
-    public BigDecimal getLatitudine() { return latitudine; }
-    public void setLatitudine(BigDecimal latitudine) { this.latitudine = latitudine; }
+    public BigDecimal getLatitude() { return latitude; }
+    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
 
-    public BigDecimal getLongitudine() { return longitudine; }
-    public void setLongitudine(BigDecimal longitudine) { this.longitudine = longitudine; }
+    public BigDecimal getLongitude() { return longitude; }
+    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
 }
