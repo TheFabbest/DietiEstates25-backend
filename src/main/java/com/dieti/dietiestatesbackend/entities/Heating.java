@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotBlank;
     allocationSize = 1
 )
 //LOOK-UP TABLE
-public class Riscaldamento extends BaseEntity {
+public class Heating extends BaseEntity {
 
     @NotBlank
     @Column(name = "nome", unique = true, nullable = false)

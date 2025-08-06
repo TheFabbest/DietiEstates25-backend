@@ -21,7 +21,7 @@ public class CommercialProperty {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_commercialproperty_property"))
+    @JoinColumn(name = "id_property", foreignKey = @ForeignKey(name = "fk_commercialproperty_property"))
     private Property property;
 
     @NotNull

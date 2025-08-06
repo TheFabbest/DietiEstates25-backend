@@ -2,7 +2,7 @@ package com.dieti.dietiestatesbackend.entities;
 
 import java.util.List;
 
-import com.dieti.dietiestatesbackend.enums.Giardino;
+import com.dieti.dietiestatesbackend.enums.Garden;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -36,67 +36,72 @@ public class ResidentialProperty {
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_locali", nullable = false)
-    private Integer numeroLocali;
+    @Column(name = "number_of_rooms", nullable = false)
+    private Integer numberOfRooms;
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_bagni", nullable = false)
-    private Integer numeroBagni;
+    @Column(name = "number_of_bathrooms", nullable = false)
+    private Integer numberOfBathrooms;
 
     @Min(0)
-    @Column(name = "posti_auto")
-    private Integer postiAuto = 0;
+    @Column(name = "parking_spaces")
+    private Integer parkingSpaces = 0;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_riscaldamento", nullable = false, foreignKey = @ForeignKey(name = "fk_residenziale_riscaldamento"))
-    private Riscaldamento riscaldamento;
+    @JoinColumn(name = "id_heating", nullable = false, foreignKey = @ForeignKey(name = "fk_residential_heating"))
+    private Heating heating;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "giardino", nullable = false)
-    private Giardino giardino;
+    @Column(name = "garden", nullable = false)
+    private Garden garden;
 
-    @Column(name = "is_arredato")
-    private boolean isArredato = false;
+    @Column(name = "is_furnished")
+    private boolean isFurnished = false;
 
     @NotNull
     @Min(1)
-    @Column(name = "numero_piani_totali", nullable = false)
-    private Integer numeroPianiTotali;
+    @Column(name = "floor", nullable = false)
+    private Integer floor;
 
-    @Column(name = "ha_ascensore")
-    private boolean haAscensore = false;
+    @NotNull
+    @Min(1)
+    @Column(name = "number_of_floors", nullable = false)
+    private Integer numberOfFloors;
+
+    @Column(name = "has_elevator")
+    private boolean hasElevator = false;
 
     // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public Property getProperty() { return property; }
-    public void setProperty(Property immobile) { this.property = immobile; }
+    public void setProperty(Property property) { this.property = property; }
 
-    public Integer getNumeroLocali() { return numeroLocali; }
-    public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }
+    public Integer getNumberOfRooms() { return numberOfRooms; }
+    public void setNumberOfRooms(Integer numberOfRooms) { this.numberOfRooms = numberOfRooms; }
 
-    public Integer getNumeroBagni() { return numeroBagni; }
-    public void setNumeroBagni(Integer numeroBagni) { this.numeroBagni = numeroBagni; }
+    public Integer getNumberOfBathrooms() { return numberOfBathrooms; }
+    public void setNumberOfBathrooms(Integer numberOfBathrooms) { this.numberOfBathrooms = numberOfBathrooms; }
 
-    public Integer getPostiAuto() { return postiAuto; }
-    public void setPostiAuto(Integer postiAuto) { this.postiAuto = postiAuto; }
+    public Integer getParkingSpaces() { return parkingSpaces; }
+    public void setParkingSpaces(Integer parkingSpaces) { this.parkingSpaces = parkingSpaces; }
 
-    public Riscaldamento getRiscaldamento() { return riscaldamento; }
-    public void setRiscaldamento(Riscaldamento riscaldamento) { this.riscaldamento = riscaldamento; }
+    public Heating getHeating() { return heating; }
+    public void setHeating(Heating heating) { this.heating = heating; }
 
-    public Giardino getGiardino() { return giardino; }
-    public void setGiardino(Giardino giardino) { this.giardino = giardino; }
+    public Garden getGarden() { return garden; }
+    public void setGarden(Garden garden) { this.garden = garden; }
 
-    public boolean isArredato() { return isArredato; }
-    public void setArredato(boolean arredato) { isArredato = arredato; }
+    public boolean isFurnished() { return isFurnished; }
+    public void setFurnished(boolean furnished) { isFurnished = furnished; }
 
-    public Integer getNumeroPianiTotali() { return numeroPianiTotali; }
-    public void setNumeroPianiTotali(Integer numeroPianiTotali) { this.numeroPianiTotali = numeroPianiTotali; }
+    public Integer getFloor() { return floor; }
+    public void setFloor(Integer floor) { this.floor = floor; }
 
-    public boolean isHaAscensore() { return haAscensore; }
-    public void setHaAscensore(boolean haAscensore) { this.haAscensore = haAscensore; }
+    public boolean hasElevator() { return hasElevator; }
+    public void setHasElevator(boolean hasElevator) { this.hasElevator = hasElevator; }
 }

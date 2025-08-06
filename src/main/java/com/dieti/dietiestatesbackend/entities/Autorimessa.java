@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "autorimessa")
-public class Autorimessa {
+public class Autorimessa extends BaseEntity {
 
     @Id
     private Long id;

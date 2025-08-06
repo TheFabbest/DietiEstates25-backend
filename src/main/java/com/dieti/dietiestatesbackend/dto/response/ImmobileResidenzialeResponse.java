@@ -2,14 +2,14 @@ package com.dieti.dietiestatesbackend.dto.response;
 
 import java.util.List;
 
-import com.dieti.dietiestatesbackend.enums.Giardino;
+import com.dieti.dietiestatesbackend.enums.Garden;
 
 public class ImmobileResidenzialeResponse extends PropertyResponse {
     private Integer numeroLocali;
     private Integer numeroBagni;
     private Integer postiAuto;
     private RiscaldamentoDTO riscaldamento;
-    private Giardino giardino;
+    private Garden giardino;
     private boolean isArredato;
     private List<String> piani;
     private Integer numeroPianiTotali;
@@ -44,8 +44,8 @@ public class ImmobileResidenzialeResponse extends PropertyResponse {
     public RiscaldamentoDTO getRiscaldamento() { return riscaldamento; }
     public void setRiscaldamento(RiscaldamentoDTO riscaldamento) { this.riscaldamento = riscaldamento; }
 
-    public Giardino getGiardino() { return giardino; }
-    public void setGiardino(Giardino giardino) { this.giardino = giardino; }
+    public Garden getGiardino() { return giardino; }
+    public void setGiardino(Garden giardino) { this.giardino = giardino; }
 
     public boolean isArredato() { return isArredato; }
     public void setArredato(boolean arredato) { isArredato = arredato; }

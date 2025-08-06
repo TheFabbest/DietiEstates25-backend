@@ -2,7 +2,7 @@ package com.dieti.dietiestatesbackend.dto.request;
 
 import java.util.List;
 
-import com.dieti.dietiestatesbackend.enums.Giardino;
+import com.dieti.dietiestatesbackend.enums.Garden;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,7 +22,7 @@ public class ImmobileResidenzialeRequest extends PropertyRequest {
     private Long idRiscaldamento;
     
     @NotNull
-    private Giardino giardino;
+    private Garden giardino;
     
     private boolean isArredato;
     
@@ -47,8 +47,8 @@ public class ImmobileResidenzialeRequest extends PropertyRequest {
     public Long getIdRiscaldamento() { return idRiscaldamento; }
     public void setIdRiscaldamento(Long idRiscaldamento) { this.idRiscaldamento = idRiscaldamento; }
 
-    public Giardino getGiardino() { return giardino; }
-    public void setGiardino(Giardino giardino) { this.giardino = giardino; }
+    public Garden getGiardino() { return giardino; }
+    public void setGiardino(Garden giardino) { this.giardino = giardino; }
 
     public boolean isArredato() { return isArredato; }
     public void setArredato(boolean arredato) { isArredato = arredato; }
