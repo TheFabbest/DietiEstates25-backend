@@ -30,12 +30,12 @@ public class Offerta extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_immobile", nullable = false, foreignKey = @ForeignKey(name = "fk_offerta_immobile"))
-    private Immobile immobile;
+    private Property immobile;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utente", nullable = false, foreignKey = @ForeignKey(name = "fk_offerta_utente"))
-    private Utente utente;
+    private User utente;
 
     @NotNull
     @DecimalMin(value = "0.01")
@@ -52,11 +52,11 @@ public class Offerta extends BaseEntity {
     private StatoOfferta stato = StatoOfferta.IN_ATTESA;
 
     // Getters and setters
-    public Immobile getImmobile() { return immobile; }
-    public void setImmobile(Immobile immobile) { this.immobile = immobile; }
+    public Property getImmobile() { return immobile; }
+    public void setImmobile(Property immobile) { this.immobile = immobile; }
 
-    public Utente getUtente() { return utente; }
-    public void setUtente(Utente utente) { this.utente = utente; }
+    public User getUtente() { return utente; }
+    public void setUtente(User utente) { this.utente = utente; }
 
     public BigDecimal getPrezzo() { return prezzo; }
     public void setPrezzo(BigDecimal prezzo) { this.prezzo = prezzo; }

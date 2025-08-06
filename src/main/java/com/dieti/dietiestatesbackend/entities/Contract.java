@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotBlank;
     sequenceName = "dieti_estates.contratto_idcontratto_seq",
     allocationSize = 1
 )
-public class Contratto extends BaseEntity {
+public class Contract extends BaseEntity {
 
     @NotBlank
     @Column(name = "nome", unique = true, nullable = false)

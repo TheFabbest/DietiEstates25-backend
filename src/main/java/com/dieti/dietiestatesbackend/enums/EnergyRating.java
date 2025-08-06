@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.enums;
 
-public enum ClasseEnergetica {
+public enum EnergyRating {
     A4,
     A3,
     A2,

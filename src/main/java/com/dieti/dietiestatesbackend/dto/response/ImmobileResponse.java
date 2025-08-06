@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.dieti.dietiestatesbackend.enums.ClasseEnergetica;
-import com.dieti.dietiestatesbackend.enums.TipologiaProprieta;
-
 public class ImmobileResponse {
     private Long id;
     private String descrizione;

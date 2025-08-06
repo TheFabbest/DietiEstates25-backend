@@ -3,8 +3,8 @@ package com.dieti.dietiestatesbackend.dto.request;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.dieti.dietiestatesbackend.enums.ClasseEnergetica;
-import com.dieti.dietiestatesbackend.enums.StatoImmobile;
+import com.dieti.dietiestatesbackend.enums.EnergyRating;
+import com.dieti.dietiestatesbackend.enums.PropertyStatus;
 import com.dieti.dietiestatesbackend.enums.TipologiaProprieta;
 
 import jakarta.validation.constraints.DecimalMin;
@@ -30,10 +30,10 @@ public class ImmobileRequest {
     private Long idCategoriaImmobile;
     
     @NotNull
-    private StatoImmobile statoImmobile;
+    private PropertyStatus statoImmobile;
     
     @NotNull
-    private ClasseEnergetica classeEnergetica;
+    private EnergyRating classeEnergetica;
     
     private TipologiaProprieta tipologiaProprieta;
     
@@ -64,11 +64,11 @@ public class ImmobileRequest {
     public Long getIdCategoriaImmobile() { return idCategoriaImmobile; }
     public void setIdCategoriaImmobile(Long idCategoriaImmobile) { this.idCategoriaImmobile = idCategoriaImmobile; }
 
-    public StatoImmobile getStatoImmobile() { return statoImmobile; }
-    public void setStatoImmobile(StatoImmobile statoImmobile) { this.statoImmobile = statoImmobile; }
+    public PropertyStatus getStatoImmobile() { return statoImmobile; }
+    public void setStatoImmobile(PropertyStatus statoImmobile) { this.statoImmobile = statoImmobile; }
 
-    public ClasseEnergetica getClasseEnergetica() { return classeEnergetica; }
-    public void setClasseEnergetica(ClasseEnergetica classeEnergetica) { this.classeEnergetica = classeEnergetica; }
+    public EnergyRating getClasseEnergetica() { return classeEnergetica; }
+    public void setClasseEnergetica(EnergyRating classeEnergetica) { this.classeEnergetica = classeEnergetica; }
 
     public TipologiaProprieta getTipologiaProprieta() { return tipologiaProprieta; }
     public void setTipologiaProprieta(TipologiaProprieta tipologiaProprieta) { this.tipologiaProprieta = tipologiaProprieta; }

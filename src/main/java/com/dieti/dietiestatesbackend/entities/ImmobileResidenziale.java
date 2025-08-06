@@ -32,7 +32,7 @@ public class ImmobileResidenziale {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_residenziale_immobile"))
-    private Immobile immobile;
+    private Property immobile;
 
     @NotNull
     @Min(1)
@@ -79,8 +79,8 @@ public class ImmobileResidenziale {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Immobile getImmobile() { return immobile; }
-    public void setImmobile(Immobile immobile) { this.immobile = immobile; }
+    public Property getImmobile() { return immobile; }
+    public void setImmobile(Property immobile) { this.immobile = immobile; }
 
     public Integer getNumeroLocali() { return numeroLocali; }
     public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }

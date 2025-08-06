@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.enums;
 
-public enum StatoImmobile {
+public enum PropertyStatus {
     NUOVO,
     IN_BUONO_STATO,
     RISTRUTTURATO, 

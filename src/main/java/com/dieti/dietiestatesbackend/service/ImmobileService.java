@@ -27,7 +27,7 @@ import com.dieti.dietiestatesbackend.dto.response.ImmobileResidenzialeResponse;
 import com.dieti.dietiestatesbackend.dto.response.ImmobileCommercialeResponse;
 import com.dieti.dietiestatesbackend.dto.response.TerrenoResponse;
 import com.dieti.dietiestatesbackend.dto.response.AutorimessaResponse;
-import com.dieti.dietiestatesbackend.entities.Immobile;
+import com.dieti.dietiestatesbackend.entities.Property;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service

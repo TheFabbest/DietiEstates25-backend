@@ -32,18 +32,18 @@ public class Agenzia extends BaseEntity {
     @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_indirizzo", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_agenzia_indirizzo"))
-    private Indirizzo indirizzo;
+    private Address indirizzo;
 
     @OneToMany(mappedBy = "agenzia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Utente> utenti = new ArrayList<>();
+    private List<User> utenti = new ArrayList<>();
 
     // Getters and setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
-    public Indirizzo getIndirizzo() { return indirizzo; }
-    public void setIndirizzo(Indirizzo indirizzo) { this.indirizzo = indirizzo; }
+    public Address getIndirizzo() { return indirizzo; }
+    public void setIndirizzo(Address indirizzo) { this.indirizzo = indirizzo; }
 
-    public List<Utente> getUtenti() { return utenti; }
-    public void setUtenti(List<Utente> utenti) { this.utenti = utenti; }
+    public List<User> getUtenti() { return utenti; }
+    public void setUtenti(List<User> utenti) { this.utenti = utenti; }
 }

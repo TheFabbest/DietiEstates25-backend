@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotBlank;
     allocationSize = 1
 )
 //LOOK-UP TABLE
-public class CategoriaImmobile extends BaseEntity {
+public class PropertyCategory extends BaseEntity {
 
     @NotBlank
     @Column(name = "categoria", nullable = false)

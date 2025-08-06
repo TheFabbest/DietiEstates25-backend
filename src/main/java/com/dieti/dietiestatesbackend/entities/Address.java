@@ -17,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
     sequenceName = "dieti_estates.indirizzo_id_seq",
     allocationSize = 1
 )
-public class Indirizzo extends BaseEntity {
+public class Address extends BaseEntity {
 
     @NotBlank
     @Column(name = "paese", nullable = false)

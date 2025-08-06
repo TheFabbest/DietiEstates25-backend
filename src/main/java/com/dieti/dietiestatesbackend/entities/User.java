@@ -18,7 +18,7 @@ import jakarta.validation.constraints.Pattern;
     sequenceName = "dieti_estates.utente_id_seq",
     allocationSize = 1
 )
-public class Utente extends BaseEntity {
+public class User extends BaseEntity {
     
     @NotBlank
     @Email

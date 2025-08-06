@@ -20,7 +20,7 @@ public class Terreno {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_terreno_immobile"))
-    private Immobile immobile;
+    private Property immobile;
 
     @Column(name = "ha_ingresso_dalla_strada")
     private boolean haIngressoDallaStrada = true;
@@ -29,8 +29,8 @@ public class Terreno {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Immobile getImmobile() { return immobile; }
-    public void setImmobile(Immobile immobile) { this.immobile = immobile; }
+    public Property getImmobile() { return immobile; }
+    public void setImmobile(Property immobile) { this.immobile = immobile; }
 
     public boolean haIngressoDallaStrada() { return haIngressoDallaStrada; }
     public void setHaIngressoDallaStrada(boolean haIngressoDallaStrada) { this.haIngressoDallaStrada = haIngressoDallaStrada; }

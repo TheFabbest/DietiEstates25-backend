@@ -26,7 +26,7 @@ public class Autorimessa {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_autorimessa_immobile"))
-    private Immobile immobile;
+    private Property immobile;
 
     @Column(name = "ha_sorveglianza")
     private boolean haSorveglianza = false;
@@ -45,8 +45,8 @@ public class Autorimessa {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Immobile getImmobile() { return immobile; }
-    public void setImmobile(Immobile immobile) { this.immobile = immobile; }
+    public Property getImmobile() { return immobile; }
+    public void setImmobile(Property immobile) { this.immobile = immobile; }
 
     public boolean isHaSorveglianza() { return haSorveglianza; }
     public void setHaSorveglianza(boolean haSorveglianza) { this.haSorveglianza = haSorveglianza; }
