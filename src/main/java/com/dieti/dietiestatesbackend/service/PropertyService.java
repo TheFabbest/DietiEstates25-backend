@@ -15,44 +15,51 @@ import com.dieti.dietiestatesbackend.dto.Listing;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 
 @Service
-public class ImmobileService {
+public class PropertyService {
     
-    private static final Logger logger = Logger.getLogger(ImmobileService.class.getName());
+    private static final Logger logger = Logger.getLogger(PropertyService.class.getName());
     private final Connection myConnection;
 
     @Autowired
-    public ImmobileService(Connection myConnection) {
+    public PropertyService(Connection myConnection) {
         this.myConnection = myConnection;
     }
 
     // // Common operations
     // Page<ImmobileResponse> getImmobili(Pageable pageable);
-    public List<PropertyResponse> searchImmobili(String keyword) throws SQLException {
-        String query = "SELECT * FROM dieti_estates.immobile WHERE descrizione LIKE ?";
-        PreparedStatement ps = myConnection.prepareStatement(query);
-        ps.setString(1, "%"+keyword+"%");
-        ResultSet rs = ps.executeQuery();
-
+    public List<PropertyResponse> searchProperties(String keyword) throws SQLException {
+        String query = "SELECT p.id, p.description, p.price, p.area, " +
+                    "c.name AS contract_name, c.id AS contract_id, " +
+                    "cat.name AS category_name, cat.id AS category_id, " +
+                    "p.status, p.energy_rating, " +
+                    "p.id_agent, a.full_name AS agent_name, " +
+                    "p.id_address, addr.full_address AS address " +
+                    "FROM dieti_estates.property p " +
+                    "JOIN dieti_estates.contract c ON p.id_contract = c.id " +
+                    "JOIN dieti_estates.property_category cat ON p.id_property_category = cat.id " +
+                    "JOIN dieti_estates.user a ON p.id_agent = a.id " +
+                    "JOIN dieti_estates.address addr ON p.id_address = addr.id " +
+                    "WHERE p.description ILIKE ?";
         List<PropertyResponse> results = new ArrayList<>();
-        while (rs.next()) {
-            PropertyResponse response = new PropertyResponse();
-            response.setId(rs.getLong("id"));
-            response.setDescription(rs.getString("descrizione"));
-            response.setPrice(rs.getBigDecimal("prezzo"));
-            response.setArea(rs.getInt("superficie"));
-            response.setId_agent(rs.getInt("id_agente_immobiliare"));
-            response.setId_address(rs.getInt("id_indirizzo"));
-            response.setUltimaModifica(rs.getTimestamp("ultima_modifica").toLocalDateTime());
-            response.setId_contract(rs.getInt("id_contratto"));
-            //response.setCaratteristicheAddizionali(rs.); // TODO see
-            // response.setCategoriaImmobile(rs.getInt("categoria_immobile")); // TODO see id or String or enum ?
-            // response.setStatoImmobile(rs.getInt("stato_immobile"));
-            // response.setClasseEnergetica(rs.getInt("classe_energetica"));
-            // response.setTipologiaProprieta(rs.getInt("tipologia_proprieta"));
-            //response.setCreatedAt(null); // TODO see if needed
-
-            // Set other fields as necessary
-            results.add(response);
+        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PropertyResponse response = new PropertyResponse();
+                    response.setId(rs.getLong("id"));
+                    response.setDescription(rs.getString("description"));
+                    response.setPrice(rs.getBigDecimal("price"));
+                    response.setArea(rs.getInt("area"));
+                    response.setContract(rs.getString("contract_name"));
+                    response.setPropertyCategory(rs.getString("category_name"));
+                    response.setStatus(rs.getString("status"));
+                    response.setEnergyClass(rs.getString("energy_rating"));
+                    response.setId_agent(rs.getLong("id_agent"));
+                    response.setAddress(rs.getString("address"));
+                    // TODO add images
+                    results.add(response);
+                }
+            }
         }
         return results;
     }

@@ -7,14 +7,15 @@ public class PropertyResponse {
     private String description;
     private BigDecimal price;
     private Integer area;
-    private Long id_contract;
-    private Long id_propertyCategory;
-    private Long id_status;
-    private Long id_energyClass;
+    private String contract;
+    private String propertyCategory;
+    private String status;
+    private String energyClass;
     // TODO see private List<String> caratteristicheAddizionali;
     private Long id_agent;
-    private Long id_address;
+    private String address;
     // TODO see private LocalDateTime createdAt;
+    // TODO add images
 
     // Main class getters and setters
     public Long getId() { return id; }
@@ -29,21 +30,21 @@ public class PropertyResponse {
     public Integer getArea() { return area; }
     public void setArea(Integer area) { this.area = area; }
 
-    public Long getId_contract() { return id_contract; }
-    public void setId_contract(Long contract) { this.id_contract = contract; }
+    public String getContract() { return contract; }
+    public void setContract(String contract) { this.contract = contract; }
 
-    public Long getId_propertyCategory() { return id_propertyCategory; }
-    public void setId_propertyCategory(Long category) { this.id_propertyCategory = category; }
+    public String getPropertyCategory() { return propertyCategory; }
+    public void setPropertyCategory(String category) { this.propertyCategory = category; }
     
-    public Long getId_status() { return id_status; }
-    public void setId_status(Long status) { this.id_status = status; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public Long getId_energyClass() { return id_energyClass; }
-    public void setId_energyClass(Long energyClass) { this.id_energyClass = energyClass; }
+    public String getEnergyClass() { return energyClass; }
+    public void setEnergyClass(String energyClass) { this.energyClass = energyClass; }
 
     public Long getId_agent() { return id_agent; }
     public void setId_agent(Long agent) { this.id_agent = agent; }
 
-    public Long getId_address() { return id_address; }
-    public void setId_address(Long address) { this.id_address = address; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 }

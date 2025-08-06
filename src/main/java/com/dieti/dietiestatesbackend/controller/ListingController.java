@@ -23,16 +23,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.dieti.dietiestatesbackend.dto.Listing;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
-import com.dieti.dietiestatesbackend.service.ImmobileService;
+import com.dieti.dietiestatesbackend.service.PropertyService;
 
 @RestController
 @RequestMapping("/api")
 public class ListingController {
     private static final Logger logger = Logger.getLogger(ListingController.class.getName());
-    private final ImmobileService immobileService;
+    private final PropertyService immobileService;
 
     @Autowired
-    public ListingController(ImmobileService immobileService) {
+    public ListingController(PropertyService immobileService) {
         this.immobileService = immobileService;
     }
 
@@ -44,7 +44,7 @@ public class ListingController {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
         try {
-            return ResponseEntity.ok(immobileService.searchImmobili(keyword));
+            return ResponseEntity.ok(immobileService.searchProperties(keyword));
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Errore durante la ricerca degli immobili: {0}", e.getMessage());
