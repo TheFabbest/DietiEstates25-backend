@@ -12,9 +12,26 @@ INSERT INTO dieti_estates.user (is_agent, is_manager, email, password, username,
     (true, true, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
     ( FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
 
-INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES (
-    'bella', 'molto bella', true
-);
+INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES
+    ('commercial property', 'commercial local', TRUE),
+    ('commercial property', 'laboratory', TRUE),
+    ('commercial property', 'commercial activity', TRUE),
+    ('commercial property', 'storehouse', TRUE),
+    ('commercial property', 'depot', TRUE),
+    ('residential property', 'apartment', TRUE),
+    ('residential property', 'penthouse', TRUE),
+    ('residential property', 'attic', TRUE),
+    ('residential property', 'loft', TRUE),
+    ('residential property', 'detached house', TRUE),
+    ('residential property', 'villa', TRUE),
+    ('residential property', 'terraced house', TRUE),
+    ('residential property', 'country house', TRUE),
+    ('land', 'agricultural', TRUE),
+    ('land', 'building', TRUE),
+    ('land', 'non-building', TRUE),
+    ('garage', 'garage', TRUE),
+    ('garage', 'parking space', TRUE)
+;
 
 INSERT INTO dieti_estates.contract (name, is_active) VALUES (
     'rental', true

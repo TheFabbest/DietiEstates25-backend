@@ -10,12 +10,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "terrain")
-public class Terrain extends BaseEntity {
+@Table(name = "land")
+public class Land extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_terrain_property"))
+    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_land_property"))
     private Property property;
 
     @Column(name = "accessible_from_street")
