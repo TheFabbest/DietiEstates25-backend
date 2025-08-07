@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.dieti.dietiestatesbackend.dto.Listing;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
@@ -31,19 +30,19 @@ import com.dieti.dietiestatesbackend.service.PropertyService;
 
 @RestController
 @RequestMapping("/api")
-public class ListingController {
-    private static final Logger logger = Logger.getLogger(ListingController.class.getName());
+public class PropertiesController {
+    private static final Logger logger = Logger.getLogger(PropertiesController.class.getName());
     private final PropertyService propertyService;
     private final AddressService addressService;
 
     @Autowired
-    public ListingController(PropertyService propertyService, AddressService addressService) {
+    public PropertiesController(PropertyService propertyService, AddressService addressService) {
         this.propertyService = propertyService;
         this.addressService = addressService;
     }
 
     @GetMapping("/properties/search/{keyword}")
-    public ResponseEntity<Object> getListings(
+    public ResponseEntity<Object> getProperties(
             @PathVariable("keyword") String keyword,
             @RequestHeader(value = "Bearer", required = false) String accessToken) {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
@@ -61,7 +60,7 @@ public class ListingController {
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Errore durante la ricerca degli immobili: {0}", e.getMessage());
-            return ResponseEntity.internalServerError().body(new ArrayList<Listing>());
+            return ResponseEntity.internalServerError().body(new ArrayList<PropertyResponse>());
         }
     }
 
@@ -85,7 +84,7 @@ public class ListingController {
             return ResponseEntity.ok(propertyService.getFeatured());
         }
         catch (SQLException e) {
-            return ResponseEntity.internalServerError().body(new ArrayList<Listing>());
+            return ResponseEntity.internalServerError().body(new ArrayList<PropertyResponse>());
         }
     }
 }

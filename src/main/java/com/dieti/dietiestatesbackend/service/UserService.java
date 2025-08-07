@@ -34,7 +34,7 @@ public class UserService {
 
     public boolean doesUserExist(String email, String password) {
         email = email.toLowerCase();
-        String query = "SELECT password FROM dieti_estates.utente WHERE email = ?";
+        String query = "SELECT password FROM dieti_estates.user WHERE email = ?";
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
             
@@ -54,7 +54,7 @@ public class UserService {
     }
 
     public String getUsernameFromEmail(String email) {
-        String query = "SELECT username FROM dieti_estates.utente WHERE email = ?";
+        String query = "SELECT username FROM dieti_estates.user WHERE email = ?";
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
@@ -73,7 +73,7 @@ public class UserService {
 
     public boolean doesUserExist(String email) {
         email = email.toLowerCase();
-        String query = "SELECT id FROM dieti_estates.utente WHERE email = ?";
+        String query = "SELECT id FROM dieti_estates.user WHERE email = ?";
         
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
@@ -100,7 +100,7 @@ public class UserService {
     }
 
     public void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
-        String query = "INSERT INTO dieti_estates.utente (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO dieti_estates.user (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
         password = passwordEncoder.encode(password);
     
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {

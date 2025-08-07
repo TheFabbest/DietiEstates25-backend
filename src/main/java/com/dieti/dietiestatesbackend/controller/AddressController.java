@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dieti.dietiestatesbackend.dto.Listing;
+import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.service.AddressService;
 
@@ -40,7 +40,7 @@ public class AddressController {
         }
         catch (SQLException e) {
             logger.log(Level.SEVERE, "Errore durante il recupero dell'indirizzo: {0}", e.getMessage());
-            return ResponseEntity.internalServerError().body(new ArrayList<Listing>());
+            return ResponseEntity.internalServerError().body(new ArrayList<Address>());
         }
     }
 }
