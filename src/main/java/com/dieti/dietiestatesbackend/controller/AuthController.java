@@ -14,11 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dieti.dietiestatesbackend.dto.response.AuthResponse;
+import com.dieti.dietiestatesbackend.dto.response.UserResponse;
+import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.security.GoogleTokenValidator;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
@@ -122,5 +127,24 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
         }
         return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
+    }
+
+
+    @GetMapping("/agent/info/{id}")
+    public ResponseEntity<Object> getAgentInfo(
+            @PathVariable("id") Long id,
+            @RequestHeader(value = "Bearer", required = true) String accessToken) {
+        if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
+            return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
+        }
+        User user = userService.getUserFromID(id);
+        if (user != null && user.isAgent()) {
+            UserResponse response = new UserResponse();
+            response.setEmail(user.getEmail());
+            response.setFullName(user.getFirstName()+ " " + user.getLastName());
+            return ResponseEntity.ok(response);
+        } else {
+            return new ResponseEntity<>("Agente non trovato", HttpStatus.NOT_FOUND);
+        }
     }
 }

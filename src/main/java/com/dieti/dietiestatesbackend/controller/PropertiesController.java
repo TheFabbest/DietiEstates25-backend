@@ -84,6 +84,7 @@ public class PropertiesController {
             return ResponseEntity.ok(propertyService.getFeatured());
         }
         catch (SQLException e) {
+            logger.info(e.getMessage());
             return ResponseEntity.internalServerError().body(new ArrayList<PropertyResponse>());
         }
     }

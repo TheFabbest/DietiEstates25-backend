@@ -60,10 +60,10 @@ public class User extends BaseEntity {
     public void setUsername(String username) { this.username = username; }
 
     public String getFirstName() { return firstName; }
-    public void setFirstName(String nome) { this.firstName = nome; }
+    public void setFirstName(String name) { this.firstName = name; }
 
     public String getLastName() { return lastName; }
-    public void setLastName(String cognome) { this.lastName = cognome; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
     public boolean isAgent() { return isAgent; }
     public void setAgent(boolean isAgent) { this.isAgent = isAgent; }

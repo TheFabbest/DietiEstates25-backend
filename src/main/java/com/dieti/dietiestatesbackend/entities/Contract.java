@@ -18,7 +18,7 @@ public class Contract extends BaseEntity {
 
     // Getters and setters
     public String getName() { return name; }
-    public void setName(String nome) { this.name = nome; }
+    public void setName(String name) { this.name = name; }
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean attivo) { isActive = attivo; }

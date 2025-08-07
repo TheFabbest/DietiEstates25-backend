@@ -26,7 +26,7 @@ public class CommercialProperty extends BaseEntity {
     private Integer numberOfRooms;
 
     @NotNull
-    @Min(1)
+    @Min(0)
     @Column(name = "floor", nullable = false)
     private Integer floor;
 

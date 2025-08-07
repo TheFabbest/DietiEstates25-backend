@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.dieti.dietiestatesbackend.entities.User;
+
 @Service
 public class UserService {
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
@@ -100,8 +102,9 @@ public class UserService {
     }
 
     public void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
-        String query = "INSERT INTO dieti_estates.user (email, password, username, nome, cognome) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO dieti_estates.user (email, password, username, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
         password = passwordEncoder.encode(password);
+        logger.info(password);
     
         try (PreparedStatement ps = myConnection.prepareStatement(query)) {
             ps.setString(1, email);
@@ -111,6 +114,33 @@ public class UserService {
             ps.setString(5, cognome);
     
             ps.executeUpdate();
+        }
+    }
+
+    public User getUserFromID(long id) {
+        String query = "SELECT * FROM dieti_estates.user WHERE id = ?";
+        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getLong("id"));
+                    user.setEmail(rs.getString("email"));
+                    user.setUsername(rs.getString("username"));
+                    user.setFirstName(rs.getString("first_name"));
+                    user.setLastName(rs.getString("last_name"));
+                    user.setAgent(rs.getBoolean("is_agent"));
+                    user.setManager(rs.getBoolean("is_manager"));
+                    user.setLicense(rs.getString("license"));
+                    // TODO user.setAgency(rs.getLong("id_agency"));
+                    return user;
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
+            return null;
         }
     }
 }

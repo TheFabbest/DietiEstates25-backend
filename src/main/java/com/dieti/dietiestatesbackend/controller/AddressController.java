@@ -31,7 +31,7 @@ public class AddressController {
     @GetMapping("/address/{id}")
     public ResponseEntity<Object> getAddress(
             @PathVariable("id") Long id,
-            @RequestHeader(value = "Bearer", required = false) String accessToken) {
+            @RequestHeader(value = "Bearer", required = true) String accessToken) {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
