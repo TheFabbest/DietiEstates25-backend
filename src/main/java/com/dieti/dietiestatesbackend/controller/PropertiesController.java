@@ -44,7 +44,7 @@ public class PropertiesController {
     @GetMapping("/properties/search/{keyword}")
     public ResponseEntity<Object> getProperties(
             @PathVariable("keyword") String keyword,
-            @RequestHeader(value = "Bearer", required = false) String accessToken) {
+            @RequestHeader(value = "Bearer", required = true) String accessToken) {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }

@@ -36,6 +36,7 @@ public class RefreshTokenProvider {
     }
 
     public static boolean validateToken(final String token) {
+        if (token == null || token.isEmpty()) return false;
         TokenHelper th = new TokenHelper(SECRET_KEY);
         return th.validateToken(token);
     }
