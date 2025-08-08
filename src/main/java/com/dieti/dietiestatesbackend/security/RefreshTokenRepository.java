@@ -25,4 +25,8 @@ public class RefreshTokenRepository {
     public static ArrayList<String> getTokensByUserId(String username) {
         return (tokens.get(username) == null) ? new ArrayList<>() : tokens.get(username);
     }
+
+    public static void deleteUserToken(String accessToken) {
+        deleteUserToken(RefreshTokenProvider.getUsernameFromToken(accessToken), accessToken);
+    }
 }

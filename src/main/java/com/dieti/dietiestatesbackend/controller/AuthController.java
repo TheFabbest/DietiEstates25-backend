@@ -129,6 +129,12 @@ public class AuthController {
         return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout(@RequestBody Map<String, String> body) {
+        String oldRefreshToken = body.get("refreshToken");
+        RefreshTokenRepository.deleteUserToken(oldRefreshToken);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/agent/info/{id}")
     public ResponseEntity<Object> getAgentInfo(
