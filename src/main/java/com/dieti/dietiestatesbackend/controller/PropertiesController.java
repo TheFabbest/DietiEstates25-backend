@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,7 +28,6 @@ import com.dieti.dietiestatesbackend.service.AddressService;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 
 @RestController
-@RequestMapping("/api")
 public class PropertiesController {
     private static final Logger logger = Logger.getLogger(PropertiesController.class.getName());
     private final PropertyService propertyService;
@@ -64,9 +62,23 @@ public class PropertiesController {
         }
     }
 
+    @GetMapping("/properties/details/{id}")
+    public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long propertyID) throws SQLException {
+        PropertyResponse p = propertyService.getProperty(propertyID);
+        if (p == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Address a = addressService.getAddress(p.getId_address());
+        p.setAddress(a.toString());
+        p.setLongitude(a.getLongitude());
+        p.setLatitude(a.getLatitude());
+        logger.info(p.getAddress());
+        return ResponseEntity.ok(p);
+    }
+
     @GetMapping("/thumbnails/{id}")
-    public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long listingID) throws ResponseStatusException {
-        Path path = Paths.get("/data/resources/listings/" + listingID + "/01.jpg");
+    public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long propertyID) throws ResponseStatusException {
+        Path path = Paths.get("/data/resources/listings/" + propertyID + "/01.jpg");
         Resource resource = null;
         try {
             resource = new UrlResource(path.toUri());
