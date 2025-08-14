@@ -33,7 +33,7 @@ public class Offer extends BaseEntity {
 
     @NotNull
     @DecimalMin(value = "0.01")
-    @Column(name = "prezzo", nullable = false, precision = 12, scale = 2)
+    @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
 
     @NotNull
@@ -43,7 +43,7 @@ public class Offer extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private OfferStatus status = OfferStatus.IN_ATTESA;
+    private OfferStatus status = OfferStatus.PENDING;
 
     // Getters and setters
     public Property getProperty() { return property; }

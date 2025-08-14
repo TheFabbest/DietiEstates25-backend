@@ -11,5 +11,5 @@ public enum EnergyRating {
     E,
     F,
     G,
-    NON_APPLICABILE
+    NOT_APPLIABLE
 }
