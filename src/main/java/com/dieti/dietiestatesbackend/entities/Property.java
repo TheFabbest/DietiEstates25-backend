@@ -99,4 +99,8 @@ public class Property extends BaseEntity {
 
     public Address getAddress() { return address; }
     public void setAddress(Address address) { this.address = address; }
+
+    public Integer getYearBuilt() { return yearBuilt; }
+    public void setYearBuilt(Integer year) { this.yearBuilt = year; }
+
 }

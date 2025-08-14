@@ -26,6 +26,7 @@ import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.service.AddressService;
 import com.dieti.dietiestatesbackend.service.PropertyService;
+import com.dieti.dietiestatesbackend.mappers.PropertyMapper;
 
 @RestController
 public class PropertiesController {
@@ -64,15 +65,10 @@ public class PropertiesController {
 
     @GetMapping("/properties/details/{id}")
     public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long propertyID) throws SQLException {
-        PropertyResponse p = propertyService.getProperty(propertyID);
+        PropertyResponse p = PropertyMapper.toResponse(propertyService.getProperty(propertyID));
         if (p == null) {
             return ResponseEntity.notFound().build();
         }
-        Address a = addressService.getAddress(p.getId_address());
-        p.setAddress(a.toString());
-        p.setLongitude(a.getLongitude());
-        p.setLatitude(a.getLatitude());
-        logger.info(p.getAddress());
         return ResponseEntity.ok(p);
     }
 

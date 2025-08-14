@@ -12,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
+import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 
 @Service
 public class PropertyService {
     
     private static final Logger logger = Logger.getLogger(PropertyService.class.getName());
     private final Connection myConnection;
+    private final PropertyRepository propertyRepository;
 
     @Autowired
-    public PropertyService(Connection myConnection) {
+    public PropertyService(Connection myConnection, PropertyRepository propertyRepository) {
         this.myConnection = myConnection;
+        this.propertyRepository = propertyRepository;
     }
 
     // // Common operations
@@ -98,38 +102,7 @@ public class PropertyService {
         return results;
     }
 
-    public PropertyResponse getProperty(long propertyID) {
-        String query = "SELECT p.id, p.description, p.price, p.area, " +
-                    "c.name AS contract_name, c.id AS contract_id, " +
-                    "cat.category AS category_name, cat.id AS category_id, " +
-                    "p.status, p.energy_rating, " +
-                    "p.id_agent, " +
-                    "p.id_address " +
-                    "FROM dieti_estates.property p " +
-                    "JOIN dieti_estates.contract c ON p.id_contract = c.id " +
-                    "JOIN dieti_estates.property_category cat ON p.id_property_category = cat.id " +
-                    "WHERE p.id = ?";
-        PropertyResponse response = null;
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setLong(1, propertyID);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    response = new PropertyResponse();
-                    response.setId(rs.getLong("id"));
-                    response.setDescription(rs.getString("description"));
-                    response.setPrice(rs.getBigDecimal("price"));
-                    response.setArea(rs.getInt("area"));
-                    response.setContract(rs.getString("contract_name"));
-                    response.setPropertyCategory(rs.getString("category_name"));
-                    response.setStatus(rs.getString("status"));
-                    response.setEnergyClass(rs.getString("energy_rating"));
-                    response.setId_agent(rs.getLong("id_agent"));
-                    response.setId_address(rs.getLong("id_address"));
-                }
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante il recupero della proprietà: " + e.getMessage());
-        }
-        return response;
+    public Property getProperty(long propertyID) {
+        return propertyRepository.findByIdWithDetails(propertyID).get();
     }
 }
