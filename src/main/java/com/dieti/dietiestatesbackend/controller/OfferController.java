@@ -23,13 +23,13 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    @GetMapping("/offers/get/{id}")
-    public ResponseEntity<Object> getOffer(
+    @GetMapping("/offers/getAgentOffers/{id}")
+    public ResponseEntity<Object> getAgentOffers(
             @PathVariable("id") Long id,
             @RequestHeader(value = "Bearer", required = true) String accessToken) throws SQLException {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        return ResponseEntity.ok(offerService.getOffer(id));
+        return ResponseEntity.ok(offerService.getAgentOffers(id));
     }
 }
