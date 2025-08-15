@@ -2,7 +2,6 @@ package com.dieti.dietiestatesbackend.service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;

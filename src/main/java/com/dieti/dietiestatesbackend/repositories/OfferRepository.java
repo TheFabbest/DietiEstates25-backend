@@ -11,8 +11,9 @@ import com.dieti.dietiestatesbackend.entities.Offer;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
-    // gets all offers from the agent
-    @Query("SELECT o FROM OFFER o " +
-           "JOIN USER u ON o.id_user = u.id AND u.is_agent")
+    // Gets all offers from the agent
+    @Query("SELECT o FROM Offer o " +
+           "JOIN o.user u " +
+           "WHERE u.isAgent = true AND u.id = :id")
     List<Offer> getAgentOffers(@Param("id") Long agentId);
 }

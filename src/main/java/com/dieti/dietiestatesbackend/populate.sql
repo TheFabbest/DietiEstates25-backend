@@ -37,19 +37,20 @@ INSERT INTO dieti_estates.property_category (category, subcategory, is_active) V
 ;
 
 INSERT INTO dieti_estates.contract (name, is_active) VALUES (
+    'sale', true
     'rental', true
 );
 
 INSERT INTO dieti_estates.property (
     area, price, year_built, id_address, id_agent, id_contract, id_property_category, status, energy_rating, description) VALUES
-    (150.0, 700000.00, 2015, 1, 1, 1, 10, 'UNDER_CONSTRUCTION', 'A1', 'Beautiful 3-bedroom house with modern amenities and a spacious garden.'),
+    (150.0, 700000.00, 2024, 1, 1, 1, 10, 'UNDER_CONSTRUCTION', 'A1', 'Beautiful 3-bedroom house with modern amenities and a spacious garden.'),
     (85.0, 400000.00, 2002, 2, 1, 1, 12, 'RENOVATED', 'D', 'Country house with rustic charm, featuring a large kitchen and scenic views.'),
     (200.0, 1200000.00, 2018, 3, 1, 1, 10, 'NEW', 'A1', 'Luxurious villa with a private pool and high-end finishes.'),
-    (60.0, 350000.00, 2023, 4, 1, 1, 6, 'TO_BE_RENOVATED', 'B', 'Modern apartment in the city center with easy access to public transport.'),
-    (100.0, 500000.00, 2012, 5, 1, 1, 7, 'UNDER_CONSTRUCTION', 'B', 'Spacious penthouse with panoramic city views and a large terrace.');
+    (60.0, 350000.00, 2025, 4, 1, 1, 6, 'UNDER_CONSTRUCTION', 'B', 'Modern apartment in the city center with easy access to public transport.'),
+    (100.0, 500000.00, 2012, 5, 1, 1, 7, 'TO_BE_RENOVATED', 'B', 'Spacious penthouse with panoramic city views and a large terrace.');
 
 INSERT INTO dieti_estates.garage (id_property, has_surveillance, number_of_floors) VALUES (
-    1, true, 1
+    4, true, 1
 );
 
 INSERT INTO dieti_estates.commercial_property (id_property, floor, number_of_bathrooms, number_of_floors, number_of_rooms, numero_vetrine, wheelchair_access) VALUES (
