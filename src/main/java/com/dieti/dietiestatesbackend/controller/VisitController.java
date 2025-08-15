@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
-import com.dieti.dietiestatesbackend.service.OfferService;
+import com.dieti.dietiestatesbackend.service.VisitService;
 
 @RestController
-public class OfferController {
-    private static final Logger logger = Logger.getLogger(OfferController.class.getName());
-    private final OfferService offerService;
+public class VisitController {
+    private static final Logger logger = Logger.getLogger(VisitController.class.getName());
+    private final VisitService visitService;
 
     @Autowired
-    public OfferController(OfferService offerService) {
-        this.offerService = offerService;
+    public VisitController(VisitService visitService) {
+        this.visitService = visitService;
     }
 
-    @GetMapping("/offers/agent_offers/{id}")
-    public ResponseEntity<Object> getAgentOffers(
+    @GetMapping("/offers/agent_visits/{id}")
+    public ResponseEntity<Object> getAgentVisits(
             @PathVariable("id") Long agentID,
             @RequestHeader(value = "Bearer", required = true) String accessToken) throws SQLException {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        return ResponseEntity.ok(offerService.getAgentOffers(agentID));
+        return ResponseEntity.ok(visitService.getAgentVisits(agentID));
     }
 }
