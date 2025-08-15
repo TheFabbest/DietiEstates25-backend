@@ -22,12 +22,12 @@ import jakarta.validation.constraints.NotNull;
 public class Offer extends BaseEntity {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_property", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_property"))
     private Property property;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_user"))
     private User user;
 

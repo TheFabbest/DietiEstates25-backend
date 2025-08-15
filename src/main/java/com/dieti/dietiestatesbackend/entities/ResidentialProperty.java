@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "residential_property")
 public class ResidentialProperty extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_residentialproperty_property"))
     private Property property;
@@ -41,7 +41,7 @@ public class ResidentialProperty extends BaseEntity {
     private Integer parkingSpaces = 0;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_heating", nullable = false, foreignKey = @ForeignKey(name = "fk_residential_heating"))
     private Heating heating;
 

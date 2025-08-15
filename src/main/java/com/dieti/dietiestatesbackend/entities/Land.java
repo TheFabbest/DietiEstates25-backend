@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 @Table(name = "land")
 public class Land extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_land_property"))
     private Property property;

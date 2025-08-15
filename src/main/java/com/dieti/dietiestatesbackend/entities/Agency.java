@@ -24,7 +24,7 @@ public class Agency extends BaseEntity {
     private String name;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_address", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_agency_address"))
     private Address address;
 

@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Min;
 @Table(name = "garage")
 public class Garage extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "id_property", foreignKey = @ForeignKey(name = "fk_garage_property"))
     private Property property;

@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "commercial_property")
 public class CommercialProperty extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     @JoinColumn(name = "id_property", foreignKey = @ForeignKey(name = "fk_commercialproperty_property"))
     private Property property;

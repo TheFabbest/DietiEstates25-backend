@@ -40,12 +40,12 @@ public class Property extends BaseEntity {
     private Integer yearBuilt;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_contract", nullable = false, foreignKey = @ForeignKey(name = "fk_property_contract"))
     private Contract contract;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_property_category", nullable = false, foreignKey = @ForeignKey(name = "fk_property_propertycategory"))
     private PropertyCategory propertyCategory;
 
@@ -60,12 +60,12 @@ public class Property extends BaseEntity {
     private EnergyRating energyRating;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_agent", nullable = false, foreignKey = @ForeignKey(name = "fk_property_agent"))
     private User agent;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_address", nullable = false, foreignKey = @ForeignKey(name = "fk_property_address"))
     private Address address;
 

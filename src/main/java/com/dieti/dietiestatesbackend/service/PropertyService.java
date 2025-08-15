@@ -105,6 +105,6 @@ public class PropertyService {
     }
 
     public Property getProperty(long propertyID) {
-        return propertyRepository.getReferenceById(propertyID);
+        return propertyRepository.findById(propertyID).get();
     }
 }
