@@ -43,24 +43,13 @@ public class PropertiesController {
     @GetMapping("/properties/search/{keyword}")
     public ResponseEntity<Object> getProperties(
             @PathVariable("keyword") String keyword,
-            @RequestHeader(value = "Bearer", required = true) String accessToken) {
+            @RequestHeader(value = "Bearer", required = true) String accessToken) throws SQLException {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        try {
-            List<PropertyResponse> list = propertyService.searchProperties(keyword);
-            for (PropertyResponse p : list) {
-                Address a = addressService.getAddress(p.getId_address());
-                p.setAddress(a.toString());
-                p.setLongitude(a.getLongitude());
-                p.setLatitude(a.getLatitude());
-            }
-            return ResponseEntity.ok(list);
-        }
-        catch (SQLException e) {
-            logger.log(Level.SEVERE, "Errore durante la ricerca degli immobili: {0}", e.getMessage());
-            return ResponseEntity.internalServerError().body(new ArrayList<PropertyResponse>());
-        }
+        return ResponseEntity.ok(propertyService.searchProperties(keyword).stream()
+            .map(PropertyMapper::toResponse)
+            .toList());
     }
 
     @GetMapping("/properties/details/{id}")
