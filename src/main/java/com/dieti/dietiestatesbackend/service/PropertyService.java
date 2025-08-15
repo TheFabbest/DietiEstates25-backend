@@ -10,12 +10,14 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 
 @Service
+@Transactional
 public class PropertyService {
     
     private static final Logger logger = Logger.getLogger(PropertyService.class.getName());
@@ -103,6 +105,6 @@ public class PropertyService {
     }
 
     public Property getProperty(long propertyID) {
-        return propertyRepository.findByIdWithDetails(propertyID).get();
+        return propertyRepository.getReferenceById(propertyID);
     }
 }

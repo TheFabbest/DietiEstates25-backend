@@ -12,7 +12,7 @@ INSERT INTO dieti_estates.agency (id_address, name) VALUES (
 -- Agent000@
 -- 123Pass!
 INSERT INTO dieti_estates.user (is_agent, is_manager, email, password, username, first_name, last_name)  VALUES
-    (true, true, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
+    (TRUE, TRUE, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
     ( FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
 
 INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES
@@ -36,10 +36,10 @@ INSERT INTO dieti_estates.property_category (category, subcategory, is_active) V
     ('garage', 'parking space', TRUE)
 ;
 
-INSERT INTO dieti_estates.contract (name, is_active) VALUES (
-    'sale', true
-    'rental', true
-);
+INSERT INTO dieti_estates.contract (name, is_active) VALUES
+    ('sale', TRUE),
+    ('rental', TRUE)
+;
 
 INSERT INTO dieti_estates.property (
     area, price, year_built, id_address, id_agent, id_contract, id_property_category, status, energy_rating, description) VALUES
@@ -50,9 +50,9 @@ INSERT INTO dieti_estates.property (
     (100.0, 500000.00, 2012, 5, 1, 1, 7, 'TO_BE_RENOVATED', 'B', 'Spacious penthouse with panoramic city views and a large terrace.');
 
 INSERT INTO dieti_estates.garage (id_property, has_surveillance, number_of_floors) VALUES (
-    4, true, 1
+    4, TRUE, 1
 );
 
 INSERT INTO dieti_estates.commercial_property (id_property, floor, number_of_bathrooms, number_of_floors, number_of_rooms, numero_vetrine, wheelchair_access) VALUES (
-    1, 0, 2, 1, 3, 1, true
+    1, 0, 2, 1, 3, 1, TRUE
 );

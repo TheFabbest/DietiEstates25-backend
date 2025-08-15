@@ -143,7 +143,7 @@ public class AuthController {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        User user = userService.getUserFromID(id);
+        User user = userService.getUser(id);
         if (user != null && user.isAgent()) {
             UserResponse response = new UserResponse();
             response.setEmail(user.getEmail());

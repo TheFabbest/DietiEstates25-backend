@@ -12,10 +12,13 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dieti.dietiestatesbackend.entities.User;
+import com.dieti.dietiestatesbackend.repositories.UserRepository;
 
 @Service
+@Transactional
 public class UserService {
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
@@ -23,10 +26,12 @@ public class UserService {
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     private final Connection myConnection;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserService(Connection myConnection) {
+    public UserService(Connection myConnection, UserRepository userRepository) {
         this.myConnection = myConnection;
+        this.userRepository = userRepository;
     }
 
     public boolean isPasswordStrong(String password) {
@@ -117,30 +122,7 @@ public class UserService {
         }
     }
 
-    public User getUserFromID(long id) {
-        String query = "SELECT * FROM dieti_estates.user WHERE id = ?";
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setLong(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getLong("id"));
-                    user.setEmail(rs.getString("email"));
-                    user.setUsername(rs.getString("username"));
-                    user.setFirstName(rs.getString("first_name"));
-                    user.setLastName(rs.getString("last_name"));
-                    user.setAgent(rs.getBoolean("is_agent"));
-                    user.setManager(rs.getBoolean("is_manager"));
-                    user.setLicense(rs.getString("license"));
-                    // TODO user.setAgency(rs.getLong("id_agency"));
-                    return user;
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
-            return null;
-        }
+    public User getUser(Long id) {
+        return userRepository.findById(id).get();
     }
 }

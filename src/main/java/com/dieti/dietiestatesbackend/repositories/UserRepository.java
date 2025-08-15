@@ -3,8 +3,9 @@ package com.dieti.dietiestatesbackend.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.entities.User;
 
 @Repository
-public interface PropertyRepository extends JpaRepository<Property, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+
 }
