@@ -1,7 +1,10 @@
 package com.dieti.dietiestatesbackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -45,7 +48,8 @@ public class User extends BaseEntity {
     @Column(name = "is_manager")
     private boolean isManager = false;
 
-    @ManyToOne
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_agency", foreignKey = @ForeignKey(name = "fk_user_agency"))
     private Agency agency;
 

@@ -11,9 +11,9 @@ INSERT INTO dieti_estates.agency (id_address, name) VALUES (
 
 -- Agent000@
 -- 123Pass!
-INSERT INTO dieti_estates.user (is_agent, is_manager, email, password, username, first_name, last_name)  VALUES
-    (TRUE, TRUE, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
-    ( FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
+INSERT INTO dieti_estates.user (id_agency, is_agent, is_manager, email, password, username, first_name, last_name)  VALUES
+    (1, TRUE, TRUE, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
+    (NULL, FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
 
 INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES
     ('commercial_property', 'commercial_local', TRUE),

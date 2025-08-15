@@ -14,4 +14,9 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     // searches for properties with a given keyword in the "description"
     @Query("SELECT p FROM Property p WHERE LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     public List<Property> findByDescriptionContainingIgnoreCase(@Param("keyword") String keyword);
+
+    // gets featured properties
+    @Query("SELECT p FROM Property p WHERE p.id < 4")
+    public List<Property> getFeatured();
+
 }

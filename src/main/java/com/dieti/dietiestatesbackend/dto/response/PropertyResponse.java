@@ -2,6 +2,9 @@ package com.dieti.dietiestatesbackend.dto.response;
 
 import java.math.BigDecimal;
 
+import com.dieti.dietiestatesbackend.entities.Address;
+import com.dieti.dietiestatesbackend.entities.User;
+
 public class PropertyResponse {
     private Long id;
     private String description;
@@ -17,7 +20,8 @@ public class PropertyResponse {
     private Long id_address;
     private BigDecimal longitude;
     private BigDecimal latitude;
-    private String address;
+    private Address address;
+    private User agent;
     // TODO see private LocalDateTime createdAt;
     // TODO add images
 
@@ -55,12 +59,15 @@ public class PropertyResponse {
     public Long getId_address() { return id_address; }
     public void setId_address(Long id_address) { this.id_address = id_address; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public Address getAddress() { return address; }
+    public void setAddress(Address address) { this.address = address; }
 
     public BigDecimal getLongitude() { return longitude; }
     public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
 
     public BigDecimal getLatitude() { return latitude; }
     public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
+
+    public User getAgent() { return agent; }
+    public void setAgent(User agent) { this.agent = agent; }
 }

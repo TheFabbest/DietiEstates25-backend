@@ -33,11 +33,12 @@ public class PropertyMapper {
         
         if (property.getAgent() != null) {
             response.setId_agent(property.getAgent().getId());
+            response.setAgent(property.getAgent());
         }
         
         if (property.getAddress() != null) {
             response.setId_address(property.getAddress().getId());
-            response.setAddress(property.getAddress().toString());
+            response.setAddress(property.getAddress());
             response.setLatitude(property.getAddress().getLatitude());
             response.setLongitude(property.getAddress().getLongitude());
         }

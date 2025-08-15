@@ -78,7 +78,7 @@ public class PropertiesController {
     @GetMapping("/properties/featured")
     public ResponseEntity<Object> getFeatured() throws ResponseStatusException {
         try {
-            return ResponseEntity.ok(propertyService.getFeatured());
+            return ResponseEntity.ok(propertyService.getFeatured().stream().map(PropertyMapper::toResponse).toList());
         }
         catch (SQLException e) {
             logger.info(e.getMessage());
