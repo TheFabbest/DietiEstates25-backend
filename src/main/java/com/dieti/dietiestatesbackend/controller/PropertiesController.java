@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,14 +16,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
-import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
-import com.dieti.dietiestatesbackend.service.AddressService;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.mappers.PropertyMapper;
 
@@ -32,22 +31,21 @@ import com.dieti.dietiestatesbackend.mappers.PropertyMapper;
 public class PropertiesController {
     private static final Logger logger = Logger.getLogger(PropertiesController.class.getName());
     private final PropertyService propertyService;
-    private final AddressService addressService;
 
     @Autowired
-    public PropertiesController(PropertyService propertyService, AddressService addressService) {
+    public PropertiesController(PropertyService propertyService) {
         this.propertyService = propertyService;
-        this.addressService = addressService;
     }
 
     @GetMapping("/properties/search/{keyword}")
     public ResponseEntity<Object> getProperties(
             @PathVariable("keyword") String keyword,
-            @RequestHeader(value = "Bearer", required = true) String accessToken) throws SQLException {
+            @RequestHeader(value = "Bearer", required = true) String accessToken,
+            @RequestBody FilterRequest filters) throws SQLException {
         if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
             return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
         }
-        return ResponseEntity.ok(propertyService.searchProperties(keyword).stream()
+        return ResponseEntity.ok(propertyService.searchPropertiesWithFilters(keyword, filters).stream()
             .map(PropertyMapper::toResponse)
             .toList());
     }
