@@ -28,6 +28,7 @@ import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.security.GoogleTokenValidator;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
 import com.dieti.dietiestatesbackend.security.RefreshTokenRepository;
+import com.dieti.dietiestatesbackend.service.AuthService;
 import com.dieti.dietiestatesbackend.service.UserService;
 import com.dieti.dietiestatesbackend.util.DaemonThreadFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -38,10 +39,12 @@ public class AuthController {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
     
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @PostMapping("/login")
@@ -132,8 +135,13 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@RequestBody Map<String, String> body) {
         String oldRefreshToken = body.get("refreshToken");
-        RefreshTokenRepository.deleteUserToken(oldRefreshToken);
-        return ResponseEntity.ok().build();
+        AuthService.LogoutResult result = authService.logout(oldRefreshToken);
+        
+        if (result.isSuccess()) {
+            return ResponseEntity.ok().build();
+        } else {
+            return new ResponseEntity<>(result.getMessage(), result.getStatus());
+        }
     }
 
     @GetMapping("/agent/info/{id}")
