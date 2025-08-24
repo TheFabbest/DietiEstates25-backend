@@ -1,14 +1,5 @@
 package com.dieti.dietiestatesbackend.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,109 +11,102 @@ import com.dieti.dietiestatesbackend.repositories.UserRepository;
 @Service
 @Transactional
 public class UserService {
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
-    private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
-    private static final Pattern PASSWORD_COMPILED_PATTERN = Pattern.compile(PASSWORD_REGEX);
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    private final Connection myConnection;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(Connection myConnection, UserRepository userRepository) {
-        this.myConnection = myConnection;
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-    }
-
-    public boolean isPasswordStrong(String password) {
-        final Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
-        return matcher.matches();
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean doesUserExist(String email, String password) {
-        email = email.toLowerCase();
-        String query = "SELECT password FROM dieti_estates.user WHERE email = ?";
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setString(1, email);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.isBeforeFirst()) {
-                    rs.next();
-                    String storedPassword = rs.getString("password");
-                    return passwordEncoder.matches(password, storedPassword);
-                } else {
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
-            return false;
-        }
+        return userRepository.findByEmail(email)
+            .map(user -> passwordEncoder.matches(password, user.getPassword()))
+            .orElse(false);
     }
 
     public String getUsernameFromEmail(String email) {
-        String query = "SELECT username FROM dieti_estates.user WHERE email = ?";
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.isBeforeFirst()) {
-                    rs.next();
-                    return rs.getString("username");
-                } else {
-                    return "";
-                }
-            }
-        } catch(SQLException e) {
-            logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
-            return "";
-        }
+        return userRepository.findByEmail(email)
+            .map(User::getUsername)
+            .orElse("");
     }
 
     public boolean doesUserExist(String email) {
-        email = email.toLowerCase();
-        String query = "SELECT id FROM dieti_estates.user WHERE email = ?";
+        return userRepository.existsByEmail(email.toLowerCase());
+    }
+
+    // Metodo getErrorMessageUserCreation rimosso come da piano di refactoring
+    // Le eccezioni verranno gestite con eccezioni più specifiche di Spring
+
+    public void createUser(String email, String password, String username, String nome, String cognome) {
+        if (userRepository.existsByEmail(email.toLowerCase()) || userRepository.existsByUsername(username)) {
+            throw new IllegalStateException("Credenziali già in uso");
+        }
         
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setString(1, email);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.isBeforeFirst();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Errore del database! {0}", e.getMessage());
-            return false;
-        }
+        User user = new User();
+        user.setEmail(email.toLowerCase());
+        user.setPassword(passwordEncoder.encode(password));
+        user.setUsername(username);
+        user.setFirstName(nome);
+        user.setLastName(cognome);
+        user.setAgent(false);
+        user.setManager(false);
+        
+        userRepository.save(user);
     }
 
-    public String getErrorMessageUserCreation(SQLException e) {
-        String message = e.getMessage();
-        if (message.contains("valid_email")) {
-            return "Email non valida.";
+    /**
+     * Crea un utente tramite autenticazione Google.
+     * Per gli utenti Google, la password è vuota e non viene codificata.
+     *
+     * @param email L'email dell'utente
+     * @param username Lo username dell'utente
+     * @param name Il nome dell'utente
+     * @param surname Il cognome dell'utente
+     * @throws IllegalStateException se le credenziali sono già in uso o se i dati obbligatori sono mancanti
+     */
+    public void createGoogleUser(String email, String username, String name, String surname) {
+        // Validazione dei dati obbligatori
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalStateException("L'email è obbligatoria per la creazione dell'utente Google");
         }
-        else if (message.contains("unique_username")) {
-            return "Username già esistente, scegline un altro.";
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalStateException("Lo username è obbligatorio per la creazione dell'utente Google");
         }
-        else {
-            return "Errore sconosciuto";
+        
+        // Verifica se le credenziali sono già in uso
+        if (userRepository.existsByEmail(email.toLowerCase())) {
+            throw new IllegalStateException("Email già in uso");
         }
-    }
-
-    public void createUser(String email, String password, String username, String nome, String cognome) throws SQLException {
-        String query = "INSERT INTO dieti_estates.user (email, password, username, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
-        password = passwordEncoder.encode(password);
-        logger.info(password);
-    
-        try (PreparedStatement ps = myConnection.prepareStatement(query)) {
-            ps.setString(1, email);
-            ps.setString(2, password);
-            ps.setString(3, username);
-            ps.setString(4, nome);
-            ps.setString(5, cognome);
-    
-            ps.executeUpdate();
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalStateException("Username già in uso");
         }
+        
+        User user = new User();
+        user.setEmail(email.toLowerCase());
+        // Per gli utenti Google, non impostiamo la password (rimane null)
+        user.setUsername(username);
+        user.setFirstName(name);
+        user.setLastName(surname);
+        user.setAgent(false);
+        user.setManager(false);
+        
+        userRepository.save(user);
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con id: " + id));
+    }
+
+    /**
+     * Recupera l'utente dato lo username.
+     * Restituisce null se non trovato.
+     */
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con username: " + username));
     }
 }

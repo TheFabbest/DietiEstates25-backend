@@ -11,9 +11,9 @@ import com.dieti.dietiestatesbackend.entities.Visit;
 
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
-    // Gets all offers from the agent
-    @Query("SELECT v FROM Visit v " +
-           "JOIN v.user u " +
-           "WHERE u.isAgent = true AND u.id = :id")
+    // Gets all visits from the agent
+    @Query(value = "SELECT v.* FROM visits v " +
+           "JOIN users u ON v.user_id = u.id " +
+           "WHERE u.is_agent = true AND u.id = :id", nativeQuery = true)
     List<Visit> getAgentVisits(@Param("id") Long agentId);
 }

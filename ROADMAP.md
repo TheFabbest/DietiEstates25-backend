@@ -12,9 +12,9 @@ Per evitare sovrapposizioni, ogni membro del team può assegnarsi una task dal b
 
 ### Luca
 
-| Task | Stato |
-| :--- | :--- |
-|      | Da Iniziare / In Corso / Completato |
+| Task                                                        | Stato        |
+| :---                                                        | :---         |
+| Copiare backend e configurare database su Azure              | Completato   |
 
 ### Fabrizio
 
@@ -34,7 +34,7 @@ Per evitare sovrapposizioni, ogni membro del team può assegnarsi una task dal b
 
 - [ ] Sistemare diagramma dei casi d’uso (aggiungere visite, controllare admin e agenti)
 - [ ] Sistemare diagramma UML (aggiungere visite, controllare filtri)
-- [ ] Copiare backend e configurare database su Azure
+- [x] Copiare backend e configurare database su Azure
 - [ ] Modificare il backend in base all’UML
 - [ ] Modificare i mockup in base ai nuovi diagrammi
 - [ ] Modificare il frontend in base ai mockup
@@ -50,7 +50,7 @@ Per evitare sovrapposizioni, ogni membro del team può assegnarsi una task dal b
 ### Product Backlog
 
 #### Documentazione e Progettazione
-- [ ] Aggiornare la documentazione (Casi d'Uso, UML, ER) per includere la gestione delle "Visite"
+- [ ] Aggiornare la documentazione (Casi d'Uso, Diagramma delle classi (normale e ristrutturato)) per includere la gestione delle "Visite"
 - [ ] Definire le specifiche per la creazione di nuovi utenti (Admin/Agenti)
 
 #### Backend

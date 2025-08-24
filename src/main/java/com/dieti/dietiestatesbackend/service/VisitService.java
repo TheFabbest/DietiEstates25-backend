@@ -1,20 +1,21 @@
 package com.dieti.dietiestatesbackend.service;
-
-import java.sql.SQLException;
+ 
 import java.util.List;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+ 
 import com.dieti.dietiestatesbackend.entities.Visit;
 import com.dieti.dietiestatesbackend.repositories.VisitRepository;
-
+import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
+ 
 @Service
 @Transactional
 public class VisitService {
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(VisitService.class);
 
     private final VisitRepository visitRepository;
 
@@ -23,8 +24,9 @@ public class VisitService {
         this.visitRepository = visitRepository;
     }
 
-    public Visit getVisit(Long id) throws SQLException {
-        return visitRepository.findById(id).get();
+    public Visit getVisit(Long id) {
+        return visitRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Visit not found with id: " + id));
     }
 
     public List<Visit> getAgentVisits(Long agentId) {

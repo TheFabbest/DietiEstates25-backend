@@ -1,20 +1,21 @@
 package com.dieti.dietiestatesbackend.service;
-
-import java.sql.SQLException;
+ 
 import java.util.List;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+ 
 import com.dieti.dietiestatesbackend.entities.Offer;
 import com.dieti.dietiestatesbackend.repositories.OfferRepository;
-
+import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
+ 
 @Service
 @Transactional
 public class OfferService {
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(OfferService.class);
 
     private final OfferRepository offerRepository;
 
@@ -23,8 +24,9 @@ public class OfferService {
         this.offerRepository = offerRepository;
     }
 
-    public Offer getOffer(Long id) throws SQLException {
-        return offerRepository.findById(id).get();
+    public Offer getOffer(Long id) {
+        return offerRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + id));
     }
 
     public List<Offer> getAgentOffers(Long agentId) {

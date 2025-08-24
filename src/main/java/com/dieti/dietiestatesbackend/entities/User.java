@@ -4,18 +4,25 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.FetchType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.dieti.dietiestatesbackend.security.AppPrincipal;
 
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails, AppPrincipal {
     
     @NotBlank
     @Email
@@ -38,14 +45,14 @@ public class User extends BaseEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "is_agent")
-    private boolean isAgent = false;
-
     @Pattern(regexp = "^[A-Z]{2}\\d{6}$")
     @Column(name = "license")
     private String license;
 
-    @Column(name = "is_manager")
+    @Column(name = "is_agent", nullable = false)
+    private boolean isAgent = false;
+
+    @Column(name = "is_manager", nullable = false)
     private boolean isManager = false;
 
     @JsonManagedReference
@@ -69,14 +76,56 @@ public class User extends BaseEntity {
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public boolean isAgent() { return isAgent; }
-    public void setAgent(boolean isAgent) { this.isAgent = isAgent; }
-
     public String getLicense() { return license; }
     public void setLicense(String license) { this.license = license; }
 
-    public boolean isManager() { return isManager; }
-    public void setManager(boolean isManager) { this.isManager = isManager; }
+    public boolean isAgent() {
+        return isAgent;
+    }
+
+    public void setAgent(boolean agent) {
+        isAgent = agent;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (isAgent) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
+        }
+        if (isManager) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public Agency getAgency() { return agency; }
     public void setAgency(Agency agenzia) { this.agency = agenzia; }

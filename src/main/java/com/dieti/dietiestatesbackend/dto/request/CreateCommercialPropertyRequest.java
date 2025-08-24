@@ -1,35 +1,36 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
-import java.util.List;
-
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class ImmobileCommercialeRequest extends PropertyRequest {
+/**
+ * DTO per la creazione di un immobile commerciale.
+ */
+public class CreateCommercialPropertyRequest extends CreatePropertyRequest {
+
     @NotNull @Min(1)
     private Integer numeroLocali;
-    
-    @NotEmpty
-    private List<String> piani;
-    
+
+    @NotNull
+    private Integer piano;
+
     @NotNull @Min(1)
     private Integer numeroBagni;
-    
+
     @NotNull @Min(1)
     private Integer numeroPianiTotali;
-    
+
     private boolean haAccessoDisabili;
-    
+
     @Min(0)
     private Integer numeroVetrine;
 
-    // Getters and setters
+    // Getters / Setters
     public Integer getNumeroLocali() { return numeroLocali; }
     public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }
 
-    public List<String> getPiani() { return piani; }
-    public void setPiani(List<String> piani) { this.piani = piani; }
+    public Integer getPiano() { return piano; }
+    public void setPiano(Integer piano) { this.piano = piano; }
 
     public Integer getNumeroBagni() { return numeroBagni; }
     public void setNumeroBagni(Integer numeroBagni) { this.numeroBagni = numeroBagni; }

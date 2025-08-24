@@ -11,13 +11,13 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Run stage
-FROM --platform=linux/amd64 openjdk:17-slim
+FROM --platform=linux/amd64 openjdk:17-jdk-slim
 WORKDIR /app
 
 # Install dependencies in a single layer to reduce image size
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends fontconfig libfreetype6 && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends fontconfig libfreetype6 && \
+#     rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/target/*.jar app.jar
 

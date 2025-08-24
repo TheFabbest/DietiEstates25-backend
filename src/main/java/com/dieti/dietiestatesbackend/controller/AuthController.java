@@ -2,163 +2,171 @@ package com.dieti.dietiestatesbackend.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.concurrent.Executors;
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dieti.dietiestatesbackend.dto.request.AuthRequest;
+import com.dieti.dietiestatesbackend.dto.request.GoogleAuthRequest;
+import com.dieti.dietiestatesbackend.dto.request.RefreshRequest;
+import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.dto.response.AuthResponse;
-import com.dieti.dietiestatesbackend.dto.response.UserResponse;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.security.GoogleTokenValidator;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
-import com.dieti.dietiestatesbackend.security.RefreshTokenRepository;
 import com.dieti.dietiestatesbackend.service.AuthService;
 import com.dieti.dietiestatesbackend.service.UserService;
-import com.dieti.dietiestatesbackend.util.DaemonThreadFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
+import jakarta.validation.Valid;
+
 @RestController
+@Validated
 public class AuthController {
-    private static final Logger logger = Logger.getLogger(AuthController.class.getName());
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new DaemonThreadFactory());
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
     private final AuthService authService;
-
+    private final ScheduledExecutorService scheduler;
+    private final AuthenticationManager authenticationManager;
+    private final RefreshTokenProvider refreshTokenProvider;
+    private final AccessTokenProvider accessTokenProvider;
+    
     @Autowired
-    public AuthController(UserService userService, AuthService authService) {
+    public AuthController(UserService userService,
+                          AuthService authService,
+                          ScheduledExecutorService scheduler,
+                          AuthenticationManager authenticationManager,
+                          RefreshTokenProvider refreshTokenProvider,
+                          AccessTokenProvider accessTokenProvider) {
         this.userService = userService;
         this.authService = authService;
+        this.scheduler = scheduler;
+        this.authenticationManager = authenticationManager;
+        this.refreshTokenProvider = refreshTokenProvider;
+        this.accessTokenProvider = accessTokenProvider;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-        if (userService.doesUserExist(email, password)) {
-            String username = userService.getUsernameFromEmail(email);
-            String accessToken = AccessTokenProvider.generateAccessToken(username);
-            String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
-            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
-        } else {
-            return new ResponseEntity<>("Credenziali non valide", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<Object> login(@RequestBody @Valid AuthRequest authRequest) {
+        try {
+            // Prima ricava lo username associato all'email, altrimenti Spring cercherà l'email come username
+            String username = userService.getUsernameFromEmail(authRequest.getEmail());
+            if (username == null || username.isEmpty()) {
+                return buildErrorResponse("Credenziali non valide", HttpStatus.UNAUTHORIZED);
+            }
+
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, authRequest.getPassword())
+            );
+
+            User user = userService.getUserByUsername(username);
+            return buildAuthResponseEntity(user, username);
+        } catch (BadCredentialsException ex) {
+            logger.warn("Tentativo di login fallito per {}: {}", authRequest.getEmail(), ex.getMessage());
+            return buildErrorResponse("Credenziali non valide", HttpStatus.UNAUTHORIZED);
+        } catch (Exception ex) {
+            logger.error("Errore durante l'autenticazione: {}", ex.getMessage());
+            return buildErrorResponse("Errore durante l'autenticazione", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String username = body.get("username");
-        // TODO verify email
-        if (userService.doesUserExist(email)) {
-            return new ResponseEntity<>("Utente gia' registrato", HttpStatus.CONFLICT);
-        }
-        else {
-            String password = body.get("password");
-            String name = body.get("name");
-            String surname = body.get("surname");
-            if (!userService.isPasswordStrong(password)){
-                return new ResponseEntity<>("Password debole: deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale (@ # $ % ^ & + =).", HttpStatus.BAD_REQUEST);
-            }
-
-            try {
-                userService.createUser(email, password, username, name, surname);
-            } catch (SQLException e) {
-                logger.log(Level.SEVERE, "Errore! {0}", e.getMessage());
-                return new ResponseEntity<>(userService.getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
-            }
-        
-            String accessToken = AccessTokenProvider.generateAccessToken(username);
-            String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
-            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+    public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) {
+        try {
+            // Create user and receive the persisted entity directly
+            User savedUser = authService.registerNewUser(signupRequest);
+            return buildAuthResponseEntity(savedUser, savedUser.getUsername());
+        } catch (IllegalStateException e) {
+            logger.warn("Registrazione non valida: {}", e.getMessage());
+            return buildErrorResponse(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (IllegalArgumentException e) {
+            logger.warn("Dati di registrazione non validi: {}", e.getMessage());
+            return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            logger.error("Errore durante la registrazione! {}", e.getMessage());
+            return buildErrorResponse("Errore durante la registrazione.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/authwithgoogle")
-    public ResponseEntity<Object> authWithGoogle(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) {
         try {
-            GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(body.get("token"));
+            GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(googleAuthRequest.getToken());
             String email = payload.getEmail();
-            String username = body.get("username");
-            if (!userService.doesUserExist(email)) {
-                if (body.containsKey("username")) {
-                    String name = body.get("name");
-                    String surname = body.get("surname");
-                    try {
-                        userService.createUser(email, "", username, name, surname);
-                    }
-                    catch (SQLException e){
-                        return new ResponseEntity<>(userService.getErrorMessageUserCreation(e), HttpStatus.BAD_REQUEST);
-                    }
-                }
-                else {
-                    return new ResponseEntity<>("L'utente non esiste", HttpStatus.NOT_FOUND);
-                }
-            }
-            String accessToken = AccessTokenProvider.generateAccessToken(username);
-            String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
-            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+
+            authService.handleGoogleAuth(email, googleAuthRequest);
+
+            User user = userService.getUserByUsername(googleAuthRequest.getUsername());
+            return buildAuthResponseEntity(user, googleAuthRequest.getUsername());
+
         } catch (IOException | GeneralSecurityException e) {
-            return new ResponseEntity<>("Token google non valido", HttpStatusCode.valueOf(498));
+            logger.warn("Token Google non valido: {}", e.getMessage());
+            return buildErrorResponse("Token Google non valido", HttpStatusCode.valueOf(498));
+        } catch (IllegalArgumentException e) {
+            logger.warn("Autenticazione Google fallita: {}", e.getMessage());
+            return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.error("Errore durante l'autenticazione con Google: {}", e.getMessage());
+            return buildErrorResponse("Errore durante l'autenticazione con Google.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Object> refreshAccessToken(@RequestBody Map<String, String> body) {
-        String oldRefreshToken = body.get("refreshToken");
-        String username = RefreshTokenProvider.getUsernameFromToken(oldRefreshToken);
-        if (RefreshTokenProvider.validateToken(oldRefreshToken) && RefreshTokenProvider.isTokenOf(username, oldRefreshToken)) {
-            String accessToken = AccessTokenProvider.generateAccessToken(username);
-            String refreshToken = RefreshTokenProvider.generateRefreshToken(username);
-            scheduler.schedule(()->RefreshTokenRepository.deleteUserToken(username, oldRefreshToken), 10, TimeUnit.SECONDS);
-            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+    public ResponseEntity<Object> refreshAccessToken(@RequestBody @Valid RefreshRequest refreshRequest) {
+        String oldRefreshToken = refreshRequest.getRefreshToken();
+        String username = refreshTokenProvider.getUsernameFromToken(oldRefreshToken);
+        
+        if (refreshTokenProvider.validateToken(oldRefreshToken) && refreshTokenProvider.isTokenOf(username, oldRefreshToken)) {
+            User user = userService.getUserByUsername(username);
+            scheduler.schedule(() -> refreshTokenProvider.deleteByTokenValue(oldRefreshToken), 10, TimeUnit.SECONDS);
+            return buildAuthResponseEntity(user, username);
         }
-        return new ResponseEntity<>("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
+        return buildErrorResponse("Refresh token non valido o scaduto", HttpStatusCode.valueOf(498));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Object> logout(@RequestBody Map<String, String> body) {
-        String oldRefreshToken = body.get("refreshToken");
-        AuthService.LogoutResult result = authService.logout(oldRefreshToken);
+    public ResponseEntity<Object> logout(@RequestBody @Valid RefreshRequest refreshRequest) {
+        AuthService.LogoutResult result = authService.logout(refreshRequest.getRefreshToken());
         
-        if (result.isSuccess()) {
+        if (result.success()) {
             return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(result.getMessage(), result.getStatus());
+            return new ResponseEntity<>(result.message(), result.status());
         }
     }
 
-    @GetMapping("/agent/info/{id}")
-    public ResponseEntity<Object> getAgentInfo(
-            @PathVariable("id") Long id,
-            @RequestHeader(value = "Bearer", required = true) String accessToken) {
-        if (accessToken == null || !AccessTokenProvider.validateToken(accessToken)) {
-            return new ResponseEntity<>("Token non valido o scaduto", HttpStatusCode.valueOf(498));
-        }
-        User user = userService.getUser(id);
-        if (user != null && user.isAgent()) {
-            UserResponse response = new UserResponse();
-            response.setEmail(user.getEmail());
-            response.setFullName(user.getFirstName()+ " " + user.getLastName());
-            return ResponseEntity.ok(response);
-        } else {
-            return new ResponseEntity<>("Agente non trovato", HttpStatus.NOT_FOUND);
-        }
+    private ResponseEntity<Object> buildAuthResponseEntity(User user, String username) {
+        String accessToken = accessTokenProvider.generateAccessToken(user);
+        String refreshToken = refreshTokenProvider.generateRefreshToken(username);
+
+        List<String> availableRoles = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, availableRoles));
     }
+
+    private ResponseEntity<Object> buildErrorResponse(String message, HttpStatusCode status) {
+        return new ResponseEntity<>(message, status);
+    }
+
+    // getAgentInfo endpoint moved to UserController to respect SRP
 }

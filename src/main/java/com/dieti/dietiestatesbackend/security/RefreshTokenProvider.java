@@ -1,52 +1,142 @@
 package com.dieti.dietiestatesbackend.security;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-
-import javax.crypto.SecretKey;
+import java.security.MessageDigest;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
-@SuppressWarnings("java:S1118")
+import com.dieti.dietiestatesbackend.entities.RefreshToken;
+import com.dieti.dietiestatesbackend.entities.User;
+import com.dieti.dietiestatesbackend.repositories.RefreshTokenRepository;
+import com.dieti.dietiestatesbackend.repositories.UserRepository;
+
+/**
+ * Provider che emette refresh token di tipo opaque (UUID) e salva il loro hash in DB.
+ * Implementa rotation single-use: durante la refresh operation il token vecchio viene rimosso
+ * e ne viene emesso uno nuovo.
+ */
 @Component
 public class RefreshTokenProvider {
 
-    private static final String SECRET_KEY = System.getenv("REFRESH_TOKEN_SECRET_KEY");
+    private static final Long REFRESH_TOKEN_DURATION_MS = 604800000L; // 7 days
 
-    private static final Long REFRESH_TOKEN_DURATION_MS = 604800000l; // 7 days
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
-    public static String generateRefreshToken(final String username) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_DURATION_MS);
-
-        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-
-        String refreshToken = Jwts.builder()
-            .setSubject(username)
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(key)
-            .compact();
-
-        RefreshTokenRepository.save(username, refreshToken);
-        return refreshToken;
+    public RefreshTokenProvider(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository;
     }
 
-    public static boolean validateToken(final String token) {
-        if (token == null || token.isEmpty()) return false;
-        TokenHelper th = new TokenHelper(SECRET_KEY);
-        return th.validateToken(token);
+    private String sha256Hex(String value) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(value.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder(digest.length * 2);
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Errore hashing token", e);
+        }
     }
 
-    public static String getUsernameFromToken(final String token) {
-        TokenHelper helper = new TokenHelper(SECRET_KEY);
-        return helper.getUsernameFromToken(token);
+    // Generate opaque token (raw) and persist its hash
+    public String generateRefreshTokenForUser(final User user) {
+        String raw = UUID.randomUUID().toString();
+        String hash = sha256Hex(raw);
+    
+        RefreshToken rt = new RefreshToken();
+        rt.setTokenValue(hash); // store hash only
+        rt.setUser(user);
+        // Ensure createdAt is set to satisfy NOT NULL constraint inherited from BaseEntity
+        rt.setCreatedAt(LocalDateTime.now());
+        rt.setExpiryDate(LocalDateTime.now().plusSeconds(REFRESH_TOKEN_DURATION_MS / 1000));
+    
+        refreshTokenRepository.save(rt);
+        return raw;
     }
 
-    public static boolean isTokenOf(final String user, final String oldRefreshToken) {
-        return RefreshTokenRepository.getTokensByUserId(user).contains(oldRefreshToken);
+    // Legacy convenience: accept username
+    public String generateRefreshToken(final String username) {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new IllegalStateException("Utente non trovato per username: " + username));
+        return generateRefreshTokenForUser(user);
     }
+
+    // Validate opaque raw token by hashing and checking DB entry + expiry
+    public boolean validateToken(final String rawToken) {
+        if (rawToken == null || rawToken.isEmpty()) return false;
+        String hash = sha256Hex(rawToken);
+        Optional<RefreshToken> opt = refreshTokenRepository.findByTokenValue(hash);
+        return opt.filter(rt -> rt.getExpiryDate() != null && rt.getExpiryDate().isAfter(LocalDateTime.now())).isPresent();
+    }
+
+    // Get username from raw token
+    public String getUsernameFromToken(final String rawToken) {
+        if (rawToken == null || rawToken.isEmpty()) return null;
+        String hash = sha256Hex(rawToken);
+        return refreshTokenRepository.findByTokenValue(hash)
+            .map(rt -> rt.getUser() != null ? rt.getUser().getUsername() : null)
+            .orElse(null);
+    }
+
+    // Check token belongs to username
+    public boolean isTokenOf(final String username, final String rawToken) {
+        if (rawToken == null || rawToken.isEmpty()) return false;
+        String hash = sha256Hex(rawToken);
+        return refreshTokenRepository.findByTokenValue(hash)
+            .map(rt -> rt.getUser() != null && username.equals(rt.getUser().getUsername()))
+            .orElse(false);
+    }
+
+    // Rotate: validate old token, remove it, emit new one for same user
+    public String rotateRefreshToken(final String oldRawToken) {
+        if (oldRawToken == null || oldRawToken.isEmpty()) {
+            throw new IllegalArgumentException("Old refresh token is required");
+        }
+        String oldHash = sha256Hex(oldRawToken);
+        Optional<RefreshToken> opt = refreshTokenRepository.findByTokenValue(oldHash);
+        if (opt.isEmpty()) {
+            throw new IllegalStateException("Refresh token non trovato o già invalidato");
+        }
+        RefreshToken existing = opt.get();
+        User user = existing.getUser();
+        // delete old
+        refreshTokenRepository.deleteByTokenValue(oldHash);
+        // create new
+        return generateRefreshTokenForUser(user);
+    }
+
+    // Delete by raw token (hashes internally)
+    @Transactional
+    public void deleteByTokenValue(final String rawToken) {
+        if (rawToken == null || rawToken.isEmpty()) return;
+        String hash = sha256Hex(rawToken);
+        refreshTokenRepository.deleteByTokenValue(hash);
+    }
+
+    // Validate token for logout and return username on success
+    public TokenValidationResult validateTokenForLogout(String rawToken) {
+        if (rawToken == null || rawToken.isEmpty()) {
+            return new TokenValidationResult(false, "Il refreshToken è obbligatorio", null);
+        }
+        if (!validateToken(rawToken)) {
+            return new TokenValidationResult(false, "Il refreshToken non è valido o è scaduto", null);
+        }
+        String username = getUsernameFromToken(rawToken);
+        if (username == null || !isTokenOf(username, rawToken)) {
+            return new TokenValidationResult(false, "Il refreshToken non corrisponde all'utente", null);
+        }
+        return new TokenValidationResult(true, "Token valido", username);
+    }
+
+    /* ---------- helper record ---------- */
+    public record TokenValidationResult(boolean isValid, String message, String username) {}
 }

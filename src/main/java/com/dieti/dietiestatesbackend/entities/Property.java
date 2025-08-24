@@ -1,15 +1,23 @@
 package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyStatus;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -18,9 +26,15 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Base entity for properties.
+ * Added accept(PropertyVisitor) to enable visitor-based mapping without instanceof.
+ */
 @Entity
-@Table(name = "Property")
-public class Property extends BaseEntity {
+@Table(name = "property")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "property_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class Property extends BaseEntity {
 
     @Column(name = "description")
     private String description;
@@ -69,8 +83,14 @@ public class Property extends BaseEntity {
     @JoinColumn(name = "id_address", nullable = false, foreignKey = @ForeignKey(name = "fk_property_address"))
     private Address address;
 
-    // TODO createdAt ?
-    // TODO additional features
+
+    @Column(name = "additional_features")
+    private String additionalFeatures;
+
+    @ElementCollection
+    @CollectionTable(name = "property_images", joinColumns = @JoinColumn(name = "id_property", foreignKey = @ForeignKey(name = "fk_property_images_property")))
+    @Column(name = "image_path")
+    private List<String> images = new ArrayList<>();
 
     // Getters and setters
     public String getDescription() { return description; }
@@ -103,4 +123,16 @@ public class Property extends BaseEntity {
     public Integer getYearBuilt() { return yearBuilt; }
     public void setYearBuilt(Integer year) { this.yearBuilt = year; }
 
+
+    public String getAdditionalFeatures() { return additionalFeatures; }
+    public void setAdditionalFeatures(String additionalFeatures) { this.additionalFeatures = additionalFeatures; }
+
+    public List<String> getImages() { return images; }
+    public void setImages(List<String> images) { this.images = images; }
+
+    /**
+     * Accept a visitor to perform type-specific operations (e.g. mapping to DTO)
+     * Implemented by subclasses to call the appropriate visitor method.
+     */
+    public abstract void accept(PropertyVisitor visitor);
 }

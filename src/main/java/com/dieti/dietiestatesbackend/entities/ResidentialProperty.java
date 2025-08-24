@@ -10,21 +10,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-// TODO extends Property?
 @Entity
 @Table(name = "residential_property")
-public class ResidentialProperty extends BaseEntity {
+@PrimaryKeyJoinColumn(name = "id")
+public class ResidentialProperty extends Property {
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @MapsId
-    @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_residentialproperty_property"))
-    private Property property;
 
     @NotNull
     @Min(1)
@@ -68,9 +63,6 @@ public class ResidentialProperty extends BaseEntity {
 
     // Getters and setters
 
-    public Property getProperty() { return property; }
-    public void setProperty(Property property) { this.property = property; }
-
     public Integer getNumberOfRooms() { return numberOfRooms; }
     public void setNumberOfRooms(Integer numberOfRooms) { this.numberOfRooms = numberOfRooms; }
 
@@ -94,4 +86,12 @@ public class ResidentialProperty extends BaseEntity {
 
     public boolean hasElevator() { return hasElevator; }
     public void setHasElevator(boolean hasElevator) { this.hasElevator = hasElevator; }
+
+    public Integer getNumberOfFloors() { return numberOfFloors; }
+    public void setNumberOfFloors(Integer numberOfFloors) { this.numberOfFloors = numberOfFloors; }
+
+    @Override
+    public void accept(PropertyVisitor visitor) {
+        visitor.visit(this);
+    }
 }

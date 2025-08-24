@@ -12,8 +12,17 @@ import com.dieti.dietiestatesbackend.entities.Offer;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
     // Gets all offers from the agent
-    @Query("SELECT o FROM Offer o " +
-           "JOIN o.user u " +
-           "WHERE u.isAgent = true AND u.id = :id")
+    /**
+     * Recupera tutte le offerte create da un agente specifico.
+     * La query verifica che l'utente abbia il flag is_agent abilitato
+     * e filtra per l'ID dell'agente per garantire che solo le offerte
+     * dell'agente specifico vengano restituite.
+     *
+     * @param agentId L'ID dell'agente
+     * @return Lista di offerte dell'agente
+     */
+    @Query(value = "SELECT o.* FROM offers o " +
+           "JOIN users u ON o.user_id = u.id " +
+           "WHERE u.is_agent = true AND u.id = :id", nativeQuery = true)
     List<Offer> getAgentOffers(@Param("id") Long agentId);
 }
