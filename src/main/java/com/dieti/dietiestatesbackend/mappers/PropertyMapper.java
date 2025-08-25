@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.dieti.dietiestatesbackend.dto.request.CreateCommercialPropertyRequest;
-import com.dieti.dietiestatesbackend.dto.request.CreateGaragePropertyRequest;
-import com.dieti.dietiestatesbackend.dto.request.CreateLandPropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreateResidentialPropertyRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
@@ -116,13 +114,17 @@ public class PropertyMapper {
         return cp;
     }
 
-    public static Land toLandEntity(CreateLandPropertyRequest req) {
+    public static Land toLandEntity(CreatePropertyRequest req) {
         Land land = new Land();
+        // Applica i campi comuni dalla request
+        applyCommonFields(req, land);
         return land;
     }
 
-    public static Garage toGarageEntity(CreateGaragePropertyRequest req) {
-        Garage g = new Garage();
-        return g;
+    public static Garage toGarageEntity(CreatePropertyRequest req) {
+        Garage garage = new Garage();
+        // Applica i campi comuni dalla request
+        applyCommonFields(req, garage);
+        return garage;
     }
 }

@@ -3,7 +3,6 @@ package com.dieti.dietiestatesbackend.security;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +54,7 @@ public class AccessTokenProvider {
     List<String> roles = user != null ?
         user.getAuthorities().stream()
             .map(authority -> authority.getAuthority())
-            .collect(Collectors.toList()) :
+            .toList() :
         List.of("ROLE_USER");
  
     return Jwts.builder()

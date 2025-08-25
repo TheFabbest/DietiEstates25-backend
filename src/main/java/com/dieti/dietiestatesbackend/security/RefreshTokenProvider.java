@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dieti.dietiestatesbackend.entities.RefreshToken;
 import com.dieti.dietiestatesbackend.entities.User;
+import com.dieti.dietiestatesbackend.exception.HashingException;
 import com.dieti.dietiestatesbackend.repositories.RefreshTokenRepository;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
 
@@ -43,7 +44,7 @@ public class RefreshTokenProvider {
             }
             return sb.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Errore hashing token", e);
+            throw new HashingException("Errore durante l'hashing del token", e);
         }
     }
 

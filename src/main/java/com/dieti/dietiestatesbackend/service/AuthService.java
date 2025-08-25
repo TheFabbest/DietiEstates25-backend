@@ -11,14 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final UserService userService;
 
     private final UserRepository userRepository;
@@ -57,8 +54,7 @@ public class AuthService {
         user.setFirstName(signupRequest.getName());
         user.setLastName(signupRequest.getSurname());
         // I campi isAgent e isManager sono già inizializzati a false nel costruttore di User
-        User saved = userRepository.save(user);
-        return saved;
+        return userRepository.save(user);
     }
 
     public void handleGoogleAuth(String email, GoogleAuthRequest googleAuthRequest) {
@@ -86,14 +82,12 @@ public class AuthService {
                 return new LogoutResult(false, validation.message(), HttpStatus.BAD_REQUEST);
             }
 
-            String username = validation.username();
             // rimuove il token persistente
             refreshTokenProvider.deleteByTokenValue(refreshToken);
 
             return new LogoutResult(true, "Logout effettuato con successo", HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("Errore durante il logout: {}", e.getMessage());
             return new LogoutResult(false, "Errore interno durante il logout", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

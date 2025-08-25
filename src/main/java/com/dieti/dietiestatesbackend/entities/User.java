@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails, AppPrincipal {
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_agency", foreignKey = @ForeignKey(name = "fk_user_agency"))
-    private transient Agency agency;
+    private Agency agency;
 
     // Getters and setters
     public String getEmail() { return email; }

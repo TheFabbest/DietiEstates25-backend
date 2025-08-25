@@ -25,9 +25,6 @@ public class JwtClaims {
     @JsonProperty(CLAIM_ROLES)
     private List<String> roles;
 
-    public JwtClaims() {
-    }
-
     public Long getId() {
         return id;
     }

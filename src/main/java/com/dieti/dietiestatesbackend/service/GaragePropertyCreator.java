@@ -3,6 +3,7 @@ package com.dieti.dietiestatesbackend.service;
 import org.springframework.stereotype.Component;
 
 import com.dieti.dietiestatesbackend.dto.request.CreateGaragePropertyRequest;
+import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.entities.Garage;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.Contract;
@@ -24,7 +25,7 @@ public class GaragePropertyCreator implements PropertyCreator<CreateGarageProper
     @Override
     public Property create(CreateGaragePropertyRequest r, User agent, Contract contract, PropertyCategory category, Address address, EntityManager entityManager, Validator validator) {
 
-        Garage garage = PropertyMapper.toGarageEntity(r);
+        Garage garage = PropertyMapper.toGarageEntity((CreatePropertyRequest) r);
         if (r.getNumeroPiani() != null) {
             garage.setNumberOfFloors(r.getNumeroPiani());
         }

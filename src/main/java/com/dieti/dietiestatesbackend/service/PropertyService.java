@@ -118,11 +118,11 @@ public class PropertyService {
             Property saved = propertyRepository.save(property);
             logger.info("Property created id={}", saved.getId());
             return PropertyMapper.toResponse(saved);
-
         } catch (EntityNotFoundException e) {
-            logger.warn("Entity not found: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            logger.warn("Entity not found during property creation for request type {}: {}", request.getPropertyType(), e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Property creation failed: " + e.getMessage(), e);        
         } catch (ResponseStatusException e) {
+            logger.warn("Property creation failed with status {}: {}", e.getStatusCode(), e.getReason());
             throw e;
         } catch (Exception e) {
             logger.error("Unexpected error creating property", e);

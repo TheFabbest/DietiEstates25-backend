@@ -68,25 +68,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String username = accessTokenProvider.getUsernameFromToken(token);
             
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (accessTokenProvider.validateToken(token)) {
-                    Long id = accessTokenProvider.getIdFromToken(token);
-                    Boolean isManager = accessTokenProvider.getIsManagerFromToken(token);
-                    List<String> roles = accessTokenProvider.getRolesFromToken(token);
-                    
-                    List<GrantedAuthority> authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-                    
-                    AuthenticatedUser principal = new AuthenticatedUser(
-                        id, username, isManager != null && isManager, authorities
-                    );
-                    
-                    authLogger.debug("Authenticated principal class={}, id={}, isManager={}",
-                        principal.getClass().getName(), principal.getId(), principal.isManager());
-                    
-                    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-                }
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && accessTokenProvider.validateToken(token)) {
+                Long id = accessTokenProvider.getIdFromToken(token);
+                Boolean isManager = accessTokenProvider.getIsManagerFromToken(token);
+                List<String> roles = accessTokenProvider.getRolesFromToken(token);
+                
+                List<GrantedAuthority> authorities = roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+                
+                AuthenticatedUser principal = new AuthenticatedUser(
+                    id, username, isManager != null && isManager, authorities
+                );
+                
+                authLogger.debug("Authenticated principal class={}, id={}, isManager={}",
+                    principal.getClass().getName(), principal.getId(), principal.isManager());
+                
+                return new UsernamePasswordAuthenticationToken(principal, null, authorities);
             }
         } catch (ExpiredJwtException e) {
             authLogger.warn("Token JWT scaduto: {}", e.getMessage());

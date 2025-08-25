@@ -97,7 +97,8 @@ public class PropertiesController {
             logger.debug("Proprietà creata con successo: {}", created.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (Exception e) {
-            logger.error("Errore durante la creazione della proprietà per richiesta {}: {}", request, e.getMessage(), e);
+            logger.error("Errore durante la creazione della proprietà per richiesta {}: tipo={}, messaggio={}",
+                request, e.getClass().getSimpleName(), e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la creazione della proprietà: " + e.getMessage(), e);
         }
     }
