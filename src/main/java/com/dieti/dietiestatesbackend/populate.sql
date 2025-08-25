@@ -2,6 +2,7 @@
 DECLARE commercial_category CONSTANT VARCHAR := 'commercial_property';
 DECLARE residential_category CONSTANT VARCHAR := 'residential_property';
 DECLARE land_category CONSTANT VARCHAR := 'land';
+DECLARE garage_category CONSTANT VARCHAR := 'garage';
 
 INSERT INTO dieti_estates.address (latitude, longitude, city, country, province, street, street_number) VALUES
     (45.123456, 12.123456, 'Fictional City', 'Country1', 'Fictional Province', 'Imaginary Street', '123'),
@@ -37,8 +38,8 @@ INSERT INTO dieti_estates.property_category (category, subcategory, is_active) V
     (land_category, 'agricultural', TRUE),
     (land_category, 'building', TRUE),
     (land_category, 'non-building', TRUE),
-    ('garage', 'garage', TRUE),
-    ('garage', 'parking space', TRUE)
+    (garage_category, 'garage', TRUE),
+    (garage_category, 'parking space', TRUE)
 ;
 
 INSERT INTO dieti_estates.contract (name, is_active) VALUES
