@@ -116,14 +116,12 @@ public class PropertyMapper {
 
     public static Land toLandEntity(CreatePropertyRequest req) {
         Land land = new Land();
-        // Applica i campi comuni dalla request
         applyCommonFields(req, land);
         return land;
     }
 
     public static Garage toGarageEntity(CreatePropertyRequest req) {
         Garage garage = new Garage();
-        // Applica i campi comuni dalla request
         applyCommonFields(req, garage);
         return garage;
     }

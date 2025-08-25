@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
+/**
+ * Repository per l'entità RefreshToken.
+ * Si trova in un package denominato: com.dieti.dietiestatesbackend.repositories
+ */
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 

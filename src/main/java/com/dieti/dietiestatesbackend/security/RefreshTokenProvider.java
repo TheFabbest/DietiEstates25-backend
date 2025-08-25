@@ -2,6 +2,7 @@ package com.dieti.dietiestatesbackend.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,8 +44,8 @@ public class RefreshTokenProvider {
                 sb.append(String.format("%02x", b));
             }
             return sb.toString();
-        } catch (Exception e) {
-            throw new HashingException("Errore durante l'hashing del token", e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new HashingException("Algoritmo di hashing non supportato: SHA-256 non disponibile", e);
         }
     }
 
