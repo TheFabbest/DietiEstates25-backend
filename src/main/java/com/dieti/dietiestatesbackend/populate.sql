@@ -1,9 +1,9 @@
 INSERT INTO dieti_estates.address (latitude, longitude, city, country, province, street, street_number) VALUES 
-    (45.123456, 12.123456, 'Fictional City', 'Fantasyland', 'Fictional Province', 'Imaginary Street', '123'),
-    (45.654321, 12.654321, 'Dreamland', 'Fantasyland', 'Dream Province', 'Fantasy Avenue', '456'),
-    (45.789012, 12.789012, 'Wonderland', 'Fantasyland', 'Wonder Province', 'Magic Boulevard', '789'),
-    (45.345678, 12.345678, 'Mystic Town', 'Fantasyland', 'Mystic Province', 'Enchanted Lane', '101'),
-    (45.987654, 12.987654, 'Fairy Village', 'Fantasyland', 'Fairy Province', 'Pixie Path', '202');
+    (45.123456, 12.123456, 'Fictional City', 'Country1', 'Fictional Province', 'Imaginary Street', '123'),
+    (45.654321, 12.654321, 'Dreamland', 'Country2', 'Dream Province', 'Fantasy Avenue', '456'),
+    (45.789012, 12.789012, 'Wonderland', 'Country3', 'Wonder Province', 'Magic Boulevard', '789'),
+    (45.345678, 12.345678, 'Mystic Town', 'Country4', 'Mystic Province', 'Enchanted Lane', '101'),
+    (45.987654, 12.987654, 'Fairy Village', 'Country5', 'Fairy Province', 'Pixie Path', '202');
 
 INSERT INTO dieti_estates.agency (id_address, name) VALUES (
     1, 'The Hobbits'
