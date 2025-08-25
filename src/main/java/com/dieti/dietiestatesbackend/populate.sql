@@ -1,4 +1,9 @@
-INSERT INTO dieti_estates.address (latitude, longitude, city, country, province, street, street_number) VALUES 
+-- Costanti per evitare duplicazione di valori letterali
+DECLARE commercial_category CONSTANT VARCHAR := 'commercial_property';
+DECLARE residential_category CONSTANT VARCHAR := 'residential_property';
+DECLARE land_category CONSTANT VARCHAR := 'land';
+
+INSERT INTO dieti_estates.address (latitude, longitude, city, country, province, street, street_number) VALUES
     (45.123456, 12.123456, 'Fictional City', 'Country1', 'Fictional Province', 'Imaginary Street', '123'),
     (45.654321, 12.654321, 'Dreamland', 'Country2', 'Dream Province', 'Fantasy Avenue', '456'),
     (45.789012, 12.789012, 'Wonderland', 'Country3', 'Wonder Province', 'Magic Boulevard', '789'),
@@ -16,22 +21,22 @@ INSERT INTO dieti_estates.user (id_agency, is_agent, is_manager, email, password
     (NULL, FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
 
 INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES
-    ('commercial_property', 'commercial_local', TRUE),
-    ('commercial_property', 'laboratory', TRUE),
-    ('commercial_property', 'commercial_activity', TRUE),
-    ('commercial_property', 'storehouse', TRUE),
-    ('commercial_property', 'depot', TRUE),
-    ('residential_property', 'apartment', TRUE),
-    ('residential_property', 'penthouse', TRUE),
-    ('residential_property', 'attic', TRUE),
-    ('residential_property', 'loft', TRUE),
-    ('residential_property', 'detached_house', TRUE),
-    ('residential_property', 'villa', TRUE),
-    ('residential_property', 'terraced_house', TRUE),
-    ('residential_property', 'country_house', TRUE),
-    ('land', 'agricultural', TRUE),
-    ('land', 'building', TRUE),
-    ('land', 'non-building', TRUE),
+    (commercial_category, 'commercial_local', TRUE),
+    (commercial_category, 'laboratory', TRUE),
+    (commercial_category, 'commercial_activity', TRUE),
+    (commercial_category, 'storehouse', TRUE),
+    (commercial_category, 'depot', TRUE),
+    (residential_category, 'apartment', TRUE),
+    (residential_category, 'penthouse', TRUE),
+    (residential_category, 'attic', TRUE),
+    (residential_category, 'loft', TRUE),
+    (residential_category, 'detached_house', TRUE),
+    (residential_category, 'villa', TRUE),
+    (residential_category, 'terraced_house', TRUE),
+    (residential_category, 'country_house', TRUE),
+    (land_category, 'agricultural', TRUE),
+    (land_category, 'building', TRUE),
+    (land_category, 'non-building', TRUE),
     ('garage', 'garage', TRUE),
     ('garage', 'parking space', TRUE)
 ;

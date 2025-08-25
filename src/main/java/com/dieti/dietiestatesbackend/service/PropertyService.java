@@ -100,12 +100,10 @@ public class PropertyService {
             PropertyCategory category = resolveCategory(request.getPropertyCategoryName());
             Address address = resolveAddress(request);
 
-            PropertyCreator<? extends CreatePropertyRequest> rawCreator = propertyCreatorFactory.getCreator(request.getPropertyType());
-            if (rawCreator == null) {
+            PropertyCreator<CreatePropertyRequest> creator = propertyCreatorFactory.getCreator(request.getPropertyType());
+            if (creator == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported property type: " + request.getPropertyType());
             }
-            @SuppressWarnings("unchecked")
-            PropertyCreator<CreatePropertyRequest> creator = (PropertyCreator<CreatePropertyRequest>) rawCreator;
 
             Property property = creator.create(request, agent, contract, category, address, entityManager, validator);
 

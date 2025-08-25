@@ -15,14 +15,14 @@ import com.dieti.dietiestatesbackend.enums.PropertyType;
 @Component
 public class PropertyCreatorFactory {
 
-    private final Map<PropertyType, PropertyCreator<? extends CreatePropertyRequest>> creators;
+    private final Map<PropertyType, PropertyCreator<CreatePropertyRequest>> creators;
 
-    public PropertyCreatorFactory(List<PropertyCreator<? extends CreatePropertyRequest>> creatorList) {
+    public PropertyCreatorFactory(List<PropertyCreator<CreatePropertyRequest>> creatorList) {
         this.creators = creatorList.stream()
                 .collect(Collectors.toMap(PropertyCreator::supports, c -> c));
     }
 
-    public PropertyCreator<? extends CreatePropertyRequest> getCreator(PropertyType type) {
+    public PropertyCreator<CreatePropertyRequest> getCreator(PropertyType type) {
         return creators.get(type);
     }
 }

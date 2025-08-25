@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * DTO per mappare i claims del payload JWT.
- * Contiene inoltre i nomi standardizzati dei claim come costanti pubbliche
- * per evitare "magic strings" nel codice.
+ * Questa classe è progettata esclusivamente per la deserializzazione dei token JWT
+ * e non contiene metodi di business logic. Tutti i metodi sono getter/setter standard
+ * per il mapping delle proprietà del payload JWT.
  */
+
 public class JwtClaims {
 
-    // Costanti per i nomi dei claim (evitano magic strings)
     public static final String CLAIM_ID = "id";
     public static final String CLAIM_IS_MANAGER = "isManager";
     public static final String CLAIM_ROLES = "roles";
