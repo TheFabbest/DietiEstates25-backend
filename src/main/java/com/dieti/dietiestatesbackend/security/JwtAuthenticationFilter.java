@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger authLogger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
 
     private final AccessTokenProvider accessTokenProvider;
@@ -82,22 +82,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         id, username, isManager != null && isManager, authorities
                     );
                     
-                    logger.debug("Authenticated principal class={}, id={}, isManager={}",
-                        principal.getClass(), principal.getId(), principal.isManager());
+                    authLogger.debug("Authenticated principal class={}, id={}, isManager={}",
+                        principal.getClass().getName(), principal.getId(), principal.isManager());
                     
                     return new UsernamePasswordAuthenticationToken(principal, null, authorities);
                 }
             }
         } catch (ExpiredJwtException e) {
-            logger.warn("Token JWT scaduto: {}", e.getMessage());
+            authLogger.warn("Token JWT scaduto: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.warn("Token JWT malformato: {}", e.getMessage());
+            authLogger.warn("Token JWT malformato: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.warn("Token JWT non supportato: {}", e.getMessage());
+            authLogger.warn("Token JWT non supportato: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.warn("Token JWT non valido: {}", e.getMessage());
+            authLogger.warn("Token JWT non valido: {}", e.getMessage());
         } catch (Exception e) {
-            logger.error("Errore durante la validazione del token JWT", e);
+            authLogger.error("Errore durante la validazione del token JWT", e);
         }
         return null;
     }

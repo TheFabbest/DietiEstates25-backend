@@ -2,7 +2,6 @@ package com.dieti.dietiestatesbackend.controller;
  
  import com.dieti.dietiestatesbackend.entities.Contract;
  import com.dieti.dietiestatesbackend.repositories.ContractRepository;
- import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.security.access.prepost.PreAuthorize;
  import org.springframework.web.bind.annotation.GetMapping;
  import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +10,11 @@ package com.dieti.dietiestatesbackend.controller;
  
  @RestController
  public class ContractController {
-     @Autowired
-     private ContractRepository contractRepository;
+     private final ContractRepository contractRepository;
+
+     public ContractController(ContractRepository contractRepository) {
+         this.contractRepository = contractRepository;
+     }
  
      @PreAuthorize("authentication.principal.isManager")
      @GetMapping("/contracts")
