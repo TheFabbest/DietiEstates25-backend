@@ -18,6 +18,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class PropertySpecifications {
 
+    private static final String NUMBER_OF_FLOORS = "numberOfFloors";
+
     public static Specification<Property> withFilters(String keyword, FilterRequest filters) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -58,7 +60,7 @@ public class PropertySpecifications {
             addMinNumberOfBathroomsFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
             addMinParkingSpacesFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
             addHeatingFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addAcceptedGardenFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
+            addAcceptedGardenFilter(filters, residentialJoin, residentialPredicates);
             addMustBeFurnishedFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
             addMustHaveElevatorFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
             addMinNumberOfFloorsResidentialFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
@@ -104,7 +106,7 @@ public class PropertySpecifications {
             
             if (filters.getMinNumberOfFloors() != null) {
                 commercialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    commercialJoin.get("numberOfFloors"), filters.getMinNumberOfFloors()));
+                    commercialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
             }
             
             if (!commercialPredicates.isEmpty()) {
@@ -133,7 +135,7 @@ public class PropertySpecifications {
             
             if (filters.getMinNumberOfFloors() != null) {
                 garagePredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    garageJoin.get("numberOfFloors"), filters.getMinNumberOfFloors()));
+                    garageJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
             }
             
             if (!garagePredicates.isEmpty()) {
@@ -183,15 +185,15 @@ public class PropertySpecifications {
             predicates.add(criteriaBuilder.or(
                 criteriaBuilder.and(
                     criteriaBuilder.isNotNull(residentialJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(residentialJoin.get("numberOfFloors"), filters.getMinNumberOfFloors())
+                    criteriaBuilder.greaterThanOrEqualTo(residentialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
                 ),
                 criteriaBuilder.and(
                     criteriaBuilder.isNotNull(commercialJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(commercialJoin.get("numberOfFloors"), filters.getMinNumberOfFloors())
+                    criteriaBuilder.greaterThanOrEqualTo(commercialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
                 ),
                 criteriaBuilder.and(
                     criteriaBuilder.isNotNull(garageJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(garageJoin.get("numberOfFloors"), filters.getMinNumberOfFloors())
+                    criteriaBuilder.greaterThanOrEqualTo(garageJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
                 )
             ));
         }
@@ -296,7 +298,7 @@ public class PropertySpecifications {
     }
 
     private static void addAcceptedGardenFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
+            List<Predicate> residentialPredicates) {
         if (filters.getAcceptedGarden() != null && !filters.getAcceptedGarden().isEmpty()) {
             residentialPredicates.add(residentialJoin.get("garden").in(filters.getAcceptedGarden()));
         }
@@ -322,7 +324,7 @@ public class PropertySpecifications {
             jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
         if (filters.getMinNumberOfFloors() != null) {
             residentialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                residentialJoin.get("numberOfFloors"), filters.getMinNumberOfFloors()));
+                residentialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
         }
     }
 }

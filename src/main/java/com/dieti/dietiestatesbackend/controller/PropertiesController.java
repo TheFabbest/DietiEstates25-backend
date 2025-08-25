@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -98,8 +97,8 @@ public class PropertiesController {
             logger.debug("Proprietà creata con successo: {}", created.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (Exception e) {
-            logger.error("Errore durante la creazione della proprietà: {}", e.getMessage(), e);
-            throw e;
+            logger.error("Errore durante la creazione della proprietà per richiesta {}: {}", request, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la creazione della proprietà: " + e.getMessage(), e);
         }
     }
 
@@ -108,7 +107,7 @@ public class PropertiesController {
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.badRequest().body(errors);
     }
 
