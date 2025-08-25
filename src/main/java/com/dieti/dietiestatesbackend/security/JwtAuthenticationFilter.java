@@ -43,54 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = extractTokenFromRequest(request);
         
         if (token != null) {
-            try {
-                // Estrai lo username e i claim dal token usando AccessTokenProvider
-                String username = accessTokenProvider.getUsernameFromToken(token);
-                
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    // Valida il token prima di usarlo
-                    if (accessTokenProvider.validateToken(token)) {
-                        // Recupera i claim necessari per l'autorizzazione direttamente dal token
-                        Long id = accessTokenProvider.getIdFromToken(token);
-                        Boolean isManager = accessTokenProvider.getIsManagerFromToken(token);
-                        List<String> roles = accessTokenProvider.getRolesFromToken(token);
-                        
-                        // Costruisci le authority a partire dai role strings presenti nel token
-                        List<GrantedAuthority> authorities = roles.stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-                        
-                        // Crea un principal leggero basato sui claim (non viene fatta alcuna query al DB)
-                        AuthenticatedUser principal = new AuthenticatedUser(
-                            id, username, isManager != null && isManager, authorities
-                        );
-                        
-                        // Crea l'authentication token con il principal leggero
-                        UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(principal, null, authorities);
-                        
-                        // Imposta il token nel SecurityContextHolder
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                        
-                        // Log per debug: classe del principal, id e flag isManager
-                        logger.debug("Authenticated principal class={}, id={}, isManager={}",
-                            principal.getClass(), principal.getId(), principal.isManager());
-                    }
-                }
-            } catch (ExpiredJwtException e) {
-                logger.warn("Token JWT scaduto: {}", e.getMessage());
-            } catch (MalformedJwtException e) {
-                logger.warn("Token JWT malformato: {}", e.getMessage());
-            } catch (UnsupportedJwtException e) {
-                logger.warn("Token JWT non supportato: {}", e.getMessage());
-            } catch (IllegalArgumentException e) {
-                logger.warn("Token JWT non valido: {}", e.getMessage());
-            } catch (Exception e) {
-                logger.error("Errore durante la validazione del token JWT", e);
+            UsernamePasswordAuthenticationToken authentication = authenticateUser(token);
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        
-        // Passa la richiesta al filtro successivo
         filterChain.doFilter(request, response);
     }
 
@@ -103,6 +60,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         bearerToken = request.getHeader("Bearer");
         if (bearerToken != null) {
             return bearerToken;
+        }
+        return null;
+    }
+    
+    private UsernamePasswordAuthenticationToken authenticateUser(String token) {
+        try {
+            String username = accessTokenProvider.getUsernameFromToken(token);
+            
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (accessTokenProvider.validateToken(token)) {
+                    Long id = accessTokenProvider.getIdFromToken(token);
+                    Boolean isManager = accessTokenProvider.getIsManagerFromToken(token);
+                    List<String> roles = accessTokenProvider.getRolesFromToken(token);
+                    
+                    List<GrantedAuthority> authorities = roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+                    
+                    AuthenticatedUser principal = new AuthenticatedUser(
+                        id, username, isManager != null && isManager, authorities
+                    );
+                    
+                    logger.debug("Authenticated principal class={}, id={}, isManager={}",
+                        principal.getClass(), principal.getId(), principal.isManager());
+                    
+                    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+                }
+            }
+        } catch (ExpiredJwtException e) {
+            logger.warn("Token JWT scaduto: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            logger.warn("Token JWT malformato: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            logger.warn("Token JWT non supportato: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.warn("Token JWT non valido: {}", e.getMessage());
+        } catch (Exception e) {
+            logger.error("Errore durante la validazione del token JWT", e);
         }
         return null;
     }

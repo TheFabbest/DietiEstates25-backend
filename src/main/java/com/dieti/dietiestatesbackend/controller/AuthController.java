@@ -48,6 +48,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenProvider refreshTokenProvider;
     private final AccessTokenProvider accessTokenProvider;
+    private final GoogleTokenValidator googleTokenValidator;
     
     @Autowired
     public AuthController(UserService userService,
@@ -55,13 +56,15 @@ public class AuthController {
                           ScheduledExecutorService scheduler,
                           AuthenticationManager authenticationManager,
                           RefreshTokenProvider refreshTokenProvider,
-                          AccessTokenProvider accessTokenProvider) {
+                          AccessTokenProvider accessTokenProvider,
+                          GoogleTokenValidator googleTokenValidator) {
         this.userService = userService;
         this.authService = authService;
         this.scheduler = scheduler;
         this.authenticationManager = authenticationManager;
         this.refreshTokenProvider = refreshTokenProvider;
         this.accessTokenProvider = accessTokenProvider;
+        this.googleTokenValidator = googleTokenValidator;
     }
 
     @PostMapping("/login")
@@ -109,7 +112,7 @@ public class AuthController {
     @PostMapping("/authwithgoogle")
     public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) {
         try {
-            GoogleIdToken.Payload payload = GoogleTokenValidator.validateToken(googleAuthRequest.getToken());
+            GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthRequest.getToken());
             String email = payload.getEmail();
 
             authService.handleGoogleAuth(email, googleAuthRequest);

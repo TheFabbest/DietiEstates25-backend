@@ -15,13 +15,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
-import jakarta.annotation.PostConstruct;
-
 @Component
 public class GoogleTokenValidator {
-
-    private static String ANDROID_ID;
-    private static String WEB_ID;
 
     @Value("${google.client.android-id:}")
     private String androidClientId;
@@ -29,15 +24,9 @@ public class GoogleTokenValidator {
     @Value("${google.client.web-id:}")
     private String webClientId;
 
-    @PostConstruct
-    public void init() {
-        ANDROID_ID = androidClientId;
-        WEB_ID = webClientId;
-    }
-
-    public static GoogleIdToken.Payload validateToken(String idTokenString)
+    public GoogleIdToken.Payload validateToken(String idTokenString)
             throws GeneralSecurityException, IOException {
-        List<String> audience = Arrays.asList(WEB_ID, ANDROID_ID);
+        List<String> audience = Arrays.asList(webClientId, androidClientId);
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                 new NetHttpTransport(),

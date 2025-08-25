@@ -7,5 +7,5 @@ public interface AppPrincipal {
     Long getId();
     String getUsername();
     boolean isManager();
-    Collection<? extends GrantedAuthority> getAuthorities();
+    Collection<GrantedAuthority> getAuthorities();
 }

@@ -87,7 +87,7 @@ public class AccessTokenProvider {
       JwtClaims jc = tokenHelper != null ? tokenHelper.getClaimsFromToken(token) : null;
       return jc != null && jc.getIsManager() != null ? jc.getIsManager() : false;
     } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      return null;
+      return false;
     }
   }
 

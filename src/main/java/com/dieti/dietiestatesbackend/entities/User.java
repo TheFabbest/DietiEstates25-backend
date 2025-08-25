@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails, AppPrincipal {
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_agency", foreignKey = @ForeignKey(name = "fk_user_agency"))
-    private Agency agency;
+    private transient Agency agency;
 
     // Getters and setters
     public String getEmail() { return email; }
@@ -96,7 +96,7 @@ public class User extends BaseEntity implements UserDetails, AppPrincipal {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (isAgent) {
             authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));

@@ -8,9 +8,9 @@ public class AuthenticatedUser implements AppPrincipal {
     private final Long id;
     private final String username;
     private final boolean isManager;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final Collection<GrantedAuthority> authorities;
 
-    public AuthenticatedUser(Long id, String username, boolean isManager, Collection<? extends GrantedAuthority> authorities) {
+    public AuthenticatedUser(Long id, String username, boolean isManager, Collection<GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.isManager = isManager;
@@ -33,7 +33,7 @@ public class AuthenticatedUser implements AppPrincipal {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return authorities;
     }
 

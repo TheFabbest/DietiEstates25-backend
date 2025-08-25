@@ -14,6 +14,22 @@ Ogni azione proposta sarà guidata dai seguenti principi:
 *   **Performance Awareness:** Evitare pattern noti per causare problemi di performance (es. N+1 query) e ottimizzare dove necessario.
 
 ---
+## Stato di Avanzamento del Refactoring
+
+A seguito delle nuove problematiche emerse e della richiesta di posticipare alcuni task, di seguito è riportata una tabella riepilogativa dello stato di avanzamento.
+
+| Fase | Punto | Problematica/Task | Stato | Note |
+| :--- | :--- | :--- | :--- | :--- |
+| **Fase 0: Sicurezza** | 1. | Gestione Schema Database Sicura | Completato | - |
+| | 2. | Vulnerabilità Gestione Segreti JWT | Completato | - |
+| | 3. | Protezione Endpoint Utente | Completato | - |
+| **Fase 1: Architettura e Test** | 1. | Introduzione Framework di Test | In Sospeso | Rimandato su richiesta utente |
+| | 2. | Eliminazione Pattern Statici (Anti-IoC) | Completato | - |
+| | 3. | Risoluzione Duplicazione `createdAt` | Completato | - |
+| **Fase 2: Performance** | 1. | Gestione Fetching EAGER | Da Avviare | - |
+| | 2. | Centralizzazione Gestione Errori | Da Avviare | - |
+| **Fase 3: Cleanup** | - | Cleanup e Best Practices | Da Avviare | Include validazione DTO, logging, etc. |
+
 
 ## Fasi di Lavoro
 
