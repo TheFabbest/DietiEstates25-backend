@@ -1,6 +1,6 @@
 #!/bin/bash
-# docker build --tag 'dietibackend' .
-docker build --no-cache --tag 'dietibackend' .
+docker build --tag 'dietibackend' .
+# docker build --no-cache --tag 'dietibackend' .
 
 docker run --rm -p 8080:8080 \
     -v "$(pwd)/logs":/app/logs \

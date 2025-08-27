@@ -19,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dieti.dietiestatesbackend.dto.request.AuthRequest;
@@ -38,6 +39,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @Validated
+@RequestMapping("/auth")
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -108,7 +110,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/authwithgoogle")
+    @PostMapping("/google")
     public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) {
         try {
             GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthRequest.getToken());
