@@ -24,9 +24,6 @@ public class SecurityConfig {
 
     private static final String AUTH_ENDPOINTS = "/auth/**";
     private static final String OAUTH2_ENDPOINTS = "/oauth2/**";
-    private static final String LOGIN_ENDPOINT = "/login";
-    private static final String SIGNUP_ENDPOINT = "/signup";
-    private static final String REFRESH_ENDPOINT = "/refresh";
     private static final String SWAGGER_API_DOCS = "/v3/api-docs/**";
     private static final String SWAGGER_UI = "/swagger-ui/**";
     private static final String SWAGGER_UI_HTML = "/swagger-ui.html";
@@ -46,9 +43,6 @@ public class SecurityConfig {
                 .requestMatchers(
                     AUTH_ENDPOINTS,
                     OAUTH2_ENDPOINTS,
-                    LOGIN_ENDPOINT,
-                    SIGNUP_ENDPOINT,
-                    REFRESH_ENDPOINT,
                     SWAGGER_API_DOCS,
                     SWAGGER_UI,
                     SWAGGER_UI_HTML
@@ -66,15 +60,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return bCryptPasswordEncoder();
-    }
-
     @Bean
     public PasswordValidator passwordValidator() {
         return new PasswordValidator();
