@@ -41,6 +41,9 @@ build/
 # Roo
 .roo
 
+# KiloCode
+.kilocode
+
 # Logs
 .logs/
 *.log

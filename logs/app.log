@@ -472,3 +472,12 @@
     values
         (?, ?)
 2025-09-06 11:10:02.958 [http-nio-8080-exec-6] DEBUG c.d.d.c.PropertiesController - Property creata id=27
+2025-09-06 12:18:54.046 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@659132ca (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:18:56.565 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@574ac6f (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:19:04.173 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@34409736 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:34:10.571 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2cc15689 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:34:24.752 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3cbf4f25 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:35:09.304 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1d606b01 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:35:11.793 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@632b6e30 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:35:16.573 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4084f922 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 12:35:27.123 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5ea2aa50 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
