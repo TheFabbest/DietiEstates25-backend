@@ -45,7 +45,9 @@ public class SecurityConfig {
                     OAUTH2_ENDPOINTS,
                     SWAGGER_API_DOCS,
                     SWAGGER_UI,
-                    SWAGGER_UI_HTML
+                    SWAGGER_UI_HTML,
+                    "/api/property-types",
+                    "/api/categories"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

@@ -1,17 +1,31 @@
 package com.dieti.dietiestatesbackend.entities;
  
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
  
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+ 
+/**
+ * Commercial property entity.
+ * Lombok provides getters/setters and a JPA-friendly no-arg constructor.
+ * Keep a compatibility accessor for callers expecting getHasWheelchairAccess().
+ */
 @Entity
 @Table(name = "commercial_property")
 @PrimaryKeyJoinColumn(name = "id")
+@DiscriminatorValue("COMMERCIAL")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class CommercialProperty extends Property {
- 
  
     @NotNull
     @Min(1)
@@ -40,28 +54,7 @@ public class CommercialProperty extends Property {
     @Column(name = "numero_vetrine")
     private Integer numeroVetrine = 0;
  
-    // Getters and setters
+    // Compatibility accessor: existing code expects getHasWheelchairAccess()
+    public boolean getHasWheelchairAccess() { return this.hasWheelchairAccess; }
  
-    public Integer getNumberOfRooms() { return numberOfRooms; }
-    public void setNumberOfRooms(Integer numeroLocali) { this.numberOfRooms = numeroLocali; }
- 
-    public Integer getFloor() { return floor; }
-    public void setFloor(Integer floor) { this.floor = floor; }
- 
-    public Integer getNumberOfBathrooms() { return numberOfBathrooms; }
-    public void setNumberOfBathrooms(Integer numeroBagni) { this.numberOfBathrooms = numeroBagni; }
- 
-    public Integer getNumberOfFloors() { return numberOfFloors; }
-    public void setNumberOfFloors(Integer numberOfFloors) { this.numberOfFloors = numberOfFloors; }
- 
-    public boolean getHasWheelchairAccess() { return hasWheelchairAccess; }
-    public void setHasWheelchairAccess(boolean hasAccess) { this.hasWheelchairAccess = hasAccess; }
- 
-    public Integer getNumeroVetrine() { return numeroVetrine; }
-    public void setNumeroVetrine(Integer numeroVetrine) { this.numeroVetrine = numeroVetrine; }
- 
-    @Override
-    public void accept(PropertyVisitor visitor) {
-        visitor.visit(this);
-    }
 }

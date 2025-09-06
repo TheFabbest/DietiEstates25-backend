@@ -10,8 +10,8 @@ import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import jakarta.persistence.EntityManager;
 
 /**
- * Implementazione di CategoryLookupService che usa EntityManager per cercare
- * per category o subcategory (mantiene comportamento precedente).
+ * Implementazione di CategoryLookupService che usa EntityManager.
+ * Updated to support the new canonical naming approach.
  */
 @Service
 public class CategoryLookupServiceImpl implements CategoryLookupService {
@@ -24,18 +24,42 @@ public class CategoryLookupServiceImpl implements CategoryLookupService {
     }
 
     @Override
-    public Optional<PropertyCategory> findByNameOrSubcategory(String name) {
+    public Optional<PropertyCategory> findByName(String name) {
         if (name == null || name.isBlank()) {
             return Optional.empty();
         }
-        List<PropertyCategory> cats = entityManager.createQuery(
-                "SELECT pc FROM PropertyCategory pc WHERE pc.category = :name OR pc.subcategory = :name",
+        List<PropertyCategory> categories = entityManager.createQuery(
+                "SELECT pc FROM PropertyCategory pc WHERE pc.name = :name",
                 PropertyCategory.class)
                 .setParameter("name", name)
                 .getResultList();
-        if (cats.isEmpty()) {
-            return Optional.empty();
+        return categories.isEmpty() ? Optional.empty() : Optional.of(categories.get(0));
+    }
+
+    @Override
+    public List<PropertyCategory> findByPropertyType(String propertyType) {
+        if (propertyType == null || propertyType.isBlank()) {
+            return List.of();
         }
-        return Optional.of(cats.get(0));
+        return entityManager.createQuery(
+                "SELECT pc FROM PropertyCategory pc WHERE pc.propertyType = :propertyType AND pc.isActive = true",
+                PropertyCategory.class)
+                .setParameter("propertyType", propertyType)
+                .getResultList();
+    }
+
+    @Override
+    public List<String> findDistinctActivePropertyTypes() {
+        return entityManager.createQuery(
+                "SELECT DISTINCT pc.propertyType FROM PropertyCategory pc WHERE pc.isActive = true",
+                String.class)
+                .getResultList();
+    }
+    
+    @Override
+    @Deprecated
+    public Optional<PropertyCategory> findByNameOrSubcategory(String name) {
+        // Legacy method - delegate to findByName for backward compatibility
+        return findByName(name);
     }
 }

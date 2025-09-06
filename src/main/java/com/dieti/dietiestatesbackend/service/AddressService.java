@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface AddressService {
     Optional<Address> findById(Long id);
     Address createFromRequest(AddressRequest request);
+    Address geocodeAddress(Address address);
 }

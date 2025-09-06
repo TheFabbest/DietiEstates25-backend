@@ -1,0 +1,22 @@
+{
+  "description": "Terreno agricolo con accesso stradale per coltivazione.",
+  "price": 150000.00,
+  "area": 10000,
+  "yearBuilt": 2025,
+  "contractType": "sale",
+  "propertyCategoryName": "Agricultural Land",
+  "propertyType": "LAND",
+  "status": "NEW",
+  "energyRating": "NOT_APPLIABLE",
+  "agentUsername": "successuser",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "MI",
+    "city": "Milano",
+    "street": "Via delle Ginestre",
+    "streetNumber": "5",
+    "building": null
+  },
+  "images": [],
+  "hasRoadAccess": true
+}

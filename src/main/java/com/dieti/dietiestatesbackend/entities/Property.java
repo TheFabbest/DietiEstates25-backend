@@ -5,35 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyStatus;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-/**
- * Base entity for properties.
- * Added accept(PropertyVisitor) to enable visitor-based mapping without instanceof.
- */
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
 @Entity
 @Table(name = "property")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "property_type", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Property extends BaseEntity {
 
     @Column(name = "description")
@@ -54,12 +40,12 @@ public abstract class Property extends BaseEntity {
     private Integer yearBuilt;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_contract", nullable = false, foreignKey = @ForeignKey(name = "fk_property_contract"))
     private Contract contract;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_property_category", nullable = false, foreignKey = @ForeignKey(name = "fk_property_propertycategory"))
     private PropertyCategory propertyCategory;
 
@@ -74,15 +60,14 @@ public abstract class Property extends BaseEntity {
     private EnergyRating energyRating;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agent", nullable = false, foreignKey = @ForeignKey(name = "fk_property_agent"))
     private User agent;
 
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_address", nullable = false, foreignKey = @ForeignKey(name = "fk_property_address"))
     private Address address;
-
 
     @Column(name = "additional_features")
     private String additionalFeatures;
@@ -92,47 +77,4 @@ public abstract class Property extends BaseEntity {
     @Column(name = "image_path")
     private List<String> images = new ArrayList<>();
 
-    // Getters and setters
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-
-    public Integer getArea() { return area; }
-    public void setArea(Integer area) { this.area = area; }
-
-    public Contract getContract() { return contract; }
-    public void setContract(Contract contract) { this.contract = contract; }
-
-    public PropertyCategory getPropertyCategory() { return propertyCategory; }
-    public void setPropertyCategory(PropertyCategory category) { this.propertyCategory = category; }
-
-    public PropertyStatus getStatus() { return status; }
-    public void setStatus(PropertyStatus status) { this.status = status; }
-
-    public EnergyRating getEnergyRating() { return energyRating; }
-    public void setEnergyRating(EnergyRating rating) { this.energyRating = rating; }
-
-    public User getAgent() { return agent; }
-    public void setAgent(User agent) { this.agent = agent; }
-
-    public Address getAddress() { return address; }
-    public void setAddress(Address address) { this.address = address; }
-
-    public Integer getYearBuilt() { return yearBuilt; }
-    public void setYearBuilt(Integer year) { this.yearBuilt = year; }
-
-
-    public String getAdditionalFeatures() { return additionalFeatures; }
-    public void setAdditionalFeatures(String additionalFeatures) { this.additionalFeatures = additionalFeatures; }
-
-    public List<String> getImages() { return images; }
-    public void setImages(List<String> images) { this.images = images; }
-
-    /**
-     * Accept a visitor to perform type-specific operations (e.g. mapping to DTO)
-     * Implemented by subclasses to call the appropriate visitor method.
-     */
-    public abstract void accept(PropertyVisitor visitor);
 }

@@ -18,29 +18,42 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
+import com.dieti.dietiestatesbackend.entities.PropertyCategory;
+import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
+import org.springframework.security.core.Authentication;
 import com.dieti.dietiestatesbackend.service.PropertyService;
-import com.dieti.dietiestatesbackend.mappers.PropertyMapper;
+import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
 
+import java.util.List;
+
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
+
 
 @RestController
 public class PropertiesController {
     private static final Logger logger = LoggerFactory.getLogger(PropertiesController.class);
     private final PropertyService propertyService;
     private final PropertyImageUtils propertyImageUtils;
-
+    private final CategoryLookupService categoryLookupService;
+    private final ResponseMapperRegistry responseMapperRegistry;
+ 
     @Autowired
-    public PropertiesController(PropertyService propertyService, PropertyImageUtils propertyImageUtils) {
+    public PropertiesController(PropertyService propertyService,
+                                PropertyImageUtils propertyImageUtils,
+                                CategoryLookupService categoryLookupService,
+                                ResponseMapperRegistry responseMapperRegistry) {
         this.propertyService = propertyService;
         this.propertyImageUtils = propertyImageUtils;
+        this.categoryLookupService = categoryLookupService;
+        this.responseMapperRegistry = responseMapperRegistry;
     }
 
     @PostMapping("/properties/search/{keyword}")
@@ -48,14 +61,14 @@ public class PropertiesController {
             @PathVariable("keyword") String keyword,
             @RequestBody FilterRequest filters) {
         return ResponseEntity.ok(propertyService.searchPropertiesWithFilters(keyword, filters).stream()
-            .map(PropertyMapper::toResponse)
+            .map(responseMapperRegistry::map)
             .toList());
     }
 
-    @PreAuthorize("@securityUtil.canAccessProperty(#authentication.principal, #propertyID)")
+    @PreAuthorize("@securityUtil.canAccessProperty(principal, #id)")
     @GetMapping("/properties/details/{id}")
-    public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long propertyID) {
-        PropertyResponse p = PropertyMapper.toResponse(propertyService.getProperty(propertyID));
+    public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long id) {
+        PropertyResponse p = responseMapperRegistry.map(propertyService.getProperty(id));
         if (p == null) {
             return ResponseEntity.notFound().build();
         }
@@ -78,29 +91,53 @@ public class PropertiesController {
 
     @GetMapping("/properties/featured")
     public ResponseEntity<Object> getFeatured() {
-        return ResponseEntity.ok(propertyService.getFeatured().stream().map(PropertyMapper::toResponse).toList());
+        return ResponseEntity.ok(propertyService.getFeatured().stream().map(responseMapperRegistry::map).toList());
     }
 
     /**
      * Endpoint per la creazione di una nuova proprietà.
-     * Accetta il DTO unificato CreatePropertyRequest nel body della richiesta,
-     * valida l'input e delega la creazione al PropertyService.
-     * Restituisce 201 Created con il PropertyResponse della risorsa creata.
+     * Il client invia un payload JSON senza discriminatore. Viene risolto in un
+     * DTO tipizzato dal PropertyRequestResolver usando propertyCategoryName.
      */
+    @PreAuthorize("@securityUtil.isAgentOrManager(authentication.principal, authentication.principal.id)")
     @PostMapping("/properties")
-    public ResponseEntity<PropertyResponse> createProperty(@Valid @RequestBody CreatePropertyRequest request) {
-        logger.debug("Richiesta di creazione proprietà ricevuta: {}", request);
-        logger.info("Payload completo ricevuto: {}", request);
-        logger.debug("DEBUG LOG: Richiesta POST /properties ricevuta - inizio elaborazione");
-        try {
-            PropertyResponse created = propertyService.createProperty(request);
-            logger.debug("Proprietà creata con successo: {}", created.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (Exception e) {
-            logger.error("Errore durante la creazione della proprietà per richiesta {}: tipo={}, messaggio={}",
-                request, e.getClass().getSimpleName(), e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante la creazione della proprietà: " + e.getMessage(), e);
-        }
+    public ResponseEntity<PropertyResponse> createProperty(
+            @RequestBody CreatePropertyRequest request,
+            Authentication authentication) {
+        logger.debug("POST /properties - request: {}", request);
+        PropertyResponse created = propertyService.createProperty(request);
+        logger.debug("Property creata id={}", created.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    /**
+     * Get available property types for the first dropdown.
+     * Returns unique property types from active categories.
+     * Endpoint: GET /api/property-types
+     */
+    @GetMapping("/api/property-types")
+    public ResponseEntity<List<String>> getPropertyTypes() {
+        logger.debug("Richiesta tipi di proprietà");
+        List<String> propertyTypes = categoryLookupService.findDistinctActivePropertyTypes();
+        List<String> sortedTypes = propertyTypes.stream().sorted().toList();
+        logger.debug("Tipi di proprietà trovati: {}", sortedTypes);
+        return ResponseEntity.ok(sortedTypes);
+    }
+
+    /**
+     * Get categories for a specific property type for the second dropdown.
+     * Endpoint: GET /api/categories?type=RESIDENTIAL
+     */
+    @GetMapping("/api/categories")
+    public ResponseEntity<List<String>> getCategoriesByType(@RequestParam("type") String propertyType) {
+        logger.debug("Richiesta categorie per tipo: {}", propertyType);
+        List<PropertyCategory> categories = categoryLookupService.findByPropertyType(propertyType);
+        List<String> categoryNames = categories.stream()
+            .map(PropertyCategory::getName)
+            .sorted()
+            .toList();
+        logger.debug("Categorie trovate per tipo {}: {}", propertyType, categoryNames);
+        return ResponseEntity.ok(categoryNames);
     }
 
     // Gestione locale della validazione per restituire 400 con dettagli dei campi

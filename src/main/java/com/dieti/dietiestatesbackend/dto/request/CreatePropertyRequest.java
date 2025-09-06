@@ -5,91 +5,47 @@ import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyStatus;
-import com.dieti.dietiestatesbackend.enums.PropertyType;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.validation.constraints.AssertTrue;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
 
 /**
- * DTO base unificato per la creazione di proprietà.
- * Ora supporta polimorfismo JSON per deserializzare automaticamente il DTO specifico
- * basato sul campo `propertyType`.
+ * Sealed interface usata per la deserializzazione polimorfica con Jackson.
+ * Dichiara gli accessor comuni in modo che il codice che accetta CreatePropertyRequest
+ * (mappers, servizi) compili correttamente.
  *
- * Nota: rimosse le additionalProperties non tipizzate per favorire DTO fortemente tipizzati.
+ * Ora distinguiamo tra richieste per "building" (più sottotipi interni)
+ * e "land". Jackson deserializzerà BUILDING verso CreateBuildingPropertyRequest
+ * che a sua volta permette i sottotipi concreti (residential, commercial, garage).
  */
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "propertyType",
-        visible = true
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "propertyType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CreateResidentialPropertyRequest.class, name = "RESIDENTIAL"),
-        @JsonSubTypes.Type(value = CreateCommercialPropertyRequest.class, name = "COMMERCIAL"),
-        @JsonSubTypes.Type(value = CreateLandPropertyRequest.class, name = "LAND"),
-        @JsonSubTypes.Type(value = CreateGaragePropertyRequest.class, name = "GARAGE")
+    @JsonSubTypes.Type(value = CreateBuildingPropertyRequest.class, name = "BUILDING"),
+    @JsonSubTypes.Type(value = CreateLandPropertyRequest.class, name = "LAND")
 })
-public class CreatePropertyRequest {
-    // Tipo di proprietà (RESIDENTIAL, COMMERCIAL, LAND, GARAGE)
-    private PropertyType propertyType;
 
-    private String description;
-    private BigDecimal price;
-    private Integer area;
-    private Integer yearBuilt;
+public sealed interface CreatePropertyRequest
+    permits CreateBuildingPropertyRequest, CreateLandPropertyRequest {
+ 
+    // Accessor comuni
+    String getDescription();
+    BigDecimal getPrice();
+    Integer getArea();
+    default Integer getYearBuilt() { return null; } // può essere null per Land
+    String getContractType();
 
-    // Contratto: opzionale (il client invia il tipo/nome, non l'id)
-    private String contractType;
+    String getPropertyCategoryName();
 
-    // Riferimenti a lookup: il client invia il nome della categoria, non l'id
-    private String propertyCategoryName;
-    private PropertyStatus status;
-    private EnergyRating energyRating;
+    PropertyStatus getStatus();
+    EnergyRating getEnergyRating();
 
-    // Agente e indirizzo (o indirizzo inline): il client fornisce agentUsername
-    private String agentUsername;
-    private Long addressId;
-    private AddressRequest addressRequest;
+    AddressRequest getAddressRequest();
 
-    // Immagini (paths)
-    private List<String> images;
+    @AssertTrue(message = "È obbligatorio fornire un indirizzo tramite addressRequest.")
+    default boolean isAddressValid() {
+        return getAddressRequest() != null;
+    }
 
-    // Getters / Setters
-    public PropertyType getPropertyType() { return propertyType; }
-    public void setPropertyType(PropertyType propertyType) { this.propertyType = propertyType; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-
-    public Integer getArea() { return area; }
-    public void setArea(Integer area) { this.area = area; }
-
-    public Integer getYearBuilt() { return yearBuilt; }
-    public void setYearBuilt(Integer yearBuilt) { this.yearBuilt = yearBuilt; }
-
-    public String getContractType() { return contractType; }
-    public void setContractType(String contractType) { this.contractType = contractType; }
-
-    public String getPropertyCategoryName() { return propertyCategoryName; }
-    public void setPropertyCategoryName(String propertyCategoryName) { this.propertyCategoryName = propertyCategoryName; }
-
-    public PropertyStatus getStatus() { return status; }
-    public void setStatus(PropertyStatus status) { this.status = status; }
-
-    public EnergyRating getEnergyRating() { return energyRating; }
-    public void setEnergyRating(EnergyRating energyRating) { this.energyRating = energyRating; }
-
-    public String getAgentUsername() { return agentUsername; }
-    public void setAgentUsername(String agentUsername) { this.agentUsername = agentUsername; }
-
-    public Long getAddressId() { return addressId; }
-    public void setAddressId(Long addressId) { this.addressId = addressId; }
-
-    public AddressRequest getAddressRequest() { return addressRequest; }
-    public void setAddressRequest(AddressRequest addressRequest) { this.addressRequest = addressRequest; }
-
-    public List<String> getImages() { return images; }
-    public void setImages(List<String> images) { this.images = images; }
+    List<String> getImages();
 }

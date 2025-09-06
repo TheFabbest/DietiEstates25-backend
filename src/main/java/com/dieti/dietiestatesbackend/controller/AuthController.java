@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,7 @@ import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.AccessTokenProvider;
 import com.dieti.dietiestatesbackend.security.GoogleTokenValidator;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
-import com.dieti.dietiestatesbackend.service.AuthService;
+import com.dieti.dietiestatesbackend.service.AuthenticationService;
 import com.dieti.dietiestatesbackend.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
@@ -44,7 +43,7 @@ public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
-    private final AuthService authService;
+    private final AuthenticationService authService;
     private final ScheduledExecutorService scheduler;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenProvider refreshTokenProvider;
@@ -53,7 +52,7 @@ public class AuthController {
     
     @Autowired
     public AuthController(UserService userService,
-                          AuthService authService,
+                          AuthenticationService authService,
                           ScheduledExecutorService scheduler,
                           AuthenticationManager authenticationManager,
                           RefreshTokenProvider refreshTokenProvider,
@@ -70,67 +69,35 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthRequest authRequest) {
-        try {
-            // Prima ricava lo username associato all'email, altrimenti Spring cercherà l'email come username
-            String username = userService.getUsernameFromEmail(authRequest.getEmail());
-            if (username == null || username.isEmpty()) {
-                return buildErrorResponse("Credenziali non valide", HttpStatus.UNAUTHORIZED);
-            }
-
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, authRequest.getPassword())
-            );
-
-            User user = userService.getUserByUsername(username);
-            return buildAuthResponseEntity(user, username);
-        } catch (BadCredentialsException ex) {
-            logger.warn("Tentativo di login fallito per {}: {}", authRequest.getEmail(), ex.getMessage());
+        // Prima ricava lo username associato all'email, altrimenti Spring cercherà l'email come username
+        String username = userService.getUsernameFromEmail(authRequest.getEmail());
+        if (username == null || username.isEmpty()) {
             return buildErrorResponse("Credenziali non valide", HttpStatus.UNAUTHORIZED);
-        } catch (Exception ex) {
-            logger.error("Errore durante l'autenticazione: {}", ex.getMessage());
-            return buildErrorResponse("Errore durante l'autenticazione", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(username, authRequest.getPassword())
+        );
+
+        User user = userService.getUserByUsername(username);
+        return buildAuthResponseEntity(user, username);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) {
-        try {
-            // Create user and receive the persisted entity directly
-            User savedUser = authService.registerNewUser(signupRequest);
-            return buildAuthResponseEntity(savedUser, savedUser.getUsername());
-        } catch (IllegalStateException e) {
-            logger.warn("Registrazione non valida: {}", e.getMessage());
-            return buildErrorResponse(e.getMessage(), HttpStatus.CONFLICT);
-        } catch (IllegalArgumentException e) {
-            logger.warn("Dati di registrazione non validi: {}", e.getMessage());
-            return buildErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            logger.error("Errore durante la registrazione! {}", e.getMessage());
-            return buildErrorResponse("Errore durante la registrazione.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        User savedUser = authService.registerNewUser(signupRequest);
+        return buildAuthResponseEntity(savedUser, savedUser.getUsername());
     }
 
     @PostMapping("/google")
-    public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) {
-        try {
-            GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthRequest.getToken());
-            String email = payload.getEmail();
+    public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) throws IOException, GeneralSecurityException {
+        GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthRequest.getToken());
+        String email = payload.getEmail();
 
-            authService.handleGoogleAuth(email, googleAuthRequest);
+        authService.handleGoogleAuth(email, googleAuthRequest);
 
-            User user = userService.getUserByUsername(googleAuthRequest.getUsername());
-            return buildAuthResponseEntity(user, googleAuthRequest.getUsername());
-
-        } catch (IOException | GeneralSecurityException e) {
-            logger.warn("Token Google non valido: {}", e.getMessage());
-            return buildErrorResponse("Token Google non valido", HttpStatusCode.valueOf(498));
-        } catch (IllegalArgumentException e) {
-            logger.warn("Autenticazione Google fallita: {}", e.getMessage());
-            return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            logger.error("Errore durante l'autenticazione con Google: {}", e.getMessage());
-            return buildErrorResponse("Errore durante l'autenticazione con Google.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        User user = userService.getUserByUsername(googleAuthRequest.getUsername());
+        return buildAuthResponseEntity(user, googleAuthRequest.getUsername());
     }
 
     @PostMapping("/refresh")
@@ -148,7 +115,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@RequestBody @Valid RefreshRequest refreshRequest) {
-        AuthService.LogoutResult result = authService.logout(refreshRequest.getRefreshToken());
+        AuthenticationService.LogoutResult result = authService.logout(refreshRequest.getRefreshToken());
         
         if (result.success()) {
             return ResponseEntity.ok().build();

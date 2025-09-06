@@ -3,44 +3,27 @@ package com.dieti.dietiestatesbackend.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
- * DTO per la creazione di un immobile commerciale.
+ * DTO for creating a commercial property.
  */
-public class CreateCommercialPropertyRequest extends CreatePropertyRequest {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public final class CreateCommercialPropertyRequest extends CreateBuildingPropertyRequest {
 
     @NotNull @Min(1)
-    private Integer numeroLocali;
+    private Integer numberOfRooms;
 
     @NotNull
-    private Integer piano;
+    private Integer floor;
 
     @NotNull @Min(1)
-    private Integer numeroBagni;
+    private Integer numberOfBathrooms;
 
-    @NotNull @Min(1)
-    private Integer numeroPianiTotali;
-
-    private boolean haAccessoDisabili;
+    private boolean hasDisabledAccess;
 
     @Min(0)
-    private Integer numeroVetrine;
-
-    // Getters / Setters
-    public Integer getNumeroLocali() { return numeroLocali; }
-    public void setNumeroLocali(Integer numeroLocali) { this.numeroLocali = numeroLocali; }
-
-    public Integer getPiano() { return piano; }
-    public void setPiano(Integer piano) { this.piano = piano; }
-
-    public Integer getNumeroBagni() { return numeroBagni; }
-    public void setNumeroBagni(Integer numeroBagni) { this.numeroBagni = numeroBagni; }
-
-    public Integer getNumeroPianiTotali() { return numeroPianiTotali; }
-    public void setNumeroPianiTotali(Integer numeroPianiTotali) { this.numeroPianiTotali = numeroPianiTotali; }
-
-    public boolean isHaAccessoDisabili() { return haAccessoDisabili; }
-    public void setHaAccessoDisabili(boolean haAccessoDisabili) { this.haAccessoDisabili = haAccessoDisabili; }
-
-    public Integer getNumeroVetrine() { return numeroVetrine; }
-    public void setNumeroVetrine(Integer numeroVetrine) { this.numeroVetrine = numeroVetrine; }
+    private Integer shopWindowCount;
 }

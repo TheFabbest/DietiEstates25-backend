@@ -17,17 +17,25 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
 @Entity
 @Table(name = "offer")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Offer extends BaseEntity {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_property", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_property"))
     private Property property;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_user"))
     private User user;
 
@@ -44,20 +52,4 @@ public class Offer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OfferStatus status = OfferStatus.PENDING;
-
-    // Getters and setters
-    public Property getProperty() { return property; }
-    public void setProperty(Property property) { this.property = property; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate data) { this.date = data; }
-
-    public OfferStatus getStatus() { return status; }
-    public void setStatus(OfferStatus status) { this.status = status; }
 }

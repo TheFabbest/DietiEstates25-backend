@@ -56,7 +56,7 @@ public class User extends BaseEntity implements UserDetails, AppPrincipal {
     private boolean isManager = false;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agency", foreignKey = @ForeignKey(name = "fk_user_agency"))
     private Agency agency;
 

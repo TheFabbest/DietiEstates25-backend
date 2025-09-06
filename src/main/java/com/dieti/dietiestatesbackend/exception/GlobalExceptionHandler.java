@@ -8,6 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Map;
+import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
+import com.dieti.dietiestatesbackend.exception.GeocodingException;
 
 /**
  * Gestore globale delle eccezioni per l'applicazione DietiEstates25.
@@ -30,7 +36,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 "Risorsa non trovata",
-                "La risorsa richiesta non è disponibile.",
+                ex.getMessage(),
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
@@ -76,6 +82,50 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
  
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Credenziali non valide",
+                "Le credenziali fornite non sono corrette.",
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Richiesta non valida",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalState(IllegalStateException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Stato non valido",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({IOException.class, GeneralSecurityException.class})
+    public ResponseEntity<ErrorResponse> handleExternalAuthErrors(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                498,
+                "Token Google non valido",
+                "Il token fornito non è valido o è scaduto: " + ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(org.springframework.http.HttpStatusCode.valueOf(498)).body(errorResponse);
+    }
+ 
     /**
      * Gestisce tutte le altre eccezioni non gestite specificamente.
      * Restituisce una risposta HTTP 500 Internal Server Error con un messaggio generico.
@@ -83,6 +133,18 @@ public class GlobalExceptionHandler {
      * @param ex L'eccezione generica catturata
      * @return ResponseEntity con status 500 e un messaggio di errore generico
      */
+    @ExceptionHandler(GeocodingException.class)
+    public ResponseEntity<ErrorResponse> handleGeocodingException(GeocodingException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).error("Errore geocoding: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Errore geocoding",
+                "Impossibile geocodificare l'indirizzo fornito.",
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         // Log the full exception for debugging purposes
@@ -95,6 +157,17 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Gestisce gli errori di validazione semantica raccolti in InvalidPayloadException.
+     * Restituisce una mappa campo->messaggio con status 400 Bad Request.
+     */
+    @ExceptionHandler(InvalidPayloadException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPayload(InvalidPayloadException ex) {
+        Map<String, String> errors = ex.getErrors();
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).info("Invalid payload: {} errors", errors.size());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     /**

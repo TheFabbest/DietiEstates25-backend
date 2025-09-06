@@ -1,16 +1,23 @@
 package com.dieti.dietiestatesbackend.entities;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Digits;
+import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 @Entity
 @Table(name = "address")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address extends BaseEntity {
 
     @NotBlank
@@ -30,50 +37,21 @@ public class Address extends BaseEntity {
     private String street;
 
     @Column(name = "street_number")
-    private String street_number;
+    private String streetNumber;
 
     @Column(name = "building")
     private String building;
 
     @NotNull
-    @Digits(integer = 10, fraction = 8)
-    @Column(name = "latitude", nullable = false, precision = 10, scale = 8)
-    private BigDecimal latitude;
+    @Embedded
+    private Coordinates coordinates;
 
-    @NotNull
-    @Digits(integer = 11, fraction = 8)
-    @Column(name = "longitude", nullable = false, precision = 11, scale = 8)
-    private BigDecimal longitude;
-
-    // Getters and setters
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-
-    public String getProvince() { return province; }
-    public void setProvince(String province) { this.province = province; }
-
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-
-    public String getStreet() { return street; }
-    public void setStreet(String street) { this.street = street; }
-
-    public String getStreet_number() { return street_number; }
-    public void setStreet_number(String street_number) { this.street_number = street_number; }
-
-    public String getBuilding() { return building; }
-    public void setBuilding(String building) { this.building = building; }
-
-    public BigDecimal getLatitude() { return latitude; }
-    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
-
-    public BigDecimal getLongitude() { return longitude; }
-    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
-
+    // Mantieni toString custom (non generato da Lombok)
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (street != null) sb.append(street);
-        if (street_number != null && !street_number.isEmpty()) sb.append(" ").append(street_number);
+        if (streetNumber != null && !streetNumber.isEmpty()) sb.append(" ").append(streetNumber);
         if (building != null && !building.isEmpty()) sb.append(", ").append(building);
         if (city != null) sb.append(", ").append(city);
         if (province != null) sb.append(", ").append(province);

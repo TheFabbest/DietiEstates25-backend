@@ -1,25 +1,25 @@
 # Build stage
-FROM --platform=linux/amd64 maven:3.8-openjdk-17 AS build
+FROM maven:3.9.11-eclipse-temurin AS build
 WORKDIR /app
 
-# Copy only pom.xml first to leverage Docker cache for dependencies
+# Copy pom first to leverage cache
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -B -DskipTests dependency:go-offline
 
-# Now copy the source code
+# Copy sources and build
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn -B clean package -DskipTests
 
 # Run stage
-FROM --platform=linux/amd64 openjdk:17-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy AS runtime
 WORKDIR /app
 
-# Install dependencies in a single layer to reduce image size
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends fontconfig libfreetype6 && \
-#     rm -rf /var/lib/apt/lists/*
-
+# Copy application artifact
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
+
+# Run as non-root if available (remove if causes permission issues on macOS Docker)
+USER 8080:8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

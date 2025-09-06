@@ -3,6 +3,7 @@ package com.dieti.dietiestatesbackend.entities;
 import com.dieti.dietiestatesbackend.enums.Garden;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,11 +16,24 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
+/**
+ * Residential property entity.
+ * Use Lombok for boilerplate while keeping JPA-friendly protected no-arg constructor.
+ * Avoid @ToString to prevent accidental lazy-loading of associations.
+ */
 @Entity
 @Table(name = "residential_property")
 @PrimaryKeyJoinColumn(name = "id")
+@DiscriminatorValue("RESIDENTIAL")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class ResidentialProperty extends Property {
-
 
     @NotNull
     @Min(1)
@@ -36,7 +50,7 @@ public class ResidentialProperty extends Property {
     private Integer parkingSpaces = 0;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_heating", nullable = false, foreignKey = @ForeignKey(name = "fk_residential_heating"))
     private Heating heating;
 
@@ -61,37 +75,7 @@ public class ResidentialProperty extends Property {
     @Column(name = "has_elevator")
     private boolean hasElevator = false;
 
-    // Getters and setters
+    // Compatibility: existing code expects a hasElevator() accessor (not isHasElevator)
+    public boolean hasElevator() { return this.hasElevator; }
 
-    public Integer getNumberOfRooms() { return numberOfRooms; }
-    public void setNumberOfRooms(Integer numberOfRooms) { this.numberOfRooms = numberOfRooms; }
-
-    public Integer getNumberOfBathrooms() { return numberOfBathrooms; }
-    public void setNumberOfBathrooms(Integer numberOfBathrooms) { this.numberOfBathrooms = numberOfBathrooms; }
-
-    public Integer getParkingSpaces() { return parkingSpaces; }
-    public void setParkingSpaces(Integer parkingSpaces) { this.parkingSpaces = parkingSpaces; }
-
-    public Heating getHeating() { return heating; }
-    public void setHeating(Heating heating) { this.heating = heating; }
-
-    public Garden getGarden() { return garden; }
-    public void setGarden(Garden garden) { this.garden = garden; }
-
-    public boolean isFurnished() { return isFurnished; }
-    public void setFurnished(boolean furnished) { isFurnished = furnished; }
-
-    public Integer getFloor() { return floor; }
-    public void setFloor(Integer floor) { this.floor = floor; }
-
-    public boolean hasElevator() { return hasElevator; }
-    public void setHasElevator(boolean hasElevator) { this.hasElevator = hasElevator; }
-
-    public Integer getNumberOfFloors() { return numberOfFloors; }
-    public void setNumberOfFloors(Integer numberOfFloors) { this.numberOfFloors = numberOfFloors; }
-
-    @Override
-    public void accept(PropertyVisitor visitor) {
-        visitor.visit(this);
-    }
 }

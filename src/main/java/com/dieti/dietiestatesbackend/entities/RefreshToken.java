@@ -5,11 +5,19 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
 @Entity
 @Table(name = "refresh_token", indexes = {
     @Index(name = "idx_refresh_token_value", columnList = "token_value", unique = true),
     @Index(name = "idx_refresh_token_user_id", columnList = "user_id")
 })
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class RefreshToken extends BaseEntity {
 
     @NotBlank
@@ -24,29 +32,4 @@ public class RefreshToken extends BaseEntity {
     @NotNull
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
-
-    // Getters and Setters
-    public String getTokenValue() {
-        return tokenValue;
-    }
-
-    public void setTokenValue(String tokenValue) {
-        this.tokenValue = tokenValue;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDateTime expiryDate) {
-        this.expiryDate = expiryDate;
-    }
 }

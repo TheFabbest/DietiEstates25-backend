@@ -1,21 +1,19 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
 import jakarta.validation.constraints.Min;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+ 
+ /**
+  * DTO per la creazione di un'autorimessa/garage.
+  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+public final class CreateGaragePropertyRequest extends CreateBuildingPropertyRequest {
+  
+  private boolean hasSurveillance;
 
-/**
- * DTO per la creazione di un'autorimessa/garage.
- */
-public class CreateGaragePropertyRequest extends CreatePropertyRequest {
+  @Min(1)
+  private Integer numberOfFloors;
 
-    private boolean haSorveglianza;
-
-    @Min(1)
-    private Integer numeroPiani;
-
-    // Getters / Setters
-    public boolean isHaSorveglianza() { return haSorveglianza; }
-    public void setHaSorveglianza(boolean haSorveglianza) { this.haSorveglianza = haSorveglianza; }
-
-    public Integer getNumeroPiani() { return numeroPiani; }
-    public void setNumeroPiani(Integer numeroPiani) { this.numeroPiani = numeroPiani; }
 }

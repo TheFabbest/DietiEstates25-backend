@@ -1,0 +1,29 @@
+{
+  "propertyType":"RESIDENTIAL",
+  "agentUsername":"testuser",
+  "description":"Appartamento di prova",
+  "price":120000,
+  "status":"NEW",
+  "energyRating":"A1",
+  "area":80,
+  "yearBuilt":1998,
+  "contractType":"sale",
+  "propertyCategoryName":"apartment",
+  "addressRequest":{
+    "country":"IT",
+    "province":"RM",
+    "city":"Rome",
+    "street":"Via Test",
+    "streetNumber":"1",
+    "latitude":41.9028,
+    "longitude":12.4964
+  },
+  "images":["/img/1.jpg","/img/2.jpg"],
+  "numberOfRooms":3,
+  "numberOfBathrooms":2,
+  "parkingSpaces":1,
+  "heatingType":"GAS",
+  "garden":"ABSENT",
+  "totalFloors":3,
+  "hasElevator":false
+}

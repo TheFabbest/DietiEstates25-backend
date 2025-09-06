@@ -41,9 +41,6 @@ build/
 # Roo
 .roo
 
-# Script files
-runLocally.sh
-
 # Logs
 .logs/
 *.log

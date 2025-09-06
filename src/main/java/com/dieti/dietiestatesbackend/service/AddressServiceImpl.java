@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dieti.dietiestatesbackend.dto.request.AddressRequest;
 import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.repositories.AddressRepository;
+import com.dieti.dietiestatesbackend.service.geocoding.GeocodingService;
+import com.dieti.dietiestatesbackend.entities.Coordinates; // Importa l'entità Coordinates
+import com.dieti.dietiestatesbackend.exception.GeocodingException;
 
 /**
  * Implementazione concreta del contratto {@link AddressService}.
@@ -22,10 +25,12 @@ import com.dieti.dietiestatesbackend.repositories.AddressRepository;
 public class AddressServiceImpl implements AddressService {
     private static final Logger logger = LoggerFactory.getLogger(AddressServiceImpl.class);
     private final AddressRepository addressRepository;
-
+    private final GeocodingService geocodingService;
+ 
     @Autowired
-    public AddressServiceImpl(AddressRepository addressRepository) {
+    public AddressServiceImpl(AddressRepository addressRepository, GeocodingService geocodingService) {
         this.addressRepository = addressRepository;
+        this.geocodingService = geocodingService;
     }
 
     @Override
@@ -48,13 +53,38 @@ public class AddressServiceImpl implements AddressService {
         adr.setProvince(request.getProvince());
         adr.setCity(request.getCity());
         adr.setStreet(request.getStreet());
-        adr.setStreet_number(request.getStreetNumber());
+        adr.setStreetNumber(request.getStreetNumber());
         adr.setBuilding(request.getBuilding());
-        adr.setLatitude(request.getLatitude());
-        adr.setLongitude(request.getLongitude());
+        // Il backend è responsabile del geocoding: richiedo le coordinate al servizio.
+        // Se il geocoding non restituisce coordinate lanciamo GeocodingException e
+        // permettiamo all'eccezione di propagarsi verso il layer superiore.
+        Optional<Coordinates> opt = geocodingService.geocode(adr);
+        if (opt.isEmpty()) {
+            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.");
+        }
+        adr.setCoordinates(opt.get());
+
         adr.setCreatedAt(LocalDateTime.now());
         Address saved = addressRepository.save(adr);
         logger.debug("Indirizzo creato con id={}", saved.getId());
         return saved;
+    }
+
+    @Override
+    public Address geocodeAddress(Address address) {
+        if (address == null) {
+            logger.debug("geocodeAddress chiamato con address nullo");
+            throw new IllegalArgumentException("Address cannot be null");
+        }
+        
+        // Effettua il geocoding dell'indirizzo
+        Optional<Coordinates> opt = geocodingService.geocode(address);
+        if (opt.isEmpty()) {
+            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.");
+        }
+        address.setCoordinates(opt.get());
+        
+        logger.debug("Indirizzo geocodificato con successo");
+        return address;
     }
 }

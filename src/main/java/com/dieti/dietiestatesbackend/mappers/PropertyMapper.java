@@ -17,54 +17,30 @@ import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 
 /**
  * Mapper semplice e deterministico per convertire tra entità e DTO.
- * Usa il Visitor pattern e delega alla classe {@link ResponseBuildingVisitor}
- * la costruzione del sottotipo di PropertyResponse.
+ * Ora delega al ResponseMapperRegistry (MapStruct-backed) per il mapping di risposta.
+ * Mantiene i helper statici per la creazione di entità da request.
  */
 @Component
 public class PropertyMapper {
 
-    public static PropertyResponse toResponse(Property property) {
-        // Build type-specific response via external visitor
-        ResponseBuildingVisitor visitor = new ResponseBuildingVisitor();
-        property.accept(visitor);
-        PropertyResponse response = visitor.getResponse();
+    private final ResponseMapperRegistry responseMapperRegistry;
 
-        // common fields (apply to all response types)
-        response.setId(property.getId());
-        response.setDescription(property.getDescription());
-        response.setPrice(property.getPrice());
-        response.setArea(property.getArea());
-        response.setYearBuilt(property.getYearBuilt());
-
-        // Handle relationships safely
-        if (property.getContract() != null) {
-            response.setContract(property.getContract().getName());
-        }
-
-        if (property.getPropertyCategory() != null) {
-            response.setPropertyCategory(property.getPropertyCategory().getCategory());
-        }
-
-        response.setStatus(property.getStatus() != null ? property.getStatus().toString() : null);
-        response.setEnergyClass(property.getEnergyRating() != null ? property.getEnergyRating().toString() : null);
-
-        if (property.getAgent() != null) {
-            response.setAgent(property.getAgent());
-        }
-
-        if (property.getAddress() != null) {
-            response.setId_address(property.getAddress().getId());
-            response.setAddress(property.getAddress());
-            response.setLatitude(property.getAddress().getLatitude());
-            response.setLongitude(property.getAddress().getLongitude());
-        }
-
-        return response;
+    public PropertyMapper(ResponseMapperRegistry responseMapperRegistry) {
+        this.responseMapperRegistry = responseMapperRegistry;
     }
 
-    public static List<PropertyResponse> toResponseList(List<Property> properties) {
+    /**
+     * Mappa un'entità Property nel DTO di risposta usando il registry dei mapper.
+     * Questo evita duplicazione di mapping e garantisce che i mapper MapStruct
+     * gestiscano correttamente sottotipi e relazioni (agent, address, heating).
+     */
+    public PropertyResponse toResponse(Property property) {
+        return responseMapperRegistry.map(property);
+    }
+
+    public List<PropertyResponse> toResponseList(List<Property> properties) {
         return properties.stream()
-                .map(PropertyMapper::toResponse)
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +65,7 @@ public class PropertyMapper {
         rp.setParkingSpaces(req.getParkingSpaces() == null ? 0 : req.getParkingSpaces());
         rp.setFurnished(req.isFurnished());
         rp.setGarden(req.getGarden());
-        rp.setNumberOfFloors(req.getTotalFloors() == null ? 1 : req.getTotalFloors());
+        rp.setNumberOfFloors(req.getNumberOfFloors() == null ? 1 : req.getNumberOfFloors());
         rp.setHasElevator(req.hasElevator());
         if (req.getFloors() != null && !req.getFloors().isEmpty()) {
             try {
@@ -105,12 +81,12 @@ public class PropertyMapper {
 
     public static CommercialProperty toCommercialEntity(CreateCommercialPropertyRequest req) {
         CommercialProperty cp = new CommercialProperty();
-        cp.setNumberOfRooms(req.getNumeroLocali());
-        cp.setFloor(req.getPiano());
-        cp.setNumberOfBathrooms(req.getNumeroBagni());
-        cp.setNumberOfFloors(req.getNumeroPianiTotali());
-        cp.setHasWheelchairAccess(req.isHaAccessoDisabili());
-        cp.setNumeroVetrine(req.getNumeroVetrine() == null ? 0 : req.getNumeroVetrine());
+        cp.setNumberOfRooms(req.getNumberOfRooms());
+        cp.setFloor(req.getFloor());
+        cp.setNumberOfBathrooms(req.getNumberOfBathrooms());
+        cp.setNumberOfFloors(req.getNumberOfFloors());
+        cp.setHasWheelchairAccess(req.isHasDisabledAccess());
+        cp.setNumeroVetrine(req.getShopWindowCount() == null ? 0 : req.getShopWindowCount());
         return cp;
     }
 

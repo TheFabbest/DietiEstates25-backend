@@ -5,8 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
+
 @Entity
 @Table(name = "contract")
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Contract extends BaseEntity {
 
     @NotBlank
@@ -15,11 +23,4 @@ public class Contract extends BaseEntity {
 
     @Column(name = "is_active")
     private boolean isActive = true;
-
-    // Getters and setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public boolean isActive() { return isActive; }
-    public void setActive(boolean attivo) { isActive = attivo; }
 }

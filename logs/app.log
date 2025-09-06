@@ -1,21 +1,21 @@
-2025-08-27 04:45:53.318 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 17.0.2 with PID 1 (/app/app.jar started by root in /app)
-2025-08-27 04:45:53.330 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
-2025-08-27 04:45:55.392 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-08-27 04:45:55.598 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 184 ms. Found 7 JPA repository interfaces.
-2025-08-27 04:45:56.940 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-08-27 04:45:57.006 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-08-27 04:45:57.007 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
-2025-08-27 04:45:57.105 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2025-08-27 04:45:57.106 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3663 ms
-2025-08-27 04:45:57.603 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-08-27 04:45:57.724 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
-2025-08-27 04:45:57.875 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-08-27 04:45:58.386 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-08-27 04:45:58.445 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-08-27 04:45:59.458 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3e6acec2
-2025-08-27 04:45:59.462 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-08-27 04:45:59.550 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-08-27 04:45:59.722 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2025-09-06 02:51:54.525 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
+2025-09-06 02:51:54.536 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
+2025-09-06 02:51:55.084 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-06 02:51:55.158 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 65 ms. Found 9 JPA repository interfaces.
+2025-09-06 02:51:55.700 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-06 02:51:55.710 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-06 02:51:55.710 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-09-06 02:51:55.738 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-06 02:51:55.739 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1158 ms
+2025-09-06 02:51:55.877 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-06 02:51:55.918 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-09-06 02:51:55.945 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-06 02:51:56.134 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-06 02:51:56.155 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-06 02:51:56.859 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@12200670
+2025-09-06 02:51:56.860 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-06 02:51:56.912 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-06 02:51:57.012 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 17.5
@@ -23,47 +23,288 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-08-27 04:46:02.455 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-08-27 04:46:06.945 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-08-27 04:46:08.089 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-08-27 04:46:08.969 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-08-27 04:46:10.372 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2025-08-27 04:46:11.113 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2025-08-27 04:46:11.132 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 18.814 seconds (process running for 20.325)
-2025-08-27 05:54:54.649 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@659336bc (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:55:24.461 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@561f9004 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:55:25.647 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@39851c80 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:55:31.143 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@236e069a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:55:56.495 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@859fd73 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:55:57.761 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@b1b7023 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 05:56:12.262 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5e799559 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 09:30:24.008 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@255c919a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 10:00:07.699 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4561bff6 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 11:58:29.322 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@12b8f523 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:07:30.526 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@71b84201 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:07:30.540 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@37a2831b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:07:47.489 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@726140fb (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:08:02.194 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@10516571 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:08:04.216 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4b566e31 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:08:12.721 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5f5f26eb (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:08:13.387 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3330856e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:08:29.140 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4b6f52df (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 12:09:17.595 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5c7ae055 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:16:06.043 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7aee1c92 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:24:10.581 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2f49476a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:24:13.903 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2f8d06bc (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:24:18.126 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@43547b6a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:25:17.950 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2643067d (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:25:24.008 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2858e094 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:25:31.372 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7679d65b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:25:47.781 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4b261d0b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:25:48.895 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@19ece78 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:45:26.586 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@27c4894f (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:45:49.884 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@76bd2cd (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:45:59.913 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@276d63a5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:46:09.936 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@60556332 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:46:19.973 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2d880b82 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:46:30.008 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4686f4a8 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:47:01.356 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2629e862 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:47:11.397 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4c605dce (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
-2025-08-27 13:47:21.446 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@44bf7d0e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-06 02:51:57.779 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-06 02:52:00.941 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-06 02:52:01.237 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-06 02:52:01.524 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-06 02:52:01.915 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-06 02:52:02.081 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-06 02:52:02.087 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 7.881 seconds (process running for 8.224)
+2025-09-06 02:53:21.229 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-06 02:53:21.239 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-06 02:53:21.253 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-06 02:53:21.277 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-09-06 02:53:21.594 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-09-06 03:34:37.853 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
+2025-09-06 03:34:37.855 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
+2025-09-06 03:34:38.302 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-06 03:34:38.354 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 47 ms. Found 9 JPA repository interfaces.
+2025-09-06 03:34:38.764 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-06 03:34:38.774 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-06 03:34:38.774 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-09-06 03:34:38.789 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-06 03:34:38.789 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 905 ms
+2025-09-06 03:34:38.906 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-06 03:34:38.942 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-09-06 03:34:38.959 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-06 03:34:39.125 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-06 03:34:39.145 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-06 03:34:39.790 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@57bac3f0
+2025-09-06 03:34:39.792 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-06 03:34:39.841 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-06 03:34:39.942 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-06 03:34:40.611 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-06 03:34:43.851 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-06 03:34:44.064 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-06 03:34:44.322 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-06 03:34:44.679 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-06 03:34:44.831 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-06 03:34:44.837 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 7.254 seconds (process running for 7.578)
+2025-09-06 03:35:00.120 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-06 03:35:00.121 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-06 03:35:00.125 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2025-09-06 03:35:00.138 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /auth/login
+2025-09-06 03:35:00.142 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-06 03:35:00.143 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /auth/login
+2025-09-06 03:35:00.278 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.email=?
+2025-09-06 03:35:00.655 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:01.004 [http-nio-8080-exec-1] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2025-09-06 03:35:01.005 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:01.133 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:01.194 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        dieti_estates.refresh_token
+        (created_at, expiry_date, token_value, user_id) 
+    values
+        (?, ?, ?, ?)
+2025-09-06 03:35:15.342 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties
+2025-09-06 03:35:15.375 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-06 03:35:15.377 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2025-09-06 03:35:15.381 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /error
+2025-09-06 03:35:15.382 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-06 03:35:15.382 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+2025-09-06 03:35:41.528 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing POST /auth/login
+2025-09-06 03:35:41.532 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-09-06 03:35:41.533 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured POST /auth/login
+2025-09-06 03:35:41.609 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.email=?
+2025-09-06 03:35:41.676 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:42.044 [http-nio-8080-exec-5] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2025-09-06 03:35:42.046 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:42.117 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:42.166 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        dieti_estates.refresh_token
+        (created_at, expiry_date, token_value, user_id) 
+    values
+        (?, ?, ?, ?)
+2025-09-06 03:35:57.709 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties
+2025-09-06 03:35:57.764 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties
+2025-09-06 03:35:57.794 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.dieti.dietiestatesbackend.controller.PropertiesController.createProperty(com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest,org.springframework.security.core.Authentication); target is of class [com.dieti.dietiestatesbackend.controller.PropertiesController]
+2025-09-06 03:35:57.824 [http-nio-8080-exec-7] DEBUG c.d.d.security.SecurityUtil - isAgentOrManager - principal: com.dieti.dietiestatesbackend.security.AuthenticatedUser@6, agentId: 6
+2025-09-06 03:35:57.824 [http-nio-8080-exec-7] DEBUG c.d.d.security.SecurityUtil - isAgentOrManager - principal id: 6, isManager: false
+2025-09-06 03:35:57.824 [http-nio-8080-exec-7] DEBUG c.d.d.security.SecurityUtil - isAgentOrManager - confronto principal.id == agentId ? true
+2025-09-06 03:35:57.825 [http-nio-8080-exec-7] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.dieti.dietiestatesbackend.controller.PropertiesController.createProperty(com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest,org.springframework.security.core.Authentication); target is of class [com.dieti.dietiestatesbackend.controller.PropertiesController]
+2025-09-06 03:35:57.883 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        count(pc1_0.id) 
+    from
+        dieti_estates.property_category pc1_0 
+    where
+        pc1_0.name=?
+2025-09-06 03:35:57.915 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        u1_0.id,
+        u1_0.id_agency,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.first_name,
+        u1_0.is_agent,
+        u1_0.is_manager,
+        u1_0.last_name,
+        u1_0.license,
+        u1_0.password,
+        u1_0.username 
+    from
+        dieti_estates.user u1_0 
+    where
+        u1_0.username=?
+2025-09-06 03:35:57.949 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name 
+    from
+        dieti_estates.contract c1_0 
+    where
+        c1_0.name=?
+2025-09-06 03:35:58.032 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type 
+    from
+        dieti_estates.property_category pc1_0 
+    where
+        pc1_0.name=?
+2025-09-06 03:35:58.070 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        dieti_estates.address
+        (building, city, latitude, longitude, country, created_at, province, street, street_number) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-06 03:35:58.122 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        dieti_estates.property
+        (additional_features, id_address, id_agent, area, id_contract, created_at, description, energy_rating, price, id_property_category, status, year_built, property_type) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'LAND')
+2025-09-06 03:35:58.164 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        dieti_estates.land
+        (accessible_from_street, id) 
+    values
+        (?, ?)
+2025-09-06 03:35:58.201 [http-nio-8080-exec-7] INFO  c.d.d.s.PropertyManagementService - Property created id=15, type=LAND

@@ -2,329 +2,244 @@ package com.dieti.dietiestatesbackend.specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.springframework.data.jpa.domain.Specification;
 
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
-import com.dieti.dietiestatesbackend.entities.Property;
-import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 import com.dieti.dietiestatesbackend.entities.CommercialProperty;
 import com.dieti.dietiestatesbackend.entities.Garage;
 import com.dieti.dietiestatesbackend.entities.Land;
+import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 
-import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
-public class PropertySpecifications {
+/**
+ * Specifications per Property con:
+ *  - Fetch mirato per prevenire N+1 (contract, propertyCategory, agent, address, heating)
+ *  - Riduzione duplicazione di stringhe tramite costanti
+ *  - Helper compatti e leggibili
+ */
+public final class PropertySpecifications {
 
+    private PropertySpecifications() {}
+
+    // Attributi comuni Property / relazioni
+    private static final String DESCRIPTION = "description";
+    private static final String CONTRACT = "contract";
+    private static final String PROPERTY_CATEGORY = "propertyCategory";
+    private static final String AGENT = "agent";
+    private static final String ADDRESS = "address";
+    private static final String HEATING = "heating";
+    private static final String CATEGORY = "category";
+    private static final String NAME = "name";
+    private static final String PRICE = "price";
+    private static final String AREA = "area";
+    private static final String YEAR_BUILT = "yearBuilt";
+    private static final String STATUS = "status";
+    private static final String ENERGY_RATING = "energyRating";
+
+    // Attributi subtype
+    private static final String NUMBER_OF_ROOMS = "numberOfRooms";
+    private static final String NUMBER_OF_BATHROOMS = "numberOfBathrooms";
+    private static final String PARKING_SPACES = "parkingSpaces";
+    private static final String GARDEN = "garden";
+    private static final String IS_FURNISHED = "isFurnished";
+    private static final String HAS_ELEVATOR = "hasElevator";
+    private static final String HAS_WHEELCHAIR_ACCESS = "hasWheelchairAccess";
+    private static final String NUMERO_VETRINE = "numeroVetrine";
+    private static final String HAS_SURVEILLANCE = "hasSurveillance";
+    private static final String ACCESSIBLE_FROM_STREET = "accessibleFromStreet";
     private static final String NUMBER_OF_FLOORS = "numberOfFloors";
 
     public static Specification<Property> withFilters(String keyword, FilterRequest filters) {
-        return (root, query, criteriaBuilder) -> {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // Keyword search
-            if (keyword != null && !keyword.trim().isEmpty()) {
-                predicates.add(criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("description")),
-                    "%" + keyword.toLowerCase() + "%"
-                ));
-            }
+            fetchCommonJoins(root, cb);
+            addKeywordPredicate(keyword, root, cb, predicates);
+            addCommonFilters(filters, root, cb, predicates);
 
-            addCommonFilters(filters, root, criteriaBuilder, predicates);
-
-            // Property-specific filters
-            addResidentialFilters(filters, root, criteriaBuilder, predicates);
-            addCommercialFilters(filters, root, criteriaBuilder, predicates);
-            addGarageFilters(filters, root, criteriaBuilder, predicates);
-            addLandFilters(filters, root, criteriaBuilder, predicates);
-            addCommonPropertyTypeFilters(filters, root, criteriaBuilder, predicates);
+            addResidentialFilters(filters, root, cb, predicates);
+            addCommercialFilters(filters, root, cb, predicates);
+            addGarageFilters(filters, root, cb, predicates);
+            addLandFilters(filters, root, cb, predicates);
+            addCommonPropertyTypeFloorsFilter(filters, root, cb, predicates);
 
             query.distinct(true);
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 
-    private static void addResidentialFilters(FilterRequest filters, 
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        
-        if (hasResidentialFilters(filters)) {
-            Join<Property, ResidentialProperty> residentialJoin = root.join("residentialProperty", JoinType.LEFT);
-            
-            List<Predicate> residentialPredicates = new ArrayList<>();
-            
-            addMinNumberOfRoomsFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addMinNumberOfBathroomsFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addMinParkingSpacesFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addHeatingFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addAcceptedGardenFilter(filters, residentialJoin, residentialPredicates);
-            addMustBeFurnishedFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addMustHaveElevatorFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            addMinNumberOfFloorsResidentialFilter(filters, residentialJoin, criteriaBuilder, residentialPredicates);
-            
-            if (!residentialPredicates.isEmpty()) {
-                predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(residentialJoin.get("id")),
-                    criteriaBuilder.and(residentialPredicates.toArray(new Predicate[0]))
-                ));
-            }
+    // ---------- Fetch ----------
+    private static void fetchCommonJoins(Root<Property> root, CriteriaBuilder cb) {
+        root.fetch(CONTRACT, JoinType.LEFT);
+        root.fetch(PROPERTY_CATEGORY, JoinType.LEFT);
+        root.fetch(AGENT, JoinType.LEFT);
+        root.fetch(ADDRESS, JoinType.LEFT);
+        try {
+            Root<ResidentialProperty> r = cb.treat(root, ResidentialProperty.class);
+            r.fetch(HEATING, JoinType.LEFT);
+        } catch (IllegalArgumentException ignored) {
+            // non Residential => ignora
         }
     }
 
-    private static void addCommercialFilters(FilterRequest filters,
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        
-        if (hasCommercialFilters(filters)) {
-            Join<Property, CommercialProperty> commercialJoin = root.join("commercialProperty", JoinType.LEFT);
-            
-            List<Predicate> commercialPredicates = new ArrayList<>();
-            
-            if (filters.getMinNumberOfRooms() != null) {
-                commercialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    commercialJoin.get("numberOfRooms"), filters.getMinNumberOfRooms()));
-            }
-            
-            if (filters.getMinNumberOfBathrooms() != null) {
-                commercialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    commercialJoin.get("numberOfBathrooms"), filters.getMinNumberOfBathrooms()));
-            }
-            
-            if (filters.getMustHaveWheelchairAccess() != null) {
-                commercialPredicates.add(criteriaBuilder.equal(
-                    commercialJoin.get("hasWheelchairAccess"), filters.getMustHaveWheelchairAccess()));
-            }
-            
-            if (filters.getMinNumeroVetrine() != null) {
-                commercialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    commercialJoin.get("numeroVetrine"), filters.getMinNumeroVetrine()));
-            }
-            
-            if (filters.getMinNumberOfFloors() != null) {
-                commercialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    commercialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
-            }
-            
-            if (!commercialPredicates.isEmpty()) {
-                predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(commercialJoin.get("id")),
-                    criteriaBuilder.and(commercialPredicates.toArray(new Predicate[0]))
-                ));
-            }
+    // ---------- Keyword ----------
+    private static void addKeywordPredicate(String keyword, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (keyword == null) return;
+        String trimmed = keyword.trim();
+        if (trimmed.isEmpty() || "all".equalsIgnoreCase(trimmed) || "filtered".equalsIgnoreCase(trimmed)) return;
+        predicates.add(cb.like(cb.lower(root.get(DESCRIPTION)), "%" + trimmed.toLowerCase() + "%"));
+    }
+
+    // ---------- Common filters ----------
+    private static void addCommonFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (f.getCategory() != null) {
+            predicates.add(cb.equal(cb.upper(root.get(PROPERTY_CATEGORY).get(CATEGORY)), f.getCategory().toUpperCase()));
+        }
+        if (f.getContract() != null) {
+            predicates.add(cb.equal(cb.upper(root.get(CONTRACT).get(NAME)), f.getContract().toUpperCase()));
+        }
+
+        addIfNotNull(f.getMinPrice(), predicates, () -> cb.greaterThanOrEqualTo(root.get(PRICE), f.getMinPrice()));
+        addIfNotNull(f.getMaxPrice(), predicates, () -> cb.lessThanOrEqualTo(root.get(PRICE), f.getMaxPrice()));
+        addIfNotNull(f.getMinArea(), predicates, () -> cb.greaterThanOrEqualTo(root.get(AREA), f.getMinArea()));
+        addIfNotNull(f.getMinYearBuilt(), predicates, () -> cb.greaterThanOrEqualTo(root.get(YEAR_BUILT), f.getMinYearBuilt()));
+
+        if (f.getAcceptedStatus() != null && !f.getAcceptedStatus().isEmpty()) {
+            predicates.add(root.get(STATUS).in(f.getAcceptedStatus()));
+        }
+
+        addIfNotNull(f.getMinEnergyRating(), predicates, () -> cb.greaterThanOrEqualTo(root.get(ENERGY_RATING), f.getMinEnergyRating()));
+    }
+
+    // ---------- Residential ----------
+    private static void addResidentialFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (!hasResidentialFilters(f)) return;
+
+        Root<ResidentialProperty> r = cb.treat(root, ResidentialProperty.class);
+        List<Predicate> list = new ArrayList<>();
+
+        addIfNotNull(f.getMinNumberOfRooms(), list, () -> cb.greaterThanOrEqualTo(r.get(NUMBER_OF_ROOMS), f.getMinNumberOfRooms()));
+        addIfNotNull(f.getMinNumberOfBathrooms(), list, () -> cb.greaterThanOrEqualTo(r.get(NUMBER_OF_BATHROOMS), f.getMinNumberOfBathrooms()));
+        addIfNotNull(f.getMinParkingSpaces(), list, () -> cb.greaterThanOrEqualTo(r.get(PARKING_SPACES), f.getMinParkingSpaces()));
+
+        if (f.getHeating() != null) {
+            list.add(cb.equal(cb.upper(r.get(HEATING).get(NAME)), f.getHeating().toUpperCase()));
+        }
+        if (f.getAcceptedGarden() != null && !f.getAcceptedGarden().isEmpty()) {
+            list.add(r.get(GARDEN).in(f.getAcceptedGarden()));
+        }
+        addIfNotNull(f.getMustBeFurnished(), list, () -> cb.equal(r.get(IS_FURNISHED), f.getMustBeFurnished()));
+        addIfNotNull(f.getMustHaveElevator(), list, () -> cb.equal(r.get(HAS_ELEVATOR), f.getMustHaveElevator()));
+        addIfNotNull(f.getMinNumberOfFloors(), list, () -> cb.greaterThanOrEqualTo(r.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors()));
+
+        if (!list.isEmpty()) {
+            predicates.add(cb.and(cb.equal(root.type(), ResidentialProperty.class), cb.and(list.toArray(new Predicate[0]))));
         }
     }
 
-    private static void addGarageFilters(FilterRequest filters,
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        
-        if (hasGarageFilters(filters)) {
-            Join<Property, Garage> garageJoin = root.join("garage", JoinType.LEFT);
-            
-            List<Predicate> garagePredicates = new ArrayList<>();
-            
-            if (filters.getMustHaveSurveillance() != null) {
-                garagePredicates.add(criteriaBuilder.equal(
-                    garageJoin.get("hasSurveillance"), filters.getMustHaveSurveillance()));
-            }
-            
-            if (filters.getMinNumberOfFloors() != null) {
-                garagePredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                    garageJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
-            }
-            
-            if (!garagePredicates.isEmpty()) {
-                predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(garageJoin.get("id")),
-                    criteriaBuilder.and(garagePredicates.toArray(new Predicate[0]))
-                ));
-            }
+    // ---------- Commercial ----------
+    private static void addCommercialFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (!hasCommercialFilters(f)) return;
+
+        Root<CommercialProperty> c = cb.treat(root, CommercialProperty.class);
+        List<Predicate> list = new ArrayList<>();
+
+        addIfNotNull(f.getMinNumberOfRooms(), list, () -> cb.greaterThanOrEqualTo(c.get(NUMBER_OF_ROOMS), f.getMinNumberOfRooms()));
+        addIfNotNull(f.getMinNumberOfBathrooms(), list, () -> cb.greaterThanOrEqualTo(c.get(NUMBER_OF_BATHROOMS), f.getMinNumberOfBathrooms()));
+        addIfNotNull(f.getMustHaveWheelchairAccess(), list, () -> cb.equal(c.get(HAS_WHEELCHAIR_ACCESS), f.getMustHaveWheelchairAccess()));
+        addIfNotNull(f.getMinNumeroVetrine(), list, () -> cb.greaterThanOrEqualTo(c.get(NUMERO_VETRINE), f.getMinNumeroVetrine()));
+        addIfNotNull(f.getMinNumberOfFloors(), list, () -> cb.greaterThanOrEqualTo(c.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors()));
+
+        if (!list.isEmpty()) {
+            predicates.add(cb.and(cb.equal(root.type(), CommercialProperty.class), cb.and(list.toArray(new Predicate[0]))));
         }
     }
 
-    private static void addLandFilters(FilterRequest filters,
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        
-        if (hasLandFilters(filters)) {
-            Join<Property, Land> landJoin = root.join("land", JoinType.LEFT);
-            
-            List<Predicate> landPredicates = new ArrayList<>();
-            
-            if (filters.getMustBeAccessibleFromStreet() != null) {
-                landPredicates.add(criteriaBuilder.equal(
-                    landJoin.get("accessibleFromStreet"), filters.getMustBeAccessibleFromStreet()));
-            }
-            
-            if (!landPredicates.isEmpty()) {
-                predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(landJoin.get("id")),
-                    criteriaBuilder.and(landPredicates.toArray(new Predicate[0]))
-                ));
-            }
+    // ---------- Garage ----------
+    private static void addGarageFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (!hasGarageFilters(f)) return;
+
+        Root<Garage> g = cb.treat(root, Garage.class);
+        List<Predicate> list = new ArrayList<>();
+
+        addIfNotNull(f.getMustHaveSurveillance(), list, () -> cb.equal(g.get(HAS_SURVEILLANCE), f.getMustHaveSurveillance()));
+        addIfNotNull(f.getMinNumberOfFloors(), list, () -> cb.greaterThanOrEqualTo(g.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors()));
+
+        if (!list.isEmpty()) {
+            predicates.add(cb.and(cb.equal(root.type(), Garage.class), cb.and(list.toArray(new Predicate[0]))));
         }
     }
 
-    private static void addCommonPropertyTypeFilters(FilterRequest filters,
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        
-        // Handle filters that apply to multiple property types
-        if (filters.getMinNumberOfFloors() != null) {
-            Join<Property, ResidentialProperty> residentialJoin = root.join("residentialProperty", JoinType.LEFT);
-            Join<Property, CommercialProperty> commercialJoin = root.join("commercialProperty", JoinType.LEFT);
-            Join<Property, Garage> garageJoin = root.join("garage", JoinType.LEFT);
-            
-            predicates.add(criteriaBuilder.or(
-                criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(residentialJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(residentialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
-                ),
-                criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(commercialJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(commercialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
-                ),
-                criteriaBuilder.and(
-                    criteriaBuilder.isNotNull(garageJoin.get("id")),
-                    criteriaBuilder.greaterThanOrEqualTo(garageJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors())
-                )
-            ));
+    // ---------- Land ----------
+    private static void addLandFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (!hasLandFilters(f)) return;
+
+        Root<Land> l = cb.treat(root, Land.class);
+        List<Predicate> list = new ArrayList<>();
+
+        addIfNotNull(f.getMustBeAccessibleFromStreet(), list, () -> cb.equal(l.get(ACCESSIBLE_FROM_STREET), f.getMustBeAccessibleFromStreet()));
+
+        if (!list.isEmpty()) {
+            predicates.add(cb.and(cb.equal(root.type(), Land.class), cb.and(list.toArray(new Predicate[0]))));
         }
     }
 
-    // Helper methods to check if specific filters are applied
-    private static boolean hasResidentialFilters(FilterRequest filters) {
-        return filters.getMinParkingSpaces() != null || 
-               filters.getHeating() != null ||
-               (filters.getAcceptedGarden() != null && !filters.getAcceptedGarden().isEmpty()) ||
-               filters.getMustBeFurnished() != null ||
-               filters.getMustHaveElevator() != null;
+    // ---------- Floors filter shared ----------
+    private static void addCommonPropertyTypeFloorsFilter(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (f.getMinNumberOfFloors() == null) return;
+
+        Root<ResidentialProperty> r = cb.treat(root, ResidentialProperty.class);
+        Root<CommercialProperty> c = cb.treat(root, CommercialProperty.class);
+        Root<Garage> g = cb.treat(root, Garage.class);
+
+        predicates.add(cb.or(
+            cb.and(cb.equal(root.type(), ResidentialProperty.class),
+                   cb.greaterThanOrEqualTo(r.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors())),
+            cb.and(cb.equal(root.type(), CommercialProperty.class),
+                   cb.greaterThanOrEqualTo(c.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors())),
+            cb.and(cb.equal(root.type(), Garage.class),
+                   cb.greaterThanOrEqualTo(g.get(NUMBER_OF_FLOORS), f.getMinNumberOfFloors()))
+        ));
     }
 
-    private static boolean hasCommercialFilters(FilterRequest filters) {
-        return filters.getMustHaveWheelchairAccess() != null ||
-               filters.getMinNumeroVetrine() != null;
+    // ---------- Utility ----------
+    private static void addIfNotNull(Object value, List<Predicate> list, Supplier<Predicate> supplier) {
+        if (value != null) list.add(supplier.get());
     }
 
-    private static boolean hasGarageFilters(FilterRequest filters) {
-        return filters.getMustHaveSurveillance() != null;
+    // ---------- hasX helpers ----------
+    private static boolean hasResidentialFilters(FilterRequest f) {
+        return f.getMinNumberOfRooms() != null ||
+               f.getMinNumberOfBathrooms() != null ||
+               f.getMinParkingSpaces() != null ||
+               f.getHeating() != null ||
+               (f.getAcceptedGarden() != null && !f.getAcceptedGarden().isEmpty()) ||
+               f.getMustBeFurnished() != null ||
+               f.getMustHaveElevator() != null ||
+               f.getMinNumberOfFloors() != null;
     }
 
-    private static boolean hasLandFilters(FilterRequest filters) {
-        return filters.getMustBeAccessibleFromStreet() != null;
-    }
-    
-    private static void addCommonFilters(FilterRequest filters,
-            jakarta.persistence.criteria.Root<Property> root,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder,
-            List<Predicate> predicates) {
-        // Common filters
-        if (filters.getCategory() != null) {
-            predicates.add(criteriaBuilder.equal(
-                criteriaBuilder.upper(root.get("propertyCategory").get("category")),
-                filters.getCategory().toUpperCase()
-            ));
-        }
-
-        if (filters.getContract() != null) {
-            predicates.add(criteriaBuilder.equal(
-                criteriaBuilder.upper(root.get("contract").get("name")),
-                filters.getContract().toUpperCase()
-            ));
-        }
-
-        if (filters.getMinPrice() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), filters.getMinPrice()));
-        }
-
-        if (filters.getMaxPrice() != null) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), filters.getMaxPrice()));
-        }
-
-        if (filters.getMinArea() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("area"), filters.getMinArea()));
-        }
-
-        if (filters.getMinYearBuilt() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("yearBuilt"), filters.getMinYearBuilt()));
-        }
-
-        if (filters.getAcceptedStatus() != null && !filters.getAcceptedStatus().isEmpty()) {
-            predicates.add(root.get("status").in(filters.getAcceptedStatus()));
-        }
-
-        if (filters.getMinEnergyRating() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("energyRating"), filters.getMinEnergyRating()));
-        }
-    }
-    private static void addMinNumberOfRoomsFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMinNumberOfRooms() != null) {
-            residentialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                residentialJoin.get("numberOfRooms"), filters.getMinNumberOfRooms()));
-        }
+    private static boolean hasCommercialFilters(FilterRequest f) {
+        return f.getMinNumberOfRooms() != null ||
+               f.getMinNumberOfBathrooms() != null ||
+               f.getMustHaveWheelchairAccess() != null ||
+               f.getMinNumeroVetrine() != null ||
+               f.getMinNumberOfFloors() != null;
     }
 
-    private static void addMinNumberOfBathroomsFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMinNumberOfBathrooms() != null) {
-            residentialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                residentialJoin.get("numberOfBathrooms"), filters.getMinNumberOfBathrooms()));
-        }
+    private static boolean hasGarageFilters(FilterRequest f) {
+        return f.getMustHaveSurveillance() != null ||
+               f.getMinNumberOfFloors() != null;
     }
 
-    private static void addMinParkingSpacesFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMinParkingSpaces() != null) {
-            residentialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                residentialJoin.get("parkingSpaces"), filters.getMinParkingSpaces()));
-        }
-    }
-
-    private static void addHeatingFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getHeating() != null) {
-            residentialPredicates.add(criteriaBuilder.equal(
-                criteriaBuilder.upper(residentialJoin.get("heating").get("name")),
-                filters.getHeating().toUpperCase()));
-        }
-    }
-
-    private static void addAcceptedGardenFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            List<Predicate> residentialPredicates) {
-        if (filters.getAcceptedGarden() != null && !filters.getAcceptedGarden().isEmpty()) {
-            residentialPredicates.add(residentialJoin.get("garden").in(filters.getAcceptedGarden()));
-        }
-    }
-
-    private static void addMustBeFurnishedFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMustBeFurnished() != null) {
-            residentialPredicates.add(criteriaBuilder.equal(
-                residentialJoin.get("isFurnished"), filters.getMustBeFurnished()));
-        }
-    }
-
-    private static void addMustHaveElevatorFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMustHaveElevator() != null) {
-            residentialPredicates.add(criteriaBuilder.equal(
-                residentialJoin.get("hasElevator"), filters.getMustHaveElevator()));
-        }
-    }
-
-    private static void addMinNumberOfFloorsResidentialFilter(FilterRequest filters, Join<Property, ResidentialProperty> residentialJoin,
-            jakarta.persistence.criteria.CriteriaBuilder criteriaBuilder, List<Predicate> residentialPredicates) {
-        if (filters.getMinNumberOfFloors() != null) {
-            residentialPredicates.add(criteriaBuilder.greaterThanOrEqualTo(
-                residentialJoin.get(NUMBER_OF_FLOORS), filters.getMinNumberOfFloors()));
-        }
+    private static boolean hasLandFilters(FilterRequest f) {
+        return f.getMustBeAccessibleFromStreet() != null;
     }
 }
