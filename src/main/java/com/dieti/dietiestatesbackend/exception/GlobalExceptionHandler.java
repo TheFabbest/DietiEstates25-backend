@@ -12,8 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
-import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
-import com.dieti.dietiestatesbackend.exception.GeocodingException;
 
 /**
  * Gestore globale delle eccezioni per l'applicazione DietiEstates25.
@@ -136,13 +134,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GeocodingException.class)
     public ResponseEntity<ErrorResponse> handleGeocodingException(GeocodingException ex) {
         LoggerFactory.getLogger(GlobalExceptionHandler.class).error("Errore geocoding: {}", ex.getMessage(), ex);
+        HttpStatus status = ex.getHttpStatus() != null ? ex.getHttpStatus() : HttpStatus.BAD_REQUEST;
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
+                status.value(),
                 "Errore geocoding",
-                "Impossibile geocodificare l'indirizzo fornito.",
+                ex.getMessage(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, status);
     }
     
     @ExceptionHandler(Exception.class)

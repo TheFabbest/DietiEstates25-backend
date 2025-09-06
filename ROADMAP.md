@@ -15,6 +15,8 @@ Per evitare sovrapposizioni, ogni membro del team può assegnarsi una task dal b
 | Task                                                        | Stato        |
 | :---                                                        | :---         |
 | Copiare backend e configurare database su Azure              | Completato   |
+| Validare il corretto funzionamento degli endpoint di ricerca e di dettaglio degli immobili | Da Iniziare  |
+| Implementare un sistema di geocoding (sostituendo il file MockGeocodingService.java) | Da Iniziare  |
 
 ### Fabrizio
 

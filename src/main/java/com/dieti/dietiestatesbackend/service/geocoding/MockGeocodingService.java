@@ -3,6 +3,7 @@ package com.dieti.dietiestatesbackend.service.geocoding;
 import java.util.Optional;
 import java.math.BigDecimal;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.dieti.dietiestatesbackend.entities.Address;
@@ -13,8 +14,12 @@ import com.dieti.dietiestatesbackend.exception.GeocodingException;
  * Implementazione mock del servizio di geocoding utilizzata per sviluppo e test.
  * Restituisce coordinate fisse per un indirizzo di esempio ("Via Roma 1, Milano"),
  * altrimenti Optional.empty().
+ *
+ * @deprecated Da rimuovere dopo il testing completo del servizio Geoapify
  */
+@Deprecated
 @Service
+@Profile("!prod") // Disabilitato in produzione
 public class MockGeocodingService implements GeocodingService {
 
     @Override

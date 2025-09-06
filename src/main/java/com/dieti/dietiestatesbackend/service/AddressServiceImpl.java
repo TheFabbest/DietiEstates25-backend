@@ -15,6 +15,7 @@ import com.dieti.dietiestatesbackend.repositories.AddressRepository;
 import com.dieti.dietiestatesbackend.service.geocoding.GeocodingService;
 import com.dieti.dietiestatesbackend.entities.Coordinates; // Importa l'entità Coordinates
 import com.dieti.dietiestatesbackend.exception.GeocodingException;
+import org.springframework.http.HttpStatus;
 
 /**
  * Implementazione concreta del contratto {@link AddressService}.
@@ -60,7 +61,7 @@ public class AddressServiceImpl implements AddressService {
         // permettiamo all'eccezione di propagarsi verso il layer superiore.
         Optional<Coordinates> opt = geocodingService.geocode(adr);
         if (opt.isEmpty()) {
-            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.");
+            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.", HttpStatus.NOT_FOUND);
         }
         adr.setCoordinates(opt.get());
 
@@ -80,7 +81,7 @@ public class AddressServiceImpl implements AddressService {
         // Effettua il geocoding dell'indirizzo
         Optional<Coordinates> opt = geocodingService.geocode(address);
         if (opt.isEmpty()) {
-            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.");
+            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.", HttpStatus.NOT_FOUND);
         }
         address.setCoordinates(opt.get());
         

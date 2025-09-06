@@ -3,8 +3,11 @@ package com.dieti.dietiestatesbackend.service.lookup;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import jakarta.persistence.EntityManager;
@@ -16,6 +19,8 @@ import jakarta.persistence.EntityManager;
 @Service
 public class CategoryLookupServiceImpl implements CategoryLookupService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryLookupServiceImpl.class);
+
     private final EntityManager entityManager;
 
     @Autowired
@@ -24,8 +29,11 @@ public class CategoryLookupServiceImpl implements CategoryLookupService {
     }
 
     @Override
+    @Cacheable(value = "categories", key = "#name")
     public Optional<PropertyCategory> findByName(String name) {
+        logger.debug("Attempting to find category by name: {} (from DB, not cache)", name);
         if (name == null || name.isBlank()) {
+            logger.debug("Category name is null or blank.");
             return Optional.empty();
         }
         List<PropertyCategory> categories = entityManager.createQuery(
@@ -33,7 +41,12 @@ public class CategoryLookupServiceImpl implements CategoryLookupService {
                 PropertyCategory.class)
                 .setParameter("name", name)
                 .getResultList();
-        return categories.isEmpty() ? Optional.empty() : Optional.of(categories.get(0));
+        if (categories.isEmpty()) {
+            logger.debug("No category found for name: {}", name);
+            return Optional.empty();
+        }
+        logger.debug("Category found for name: {}", name);
+        return Optional.of(categories.get(0));
     }
 
     @Override

@@ -10,13 +10,11 @@
   "contractType":"sale",
   "propertyCategoryName":"Apartment",
   "addressRequest":{
-    "country":"IT",
-    "province":"RM",
-    "city":"Rome",
-    "street":"Via Test",
-    "streetNumber":"1",
-    "latitude":41.9028,
-    "longitude":12.4964
+    "country":"Italy",
+    "province":"Caserta",
+    "city":"Castel Volturno",
+    "street":"Via Ferrara",
+    "streetNumber":"27"
   },
   "images":["/img/1.jpg","/img/2.jpg"],
   "numberOfRooms":3,

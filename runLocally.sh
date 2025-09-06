@@ -39,5 +39,15 @@ else
              -e "GEOAPIFY_API_KEY=${GEOAPIFY_API_KEY:-}")
 fi
 
+echo "Environment variables passed to Docker:"
+for var in "${RUN_ARGS[@]}"; do
+  if [[ "$var" == -e* ]]; then
+    echo "$var"
+  fi
+done
+
+# clean up old logs
+rm -f logs/*.log
+
 # Run container
 docker run "${RUN_ARGS[@]}" "$IMAGE_NAME"
