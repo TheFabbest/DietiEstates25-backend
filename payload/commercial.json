@@ -1,0 +1,27 @@
+{
+  "propertyType": "COMMERCIAL",
+  "agentUsername": "testuser",
+  "description": "Ufficio moderno in centro città",
+  "price": 300000.00,
+  "area": 150,
+  "yearBuilt": 2010,
+  "contractType": "sale",
+  "propertyCategoryName": "Office",
+  "status": "NEW",
+  "energyRating": "A1",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "RM",
+    "city": "Rome",
+    "street": "Via Commerciale",
+    "streetNumber": "10",
+    "building": null
+  },
+  "images": [],
+  "numberOfRooms": 5,
+  "floor": 2,
+  "numberOfBathrooms": 2,
+  "hasDisabledAccess": true,
+  "shopWindowCount": 3,
+  "numberOfFloors": 5
+}

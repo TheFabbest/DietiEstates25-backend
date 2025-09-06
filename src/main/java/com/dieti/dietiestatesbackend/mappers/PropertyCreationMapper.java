@@ -55,8 +55,8 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "images", source = "request.images")
     @Mapping(target = "heating", source = "request.heatingType")
     @Mapping(target = "numberOfFloors", source = "request.numberOfFloors")
-    @Mapping(target = "floor", ignore = true)
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
+    @Mapping(target = "floor", source = "request.floor") // Mappa il campo floor
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
     public abstract ResidentialProperty toEntity(CreateResidentialPropertyRequest request, User agent);

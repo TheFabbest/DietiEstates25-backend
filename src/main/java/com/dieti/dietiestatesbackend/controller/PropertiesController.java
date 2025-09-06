@@ -35,6 +35,7 @@ import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
 import java.util.List;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -102,9 +103,10 @@ public class PropertiesController {
     @PreAuthorize("@securityUtil.isAgentOrManager(authentication.principal, authentication.principal.id)")
     @PostMapping("/properties")
     public ResponseEntity<PropertyResponse> createProperty(
-            @RequestBody CreatePropertyRequest request,
+            @Valid @RequestBody CreatePropertyRequest request,
             Authentication authentication) {
         logger.debug("POST /properties - request: {}", request);
+        logger.debug("Dettagli CreatePropertyRequest: {}", request); // Log dettagliato della request
         PropertyResponse created = propertyService.createProperty(request);
         logger.debug("Property creata id={}", created.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);

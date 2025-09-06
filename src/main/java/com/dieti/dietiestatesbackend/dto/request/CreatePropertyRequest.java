@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "propertyType")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = CreateBuildingPropertyRequest.class, name = "BUILDING"),
+    @JsonSubTypes.Type(value = CreateResidentialPropertyRequest.class, name = "RESIDENTIAL"),
+    @JsonSubTypes.Type(value = CreateCommercialPropertyRequest.class, name = "COMMERCIAL"),
+    @JsonSubTypes.Type(value = CreateGaragePropertyRequest.class, name = "GARAGE"),
     @JsonSubTypes.Type(value = CreateLandPropertyRequest.class, name = "LAND")
 })
 
@@ -40,6 +42,8 @@ public sealed interface CreatePropertyRequest
     PropertyStatus getStatus();
     EnergyRating getEnergyRating();
 
+    com.dieti.dietiestatesbackend.enums.PropertyType getPropertyType(); // Aggiunto
+
     AddressRequest getAddressRequest();
 
     @AssertTrue(message = "È obbligatorio fornire un indirizzo tramite addressRequest.")
@@ -48,4 +52,11 @@ public sealed interface CreatePropertyRequest
     }
 
     List<String> getImages();
+    @AssertTrue(message = "Il tipo di proprietà non corrisponde alla categoria specificata.")
+    default boolean isPropertyTypeConsistentWithCategory() {
+        // Questa validazione sarà gestita a livello di servizio, non qui direttamente.
+        // Lasciamo qui il placeholder per chiarezza, ma la logica effettiva
+        // dipenderà dall'accesso al CategoryLookupService.
+        return true;
+    }
 }

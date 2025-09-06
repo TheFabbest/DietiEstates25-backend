@@ -1,0 +1,23 @@
+{
+  "propertyType": "GARAGE",
+  "agentUsername": "testuser",
+  "description": "Garage singolo in zona residenziale",
+  "price": 25000.00,
+  "area": 15,
+  "yearBuilt": 2005,
+  "contractType": "sale",
+  "propertyCategoryName": "Single Garage",
+  "status": "NEW",
+  "energyRating": "NOT_APPLIABLE",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "RM",
+    "city": "Rome",
+    "street": "Via del Garage",
+    "streetNumber": "3",
+    "building": null
+  },
+  "images": [],
+  "hasSurveillance": true,
+  "numberOfFloors": 1
+}

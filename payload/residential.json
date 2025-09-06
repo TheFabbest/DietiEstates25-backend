@@ -8,7 +8,7 @@
   "area":80,
   "yearBuilt":1998,
   "contractType":"sale",
-  "propertyCategoryName":"apartment",
+  "propertyCategoryName":"Apartment",
   "addressRequest":{
     "country":"IT",
     "province":"RM",
@@ -22,8 +22,10 @@
   "numberOfRooms":3,
   "numberOfBathrooms":2,
   "parkingSpaces":1,
-  "heatingType":"GAS",
+  "heatingType":"gas",
   "garden":"ABSENT",
-  "totalFloors":3,
-  "hasElevator":false
+  "floor":1,
+  "numberOfFloors":2,
+  "hasElevator":false,
+  "isFurnished":false
 }

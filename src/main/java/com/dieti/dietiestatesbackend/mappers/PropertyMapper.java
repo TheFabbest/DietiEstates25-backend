@@ -65,17 +65,9 @@ public class PropertyMapper {
         rp.setParkingSpaces(req.getParkingSpaces() == null ? 0 : req.getParkingSpaces());
         rp.setFurnished(req.isFurnished());
         rp.setGarden(req.getGarden());
-        rp.setNumberOfFloors(req.getNumberOfFloors() == null ? 1 : req.getNumberOfFloors());
+        rp.setNumberOfFloors(req.getNumberOfFloors());
         rp.setHasElevator(req.hasElevator());
-        if (req.getFloors() != null && !req.getFloors().isEmpty()) {
-            try {
-                rp.setFloor(Integer.parseInt(req.getFloors().get(0)));
-            } catch (NumberFormatException e) {
-                rp.setFloor(1);
-            }
-        } else {
-            rp.setFloor(1);
-        }
+        rp.setFloor(req.getFloor()); // Mappa il campo floor direttamente
         return rp;
     }
 
@@ -84,7 +76,7 @@ public class PropertyMapper {
         cp.setNumberOfRooms(req.getNumberOfRooms());
         cp.setFloor(req.getFloor());
         cp.setNumberOfBathrooms(req.getNumberOfBathrooms());
-        cp.setNumberOfFloors(req.getNumberOfFloors());
+        cp.setNumberOfFloors(req.getNumberOfFloors()); // Ora il campo esiste nel DTO
         cp.setHasWheelchairAccess(req.isHasDisabledAccess());
         cp.setNumeroVetrine(req.getShopWindowCount() == null ? 0 : req.getShopWindowCount());
         return cp;

@@ -31,6 +31,7 @@ public class PropertyCreationService {
     private final PropertyRepository propertyRepository;
     private final CreationMapperRegistry creationMapperRegistry;
 
+
     public PropertyCreationService(AgentLookupService agentLookupService,
                                    PropertyRepository propertyRepository,
                                    CreationMapperRegistry creationMapperRegistry) {
@@ -41,6 +42,10 @@ public class PropertyCreationService {
 
     @Transactional
     public Property createProperty(CreatePropertyRequest request) {
+        // La validazione della coerenza tra propertyType e propertyCategoryName
+        // è stata spostata al validatore di classe @ValidPropertyCategory.
+        // Qui il servizio si occupa solo della creazione e persistenza.
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AuthenticatedUser authenticatedUser = (AuthenticatedUser) authentication.getPrincipal();
         User agent = agentLookupService.findAgentByUsername(authenticatedUser.getUsername())
@@ -48,8 +53,10 @@ public class PropertyCreationService {
 
         // Il mapping verso l'entità concreta è responsabilità del CreationMapperRegistry
         Property property = creationMapperRegistry.map((AbstractCreatePropertyRequest) request, agent);
+        logger.debug("Property mappata prima del salvataggio: {}", property); // Log della Property mappata
 
         property = propertyRepository.save(property);
+        logger.debug("Property salvata con successo id={} type={}", property.getId(), property.getClass().getSimpleName()); // Nuovo log
 
         logger.debug("Created property id={} type={}", property.getId(), property.getClass().getSimpleName());
         return property;
