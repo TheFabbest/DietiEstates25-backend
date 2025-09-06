@@ -66,7 +66,6 @@ public class PropertiesController {
             .toList());
     }
 
-    @PreAuthorize("@securityUtil.canAccessProperty(principal, #id)")
     @GetMapping("/properties/details/{id}")
     public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long id) {
         PropertyResponse p = responseMapperRegistry.map(propertyService.getProperty(id));
