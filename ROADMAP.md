@@ -61,6 +61,7 @@ Per evitare sovrapposizioni, ogni membro del team può assegnarsi una task dal b
 - [ ] Implementare la funzionalità per inserire offerte ricevute esternamente
 - [ ] (Opzionale) Rifattorizzare la ricerca per consentire un raggio arbitrario
 - [ ] Scrivere test unitari e di integrazione completi per il backend
+- [ ] Implementare caching (Redis) per evitare chiamate API ripetitive a Geoapify Places (rimandato a data da destinarsi)
 
 #### Frontend
 - [ ] Integrare i filtri di ricerca con le nuove API del backend

@@ -15,6 +15,9 @@ import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.service.geocoding.Coordinates;
+import com.dieti.dietiestatesbackend.service.places.PlacesService;
+import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
  
 /**
  * Façade service per le operazioni sulle Property.
@@ -31,15 +34,18 @@ public class PropertyService {
 
     private final PropertyQueryService propertyQueryService;
     private final PropertyManagementService propertyManagementService;
+    private final PlacesService placesService;
  
     /**
      * Costruttore principale: tutte le dipendenze sono richieste.
      */
     @Autowired
     public PropertyService(PropertyQueryService propertyQueryService,
-                           PropertyManagementService propertyManagementService) {
+                           PropertyManagementService propertyManagementService,
+                           PlacesService placesService) {
         this.propertyQueryService = Objects.requireNonNull(propertyQueryService, "propertyQueryService");
         this.propertyManagementService = Objects.requireNonNull(propertyManagementService, "propertyManagementService");
+        this.placesService = Objects.requireNonNull(placesService, "placesService");
     }
 
     // --- Read (delegated) ---
@@ -92,4 +98,27 @@ public class PropertyService {
     // Dependency resolution moved to PropertyDependencyResolver
 
     // Helper methods removed — use dedicated utilities if needed.
+
+    /**
+     * Trova punti di interesse nelle vicinanze di un immobile.
+     *
+     * @param propertyId ID dell'immobile
+     * @param radius raggio di ricerca in metri
+     * @param categories categorie di luoghi da cercare
+     * @return lista di luoghi trovati nelle vicinanze
+     */
+    public List<PlaceDTO> findNearbyPlaces(Long propertyId, int radius, List<String> categories) {
+        Property property = propertyQueryService.getProperty(propertyId);
+        if (property == null || property.getAddress() == null || property.getAddress().getCoordinates() == null) {
+            throw new IllegalArgumentException("Immobile non trovato o senza coordinate valide");
+        }
+
+        var coordinates = property.getAddress().getCoordinates();
+        var geoapifyCoordinates = new Coordinates(
+            coordinates.getLatitude(),
+            coordinates.getLongitude()
+        );
+
+        return placesService.findNearbyPlaces(geoapifyCoordinates, radius, categories);
+    }
 }

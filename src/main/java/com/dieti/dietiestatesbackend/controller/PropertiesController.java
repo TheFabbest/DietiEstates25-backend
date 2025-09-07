@@ -30,6 +30,7 @@ import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import org.springframework.security.core.Authentication;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
+import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
 import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
 
 import java.util.List;
@@ -41,11 +42,13 @@ import jakarta.validation.Valid;
 @RestController
 public class PropertiesController {
     private static final Logger logger = LoggerFactory.getLogger(PropertiesController.class);
+    private static final String DEFAULT_RADIUS_SPEL = "#{T(java.lang.Integer).valueOf(${geoapify.places.radius})}";
+    private static final String DEFAULT_CATEGORIES_SPEL = "#{'${geoapify.places.categories}'.split(',')}";
     private final PropertyService propertyService;
     private final PropertyImageUtils propertyImageUtils;
     private final CategoryLookupService categoryLookupService;
     private final ResponseMapperRegistry responseMapperRegistry;
- 
+
     @Autowired
     public PropertiesController(PropertyService propertyService,
                                 PropertyImageUtils propertyImageUtils,
@@ -139,6 +142,28 @@ public class PropertiesController {
             .toList();
         logger.debug("Categorie trovate per tipo {}: {}", propertyType, categoryNames);
         return ResponseEntity.ok(categoryNames);
+    }
+
+    /**
+     * Endpoint per la ricerca di punti di interesse nelle vicinanze di un immobile.
+     *
+     * @param id ID dell'immobile di riferimento
+     * @param radius raggio di ricerca in metri (default: 5000)
+     * @param categories categorie di luoghi da cercare (default: ["commercial", "catering", "education"])
+     * @return lista di luoghi trovati nelle vicinanze
+     */
+    @GetMapping("/api/properties/{id}/places")
+    public ResponseEntity<List<PlaceDTO>> getNearbyPlaces(
+            @PathVariable("id") Long id,
+            @RequestParam(value = "radius", defaultValue = DEFAULT_RADIUS_SPEL) int radius,
+            @RequestParam(value = "categories", defaultValue = DEFAULT_CATEGORIES_SPEL) List<String> categories) {
+ 
+        logger.debug("Richiesta luoghi vicini per propertyId={}, radius={}, categories={}", id, radius, categories);
+ 
+        // Il PropertyService dovrà ottenere le coordinate e chiamare il PlacesService
+        List<PlaceDTO> places = propertyService.findNearbyPlaces(id, radius, categories);
+ 
+        return ResponseEntity.ok(places);
     }
 
     // Gestione locale della validazione per restituire 400 con dettagli dei campi

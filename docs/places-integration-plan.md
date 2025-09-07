@@ -1,16 +1,16 @@
-# Piano Architetturale: Integrazione Geopify Places
+# Piano Architetturale Semplificato: Integrazione Geopify Places
 
 ## 1. Obiettivo
 
-Integrare il servizio "Places" di Geoapify per trovare punti di interesse (POI) nelle vicinanze di un immobile. L'obiettivo è fornire agli utenti informazioni contestuali rilevanti come scuole, parchi, trasporti pubblici e altri servizi, migliorando l'esperienza utente.
+Integrare il servizio "Places" di Geoapify per trovare punti di interesse (POI) nelle vicinanze di un immobile. L'obiettivo è fornire agli utenti informazioni contestuali rilevanti, seguendo i principi di Clean Architecture, SoC e SOLID per garantire manutenibilità e scalabilità.
 
-L'architettura seguirà i principi di Clean Architecture, SoC e SOLID, garantendo manutenibilità, testabilità e scalabilità.
+Questa versione del piano è stata **semplificata** per concentrarsi sulla funzionalità di base, posticipando meccanismi complessi in linea con i principi YAGNI e KISS.
 
-## 2. Architettura e Flusso dei Dati
+## 2. Architettura e Flusso dei Dati (Semplificato)
 
-L'integrazione introduce un nuovo servizio, `PlacesService`, che astrae la logica di ricerca dei POI. Per rispettare il **Principio della Legge di Demetra (LoD)**, il `PropertyService` non accederà più direttamente al repository per le coordinate, ma utilizzerà un metodo incapsulato per recuperarle.
+L'architettura mantiene la separazione dei layer ma rimuove la complessità legata alla resilienza avanzata, che potrà essere introdotta in futuro.
 
-### Diagramma Architetturale
+### Diagramma Architetturale Semplificato
 
 ```mermaid
 graph TD
@@ -33,40 +33,35 @@ graph TD
         G[Geoapify Places API]
     end
 
-    subgraph "Resilience"
-        H[Circuit Breaker - Resilience4j]
-        I[Retry with Backoff]
-    end
-
     A -- Chiama --> B
-    B -- Ottiene coordinate incapsulate da --> F
+    B -- Ottiene coordinate da --> F
     B -- Chiama --> C
     D -- Implementa --> C
     B -- Inietta --> C
-    D -- Usa --> H
-    H -- Avvolge --> E
-    E -- Applica --> I
-    I -- Tenta chiamata a --> G
+    D -- Usa --> E
+    E -- Chiama --> G
 ```
 
-### Flusso dei Dati
+### Flusso dei Dati Semplificato
 
 1.  Il client invia una richiesta a `GET /api/properties/{id}/places`.
-2.  `PropertiesController` riceve la richiesta.
-3.  Il controller chiama un metodo del `PropertyService` per avviare la ricerca.
-4.  Il `PropertyService` ottiene le coordinate dell'immobile in modo incapsulato, senza esporre i dettagli del `PropertyRepository`.
-5.  Il `PropertyService` invoca il `PlacesService` passando coordinate, raggio e categorie.
-6.  `GeoapifyPlacesService` (implementazione concreta) esegue la richiesta all'API di Geoapify.
-    -   La chiamata è protetta da un **Circuit Breaker** (Resilience4j).
-    -   In caso di errori transitori (es. 429 Too Many Requests), viene applicata una strategia di **retry con backoff esponenziale**.
-7.  Se l'API fallisce persistentemente e il circuit breaker si apre, viene attivata una **fallback strategy** (es. restituire una lista vuota).
-8.  L'API di Geoapify restituisce un GeoJSON con i luoghi trovati.
-9.  Il servizio mappa la risposta in una lista di `PlaceDTO`.
-10. La lista viene restituita al controller e, infine, al client.
+2.  `PropertiesController` riceve la richiesta e chiama il `PropertyService`.
+3.  `PropertyService` ottiene le coordinate dell'immobile e invoca `PlacesService.findNearbyPlaces(...)`.
+4.  `GeoapifyPlacesService` (implementazione) utilizza `WebClient` per chiamare l'API di Geoapify.
+5.  **Gestione Errori Semplice**: Se la chiamata API fallisce, viene lanciata un'eccezione `PlacesServiceException` che verrà gestita globalmente da `GlobalExceptionHandler`.
+6.  La risposta JSON viene deserializzata in modo **typesafe** in DTO specifici (`GeoapifyPlacesResponse`), evitando l'uso di `instanceof`.
+7.  Il servizio mappa i risultati in una lista di `PlaceDTO` e la restituisce.
 
-## 3. Componenti Chiave
+## 3. Decisioni Chiave di Semplificazione
 
-### 3.1. Service Layer
+*   **Resilienza**: **Posticipata**. Non verranno implementati `Resilience4j` (Circuit Breaker, Retry). La gestione degli errori di rete si affida al comportamento standard di `WebClient`.
+*   **Gestione Errori**: Si utilizzerà una singola eccezione custom, `PlacesServiceException`, per incapsulare tutti gli errori relativi all'interazione con Geopify.
+*   **Caching**: Si utilizzerà l'annotazione `@Cacheable` standard di Spring senza un `keyGenerator` custom per la fase iniziale.
+*   **Legge di Demetra (LoD)**: Il principio viene rispettato. Il `PropertyService` incapsula la logica di recupero delle coordinate, non esponendo il `PropertyRepository` ai suoi chiamanti.
+
+## 4. Componenti Chiave
+
+### 4.1. Service Layer
 
 -   **`PlacesService.java` (Interfaccia)**:
     ```java
@@ -74,18 +69,18 @@ graph TD
         List<PlaceDTO> findNearbyPlaces(Coordinates coordinates, int radius, List<String> categories);
     }
     ```
--   **`GeoapifyPlacesService.java` (Implementazione)**: Implementa `PlacesService`, gestisce la logica di interazione con l'API, il caching, la resilienza e la gestione degli errori.
+-   **`GeoapifyPlacesService.java` (Implementazione)**: Implementa `PlacesService` e contiene la logica di chiamata all'API tramite `WebClient`.
 
-### 3.2. Controller
+### 4.2. Controller
 
 -   **`GET /api/properties/{id}/places`**:
     -   **Path Variable**: `id` (ID dell'immobile).
     -   **Query Params**: `radius` (default: 1000m), `categories` (default: "essenziali").
 
-### 3.3. Modelli di Dati (DTO)
+### 4.3. Modelli di Dati (DTO)
 
--   **`GeoapifyPlacesResponse.java`**: DTO per deserializzare la risposta JSON di Geoapify.
--   **`PlaceDTO.java`**: DTO snello per il client.
+-   **`GeoapifyPlacesResponse.java`**: DTO per deserializzare la risposta JSON completa di Geoapify in modo typesafe.
+-   **`PlaceDTO.java`**: DTO snello esposto al client.
     ```java
     public class PlaceDTO {
         private String name;
@@ -96,57 +91,38 @@ graph TD
     }
     ```
 
-## 4. Configurazione
+## 5. Configurazione
 
-La configurazione sarà estesa in `GeocodingProperties` per includere l'URL dell'API Places.
+La configurazione verrà estesa per includere l'URL dell'API Places.
 
 -   **`application.properties`**:
     ```properties
-    # Geoapify Places API
     geocoding.provider.geoapify.places-api-url=https://api.geoapify.com/v2/places
     ```
--   **`GeocodingProperties.java`**:
+-   **`GeoapifyConfig.java`**:
     ```java
-    public static class Geoapify {
+    public class GeoapifyConfig {
         // ... altre proprietà
-        private String placesApiUrl; // NUOVO
+        private String placesApiUrl;
         // getter e setter
     }
     ```
 
-## 5. Caching
-
-La strategia di caching verrà migliorata per garantire una chiave deterministica e affidabile.
-
--   **Cache**: `"places"`.
--   **Chiave Deterministica**: La chiave sarà generata ordinando le categorie e unendole, per evitare che lo stesso set di categorie in ordine diverso produca chiavi differenti.
-    ```java
-    @Cacheable(value = "places", keyGenerator = "placesCacheKeyGenerator")
-    public List<PlaceDTO> findNearbyPlaces(Coordinates coordinates, int radius, List<String> categories) {
-        // ... logica di chiamata API
-    }
-    ```
--   **`CacheKeyGenerator` Custom**: Verrà creato un bean `placesCacheKeyGenerator` che implementa la logica di ordinamento e join delle categorie per generare la chiave.
-
-## 6. Gestione degli Errori e Resilienza
-
-La gestione degli errori sarà resa più specifica e robusta.
-
-### 6.1. Eccezioni Specifiche
-
-Invece di una generica `PlacesException`, verranno introdotte eccezioni specifiche per scenari di errore distinti:
--   `GeoapifyApiException`: Per errori generici dell'API (es. 5xx).
--   `InvalidRequestException`: Per errori di richiesta del client (es. 4xx, parametri non validi).
--   `ServiceUnavailableException`: Quando il servizio non è raggiungibile o il circuit breaker è aperto.
-
-### 6.2. Resilienza con Resilience4j
-
--   **Circuit Breaker**: Verrà configurato un `CircuitBreaker` sul `GeoapifyPlacesService` per interrompere le chiamate in caso di fallimenti ripetuti, prevenendo il sovraccarico del sistema.
--   **Fallback Strategy**: In caso di circuito aperto o fallimento non recuperabile, il servizio restituirà una fallback (es. lista vuota o dati da una cache secondaria/statica).
--   **Rate Limiting e Retry**: Per gestire il rate limiting dell'API di Geoapify (HTTP 429), verrà implementato un meccanismo di **retry con backoff esponenziale**. Questo tenterà di eseguire nuovamente la chiamata dopo un ritardo crescente, evitando di sovraccaricare l'API.
 
 ## 7. Aderenza alla Legge di Demetra (LoD)
 
 Per rispettare il principio LoD, il `PropertyService` non dovrà più conoscere i dettagli implementativi del `PropertyRepository` per ottenere le coordinate.
 
 -   **Incapsulamento**: Verrà introdotto un metodo `getCoordinatesByPropertyId(Long propertyId)` nel `PropertyService` (o in un servizio dedicato come `CoordinatesService` se la logica cresce). Questo metodo conterrà la logica per recuperare le coordinate, nascondendo la dipendenza diretta dal repository al chiamante.
+
+## 8. Roadmap di Implementazione
+
+La seguente To-Do list guiderà lo sviluppo:
+
+- [ ] Definire i DTO per la risposta di Geopify Places.
+- [ ] Creare l'interfaccia `PlacesService`.
+- [ ] Implementare `GeoapifyPlacesService` con `WebClient`.
+- [ ] Definire e gestire `PlacesServiceException` nel `GlobalExceptionHandler`.
+- [ ] Integrare `PlacesService` nel `PropertyService`.
+- [ ] Creare l'endpoint nel `PropertiesController`.
+- [ ] Aggiungere la configurazione per l'URL dell'API Places.

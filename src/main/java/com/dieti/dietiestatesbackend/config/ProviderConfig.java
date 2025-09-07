@@ -3,12 +3,13 @@ package com.dieti.dietiestatesbackend.config;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
-@ConfigurationProperties("geocoding")
+/**
+ * Configurazione del provider per servizi di geocoding.
+ */
 @Data
 @NoArgsConstructor
-public class GeocodingProperties {
-    private ProviderConfig provider = new ProviderConfig();
+@ConfigurationProperties("geocoding.provider")
+public class ProviderConfig {
+    private GeoapifyConfig geoapify = new GeoapifyConfig();
 }

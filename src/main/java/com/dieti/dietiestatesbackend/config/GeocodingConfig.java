@@ -13,4 +13,11 @@ public class GeocodingConfig {
                 .baseUrl(geocodingProperties.getProvider().getGeoapify().getApiUrl())
                 .build();
     }
+
+    @Bean
+    public WebClient geoapifyPlacesWebClient(GeocodingProperties geocodingProperties) {
+        return WebClient.builder()
+                .baseUrl(geocodingProperties.getProvider().getGeoapify().getPlacesApiUrl())
+                .build();
+    }
 }

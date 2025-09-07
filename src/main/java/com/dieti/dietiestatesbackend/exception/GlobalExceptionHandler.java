@@ -143,6 +143,25 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, status);
     }
+
+    /**
+     * Gestisce l'eccezione PlacesServiceException per errori relativi al servizio Places.
+     * Restituisce una risposta HTTP 500 Internal Server Error con messaggio descrittivo.
+     *
+     * @param ex L'eccezione PlacesServiceException catturata
+     * @return ResponseEntity con status 500 e messaggio di errore
+     */
+    @ExceptionHandler(PlacesServiceException.class)
+    public ResponseEntity<ErrorResponse> handlePlacesServiceException(PlacesServiceException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).error("Errore nel servizio Places: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Errore nel servizio di ricerca luoghi",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
