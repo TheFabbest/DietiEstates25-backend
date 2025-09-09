@@ -13,6 +13,7 @@ import com.dieti.dietiestatesbackend.entities.Garage;
 import com.dieti.dietiestatesbackend.entities.Land;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
+import com.dieti.dietiestatesbackend.util.BoundingBoxUtility;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.JoinType;
@@ -209,20 +210,23 @@ public final class PropertySpecifications {
 
         BigDecimal centerLat = f.getCenterLatitude();
         BigDecimal centerLon = f.getCenterLongitude();
-        double radiusKm = f.getRadiusInMeters() / 1000.0;
-
-        double latDelta = radiusKm / 111.0;
-        double lonDelta = radiusKm / (111.0 * Math.cos(Math.toRadians(centerLat.doubleValue())));
-
-        BigDecimal minLat = centerLat.subtract(BigDecimal.valueOf(latDelta));
-        BigDecimal maxLat = centerLat.add(BigDecimal.valueOf(latDelta));
-        BigDecimal minLon = centerLon.subtract(BigDecimal.valueOf(lonDelta));
-        BigDecimal maxLon = centerLon.add(BigDecimal.valueOf(lonDelta));
+        double radiusMeters = f.getRadiusInMeters();
+        
+        // Utilizza la utility class per calcolo preciso del bounding box
+        BigDecimal[] boundingBox = BoundingBoxUtility.calculateBoundingBox(centerLat, centerLon, radiusMeters);
+        BigDecimal minLat = boundingBox[0];
+        BigDecimal maxLat = boundingBox[1];
+        BigDecimal minLon = boundingBox[2];
+        BigDecimal maxLon = boundingBox[3];
 
         try {
             // Filtro bounding box - percorso corretto per coordinate embedded
+            // Applica il filtro solo se le coordinate esistono
             predicates.add(cb.between(root.get(ADDRESS).get("coordinates").get("latitude"), minLat, maxLat));
             predicates.add(cb.between(root.get(ADDRESS).get("coordinates").get("longitude"), minLon, maxLon));
+            
+            // Filtro aggiuntivo per escludere proprietà senza coordinate
+            predicates.add(cb.isNotNull(root.get(ADDRESS).get("coordinates")));
         } catch (Exception e) {
             throw new RuntimeException("Errore nell'applicazione dei filtri geografici", e);
         }
