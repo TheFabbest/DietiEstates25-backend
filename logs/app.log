@@ -1,23 +1,23 @@
-2025-09-07 17:12:56.379 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
-2025-09-07 17:12:56.380 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
-2025-09-07 17:12:56.381 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
-2025-09-07 17:12:56.872 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-09-07 17:12:57.029 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 150 ms. Found 9 JPA repository interfaces.
-2025-09-07 17:12:57.393 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-09-07 17:12:57.402 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-09-07 17:12:57.403 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
-2025-09-07 17:12:57.416 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2025-09-07 17:12:57.416 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 993 ms
-2025-09-07 17:12:57.458 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2025-09-07 17:12:57.521 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-09-07 17:12:57.556 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
-2025-09-07 17:12:57.577 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-09-07 17:12:57.725 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-09-07 17:12:57.743 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-09-07 17:12:58.395 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@24f3fb87
-2025-09-07 17:12:58.397 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-09-07 17:12:58.464 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-09-07 17:12:58.611 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2025-09-09 10:34:42.785 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
+2025-09-09 10:34:42.787 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
+2025-09-09 10:34:42.788 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
+2025-09-09 10:34:43.763 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-09 10:34:43.936 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 166 ms. Found 9 JPA repository interfaces.
+2025-09-09 10:34:45.334 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-09 10:34:45.345 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-09 10:34:45.346 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-09-09 10:34:45.363 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-09 10:34:45.364 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2544 ms
+2025-09-09 10:34:45.421 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-09 10:34:45.521 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-09 10:34:45.613 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-09-09 10:34:45.659 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-09 10:34:45.907 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-09 10:34:45.931 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-09 10:34:46.595 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7fa85a55
+2025-09-09 10:34:46.597 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-09 10:34:46.662 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-09 10:34:46.767 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 17.5
@@ -25,23 +25,22 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-09-07 17:12:59.275 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-09-07 17:13:02.611 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-09-07 17:13:02.970 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-09-07 17:13:03.243 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-09-07 17:13:03.627 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2025-09-07 17:13:03.785 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2025-09-07 17:13:03.792 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 7.702 seconds (process running for 8.168)
-2025-09-07 17:13:22.426 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-09-07 17:13:22.428 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2025-09-07 17:13:22.432 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
-2025-09-07 17:13:22.450 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places
-2025-09-07 17:13:22.576 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:13:22.579 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places
-2025-09-07 17:13:22.791 [http-nio-8080-exec-1] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=5000, categories=[education, healthcare.hospital, public_transport, leisure.park]
-2025-09-07 17:13:22.884 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+2025-09-09 10:34:48.060 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-09 10:34:51.437 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-09 10:34:51.877 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-09 10:34:52.888 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-09 10:34:53.555 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-09 10:34:54.300 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-09 10:34:54.331 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 11.839 seconds (process running for 12.194)
+2025-09-09 10:35:13.842 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-09 10:35:13.845 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-09 10:35:13.869 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 21 ms
+2025-09-09 10:35:13.893 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:35:14.492 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:35:14.507 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:35:14.729 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -137,131 +136,19 @@
         dieti_estates.heating h1_0 
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
     where
-        p1_0.id=?
-2025-09-07 17:13:22.955 [http-nio-8080-exec-1] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=education,healthcare.hospital,public_transport,leisure.park&filter=circle:13.997750,40.968680,5000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:13:57.152 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places
-2025-09-07 17:13:57.172 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:13:57.179 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:13:57.207 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:13:57.208 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:13:57.209 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:15.796 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places/education
-2025-09-07 17:14:15.803 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:15.805 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:15.807 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:14:15.808 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:15.808 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:27.167 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places/education
-2025-09-07 17:14:27.169 [http-nio-8080-exec-7] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:27.170 [http-nio-8080-exec-7] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:27.171 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:14:27.171 [http-nio-8080-exec-7] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:27.172 [http-nio-8080-exec-7] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:30.090 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places/education
-2025-09-07 17:14:30.092 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:30.093 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:30.094 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:14:30.095 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:30.095 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:37.859 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places
-2025-09-07 17:14:37.862 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:37.863 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:37.864 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:14:37.864 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:37.864 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:44.906 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places
-2025-09-07 17:14:44.908 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:44.913 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:44.914 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:14:44.915 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:44.915 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:14:54.753 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing POST /auth/login
-2025-09-07 17:14:54.754 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:14:54.755 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured POST /auth/login
-2025-09-07 17:14:54.891 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:36:41.441 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:36:41.454 [http-nio-8080-exec-2] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:36:41.455 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:36:41.578 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
     select
-        u1_0.id,
-        u1_0.id_agency,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.first_name,
-        u1_0.is_agent,
-        u1_0.is_manager,
-        u1_0.last_name,
-        u1_0.license,
-        u1_0.password,
-        u1_0.username 
-    from
-        dieti_estates.user u1_0 
-    where
-        u1_0.email=?
-2025-09-07 17:14:55.263 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.id_agency,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.first_name,
-        u1_0.is_agent,
-        u1_0.is_manager,
-        u1_0.last_name,
-        u1_0.license,
-        u1_0.password,
-        u1_0.username 
-    from
-        dieti_estates.user u1_0 
-    where
-        u1_0.username=?
-2025-09-07 17:14:55.628 [http-nio-8080-exec-5] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
-2025-09-07 17:14:55.630 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.id_agency,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.first_name,
-        u1_0.is_agent,
-        u1_0.is_manager,
-        u1_0.last_name,
-        u1_0.license,
-        u1_0.password,
-        u1_0.username 
-    from
-        dieti_estates.user u1_0 
-    where
-        u1_0.username=?
-2025-09-07 17:14:55.753 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
-    select
-        u1_0.id,
-        u1_0.id_agency,
-        u1_0.created_at,
-        u1_0.email,
-        u1_0.first_name,
-        u1_0.is_agent,
-        u1_0.is_manager,
-        u1_0.last_name,
-        u1_0.license,
-        u1_0.password,
-        u1_0.username 
-    from
-        dieti_estates.user u1_0 
-    where
-        u1_0.username=?
-2025-09-07 17:14:55.846 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
-    insert 
-    into
-        dieti_estates.refresh_token
-        (created_at, expiry_date, token_value, user_id) 
-    values
-        (?, ?, ?, ?)
-2025-09-07 17:15:07.823 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places
-2025-09-07 17:15:07.828 [http-nio-8080-exec-7] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:15:07.828 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places
-2025-09-07 17:15:07.830 [http-nio-8080-exec-7] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=5000, categories=[education, healthcare.hospital, public_transport, leisure.park]
-2025-09-07 17:15:07.869 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
-    select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -357,16 +244,19 @@
         dieti_estates.heating h1_0 
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
     where
-        p1_0.id=?
-2025-09-07 17:15:07.912 [http-nio-8080-exec-7] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=education,healthcare.hospital,public_transport,leisure.park&filter=circle:13.997750,40.968680,5000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:16:28.406 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=20000
-2025-09-07 17:16:28.415 [http-nio-8080-exec-9] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:16:28.416 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=20000
-2025-09-07 17:16:28.427 [http-nio-8080-exec-9] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=20000, categories=[education, healthcare.hospital, public_transport, leisure.park]
-2025-09-07 17:16:28.476 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:36:53.581 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:36:53.592 [http-nio-8080-exec-4] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:36:53.593 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:36:53.660 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -462,16 +352,19 @@
         dieti_estates.heating h1_0 
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
     where
-        p1_0.id=?
-2025-09-07 17:16:28.688 [http-nio-8080-exec-9] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=education,healthcare.hospital,public_transport,leisure.park&filter=circle:13.997750,40.968680,20000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:17:06.744 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=200
-2025-09-07 17:17:06.753 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:17:06.754 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=200
-2025-09-07 17:17:06.765 [http-nio-8080-exec-1] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=200, categories=[education, healthcare.hospital, public_transport, leisure.park]
-2025-09-07 17:17:06.806 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:37:32.690 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:37:32.704 [http-nio-8080-exec-6] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:37:32.705 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:37:32.771 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -567,28 +460,25 @@
         dieti_estates.heating h1_0 
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
     where
-        p1_0.id=?
-2025-09-07 17:17:06.856 [http-nio-8080-exec-1] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=education,healthcare.hospital,public_transport,leisure.park&filter=circle:13.997750,40.968680,200&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:17:32.904 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=2000?categories=commercial.supermarket
-2025-09-07 17:17:32.909 [http-nio-8080-exec-4] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:17:32.909 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=2000?categories=commercial.supermarket
-2025-09-07 17:17:32.943 [http-nio-8080-exec-4] ERROR c.d.d.e.GlobalExceptionHandler - Errore interno del server: Method parameter 'radius': Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "2000?categories=commercial.supermarket"
-org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'radius': Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "2000?categories=commercial.supermarket"
-	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:301)
-	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:136)
-	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
-	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:37:56.595 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search
+2025-09-09 10:37:56.603 [http-nio-8080-exec-8] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:37:56.605 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search
+2025-09-09 10:37:56.607 [http-nio-8080-exec-8] WARN  o.s.web.servlet.PageNotFound - No mapping for POST /properties/search
+2025-09-09 10:37:56.621 [http-nio-8080-exec-8] ERROR c.d.d.e.GlobalExceptionHandler - Errore interno del server: No endpoint POST /properties/search.
+org.springframework.web.servlet.NoHandlerFoundException: No endpoint POST /properties/search.
+	at org.springframework.web.servlet.DispatcherServlet.noHandlerFound(DispatcherServlet.java:1305)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
 	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
 	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
 	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
 	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
 	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
@@ -677,27 +567,120 @@ org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: M
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: java.lang.NumberFormatException: For input string: "2000?categories=commercial.supermarket"
-	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
-	at java.base/java.lang.Integer.parseInt(Integer.java:662)
-	at java.base/java.lang.Integer.valueOf(Integer.java:989)
-	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:201)
-	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115)
-	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:439)
-	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:412)
-	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:161)
-	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:80)
-	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:53)
-	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:867)
-	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:293)
-	... 101 common frames omitted
-2025-09-07 17:17:42.663 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?categories=commercial.supermarket
-2025-09-07 17:17:42.668 [http-nio-8080-exec-2] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:17:42.669 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?categories=commercial.supermarket
-2025-09-07 17:17:42.671 [http-nio-8080-exec-2] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=5000, categories=[commercial.supermarket]
-2025-09-07 17:17:42.720 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+2025-09-09 10:38:22.542 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:38:22.553 [http-nio-8080-exec-9] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:38:22.555 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:38:22.762 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a2_0.id,
+        a2_0.building,
+        a2_0.city,
+        a2_0.latitude,
+        a2_0.longitude,
+        a2_0.country,
+        a2_0.created_at,
+        a2_0.province,
+        a2_0.street,
+        a2_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a1_0.id_agency,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.status,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.address a2_0 
+            on a2_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
+    where
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:38:44.907 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:38:44.919 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:38:44.920 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:38:44.984 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -794,24 +777,48 @@ Caused by: java.lang.NumberFormatException: For input string: "2000?categories=c
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
     where
-        p1_0.id=?
-2025-09-07 17:17:42.764 [http-nio-8080-exec-2] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=commercial.supermarket&filter=circle:13.997750,40.968680,5000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:18:09.319 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/999999/places
-2025-09-07 17:18:09.329 [http-nio-8080-exec-6] ERROR c.d.d.s.JwtAuthenticationFilter - Errore durante la validazione del token JWT
-io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
-	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:576)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:364)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36)
-	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29)
-	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:827)
-	at com.dieti.dietiestatesbackend.security.TokenHelper.getAllClaimsFromToken(TokenHelper.java:90)
-	at com.dieti.dietiestatesbackend.security.TokenHelper.getClaimFromToken(TokenHelper.java:68)
-	at com.dieti.dietiestatesbackend.security.TokenHelper.getUsernameFromToken(TokenHelper.java:55)
-	at com.dieti.dietiestatesbackend.security.AccessTokenProvider.getUsernameFromToken(AccessTokenProvider.java:104)
-	at com.dieti.dietiestatesbackend.security.JwtAuthenticationFilter.authenticateUser(JwtAuthenticationFilter.java:69)
-	at com.dieti.dietiestatesbackend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:46)
+        lower(p1_0.description) like ? escape ''
+2025-09-09 10:38:55.993 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search
+2025-09-09 10:38:55.996 [http-nio-8080-exec-3] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:38:55.997 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search
+2025-09-09 10:38:55.997 [http-nio-8080-exec-3] WARN  o.s.web.servlet.PageNotFound - No mapping for POST /properties/search
+2025-09-09 10:38:56.001 [http-nio-8080-exec-3] ERROR c.d.d.e.GlobalExceptionHandler - Errore interno del server: No endpoint POST /properties/search.
+org.springframework.web.servlet.NoHandlerFoundException: No endpoint POST /properties/search.
+	at org.springframework.web.servlet.DispatcherServlet.noHandlerFound(DispatcherServlet.java:1305)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.dieti.dietiestatesbackend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:51)
 	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
 	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
 	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
@@ -871,18 +878,120 @@ io.jsonwebtoken.security.SignatureException: JWT signature does not match locall
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2025-09-07 17:18:09.337 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:18:09.338 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:18:09.339 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
-2025-09-07 17:18:09.339 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:18:09.339 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:18:23.638 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/337/places?categories=commercial.supermarket
-2025-09-07 17:18:23.648 [http-nio-8080-exec-8] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:18:23.649 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/337/places?categories=commercial.supermarket
-2025-09-07 17:18:23.659 [http-nio-8080-exec-8] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=337, radius=5000, categories=[commercial.supermarket]
-2025-09-07 17:18:23.702 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+2025-09-09 10:39:52.720 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/test
+2025-09-09 10:39:52.734 [http-nio-8080-exec-4] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:39:52.735 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/test
+2025-09-09 10:39:52.799 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a2_0.id,
+        a2_0.building,
+        a2_0.city,
+        a2_0.latitude,
+        a2_0.longitude,
+        a2_0.country,
+        a2_0.created_at,
+        a2_0.province,
+        a2_0.street,
+        a2_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a1_0.id_agency,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.status,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.address a2_0 
+            on a2_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
+    where
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:40:25.237 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/empty
+2025-09-09 10:40:25.252 [http-nio-8080-exec-6] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:40:25.253 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/empty
+2025-09-09 10:40:25.329 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    select
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -979,14 +1088,113 @@ io.jsonwebtoken.security.SignatureException: JWT signature does not match locall
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
     where
-        p1_0.id=?
-2025-09-07 17:19:50.420 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/337/places?categories=healthcare
-2025-09-07 17:19:50.429 [http-nio-8080-exec-10] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:19:50.430 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/337/places?categories=healthcare
-2025-09-07 17:19:50.436 [http-nio-8080-exec-10] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=337, radius=5000, categories=[healthcare]
-2025-09-07 17:19:50.478 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+        lower(p1_0.description) like ? escape ''
+2025-09-09 10:41:06.257 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/Appartamento/
+2025-09-09 10:41:06.270 [http-nio-8080-exec-8] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:41:06.272 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/Appartamento/
+2025-09-09 10:41:06.273 [http-nio-8080-exec-8] WARN  o.s.web.servlet.PageNotFound - No mapping for POST /properties/search/Appartamento/
+2025-09-09 10:41:06.277 [http-nio-8080-exec-8] ERROR c.d.d.e.GlobalExceptionHandler - Errore interno del server: No endpoint POST /properties/search/Appartamento/.
+org.springframework.web.servlet.NoHandlerFoundException: No endpoint POST /properties/search/Appartamento/.
+	at org.springframework.web.servlet.DispatcherServlet.noHandlerFound(DispatcherServlet.java:1305)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.dieti.dietiestatesbackend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:51)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1769)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-09-09 10:41:16.563 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/Appartamento
+2025-09-09 10:41:16.567 [http-nio-8080-exec-9] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:41:16.568 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/Appartamento
+2025-09-09 10:41:16.621 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -1083,14 +1291,13 @@ io.jsonwebtoken.security.SignatureException: JWT signature does not match locall
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
     where
-        p1_0.id=?
-2025-09-07 17:19:59.750 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?categories=healthcare
-2025-09-07 17:19:59.756 [http-nio-8080-exec-3] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:19:59.757 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?categories=healthcare
-2025-09-07 17:19:59.758 [http-nio-8080-exec-3] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=5000, categories=[healthcare]
-2025-09-07 17:19:59.798 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+        lower(p1_0.description) like ? escape ''
+2025-09-09 10:41:48.674 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search/Appartamento
+2025-09-09 10:41:48.690 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-09 10:41:48.691 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search/Appartamento
+2025-09-09 10:41:48.770 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
     select
-        p1_0.id,
+        distinct p1_0.id,
         p1_0.property_type,
         p1_0.additional_features,
         p1_0.id_address,
@@ -1186,327 +1393,19 @@ io.jsonwebtoken.security.SignatureException: JWT signature does not match locall
         dieti_estates.heating h1_0 
             on p1_0.property_type='RESIDENTIAL' 
             and h1_0.id=p1_1.id_heating 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
     where
-        p1_0.id=?
-2025-09-07 17:19:59.845 [http-nio-8080-exec-3] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=healthcare&filter=circle:13.997750,40.968680,5000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:20:48.617 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=1000&categories=commercial.supermarket
-2025-09-07 17:20:48.629 [http-nio-8080-exec-2] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:20:48.630 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=1000&categories=commercial.supermarket
-2025-09-07 17:20:48.656 [http-nio-8080-exec-2] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=1000, categories=[commercial.supermarket]
-2025-09-07 17:20:48.808 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
-    select
-        p1_0.id,
-        p1_0.property_type,
-        p1_0.additional_features,
-        p1_0.id_address,
-        a2_0.id,
-        a2_0.building,
-        a2_0.city,
-        a2_0.latitude,
-        a2_0.longitude,
-        a2_0.country,
-        a2_0.created_at,
-        a2_0.province,
-        a2_0.street,
-        a2_0.street_number,
-        p1_0.id_agent,
-        a1_0.id,
-        a1_0.id_agency,
-        a1_0.created_at,
-        a1_0.email,
-        a1_0.first_name,
-        a1_0.is_agent,
-        a1_0.is_manager,
-        a1_0.last_name,
-        a1_0.license,
-        a1_0.password,
-        a1_0.username,
-        p1_0.area,
-        p1_0.id_contract,
-        c1_0.id,
-        c1_0.created_at,
-        c1_0.is_active,
-        c1_0.name,
-        p1_0.created_at,
-        p1_0.description,
-        p1_0.energy_rating,
-        p1_0.price,
-        p1_0.id_property_category,
-        pc1_0.id,
-        pc1_0.created_at,
-        pc1_0.is_active,
-        pc1_0.name,
-        pc1_0.property_type,
-        p1_0.status,
-        p1_0.year_built,
-        p1_2.floor,
-        p1_2.wheelchair_access,
-        p1_2.number_of_bathrooms,
-        p1_2.number_of_floors,
-        p1_2.number_of_rooms,
-        p1_2.numero_vetrine,
-        p1_3.has_surveillance,
-        p1_3.number_of_floors,
-        p1_4.accessible_from_street,
-        p1_1.floor,
-        p1_1.garden,
-        p1_1.has_elevator,
-        p1_1.id_heating,
-        h1_0.id,
-        h1_0.created_at,
-        h1_0.is_active,
-        h1_0.name,
-        p1_1.is_furnished,
-        p1_1.number_of_bathrooms,
-        p1_1.number_of_floors,
-        p1_1.number_of_rooms,
-        p1_1.parking_spaces 
-    from
-        dieti_estates.property p1_0 
-    left join
-        dieti_estates.residential_property p1_1 
-            on p1_0.id=p1_1.id 
-    left join
-        dieti_estates.commercial_property p1_2 
-            on p1_0.id=p1_2.id 
-    left join
-        dieti_estates.garage p1_3 
-            on p1_0.id=p1_3.id 
-    left join
-        dieti_estates.land p1_4 
-            on p1_0.id=p1_4.id 
-    left join
-        dieti_estates.contract c1_0 
-            on c1_0.id=p1_0.id_contract 
-    left join
-        dieti_estates.property_category pc1_0 
-            on pc1_0.id=p1_0.id_property_category 
-    left join
-        dieti_estates.user a1_0 
-            on a1_0.id=p1_0.id_agent 
-    left join
-        dieti_estates.address a2_0 
-            on a2_0.id=p1_0.id_address 
-    left join
-        dieti_estates.heating h1_0 
-            on p1_0.property_type='RESIDENTIAL' 
-            and h1_0.id=p1_1.id_heating 
-    where
-        p1_0.id=?
-2025-09-07 17:20:48.877 [http-nio-8080-exec-2] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=commercial.supermarket&filter=circle:13.997750,40.968680,1000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:21:40.244 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=10000&categories=healthcare
-2025-09-07 17:21:40.254 [http-nio-8080-exec-6] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:21:40.255 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=10000&categories=healthcare
-2025-09-07 17:21:40.259 [http-nio-8080-exec-6] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=10000, categories=[healthcare]
-2025-09-07 17:21:40.310 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
-    select
-        p1_0.id,
-        p1_0.property_type,
-        p1_0.additional_features,
-        p1_0.id_address,
-        a2_0.id,
-        a2_0.building,
-        a2_0.city,
-        a2_0.latitude,
-        a2_0.longitude,
-        a2_0.country,
-        a2_0.created_at,
-        a2_0.province,
-        a2_0.street,
-        a2_0.street_number,
-        p1_0.id_agent,
-        a1_0.id,
-        a1_0.id_agency,
-        a1_0.created_at,
-        a1_0.email,
-        a1_0.first_name,
-        a1_0.is_agent,
-        a1_0.is_manager,
-        a1_0.last_name,
-        a1_0.license,
-        a1_0.password,
-        a1_0.username,
-        p1_0.area,
-        p1_0.id_contract,
-        c1_0.id,
-        c1_0.created_at,
-        c1_0.is_active,
-        c1_0.name,
-        p1_0.created_at,
-        p1_0.description,
-        p1_0.energy_rating,
-        p1_0.price,
-        p1_0.id_property_category,
-        pc1_0.id,
-        pc1_0.created_at,
-        pc1_0.is_active,
-        pc1_0.name,
-        pc1_0.property_type,
-        p1_0.status,
-        p1_0.year_built,
-        p1_2.floor,
-        p1_2.wheelchair_access,
-        p1_2.number_of_bathrooms,
-        p1_2.number_of_floors,
-        p1_2.number_of_rooms,
-        p1_2.numero_vetrine,
-        p1_3.has_surveillance,
-        p1_3.number_of_floors,
-        p1_4.accessible_from_street,
-        p1_1.floor,
-        p1_1.garden,
-        p1_1.has_elevator,
-        p1_1.id_heating,
-        h1_0.id,
-        h1_0.created_at,
-        h1_0.is_active,
-        h1_0.name,
-        p1_1.is_furnished,
-        p1_1.number_of_bathrooms,
-        p1_1.number_of_floors,
-        p1_1.number_of_rooms,
-        p1_1.parking_spaces 
-    from
-        dieti_estates.property p1_0 
-    left join
-        dieti_estates.residential_property p1_1 
-            on p1_0.id=p1_1.id 
-    left join
-        dieti_estates.commercial_property p1_2 
-            on p1_0.id=p1_2.id 
-    left join
-        dieti_estates.garage p1_3 
-            on p1_0.id=p1_3.id 
-    left join
-        dieti_estates.land p1_4 
-            on p1_0.id=p1_4.id 
-    left join
-        dieti_estates.contract c1_0 
-            on c1_0.id=p1_0.id_contract 
-    left join
-        dieti_estates.property_category pc1_0 
-            on pc1_0.id=p1_0.id_property_category 
-    left join
-        dieti_estates.user a1_0 
-            on a1_0.id=p1_0.id_agent 
-    left join
-        dieti_estates.address a2_0 
-            on a2_0.id=p1_0.id_address 
-    left join
-        dieti_estates.heating h1_0 
-            on p1_0.property_type='RESIDENTIAL' 
-            and h1_0.id=p1_1.id_heating 
-    where
-        p1_0.id=?
-2025-09-07 17:21:40.350 [http-nio-8080-exec-6] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=healthcare&filter=circle:13.997750,40.968680,10000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:21:52.324 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=10000&categories=healthcare.hospital
-2025-09-07 17:21:52.328 [http-nio-8080-exec-8] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
-2025-09-07 17:21:52.328 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/properties/37/places?radius=10000&categories=healthcare.hospital
-2025-09-07 17:21:52.329 [http-nio-8080-exec-8] DEBUG c.d.d.c.PropertiesController - Richiesta luoghi vicini per propertyId=37, radius=10000, categories=[healthcare.hospital]
-2025-09-07 17:21:52.367 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
-    select
-        p1_0.id,
-        p1_0.property_type,
-        p1_0.additional_features,
-        p1_0.id_address,
-        a2_0.id,
-        a2_0.building,
-        a2_0.city,
-        a2_0.latitude,
-        a2_0.longitude,
-        a2_0.country,
-        a2_0.created_at,
-        a2_0.province,
-        a2_0.street,
-        a2_0.street_number,
-        p1_0.id_agent,
-        a1_0.id,
-        a1_0.id_agency,
-        a1_0.created_at,
-        a1_0.email,
-        a1_0.first_name,
-        a1_0.is_agent,
-        a1_0.is_manager,
-        a1_0.last_name,
-        a1_0.license,
-        a1_0.password,
-        a1_0.username,
-        p1_0.area,
-        p1_0.id_contract,
-        c1_0.id,
-        c1_0.created_at,
-        c1_0.is_active,
-        c1_0.name,
-        p1_0.created_at,
-        p1_0.description,
-        p1_0.energy_rating,
-        p1_0.price,
-        p1_0.id_property_category,
-        pc1_0.id,
-        pc1_0.created_at,
-        pc1_0.is_active,
-        pc1_0.name,
-        pc1_0.property_type,
-        p1_0.status,
-        p1_0.year_built,
-        p1_2.floor,
-        p1_2.wheelchair_access,
-        p1_2.number_of_bathrooms,
-        p1_2.number_of_floors,
-        p1_2.number_of_rooms,
-        p1_2.numero_vetrine,
-        p1_3.has_surveillance,
-        p1_3.number_of_floors,
-        p1_4.accessible_from_street,
-        p1_1.floor,
-        p1_1.garden,
-        p1_1.has_elevator,
-        p1_1.id_heating,
-        h1_0.id,
-        h1_0.created_at,
-        h1_0.is_active,
-        h1_0.name,
-        p1_1.is_furnished,
-        p1_1.number_of_bathrooms,
-        p1_1.number_of_floors,
-        p1_1.number_of_rooms,
-        p1_1.parking_spaces 
-    from
-        dieti_estates.property p1_0 
-    left join
-        dieti_estates.residential_property p1_1 
-            on p1_0.id=p1_1.id 
-    left join
-        dieti_estates.commercial_property p1_2 
-            on p1_0.id=p1_2.id 
-    left join
-        dieti_estates.garage p1_3 
-            on p1_0.id=p1_3.id 
-    left join
-        dieti_estates.land p1_4 
-            on p1_0.id=p1_4.id 
-    left join
-        dieti_estates.contract c1_0 
-            on c1_0.id=p1_0.id_contract 
-    left join
-        dieti_estates.property_category pc1_0 
-            on pc1_0.id=p1_0.id_property_category 
-    left join
-        dieti_estates.user a1_0 
-            on a1_0.id=p1_0.id_agent 
-    left join
-        dieti_estates.address a2_0 
-            on a2_0.id=p1_0.id_address 
-    left join
-        dieti_estates.heating h1_0 
-            on p1_0.property_type='RESIDENTIAL' 
-            and h1_0.id=p1_1.id_heating 
-    where
-        p1_0.id=?
-2025-09-07 17:21:52.403 [http-nio-8080-exec-8] DEBUG c.d.d.s.places.GeoapifyPlacesService - Chiamando API Geoapify Places: ?categories=healthcare.hospital&filter=circle:13.997750,40.968680,10000&bias=proximity:13.997750,40.968680&limit=20&apiKey=3806bb91ce48458d99cc1894a0385f45
-2025-09-07 17:36:13.706 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/properties/37/places?radius=10000&categories=healthcare.hospital
-2025-09-07 17:36:13.715 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:36:13.717 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2025-09-07 17:36:13.719 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error?radius=10000&categories=healthcare.hospital
-2025-09-07 17:36:13.719 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2025-09-07 17:36:13.719 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
+        lower(p1_0.description) like ? escape '' 
+        and a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ?
+2025-09-09 10:54:50.766 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4adfbd0c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 10:54:56.507 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1abb154e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:10:05.810 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5a0b84c4 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:10:07.232 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@21bf9468 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:10:45.969 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5310f13b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:10:52.893 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@513269bc (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:11:05.333 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@58be1aba (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:11:11.807 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@14a7fdd8 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2025-09-09 11:11:26.419 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2d5f7f32 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.

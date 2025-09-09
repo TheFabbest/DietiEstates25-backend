@@ -1,7 +1,9 @@
 package com.dieti.dietiestatesbackend.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,18 +12,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
+import com.dieti.dietiestatesbackend.entities.Coordinates;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
+import com.dieti.dietiestatesbackend.exception.SpatialSearchException;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.specification.PropertySpecifications;
+import com.dieti.dietiestatesbackend.util.HaversineUtils;
 
 /**
  * Service dedicated to read-only queries for Property.
  * Responsibility: expose read methods (search, filters, featured, detail).
  * Pagination is supported where appropriate; helper paginate() keeps logic testable.
+ * Implementa l'interfaccia PropertyQueryServiceInterface per seguire il principio di Dependency Inversion.
  */
 @Service
-public class PropertyQueryService {
+public class PropertyQueryService implements PropertyQueryServiceInterface {
 
     private final PropertyRepository propertyRepository;
 
@@ -42,10 +48,19 @@ public class PropertyQueryService {
     /**
      * Search using rich filters. Returns a full list because the specification-based query
      * already applies fetch-joins optimized for read.
+     * Applies Haversine distance refinement after the database query for precise geographic filtering.
+     * Geographic filters (centerLatitude, centerLongitude, radiusInMeters) are now mandatory and validated by Bean Validation.
      */
-    public List<Property> searchPropertiesWithFilters(String keyword, FilterRequest filters) {
+    public List<Property> searchPropertiesWithFilters(FilterRequest filters) {
         Objects.requireNonNull(filters, "filters must not be null");
-        return propertyRepository.findAll(PropertySpecifications.withFilters(normalize(keyword), filters));
+        
+        // First get results using specification-based query (includes approximate bounding box filter)
+        List<Property> results = propertyRepository.findAll(PropertySpecifications.withFilters(filters));
+        
+        // Apply precise Haversine distance refinement (geographic filters are now always present)
+        results = refineWithHaversineDistance(results, filters);
+        
+        return results;
     }
 
     /**
@@ -78,5 +93,56 @@ public class PropertyQueryService {
         int end = Math.min(start + pageable.getPageSize(), total);
         List<Property> content = items.subList(start, end);
         return new PageImpl<>(content, pageable, total);
+    }
+    
+    // --- Geographic filtering helpers ---
+    
+    /**
+     * Validates coordinate ranges (now called directly from refineWithHaversineDistance)
+     */
+    private void validateCoordinates(BigDecimal latitude, BigDecimal longitude) {
+        try {
+            Coordinates.validateCoordinates(latitude, longitude);
+        } catch (IllegalArgumentException e) {
+            throw new SpatialSearchException(
+                "Coordinate geografiche non valide: " + e.getMessage(),
+                org.springframework.http.HttpStatus.BAD_REQUEST
+            );
+        }
+    }
+    
+    /**
+     * Refines the property list using precise Haversine distance calculation
+     * Filters out properties that are outside the specified radius from the center point
+     * Geographic filters are now mandatory and validated by Bean Validation
+     */
+    private List<Property> refineWithHaversineDistance(List<Property> properties, FilterRequest filters) {
+        BigDecimal centerLat = filters.getCenterLatitude();
+        BigDecimal centerLon = filters.getCenterLongitude();
+        double radiusMeters = filters.getRadiusInMeters();
+        
+        // Validate coordinates (Bean Validation ensures they are not null)
+        validateCoordinates(centerLat, centerLon);
+        
+        if (radiusMeters < 0) {
+            throw new SpatialSearchException(
+                "Il raggio di ricerca deve essere maggiore o uguale a 0",
+                org.springframework.http.HttpStatus.BAD_REQUEST
+            );
+        }
+        
+        return properties.stream()
+                .filter(property -> {
+                    if (property.getAddress() == null || property.getAddress().getCoordinates() == null) {
+                        return false; // Skip properties without coordinates
+                    }
+                    
+                    BigDecimal propertyLat = property.getAddress().getCoordinates().getLatitude();
+                    BigDecimal propertyLon = property.getAddress().getCoordinates().getLongitude();
+                    
+                    double distance = HaversineUtils.calculateDistance(centerLat, centerLon, propertyLat, propertyLon);
+                    return distance <= radiusMeters;
+                })
+                .collect(Collectors.toList());
     }
 }

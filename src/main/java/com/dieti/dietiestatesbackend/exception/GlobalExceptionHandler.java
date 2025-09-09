@@ -163,6 +163,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+    /**
+     * Gestisce l'eccezione SpatialSearchException per errori relativi alla ricerca spaziale.
+     * Restituisce una risposta HTTP appropriata basata sullo status definito nell'eccezione.
+     * Segue il principio Open/Closed essendo facilmente estendibile per nuove eccezioni.
+     *
+     * @param ex L'eccezione SpatialSearchException catturata
+     * @return ResponseEntity con status appropriato e messaggio di errore
+     */
+    @ExceptionHandler(SpatialSearchException.class)
+    public ResponseEntity<ErrorResponse> handleSpatialSearchException(SpatialSearchException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Errore ricerca spaziale: {}", ex.getMessage(), ex);
+        HttpStatus status = ex.getHttpStatus() != null ? ex.getHttpStatus() : HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(
+                status.value(),
+                "Errore ricerca geografica",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         // Log the full exception for debugging purposes

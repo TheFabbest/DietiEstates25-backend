@@ -60,11 +60,10 @@ public class PropertiesController {
         this.responseMapperRegistry = responseMapperRegistry;
     }
 
-    @PostMapping("/properties/search/{keyword}")
+    @PostMapping("/properties/search")
     public ResponseEntity<Object> getProperties(
-            @PathVariable("keyword") String keyword,
             @RequestBody FilterRequest filters) {
-        return ResponseEntity.ok(propertyService.searchPropertiesWithFilters(keyword, filters).stream()
+        return ResponseEntity.ok(propertyService.searchPropertiesWithFilters(filters).stream()
             .map(responseMapperRegistry::map)
             .toList());
     }

@@ -1,5 +1,6 @@
 package com.dieti.dietiestatesbackend.specification;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -23,13 +24,13 @@ import jakarta.persistence.criteria.Root;
  *  - Fetch mirato per prevenire N+1 (contract, propertyCategory, agent, address, heating)
  *  - Riduzione duplicazione di stringhe tramite costanti
  *  - Helper compatti e leggibili
+ *  - Logica di filtraggio geografico approssimativo (bounding box)
  */
 public final class PropertySpecifications {
 
     private PropertySpecifications() {}
 
     // Attributi comuni Property / relazioni
-    private static final String DESCRIPTION = "description";
     private static final String CONTRACT = "contract";
     private static final String PROPERTY_CATEGORY = "propertyCategory";
     private static final String AGENT = "agent";
@@ -56,13 +57,13 @@ public final class PropertySpecifications {
     private static final String ACCESSIBLE_FROM_STREET = "accessibleFromStreet";
     private static final String NUMBER_OF_FLOORS = "numberOfFloors";
 
-    public static Specification<Property> withFilters(String keyword, FilterRequest filters) {
+    public static Specification<Property> withFilters(FilterRequest filters) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             fetchCommonJoins(root, cb);
-            addKeywordPredicate(keyword, root, cb, predicates);
             addCommonFilters(filters, root, cb, predicates);
+            addGeographicFilters(filters, root, cb, predicates);
 
             addResidentialFilters(filters, root, cb, predicates);
             addCommercialFilters(filters, root, cb, predicates);
@@ -89,13 +90,6 @@ public final class PropertySpecifications {
         }
     }
 
-    // ---------- Keyword ----------
-    private static void addKeywordPredicate(String keyword, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
-        if (keyword == null) return;
-        String trimmed = keyword.trim();
-        if (trimmed.isEmpty() || "all".equalsIgnoreCase(trimmed) || "filtered".equalsIgnoreCase(trimmed)) return;
-        predicates.add(cb.like(cb.lower(root.get(DESCRIPTION)), "%" + trimmed.toLowerCase() + "%"));
-    }
 
     // ---------- Common filters ----------
     private static void addCommonFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
@@ -209,6 +203,36 @@ public final class PropertySpecifications {
         ));
     }
 
+    // ---------- Geographic filters ----------
+    private static void addGeographicFilters(FilterRequest f, Root<Property> root, CriteriaBuilder cb, List<Predicate> predicates) {
+        if (!hasGeographicFilters(f)) return;
+
+        BigDecimal centerLat = f.getCenterLatitude();
+        BigDecimal centerLon = f.getCenterLongitude();
+        double radiusKm = f.getRadiusInMeters() / 1000.0;
+
+        double latDelta = radiusKm / 111.0;
+        double lonDelta = radiusKm / (111.0 * Math.cos(Math.toRadians(centerLat.doubleValue())));
+
+        BigDecimal minLat = centerLat.subtract(BigDecimal.valueOf(latDelta));
+        BigDecimal maxLat = centerLat.add(BigDecimal.valueOf(latDelta));
+        BigDecimal minLon = centerLon.subtract(BigDecimal.valueOf(lonDelta));
+        BigDecimal maxLon = centerLon.add(BigDecimal.valueOf(lonDelta));
+
+        try {
+            // Filtro bounding box - percorso corretto per coordinate embedded
+            predicates.add(cb.between(root.get(ADDRESS).get("coordinates").get("latitude"), minLat, maxLat));
+            predicates.add(cb.between(root.get(ADDRESS).get("coordinates").get("longitude"), minLon, maxLon));
+        } catch (Exception e) {
+            throw new RuntimeException("Errore nell'applicazione dei filtri geografici", e);
+        }
+    }
+
+    private static boolean hasGeographicFilters(FilterRequest f) {
+        // Geographic filters are now always present and validated by Bean Validation
+        return f.getCenterLatitude() != null && f.getCenterLongitude() != null && f.getRadiusInMeters() != null;
+    }
+
     // ---------- Utility ----------
     private static void addIfNotNull(Object value, List<Predicate> list, Supplier<Predicate> supplier) {
         if (value != null) list.add(supplier.get());
@@ -242,4 +266,5 @@ public final class PropertySpecifications {
     private static boolean hasLandFilters(FilterRequest f) {
         return f.getMustBeAccessibleFromStreet() != null;
     }
+
 }

@@ -11,10 +11,10 @@
   "agentUsername": "successuser",
   "addressRequest": {
     "country": "Italy",
-    "province": "MI",
-    "city": "Milano",
-    "street": "Via delle Ginestre",
-    "streetNumber": "5",
+    "province": "NA",
+    "city": "Casoria",
+    "street": "Via Roma",
+    "streetNumber": "200",
     "building": null
   },
   "images": [],

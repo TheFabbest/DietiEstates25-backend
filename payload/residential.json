@@ -11,10 +11,10 @@
   "propertyCategoryName":"Apartment",
   "addressRequest":{
     "country":"Italy",
-    "province":"Caserta",
-    "city":"Castel Volturno",
-    "street":"Via Ferrara",
-    "streetNumber":"27"
+    "province":"NA",
+    "city":"Napoli",
+    "street":"Piazza del Plebiscito",
+    "streetNumber":"1"
   },
   "images":["/img/1.jpg","/img/2.jpg"],
   "numberOfRooms":3,

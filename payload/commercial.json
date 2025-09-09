@@ -11,10 +11,10 @@
   "energyRating": "A1",
   "addressRequest": {
     "country": "Italy",
-    "province": "RM",
-    "city": "Rome",
-    "street": "Via Commerciale",
-    "streetNumber": "10",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Via Toledo",
+    "streetNumber": "100",
     "building": null
   },
   "images": [],

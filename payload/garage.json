@@ -11,10 +11,10 @@
   "energyRating": "NOT_APPLIABLE",
   "addressRequest": {
     "country": "Italy",
-    "province": "RM",
-    "city": "Rome",
-    "street": "Via del Garage",
-    "streetNumber": "3",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Via Caracciolo",
+    "streetNumber": "75",
     "building": null
   },
   "images": [],

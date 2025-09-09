@@ -32,7 +32,7 @@ public class PropertyService {
     private static final Logger logger = LoggerFactory.getLogger(PropertyService.class);
     private static final int DEFAULT_LEGACY_PAGE_SIZE = 50;
 
-    private final PropertyQueryService propertyQueryService;
+    private final PropertyQueryServiceInterface propertyQueryService;
     private final PropertyManagementService propertyManagementService;
     private final PlacesService placesService;
  
@@ -40,7 +40,7 @@ public class PropertyService {
      * Costruttore principale: tutte le dipendenze sono richieste.
      */
     @Autowired
-    public PropertyService(PropertyQueryService propertyQueryService,
+    public PropertyService(PropertyQueryServiceInterface propertyQueryService,
                            PropertyManagementService propertyManagementService,
                            PlacesService placesService) {
         this.propertyQueryService = Objects.requireNonNull(propertyQueryService, "propertyQueryService");
@@ -62,10 +62,11 @@ public class PropertyService {
     /**
      * Search with filters. Delegates to PropertyQueryService which executes
      * a Specification-based query with fetch joins optimized for reads.
+     * Geographic filters (centerLatitude, centerLongitude, radiusInMeters) are now mandatory.
      */
-    public List<Property> searchPropertiesWithFilters(String keyword, FilterRequest filters) {
+    public List<Property> searchPropertiesWithFilters(FilterRequest filters) {
         Objects.requireNonNull(filters, "filters must not be null");
-        return propertyQueryService.searchPropertiesWithFilters(normalize(keyword), filters);
+        return propertyQueryService.searchPropertiesWithFilters(filters);
     }
 
     /**
