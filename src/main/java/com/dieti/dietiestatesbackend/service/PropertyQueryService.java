@@ -1,10 +1,10 @@
 package com.dieti.dietiestatesbackend.service;
 
+import com.dieti.dietiestatesbackend.util.BoundingBoxUtility;
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,44 +13,46 @@ import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
-import com.dieti.dietiestatesbackend.specification.PropertySpecifications;
 
 /**
  * Service dedicated to read-only queries for Property.
  * Responsibility: expose read methods (search, filters, featured, detail).
- * Pagination is supported where appropriate; helper paginate() keeps logic testable.
+ * Pagination is supported where appropriate and handled at database level for optimal performance.
  * Implementa l'interfaccia PropertyQueryServiceInterface per seguire il principio di Dependency Inversion.
  */
 @Service
 public class PropertyQueryService implements PropertyQueryServiceInterface {
 
     private final PropertyRepository propertyRepository;
+    private final BoundingBoxUtility boundingBoxUtility;
 
-    public PropertyQueryService(PropertyRepository propertyRepository) {
+    public PropertyQueryService(PropertyRepository propertyRepository, BoundingBoxUtility boundingBoxUtility) {
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
+        this.boundingBoxUtility = Objects.requireNonNull(boundingBoxUtility, "boundingBoxUtility");
     }
 
-    /**
-     * Search properties by keyword with pagination.
-     * The repository returns a list with fetch-joins; this method paginates the list.
-     */
-    public Page<Property> searchProperties(String keyword, Pageable pageable) {
-        Objects.requireNonNull(pageable, "pageable must not be null");
-        List<Property> results = propertyRepository.searchByDescription(normalize(keyword));
-        return paginate(results, pageable);
-    }
 
     /**
-     * Search using rich filters. Returns a full list because the specification-based query
-     * already applies fetch-joins optimized for read.
+     * Search using rich filters with pagination. Uses specification-based query
+     * with fetch-joins optimized for read and precise geographic filtering.
      * Geographic filters (centerLatitude, centerLongitude, radiusInMeters) are now mandatory and validated by Bean Validation.
      * All geographic filtering is now handled at the database level through JPA Specifications.
      */
-    public List<Property> searchPropertiesWithFilters(FilterRequest filters) {
+    public Page<Property> searchPropertiesWithFilters(FilterRequest filters, Pageable pageable) {
         Objects.requireNonNull(filters, "filters must not be null");
+        Objects.requireNonNull(pageable, "pageable must not be null");
         
-        // Get results using specification-based query (includes precise geographic filtering)
-        return propertyRepository.findAll(PropertySpecifications.withFilters(filters));
+        // Calculate bounding box for geographic filtering using utility class
+        double[] bounds = boundingBoxUtility.calculateBoundingBoxAsDouble(
+            filters.getCenterLatitude(),
+            filters.getCenterLongitude(),
+            filters.getRadiusInMeters()
+        );
+        
+        // Use custom query with eager loading and geographic filtering
+        return propertyRepository.searchWithFiltersAndEagerFetch(
+            bounds[0], bounds[1], bounds[2], bounds[3], pageable
+        );
     }
 
     /**
@@ -66,22 +68,5 @@ public class PropertyQueryService implements PropertyQueryServiceInterface {
     public Property getProperty(long propertyID) {
         return propertyRepository.findDetailedById(propertyID)
                 .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + propertyID));
-    }
-
-    // --- Helpers ---
-
-    private static String normalize(String keyword) {
-        return keyword == null ? "" : keyword.trim();
-    }
-
-    private Page<Property> paginate(List<Property> items, Pageable pageable) {
-        if (items == null || items.isEmpty()) {
-            return new PageImpl<>(List.of(), pageable, 0);
-        }
-        int total = items.size();
-        int start = Math.min((int) pageable.getOffset(), total);
-        int end = Math.min(start + pageable.getPageSize(), total);
-        List<Property> content = items.subList(start, end);
-        return new PageImpl<>(content, pageable, total);
     }
 }

@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
  
@@ -30,7 +31,6 @@ import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
 public class PropertyService {
     
     private static final Logger logger = LoggerFactory.getLogger(PropertyService.class);
-    private static final int DEFAULT_LEGACY_PAGE_SIZE = 50;
 
     private final PropertyQueryServiceInterface propertyQueryService;
     private final PropertyManagementService propertyManagementService;
@@ -48,25 +48,16 @@ public class PropertyService {
         this.placesService = Objects.requireNonNull(placesService, "placesService");
     }
 
-    // --- Read (delegated) ---
-    /**
-     * Legacy-friendly search returning a List. Internally delegates to
-     * {@link PropertyQueryService#searchProperties(String, org.springframework.data.domain.Pageable)}
-     * using a sensible default page size to avoid large results.
-     */
-    public List<Property> searchProperties(String keyword) {
-        return propertyQueryService.searchProperties(normalize(keyword),
-                PageRequest.of(0, DEFAULT_LEGACY_PAGE_SIZE)).getContent();
-    }
 
     /**
-     * Search with filters. Delegates to PropertyQueryService which executes
+     * Search with filters with pagination. Delegates to PropertyQueryService which executes
      * a Specification-based query with fetch joins optimized for reads.
      * Geographic filters (centerLatitude, centerLongitude, radiusInMeters) are now mandatory.
      */
-    public List<Property> searchPropertiesWithFilters(FilterRequest filters) {
+    public Page<Property> searchPropertiesWithFilters(FilterRequest filters, Pageable pageable) {
         Objects.requireNonNull(filters, "filters must not be null");
-        return propertyQueryService.searchPropertiesWithFilters(filters);
+        Objects.requireNonNull(pageable, "pageable must not be null");
+        return propertyQueryService.searchPropertiesWithFilters(filters, pageable);
     }
 
     /**
@@ -89,11 +80,6 @@ public class PropertyService {
      */
     public PropertyResponse createProperty(CreatePropertyRequest request) {
         return propertyManagementService.createProperty(request);
-    }
-
-    // --- Helper methods (extracted) ---
-    private static String normalize(String keyword) {
-        return keyword == null ? "" : keyword.trim();
     }
 
     // Dependency resolution moved to PropertyDependencyResolver

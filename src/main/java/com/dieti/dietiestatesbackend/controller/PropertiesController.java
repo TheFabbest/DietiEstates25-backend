@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
+import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,8 @@ import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
 import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -61,11 +64,12 @@ public class PropertiesController {
     }
 
     @PostMapping("/properties/search")
-    public ResponseEntity<Object> getProperties(
-            @RequestBody FilterRequest filters) {
-        return ResponseEntity.ok(propertyService.searchPropertiesWithFilters(filters).stream()
-            .map(responseMapperRegistry::map)
-            .toList());
+    public ResponseEntity<Page<PropertyResponse>> getProperties(
+            @RequestBody FilterRequest filters,
+            Pageable pageable) {
+        Page<Property> propertiesPage = propertyService.searchPropertiesWithFilters(filters, pageable);
+        Page<PropertyResponse> responsePage = propertiesPage.map(responseMapperRegistry::map);
+        return ResponseEntity.ok(responsePage);
     }
 
     @GetMapping("/properties/details/{id}")

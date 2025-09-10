@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -17,7 +16,6 @@ public class AuthenticationService {
 
     private final UserQueryService userQueryService;
     private final UserManagementService userManagementService;
-    private final PasswordEncoder passwordEncoder;
     private final PasswordValidator passwordValidator;
     private final RefreshTokenProvider refreshTokenProvider;
 
@@ -28,7 +26,6 @@ public class AuthenticationService {
                                  RefreshTokenProvider refreshTokenProvider) {
         this.userQueryService = userQueryService;
         this.userManagementService = userManagementService;
-        this.passwordEncoder = passwordEncoder;
         this.passwordValidator = passwordValidator;
         this.refreshTokenProvider = refreshTokenProvider;
     }

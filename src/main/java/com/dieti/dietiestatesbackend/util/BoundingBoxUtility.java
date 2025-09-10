@@ -2,19 +2,22 @@ package com.dieti.dietiestatesbackend.util;
 
 import java.math.BigDecimal;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Utility class for precise bounding box calculations based on WGS84 ellipsoid.
  * Provides methods to calculate geographic bounding boxes from center coordinates and radius.
  * Handles edge cases like poles and antimeridian crossing.
  */
-public final class BoundingBoxUtility {
+@Component
+public class BoundingBoxUtility {
 
     // WGS84 constants for precise geodetic calculations
     private static final double METERS_PER_DEGREE_LATITUDE = 111320.0; // ~111.32 km in meters
     private static final double MIN_COS_LATITUDE = 1e-10; // Minimum cosine value to avoid division by zero
 
-    private BoundingBoxUtility() {
-        // Utility class - prevent instantiation
+    // Costruttore pubblico per Spring
+    public BoundingBoxUtility() {
     }
 
     /**
@@ -27,7 +30,7 @@ public final class BoundingBoxUtility {
      * @return Array of [minLat, maxLat, minLon, maxLon] in degrees
      * @throws IllegalArgumentException if coordinates are invalid
      */
-    public static BigDecimal[] calculateBoundingBox(BigDecimal centerLatitude, BigDecimal centerLongitude, double radiusMeters) {
+    public BigDecimal[] calculateBoundingBox(BigDecimal centerLatitude, BigDecimal centerLongitude, double radiusMeters) {
         validateInput(centerLatitude, centerLongitude, radiusMeters);
 
         double centerLatValue = centerLatitude.doubleValue();
@@ -57,13 +60,33 @@ public final class BoundingBoxUtility {
     }
 
     /**
+     * Calculate precise bounding box coordinates from center point and radius, returning double values.
+     * Based on WGS84 ellipsoid model with proper handling of latitude-dependent longitude spacing.
+     *
+     * @param centerLatitude Center latitude in degrees
+     * @param centerLongitude Center longitude in degrees
+     * @param radiusMeters Search radius in meters
+     * @return Array of [minLat, maxLat, minLon, maxLon] in degrees as double values
+     * @throws IllegalArgumentException if coordinates are invalid
+     */
+    public double[] calculateBoundingBoxAsDouble(BigDecimal centerLatitude, BigDecimal centerLongitude, double radiusMeters) {
+        BigDecimal[] boundingBox = calculateBoundingBox(centerLatitude, centerLongitude, radiusMeters);
+        return new double[] {
+            boundingBox[0].doubleValue(),
+            boundingBox[1].doubleValue(),
+            boundingBox[2].doubleValue(),
+            boundingBox[3].doubleValue()
+        };
+    }
+
+    /**
      * Calculate latitude delta for bounding box.
      * Latitude spacing is approximately constant (~111.32 km per degree).
      *
      * @param radiusMeters Search radius in meters
      * @return Latitude delta in degrees
      */
-    private static double calculateLatitudeDelta(double radiusMeters) {
+    private double calculateLatitudeDelta(double radiusMeters) {
         return radiusMeters / METERS_PER_DEGREE_LATITUDE;
     }
 
@@ -75,7 +98,7 @@ public final class BoundingBoxUtility {
      * @param radiusMeters Search radius in meters
      * @return Longitude delta in degrees
      */
-    private static double calculateLongitudeDelta(double centerLatitude, double radiusMeters) {
+    private double calculateLongitudeDelta(double centerLatitude, double radiusMeters) {
         double centerLatRad = Math.toRadians(centerLatitude);
         double cosLat = Math.cos(centerLatRad);
         
@@ -94,7 +117,7 @@ public final class BoundingBoxUtility {
      * @param maxLon Maximum longitude before adjustment
      * @return Array of [adjustedMinLon, adjustedMaxLon]
      */
-    private static double[] adjustForAntimeridian(double minLon, double maxLon) {
+    private double[] adjustForAntimeridian(double minLon, double maxLon) {
         // Handle wrapping around -180°/180° boundary
         if (minLon < -180.0) {
             minLon += 360.0;
@@ -114,7 +137,7 @@ public final class BoundingBoxUtility {
      * @param radiusMeters Search radius
      * @throws IllegalArgumentException if any parameter is invalid
      */
-    private static void validateInput(BigDecimal centerLatitude, BigDecimal centerLongitude, double radiusMeters) {
+    private void validateInput(BigDecimal centerLatitude, BigDecimal centerLongitude, double radiusMeters) {
         if (centerLatitude == null || centerLongitude == null) {
             throw new IllegalArgumentException("Center coordinates cannot be null");
         }
@@ -145,7 +168,7 @@ public final class BoundingBoxUtility {
      * @param boundingBox Bounding box coordinates [minLat, maxLat, minLon, maxLon]
      * @return true if the point is within the bounding box, false otherwise
      */
-    public static boolean isPointInBoundingBox(double pointLat, double pointLon, BigDecimal[] boundingBox) {
+    public boolean isPointInBoundingBox(double pointLat, double pointLon, BigDecimal[] boundingBox) {
         if (boundingBox == null || boundingBox.length != 4) {
             return false;
         }

@@ -16,15 +16,6 @@ import com.dieti.dietiestatesbackend.entities.Property;
 public interface PropertyQueryServiceInterface {
     
     /**
-     * Cerca proprietà per parola chiave con paginazione.
-     *
-     * @param keyword parola chiave di ricerca
-     * @param pageable informazioni di paginazione
-     * @return pagina di proprietà che corrispondono alla ricerca
-     */
-    Page<Property> searchProperties(String keyword, Pageable pageable);
-    
-    /**
      * Cerca proprietà utilizzando filtri avanzati.
      * Include filtri geografici con approccio a due fasi (bounding box DB + Haversine in memoria).
      * I filtri geografici (centerLatitude, centerLongitude, radiusInMeters) sono ora obbligatori.
@@ -32,7 +23,7 @@ public interface PropertyQueryServiceInterface {
      * @param filters filtri di ricerca
      * @return lista di proprietà che corrispondono ai filtri
      */
-    List<Property> searchPropertiesWithFilters(FilterRequest filters);
+    Page<Property> searchPropertiesWithFilters(FilterRequest filters, Pageable pageable);
     
     /**
      * Ottiene le proprietà in evidenza (ultime 4).
