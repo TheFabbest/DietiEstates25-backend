@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
@@ -182,6 +183,25 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponse, status);
+    }
+
+    /**
+     * Gestisce l'eccezione NoHandlerFoundException, che si verifica quando un endpoint non viene trovato.
+     * Restituisce una risposta HTTP 404 Not Found con un messaggio informativo.
+     *
+     * @param ex L'eccezione NoHandlerFoundException catturata
+     * @return ResponseEntity con status 404 e un messaggio di endpoint non trovato
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Endpoint non trovato: {}", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Endpoint non trovato",
+                "L'endpoint richiesto non esiste: " + ex.getRequestURL(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
