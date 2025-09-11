@@ -1,127 +1,197 @@
-# Documentazione API DietiEstates25 Backend
+
+# Documentazione API DietiEstates
+
+Questa documentazione fornisce una guida completa per l'utilizzo delle API RESTful del backend DietiEstates25. Include esempi pratici e dettagliati per illustrare la struttura dei payload di richiesta e risposta, nonché l'utilizzo corretto degli URL, inclusi i parametri di path e query. L'obiettivo è rendere la documentazione completamente autosufficiente per gli sviluppatori che consumano l'API, minimizzando la necessità di supporto diretto o di spiegazioni aggiuntive sul funzionamento del backend e facilitando un'integrazione rapida ed efficace.
 
 ## Introduzione
 
-Questa documentazione descrive le API RESTful del backend DietiEstates25 per la gestione delle proprietà immobiliari.
+Le API di DietiEstates consentono l'interazione con il sistema di gestione immobiliare, dalla ricerca di proprietà alla gestione degli utenti e dei contratti. L'autenticazione è gestita tramite JWT (JSON Web Tokens). Alcuni endpoint sono pubblici, mentre altri richiedono un token di accesso valido.
 
-### Autenticazione JWT
+## Configurazione
 
-Tutte le API richiedono autenticazione tramite JWT (JSON Web Token), tranne gli endpoint pubblici specificati nella configurazione di sicurezza. Il token JWT deve essere incluso nell'header `Authorization` con il formato `Bearer <token>`.
+Per interagire con le API, è necessario configurare le credenziali appropriate:
+-   **JWT Secret:** Utilizzato per la firma e la verifica dei token JWT.
+-   **Geoapify API Key:** Necessaria per le funzionalità di geocoding e ricerca di luoghi di interesse.
 
-**Endpoint pubblici (non richiedono autenticazione):**
-- `/auth/**` - Autenticazione e registrazione
-- `/oauth2/**` - OAuth2 integration
-- `/api/property-types` - Lista tipi di proprietà
-- `/api/categories` - Lista categorie per tipo
-- Documentazione Swagger
+## Geocoding Automatico
 
-### Configurazione Credenziali
+Il sistema esegue il geocoding automatico degli indirizzi forniti durante la creazione delle proprietà, convertendo gli indirizzi testuali in coordinate geografiche (latitudine e longitudine).
 
-Il sistema richiede le seguenti configurazioni:
+---
 
-- **JWT Secret Key**: Chiave segreta per la firma dei token JWT
-- **Geoapify API Key**: Chiave API per il servizio di geocoding e ricerca luoghi
-- **Configurazione nel file `application.properties`**:
-```properties
-jwt.secret=your-jwt-secret-key
-geocoding.provider.geoapify.api-key=your-geoapify-api-key
-```
+# Esempi Dettagliati per Endpoint API DietiEstates
 
-### Geocoding Automatico
+## 🔐 **AuthController** - Endpoint di autenticazione
 
-Il sistema esegue automaticamente il geocoding degli indirizzi utilizzando il servizio Geoapify. Quando viene fornito un indirizzo tramite `addressRequest`, le coordinate geografiche (latitudine e longitudine) vengono calcolate automaticamente e associate alla proprietà.
+### **POST** [`/auth/login`](src/main/java/com/dieti/dietiestatesbackend/controller/AuthController.java:70)
+Autentica un utente e restituisce token di accesso e refresh.
 
-## Endpoint API
+**URL:** `https://api.dietiestates.com/auth/login`
 
-### 1. Ricerca Proprietà
-
-**Descrizione**: Ricerca proprietà con filtri avanzati e ricerca geografica.
-
-**Metodo**: `POST`
-
-**Percorso**: `/properties/search`
-
-**Autenticazione**: Richiesta (JWT)
-
-**Parametri di richiesta**:
+**Request Body:**
 ```json
 {
-  "category": "RESIDENTIAL|COMMERCIAL|LAND|GARAGE",
-  "contract": "SALE|RENT",
-  "minPrice": 0.01,
-  "maxPrice": 1000000.00,
-  "minArea": 1,
-  "minYearBuilt": 1900,
-  "acceptedCondition": ["NEW", "GOOD_CONDITION", "RENOVATED", "TO_BE_RENOVATED", "POOR_CONDITION", "UNDER_CONSTRUCTION"],
-  "minEnergyRating": "A|B|C|D|E|F|G",
-  "centerLatitude": 41.8902,
-  "centerLongitude": 12.4922,
-  "radiusInMeters": 5000,
-  "minNumberOfFloors": 1,
-  "minNumberOfRooms": 1,
-  "minNumberOfBathrooms": 1,
-  "minParkingSpaces": 1,
-  "heating": "string",
-  "acceptedGarden": ["NO", "SMALL", "MEDIUM", "LARGE"],
-  "mustBeFurnished": true,
-  "mustHaveElevator": true,
-  "mustHaveWheelchairAccess": true,
-  "minNumeroVetrine": 1,
-  "mustHaveSurveillance": true,
-  "mustBeAccessibleFromStreet": true
+  "email": "mario.rossi@email.com",
+  "password": "Password123!"
 }
 ```
 
-**Campi obbligatori per ricerca geografica**:
-- `centerLatitude` (BigDecimal): Latitudine del centro di ricerca
-- `centerLongitude` (BigDecimal): Longitudine del centro di ricerca  
-- `radiusInMeters` (Double): Raggio di ricerca in metri (≥ 0)
+**Response Body:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "availableRoles": ["USER", "AGENT"]
+}
+```
 
-**Esempio richiesta**:
+### **POST** [`/auth/signup`](src/main/java/com/dieti/dietiestatesbackend/controller/AuthController.java:86)
+Registra un nuovo utente.
+
+**URL:** `https://api.dietiestates.com/auth/signup`
+
+**Request Body:**
+```json
+{
+  "email": "mario.rossi@email.com",
+  "username": "mariorossi",
+  "password": "Password123!",
+  "name": "Mario",
+  "surname": "Rossi"
+}
+```
+
+**Response Body:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "availableRoles": ["USER"]
+}
+```
+
+### **POST** [`/auth/google`](src/main/java/com/dieti/dietiestatesbackend/controller/AuthController.java:92)
+Autentica un utente tramite Google.
+
+**URL:** `https://api.dietiestates.com/auth/google`
+
+**Request Body:**
+```json
+{
+  "token": "ya29.a0AfH6SMC...",
+  "username": "mariorossi",
+  "name": "Mario",
+  "surname": "Rossi"
+}
+```
+
+**Response Body:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "availableRoles": ["USER"]
+}
+```
+
+### **POST** [`/auth/refresh`](src/main/java/com/dieti/dietiestatesbackend/controller/AuthController.java:103)
+Aggiorna il token di accesso utilizzando il token di refresh.
+
+**URL:** `https://api.dietiestates.com/auth/refresh`
+
+**Request Body:**
+```json
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Response Body:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "availableRoles": ["USER", "AGENT"]
+}
+```
+
+### **POST** [`/auth/logout`](src/main/java/com/dieti/dietiestatesbackend/controller/AuthController.java:116)
+Effettua il logout dell'utente invalidando il token di refresh.
+
+**URL:** `https://api.dietiestates.com/auth/logout`
+
+**Request Body:**
+```json
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Response:** `204 No Content`
+
+## 🏠 **PropertiesController** - Endpoint di gestione proprietà
+
+### **POST** [`/properties/search`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:66)
+Cerca proprietà con filtri avanzati e geografici.
+
+**URL:** `https://api.dietiestates.com/properties/search`
+
+**Request Body:**
 ```json
 {
   "category": "RESIDENTIAL",
   "contract": "SALE",
   "minPrice": 100000,
-  "maxPrice": 500000,
-  "minArea": 80,
-  "centerLatitude": 41.9028,
-  "centerLongitude": 12.4964,
-  "radiusInMeters": 3000,
-  "minNumberOfRooms": 3,
-  "minNumberOfBathrooms": 2
+  "maxPrice": 300000,
+  "minArea": 70,
+  "minYearBuilt": 2000,
+  "acceptedCondition": ["NEW", "GOOD_CONDITION"],
+  "minEnergyRating": "B",
+  "centerLatitude": 40.8518,
+  "centerLongitude": 14.2681,
+  "radiusInMeters": 5000,
+  "minNumberOfRooms": 2,
+  "minNumberOfBathrooms": 1,
+  "minParkingSpaces": 1,
+  "heating": "Centralized",
+  "acceptedGarden": ["PRIVATE", "ABSENT"],
+  "mustBeFurnished": false,
+  "mustHaveElevator": true
 }
 ```
 
-**Esempio risposta** (paginated):
+**Response Body:**
 ```json
 {
   "content": [
     {
       "id": 123,
-      "description": "Appartamento in centro",
-      "price": 350000.00,
-      "area": 95,
-      "yearBuilt": 2010,
+      "description": "Appartamento luminoso in centro città",
+      "price": 250000,
+      "area": 85,
+      "yearBuilt": 2015,
       "contract": "SALE",
-      "propertyCategory": "Appartamento",
+      "propertyCategory": "Apartment",
       "condition": "GOOD_CONDITION",
-      "energyRating": "B",
+      "energyRating": "A2",
       "address": {
-        "country": "IT",
-        "province": "RM",
-        "city": "Roma",
-        "street": "Via Appia",
-        "civic": "123",
+        "id": 456,
+        "country": "Italy",
+        "province": "NA",
+        "city": "Napoli",
+        "street": "Via Toledo",
+        "streetNumber": "15",
         "building": "A",
-        "latitude": 41.9028,
-        "longitude": 12.4964
+        "latitude": 40.8518,
+        "longitude": 14.2681
       },
       "agent": {
-        "id": 456,
-        "name": "Mario Rossi",
-        "email": "mario.rossi@agency.com",
-        "phone": "+39 1234567890"
+        "id": 789,
+        "firstName": "Luigi",
+        "lastName": "Bianchi",
+        "email": "luigi.bianchi@agenzia.it",
+        "agencyId": 1,
+        "agencyName": "Dieti Immobiliare"
       },
       "createdAt": "2024-01-15T10:30:00"
     }
@@ -129,289 +199,411 @@ Il sistema esegue automaticamente il geocoding degli indirizzi utilizzando il se
   "pageable": {
     "pageNumber": 0,
     "pageSize": 20,
-    "sort": {
-      "sorted": false,
-      "unsorted": true,
-      "empty": true
-    },
-    "offset": 0,
-    "paged": true,
-    "unpaged": false
+    "sort": { "sorted": false }
   },
   "totalElements": 1,
   "totalPages": 1,
   "last": true,
   "size": 20,
   "number": 0,
-  "sort": {
-    "sorted": false,
-    "unsorted": true,
-    "empty": true
-  },
-  "numberOfElements": 1,
+  "sort": { "sorted": false },
   "first": true,
+  "numberOfElements": 1,
   "empty": false
 }
 ```
 
-### 2. Dettaglio Proprietà
+### **GET** [`/properties/details/{id}`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:75)
+Recupera i dettagli completi di una proprietà specifica.
 
-**Descrizione**: Ottiene i dettagli completi di una specifica proprietà.
+**URL:** `https://api.dietiestates.com/properties/details/123`
 
-**Metodo**: `GET`
-
-**Percorso**: `/properties/details/{id}`
-
-**Autenticazione**: Richiesta (JWT)
-
-**Parametri**:
-- `id` (path variable): ID della proprietà (long)
-
-**Esempio risposta**:
+**Response Body:**
 ```json
 {
   "id": 123,
-  "description": "Appartamento luminoso in zona centrale",
-  "price": 350000.00,
-  "area": 95,
-  "yearBuilt": 2010,
+  "description": "Appartamento luminoso in centro città",
+  "price": 250000,
+  "area": 85,
+  "yearBuilt": 2015,
   "contract": "SALE",
-  "propertyCategory": "Appartamento",
+  "propertyCategory": "Apartment",
   "condition": "GOOD_CONDITION",
-  "energyRating": "B",
+  "energyRating": "A2",
   "address": {
-    "country": "IT",
-    "province": "RM",
-    "city": "Roma",
-    "street": "Via Appia",
-    "civic": "123",
+    "id": 456,
+    "country": "Italy",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Via Toledo",
+    "streetNumber": "15",
     "building": "A",
-    "latitude": 41.9028,
-    "longitude": 12.4964
+    "latitude": 40.8518,
+    "longitude": 14.2681
   },
   "agent": {
-    "id": 456,
-    "name": "Mario Rossi",
-    "email": "mario.rossi@agency.com",
-    "phone": "+39 1234567890",
-    "agencyId": 789,
-    "agencyName": "Premium Real Estate"
+    "id": 789,
+    "firstName": "Luigi",
+    "lastName": "Bianchi",
+    "email": "luigi.bianchi@agenzia.it",
+    "agencyId": 1,
+    "agencyName": "Dieti Immobiliare"
   },
-  "createdAt": "2024-01-15T10:30:00",
-  "images": ["property_123_1.jpg", "property_123_2.jpg"]
+  "createdAt": "2024-01-15T10:30:00"
 }
 ```
 
-### 3. Creazione Proprietà
+### **GET** [`/thumbnails/{id}`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:84)
+Recupera l'immagine thumbnail di una proprietà.
 
-**Descrizione**: Crea una nuova proprietà con validazione automatica e geocoding.
+**URL:** `https://api.dietiestates.com/thumbnails/123`
 
-**Metodo**: `POST`
+**Response:** Immagine JPEG/PNG (binary content)
 
-**Percorso**: `/properties`
+### **GET** [`/properties/featured`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:98)
+Recupera un elenco di proprietà in evidenza.
 
-**Autenticazione**: Richiesta (JWT) - Solo agenti immobiliari o manager
+**URL:** `https://api.dietiestates.com/properties/featured`
 
-**Parametri di richiesta**:
-
-Il payload utilizza deserializzazione polimorfica basata sul campo `propertyType`. La struttura base include:
-
-**Campi comuni a tutte le proprietà**:
+**Response Body:**
 ```json
-{
-  "propertyType": "RESIDENTIAL|COMMERCIAL|LAND|GARAGE",
-  "description": "string (obbligatorio)",
-  "price": 0.01 (obbligatorio, BigDecimal),
-  "area": 1 (obbligatorio, Integer),
-  "yearBuilt": 1900 (Integer, opzionale, può essere null),
-  "contractType": "SALE|RENT",
-  "propertyCategoryName": "string",
-  "condition": "NEW|GOOD_CONDITION|RENOVATED|TO_BE_RENOVATED|POOR_CONDITION|UNDER_CONSTRUCTION",
-  "energyRating": "A|B|C|D|E|F|G",
-  "addressRequest": {
-    "country": "IT",
-    "province": "RM",
-    "city": "Roma",
-    "street": "Via Roma",
-    "civic": "1",
-    "building": "A",
-    "latitude": 41.8902,
-    "longitude": 12.4922
-  },
-  "images": ["path1.jpg", "path2.jpg"]
-}
+[
+  {
+    "id": 123,
+    "description": "Appartamento di lusso con vista mare",
+    "price": 450000,
+    "area": 120,
+    "yearBuilt": 2020,
+    "contract": "SALE",
+    "propertyCategory": "Luxury Apartment",
+    "condition": "NEW",
+    "energyRating": "A1",
+    "address": {
+      "id": 456,
+      "country": "Italy",
+      "province": "NA",
+      "city": "Posillipo",
+      "street": "Via Posillipo",
+      "streetNumber": "25",
+      "building": null,
+      "latitude": 40.8128,
+      "longitude": 14.2121
+    },
+    "agent": {
+      "id": 789,
+      "firstName": "Giulia",
+      "lastName": "Verdi",
+      "email": "giulia.verdi@agenzia.it",
+      "agencyId": 1,
+      "agencyName": "Dieti Immobiliare"
+    },
+    "createdAt": "2024-01-10T14:20:00"
+  }
+]
 ```
 
-**Campi specifici per tipologia**:
+### **POST** [`/properties`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:110)
+Crea una nuova proprietà. Supporta la creazione polimorfica di diversi tipi di proprietà.
 
-**RESIDENTIAL**:
+**URL:** `https://api.dietiestates.com/properties`
+
+#### Sottotipo: [`CreateResidentialPropertyRequest`](src/main/java/com/dieti/dietiestatesbackend/dto/request/CreateResidentialPropertyRequest.java)
+Crea una nuova proprietà residenziale.
+
+**Request Body:**
 ```json
 {
   "propertyType": "RESIDENTIAL",
-  "numeroLocali": 3,
-  "numeroBagni": 2,
-  "giardino": "NO|SMALL|MEDIUM|LARGE",
-  "numeroPianiTotali": 2,
-  "isArredato": false,
-  "piani": ["1", "2"]
+  "agentUsername": "mariorossi",
+  "description": "Appartamento moderno con terrazza",
+  "price": 280000,
+  "area": 90,
+  "yearBuilt": 2018,
+  "contractType": "SALE",
+  "propertyCategoryName": "Apartment",
+  "condition": "GOOD_CONDITION",
+  "energyRating": "A2",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Corso Umberto I",
+    "streetNumber": "45",
+    "building": "B"
+  },
+  "images": ["/img/property1.jpg", "/img/property2.jpg"],
+  "numberOfRooms": 3,
+  "numberOfBathrooms": 2,
+  "parkingSpaces": 1,
+  "heatingType": "Autonomous",
+  "garden": "ABSENT",
+  "floor": 2,
+  "numberOfFloors": 4,
+  "hasElevator": true,
+  "isFurnished": false
 }
 ```
 
-**COMMERCIAL**:
+#### Sottotipo: [`CreateCommercialPropertyRequest`](src/main/java/com/dieti/dietiestatesbackend/dto/request/CreateCommercialPropertyRequest.java)
+Crea una nuova proprietà commerciale.
+
+**Request Body:**
 ```json
 {
-  "propertyType": "COMMERCIAL", 
-  "numeroLocali": 5,
-  "piano": 1,
-  "numeroBagni": 2,
-  "numeroPianiTotali": 3,
-  "mustHaveWheelchairAccess": true,
-  "minNumeroVetrine": 2
+  "propertyType": "COMMERCIAL",
+  "agentUsername": "mariorossi",
+  "description": "Ufficio in zona centrale",
+  "price": 350000,
+  "area": 120,
+  "yearBuilt": 2015,
+  "contractType": "SALE",
+  "propertyCategoryName": "Office",
+  "condition": "RENOVATED",
+  "energyRating": "B",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Via Roma",
+    "streetNumber": "100",
+    "building": null
+  },
+  "images": ["/img/office1.jpg"],
+  "numberOfRooms": 6,
+  "floor": 3,
+  "numberOfBathrooms": 2,
+  "hasDisabledAccess": true,
+  "shopWindowCount": 2,
+  "numberOfFloors": 5
 }
 ```
 
-**GARAGE**:
+#### Sottotipo: [`CreateGaragePropertyRequest`](src/main/java/com/dieti/dietiestatesbackend/dto/request/CreateGaragePropertyRequest.java)
+Crea una nuova proprietà di tipo garage.
+
+**Request Body:**
 ```json
 {
   "propertyType": "GARAGE",
-  "mustHaveSurveillance": true
-}
-```
-
-**LAND**:
-```json
-{
-  "propertyType": "LAND", 
-  "mustBeAccessibleFromStreet": true
-}
-```
-
-**Esempio richiesta completa (RESIDENTIAL)**:
-```json
-{
-  "propertyType": "RESIDENTIAL",
-  "description": "Appartamento moderno in zona residenziale",
-  "price": 280000.00,
-  "area": 85,
-  "yearBuilt": 2015,
+  "agentUsername": "mariorossi",
+  "description": "Box auto con sorveglianza",
+  "price": 30000,
+  "area": 18,
+  "yearBuilt": 2010,
   "contractType": "SALE",
-  "propertyCategoryName": "Appartamento",
+  "propertyCategoryName": "Garage Box",
   "condition": "GOOD_CONDITION",
-  "energyRating": "A",
+  "energyRating": "NOT_APPLIABLE",
   "addressRequest": {
-    "country": "IT",
-    "province": "MI",
-    "city": "Milano",
-    "street": "Corso Buenos Aires",
-    "civic": "45",
-    "building": "B",
-    "latitude": 45.4773,
-    "longitude": 9.1815
+    "country": "Italy",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Viale Augusto",
+    "streetNumber": "75",
+    "building": null
   },
-  "images": ["img1.jpg", "img2.jpg"],
-  "numeroLocali": 3,
-  "numeroBagni": 1,
-  "giardino": "NO",
-  "numeroPianiTotali": 5,
-  "isArredato": false,
-  "piani": ["3"]
+  "images": ["/img/garage1.jpg"],
+  "hasSurveillance": true,
+  "numberOfFloors": 1
 }
 ```
 
-**Esempio risposta**:
+#### Sottotipo: [`CreateLandPropertyRequest`](src/main/java/com/dieti/dietiestatesbackend/dto/request/CreateLandPropertyRequest.java)
+Crea una nuova proprietà di tipo terreno.
+
+**Request Body:**
 ```json
 {
-  "id": 124,
-  "description": "Appartamento moderno in zona residenziale",
-  "price": 280000.00,
-  "area": 85,
-  "yearBuilt": 2015,
+  "propertyType": "LAND",
+  "agentUsername": "mariorossi",
+  "description": "Terreno edificabile con vista",
+  "price": 180000,
+  "area": 5000,
+  "yearBuilt": 2024,
+  "contractType": "SALE",
+  "propertyCategoryName": "Buildable Land",
+  "condition": "NEW",
+  "energyRating": "NOT_APPLIABLE",
+  "addressRequest": {
+    "country": "Italy",
+    "province": "NA",
+    "city": "Pozzuoli",
+    "street": "Via Campi Flegrei",
+    "streetNumber": "200",
+    "building": null
+  },
+  "images": ["/img/land1.jpg"],
+  "hasRoadAccess": true
+}
+```
+
+**Response Body per tutti i sottotipi:**
+```json
+{
+  "id": 456,
+  "description": "Appartamento moderno con terrazza",
+  "price": 280000,
+  "area": 90,
+  "yearBuilt": 2018,
   "contract": "SALE",
-  "propertyCategory": "Appartamento",
+  "propertyCategory": "Apartment",
   "condition": "GOOD_CONDITION",
-  "energyRating": "A",
+  "energyRating": "A2",
   "address": {
-    "country": "IT",
-    "province": "MI",
-    "city": "Milano",
-    "street": "Corso Buenos Aires",
-    "civic": "45",
+    "id": 789,
+    "country": "Italy",
+    "province": "NA",
+    "city": "Napoli",
+    "street": "Corso Umberto I",
+    "streetNumber": "45",
     "building": "B",
-    "latitude": 45.4773,
-    "longitude": 9.1815
+    "latitude": 40.8518,
+    "longitude": 14.2681
   },
   "agent": {
-    "id": 457,
-    "name": "Laura Bianchi",
-    "email": "laura.bianchi@agency.com",
-    "phone": "+39 0987654321",
-    "agencyId": 790,
-    "agencyName": "City Homes"
+    "id": 123,
+    "firstName": "Mario",
+    "lastName": "Rossi",
+    "email": "mario.rossi@agenzia.it",
+    "agencyId": 1,
+    "agencyName": "Dieti Immobiliare"
   },
-  "createdAt": "2024-01-16T14:20:00"
+  "createdAt": "2024-01-20T09:15:00"
 }
 ```
 
-## Gestione Campi Specifici
+### **GET** [`/api/property-types`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:125)
+Recupera un elenco di tutti i tipi di proprietà disponibili.
 
-### `agencyId` e `agencyName`
-- **Gestione valori null**: I campi `agencyId` e `agencyName` possono essere `null` quando l'agente non è associato a un'agenzia
-- Nei DTO di risposta, questi campi sono opzionali e possono essere omessi o avere valore esplicito `null`
+**URL:** `https://api.dietiestates.com/api/property-types`
 
-### `createdAt`
-- **Inclusione**: Sempre incluso nella risposta
-- **Formato**: `LocalDateTime` in formato ISO 8601 (es. "2024-01-15T10:30:00")
+**Response Body:**
+```json
+[
+  "RESIDENTIAL",
+  "COMMERCIAL",
+  "GARAGE",
+  "LAND"
+]
+```
 
-### `yearBuilt`
-- **Gestione valori null**: Campo opzionale, può essere `null` quando l'anno di costruzione non è disponibile
-- **Tipo**: Integer
+### **GET** [`/api/categories`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:138)
+Recupera un elenco di tutte le categorie di proprietà disponibili.
 
-### `numberOfFloors` (`numeroPianiTotali`)
-- **Tipo**: Numero intero (Integer)
-- **Obbligatorio**: Per proprietà residential e commercial e garage
+**URL:** `https://api.dietiestates.com/api/categories`
 
-### `condition` (ex `status`)
-- **Descrizione**: Rappresenta lo stato fisico della proprietà
-- **Valori possibili**:
-  - `NEW`: Nuova costruzione
-  - `GOOD_CONDITION`: Buone condizioni
-  - `RENOVATED`: Ristrutturato di recente  
-  - `TO_BE_RENOVATED`: Da ristrutturare
-  - `POOR_CONDITION`: Cattive condizioni
-  - `UNDER_CONSTRUCTION`: In costruzione
+**Response Body:**
+```json
+[
+  "Apartment",
+  "Villa",
+  "Office",
+  "Shop",
+  "Garage Box",
+  "Buildable Land",
+  "Agricultural Land"
+]
+```
 
-## Convenzioni di Naming
+### **GET** [`/api/properties/{id}/places`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:158)
+Recupera i luoghi di interesse vicini a una proprietà specifica.
 
-- **JSON**: Utilizzare camelCase per tutti i nomi dei campi
-- **Enum**: Utilizzare MAIUSCOLO per i valori degli enumerativi
-- **Validazione**: Seguire le annotazioni Jakarta Bean Validation (@NotNull, @Min, etc.)
+**URL:** `https://api.dietiestates.com/api/properties/123/places`
 
-## Errori comuni
+**Response Body:**
+```json
+[
+  {
+    "name": "Supermercato Conad",
+    "category": "supermarket",
+    "distance": 250,
+    "latitude": 40.8520,
+    "longitude": 14.2685
+  },
+  {
+    "name": "Scuola Elementare",
+    "category": "education",
+    "distance": 500,
+    "latitude": 40.8510,
+    "longitude": 14.2675
+  },
+  {
+    "name": "Fermata Metro Toledo",
+    "category": "transport",
+    "distance": 300,
+    "latitude": 40.8515,
+    "longitude": 14.2680
+  }
+]
+```
 
-**HTTP 400 - Bad Request**:
-- Campi obbligatori mancanti
-- Tipi di dati non validi
-- Valori fuori range
+## 👤 **UserController** - Endpoint utenti
 
-**HTTP 401 - Unauthorized**:
-- Token JWT mancante o scaduto
-- Token non valido
+### **GET** [`/agent/info/{id}`](src/main/java/com/dieti/dietiestatesbackend/controller/UserController.java:28)
+Recupera le informazioni di un agente specifico.
 
-**HTTP 403 - Forbidden**:
-- Permessi insufficienti (solo agenti/manager possono creare proprietà)
+**URL:** `https://api.dietiestates.com/agent/info/789`
 
-**HTTP 404 - Not Found**:
-- Proprietà non trovata
-- Risorsa non esistente
+**Response Body:**
+```json
+{
+  "fullName": "Luigi Bianchi",
+  "email": "luigi.bianchi@agenzia.it"
+}
+```
 
-## Note Tecniche
+## 📍 **AddressController** - Endpoint indirizzi
 
-- Tutte le date sono in formato ISO 8601
-- I prezzi sono in BigDecimal con precisione di 2 decimali
-- Le coordinate geografiche utilizzano il sistema WGS84
-- Le immagini sono gestite come array di path
-- La paginazione segue lo standard Spring Data
+### **GET** [`/address/{id}`](src/main/java/com/dieti/dietiestatesbackend/controller/AddressController.java:25)
+Recupera i dettagli di un indirizzo specifico.
 
----
+**URL:** `https://api.dietiestates.com/address/456`
 
-*Ultimo aggiornamento: 11 Settembre 2024*
+**Response Body:**
+```json
+{
+  "id": 456,
+  "country": "Italy",
+  "province": "NA",
+  "city": "Napoli",
+  "street": "Via Toledo",
+  "streetNumber": "15",
+  "building": "A",
+  "latitude": 40.8518,
+  "longitude": 14.2681,
+  "createdAt": "2024-01-15T10:30:00",
+  "updatedAt": "2024-01-15T10:30:00"
+}
+```
+
+## 📋 **ContractController** - Endpoint contratti
+
+### **GET** [`/contracts`](src/main/java/com/dieti/dietiestatesbackend/controller/ContractController.java:20)
+Recupera un elenco di tutti i contratti disponibili.
+
+**URL:** `https://api.dietiestates.com/contracts`
+
+**Response Body:**
+```json
+[
+  {
+    "id": 1,
+    "name": "SALE",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00",
+    "updatedAt": "2024-01-01T00:00:00"
+  },
+  {
+    "id": 2,
+    "name": "RENT",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00",
+    "updatedAt": "2024-01-01T00:00:00"
+  }
+]
+```
+
+## 💼 **OfferController** - Endpoint offerte
+
+### **GET** [`/offers/agent_offers/{id}`](src/main/java/com/dieti/dietiestatesbackend/controller/OfferController.java:24)
+Recupera le offerte associat

@@ -35,7 +35,7 @@ import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
 import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import jakarta.validation.ConstraintViolationException;
@@ -64,6 +64,7 @@ public class PropertiesController {
     }
 
     @PostMapping("/properties/search")
+    @Transactional(readOnly = true)
     public ResponseEntity<Page<PropertyResponse>> getProperties(
             @RequestBody FilterRequest filters,
             Pageable pageable) {
