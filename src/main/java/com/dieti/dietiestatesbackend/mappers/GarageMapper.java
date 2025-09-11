@@ -19,8 +19,8 @@ public interface GarageMapper {
     @Mappings({
         // I campi comuni sono ora ereditati implicitamente.
         // Campi specifici
-        @Mapping(target = "floors", expression = "java(property.getNumberOfFloors() == null ? null : java.util.List.of(String.valueOf(property.getNumberOfFloors())))"),
         @Mapping(target = "hasSurveillance", source = "hasSurveillance"),
+        @Mapping(target = "floor", source = "floor"),
         @Mapping(target = "numberOfFloors", source = "numberOfFloors")
     })
     GarageResponse toResponse(Garage property);

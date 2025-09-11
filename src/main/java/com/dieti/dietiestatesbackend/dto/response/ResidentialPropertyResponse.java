@@ -1,7 +1,5 @@
 package com.dieti.dietiestatesbackend.dto.response;
  
-import java.util.List;
- 
 import com.dieti.dietiestatesbackend.enums.Garden;
  
 import lombok.Getter;
@@ -16,7 +14,7 @@ public class ResidentialPropertyResponse extends PropertyResponse {
     private HeatingDTO heating;
     private Garden garden;
     private boolean isFurnished;
-    private List<String> floors;
+    private Integer floor;
     private Integer numberOfFloors;
     private boolean hasElevator;
 }

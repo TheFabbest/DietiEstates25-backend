@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
-import com.dieti.dietiestatesbackend.enums.PropertyStatus;
+import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import com.dieti.dietiestatesbackend.validation.ExistingEntity;
 
 import lombok.Data;
@@ -27,7 +27,7 @@ public abstract class AbstractCreatePropertyRequest {
     @ExistingEntity(entityClass = PropertyCategory.class, fieldName = "name", message = "La categoria proprietà specificata non esiste.")
     private String propertyCategoryName;
     
-    private PropertyStatus status;
+    private PropertyCondition condition;
     private EnergyRating energyRating;
     
     private AddressRequest addressRequest;

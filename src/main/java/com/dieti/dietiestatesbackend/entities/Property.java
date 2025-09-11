@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
-import com.dieti.dietiestatesbackend.enums.PropertyStatus;
+import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -51,8 +51,8 @@ public abstract class Property extends BaseEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private PropertyStatus status;
+    @Column(name = "condition", nullable = false)
+    private PropertyCondition condition;
 
     @NotNull
     @Enumerated(EnumType.STRING)

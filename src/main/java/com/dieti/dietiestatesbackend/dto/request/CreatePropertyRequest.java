@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
-import com.dieti.dietiestatesbackend.enums.PropertyStatus;
+import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.AssertTrue;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -39,7 +39,7 @@ public sealed interface CreatePropertyRequest
 
     String getPropertyCategoryName();
 
-    PropertyStatus getStatus();
+    PropertyCondition getCondition();
     EnergyRating getEnergyRating();
 
     com.dieti.dietiestatesbackend.enums.PropertyType getPropertyType(); // Aggiunto

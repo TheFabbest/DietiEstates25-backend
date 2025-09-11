@@ -7,7 +7,7 @@
   "yearBuilt": 2005,
   "contractType": "sale",
   "propertyCategoryName": "Single Garage",
-  "status": "NEW",
+  "condition": "NEW",
   "energyRating": "NOT_APPLIABLE",
   "addressRequest": {
     "country": "Italy",

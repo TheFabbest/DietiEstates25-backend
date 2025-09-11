@@ -1,22 +1,22 @@
-2025-09-10 22:45:49.108 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
-2025-09-10 22:45:49.109 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
-2025-09-10 22:45:49.110 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
-2025-09-10 22:45:49.595 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-09-10 22:45:49.793 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 193 ms. Found 9 JPA repository interfaces.
-2025-09-10 22:45:50.196 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-09-10 22:45:50.204 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-09-10 22:45:50.204 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
-2025-09-10 22:45:50.222 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2025-09-10 22:45:50.222 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1082 ms
-2025-09-10 22:45:50.272 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2025-09-10 22:45:50.361 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-09-10 22:45:50.400 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
-2025-09-10 22:45:50.426 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-09-10 22:45:50.587 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-09-10 22:45:50.604 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-09-10 22:45:51.327 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21c5c68a
-2025-09-10 22:45:51.329 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-09-10 22:45:51.576 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2025-09-11 03:36:11.788 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
+2025-09-11 03:36:11.790 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
+2025-09-11 03:36:11.790 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
+2025-09-11 03:36:12.326 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-11 03:36:12.455 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 122 ms. Found 9 JPA repository interfaces.
+2025-09-11 03:36:12.963 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-11 03:36:12.973 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-11 03:36:12.973 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-09-11 03:36:12.992 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-11 03:36:12.992 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1168 ms
+2025-09-11 03:36:13.050 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-11 03:36:13.138 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-11 03:36:13.175 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-09-11 03:36:13.197 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-11 03:36:13.390 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-11 03:36:13.413 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-11 03:36:14.540 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@54970127
+2025-09-11 03:36:14.542 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-11 03:36:14.827 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 17.5
@@ -24,43 +24,41 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-09-10 22:45:52.254 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-09-10 22:45:55.539 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-09-10 22:45:55.613 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Initializing JpaMetamodelMappingContext…
-2025-09-10 22:45:55.626 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Finished initializing JpaMetamodelMappingContext
-2025-09-10 22:45:55.845 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByUsername'
-2025-09-10 22:45:55.866 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByUsername
-2025-09-10 22:45:55.895 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmail'
-2025-09-10 22:45:55.896 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmail
-2025-09-10 22:45:55.897 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByUsername'
-2025-09-10 22:45:55.897 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByUsername
-2025-09-10 22:45:55.898 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByEmail'
-2025-09-10 22:45:55.898 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmail
-2025-09-10 22:45:55.919 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByTokenValue'
-2025-09-10 22:45:55.919 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByTokenValue
-2025-09-10 22:45:55.922 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.findByTokenValue.count
-2025-09-10 22:45:55.929 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-09-10 22:45:56.182 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByUser_Id'
-2025-09-10 22:45:56.182 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByUser_Id
-2025-09-10 22:45:56.209 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-09-10 22:45:56.224 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Contract.findByName'
-2025-09-10 22:45:56.225 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Contract.findByName
-2025-09-10 22:45:56.240 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Offer.getAgentOffers.count
-2025-09-10 22:45:56.313 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Property.findDetailedById.count
-2025-09-10 22:45:56.356 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.findByName'
-2025-09-10 22:45:56.357 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.findByName
-2025-09-10 22:45:56.357 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.existsByName'
-2025-09-10 22:45:56.357 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.existsByName
-2025-09-10 22:45:56.402 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Visit.getAgentVisits.count
-2025-09-10 22:45:56.537 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2025-09-10 22:45:56.636 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.findByName'
-2025-09-10 22:45:56.637 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.findByName
-2025-09-10 22:45:56.637 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.existsByName'
-2025-09-10 22:45:56.638 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.existsByName
-2025-09-10 22:45:56.720 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2025-09-10 22:45:56.726 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 7.88 seconds (process running for 8.185)
-2025-09-10 22:45:59.948 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2025-09-10 22:45:59.952 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
-2025-09-10 22:45:59.973 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-09-10 22:45:59.974 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2025-09-10 22:46:00.162 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-09-11 03:36:15.696 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-11 03:36:15.917 [main] DEBUG org.hibernate.SQL - 
+    alter table if exists dieti_estates.garage 
+       add column floor integer
+2025-09-11 03:36:19.553 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-11 03:36:19.615 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Initializing JpaMetamodelMappingContext…
+2025-09-11 03:36:19.628 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Finished initializing JpaMetamodelMappingContext
+2025-09-11 03:36:19.946 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByUsername'
+2025-09-11 03:36:19.979 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByUsername
+2025-09-11 03:36:20.029 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmail'
+2025-09-11 03:36:20.030 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmail
+2025-09-11 03:36:20.031 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByUsername'
+2025-09-11 03:36:20.032 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByUsername
+2025-09-11 03:36:20.033 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByEmail'
+2025-09-11 03:36:20.033 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmail
+2025-09-11 03:36:20.061 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByTokenValue'
+2025-09-11 03:36:20.062 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByTokenValue
+2025-09-11 03:36:20.066 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.findByTokenValue.count
+2025-09-11 03:36:20.075 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-11 03:36:20.548 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByUser_Id'
+2025-09-11 03:36:20.548 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByUser_Id
+2025-09-11 03:36:20.585 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-11 03:36:20.606 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Contract.findByName'
+2025-09-11 03:36:20.607 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Contract.findByName
+2025-09-11 03:36:20.633 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Offer.getAgentOffers.count
+2025-09-11 03:36:20.730 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Property.findDetailedById.count
+2025-09-11 03:36:20.765 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.findByName'
+2025-09-11 03:36:20.766 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.findByName
+2025-09-11 03:36:20.767 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.existsByName'
+2025-09-11 03:36:20.768 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.existsByName
+2025-09-11 03:36:20.816 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Visit.getAgentVisits.count
+2025-09-11 03:36:20.997 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-11 03:36:21.121 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.findByName'
+2025-09-11 03:36:21.121 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.findByName
+2025-09-11 03:36:21.122 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.existsByName'
+2025-09-11 03:36:21.123 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.existsByName
+2025-09-11 03:36:21.216 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-11 03:36:21.224 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 9.756 seconds (process running for 10.166)

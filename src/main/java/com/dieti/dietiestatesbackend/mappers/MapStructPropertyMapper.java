@@ -32,11 +32,12 @@ public interface MapStructPropertyMapper {
         @Mapping(target = "yearBuilt", source = "yearBuilt"),
         @Mapping(target = "contract", source = "contract.name"),
         @Mapping(target = "propertyCategory", source = "propertyCategory.name"),
-        @Mapping(target = "status", source = "status"),
+        @Mapping(target = "condition", source = "condition"),
         // 'energyRating' ora matcha implicitamente.
         // 'agent' e 'address' sono gestiti dai mapper in 'uses'.
         @Mapping(target = "agent", source = "agent"),
-        @Mapping(target = "address", source = "address")
+        @Mapping(target = "address", source = "address"),
+        @Mapping(target = "createdAt", source = "createdAt")
     })
     PropertyResponse propertyToPropertyResponse(Property property);
 

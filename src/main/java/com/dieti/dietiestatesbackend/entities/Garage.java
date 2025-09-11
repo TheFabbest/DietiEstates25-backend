@@ -20,12 +20,15 @@ import lombok.AccessLevel;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Garage extends Property {
- 
+
     @Column(name = "has_surveillance")
     private boolean hasSurveillance = false;
- 
+
+    @Column(name = "floor")
+    private Integer floor;
+
     @Min(1)
     @Column(name = "number_of_floors")
     private Integer numberOfFloors = 1;
- 
+
 }

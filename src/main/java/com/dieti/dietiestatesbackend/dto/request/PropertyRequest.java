@@ -24,7 +24,7 @@ public class PropertyRequest {
     private Long id_propertyCategory;
     
     @NotNull
-    private Long id_status;
+    private Long id_condition;
     
     @NotNull
     private Long id_energyClass;
@@ -53,8 +53,8 @@ public class PropertyRequest {
     public Long getIdPropertyCategory() { return id_propertyCategory; }
     public void setIdPropertyCategory(Long id_propertyCategory) { this.id_propertyCategory = id_propertyCategory; }
 
-    public Long getId_status() { return id_status; }
-    public void setId_status(Long id_status) { this.id_status = id_status; }
+    public Long getId_condition() { return id_condition; }
+    public void setId_condition(Long id_condition) { this.id_condition = id_condition; }
 
     public Long getId_energyClass() { return id_energyClass; }
     public void setId_energyClass(Long id_energyClass) { this.id_energyClass = id_energyClass; }

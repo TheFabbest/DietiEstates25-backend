@@ -54,7 +54,7 @@ public class PropertyMapper {
         if (req.getImages() != null) {
             property.setImages(req.getImages());
         }
-        property.setStatus(req.getStatus());
+        property.setCondition(req.getCondition());
         property.setEnergyRating(req.getEnergyRating());
     }
 

@@ -1,6 +1,7 @@
 package com.dieti.dietiestatesbackend.dto.response;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +26,11 @@ public class PropertyResponse {
     private Integer yearBuilt;
     private String contract;
     private String propertyCategory;
-    private String status;
+    private String condition;
     private String energyRating; // Rinomino per corrispondenza con l'entità
     // TODO see private List<String> caratteristicheAddizionali;
     private AddressResponseDTO address;
     private AgentResponseDTO agent;
-    // TODO see private LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     // TODO add images
 }

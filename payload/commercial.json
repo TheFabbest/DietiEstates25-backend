@@ -7,7 +7,7 @@
   "yearBuilt": 2010,
   "contractType": "sale",
   "propertyCategoryName": "Office",
-  "status": "NEW",
+  "condition": "NEW",
   "energyRating": "A1",
   "addressRequest": {
     "country": "Italy",

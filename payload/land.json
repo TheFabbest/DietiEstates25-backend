@@ -6,7 +6,7 @@
   "contractType": "sale",
   "propertyCategoryName": "Agricultural Land",
   "propertyType": "LAND",
-  "status": "NEW",
+  "condition": "NEW",
   "energyRating": "NOT_APPLIABLE",
   "agentUsername": "successuser",
   "addressRequest": {

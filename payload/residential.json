@@ -3,7 +3,7 @@
   "agentUsername":"testuser",
   "description":"Appartamento di prova",
   "price":120000,
-  "status":"NEW",
+  "condition":"NEW",
   "energyRating":"A1",
   "area":80,
   "yearBuilt":1998,

@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.enums;
 
-public enum PropertyStatus {
+public enum PropertyCondition {
     NEW,
     GOOD_CONDITION,
     RENOVATED,

@@ -25,7 +25,7 @@ public interface ResidentialPropertyMapper {
         @Mapping(target = "heating", source = "heating"), // heating gestito da HeatingMapper
         @Mapping(target = "garden", source = "garden"),
         @Mapping(target = "furnished", source = "furnished"),
-        @Mapping(target = "floors", expression = "java(property.getFloor() == null ? null : java.util.List.of(String.valueOf(property.getFloor())))"),
+        @Mapping(target = "floor", source = "floor"),
         @Mapping(target = "hasElevator", source = "hasElevator"),
         @Mapping(target = "numberOfFloors", source = "numberOfFloors")
     })

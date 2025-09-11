@@ -1,7 +1,5 @@
 package com.dieti.dietiestatesbackend.dto.response;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
  
@@ -12,6 +10,6 @@ import lombok.EqualsAndHashCode;
  @EqualsAndHashCode(callSuper = true)
  public class GarageResponse extends PropertyResponse {
      private boolean hasSurveillance;
-     private List<String> floors;
+     private Integer floor;
      private Integer numberOfFloors;
  }

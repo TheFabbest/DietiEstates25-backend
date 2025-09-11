@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.Garden;
-import com.dieti.dietiestatesbackend.enums.PropertyStatus;
+import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -36,7 +36,7 @@ public class FilterRequest {
     private BigDecimal maxPrice;
     private Integer minArea;
     private Integer minYearBuilt;
-    private List<PropertyStatus> acceptedStatus;
+    private List<PropertyCondition> acceptedCondition;
     private EnergyRating minEnergyRating;
     
     // Geographic search - now mandatory

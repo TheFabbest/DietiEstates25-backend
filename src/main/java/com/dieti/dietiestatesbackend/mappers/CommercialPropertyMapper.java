@@ -18,7 +18,7 @@ public interface CommercialPropertyMapper {
 @Mappings({
     // I campi comuni sono ora ereditati implicitamente.
     // Campi specifici
-    @Mapping(target = "floors", expression = "java(property.getFloor() == null ? null : java.util.List.of(String.valueOf(property.getFloor())))"),
+    @Mapping(target = "floor", source = "floor"),
     @Mapping(target = "hasDisabledAccess", source = "hasWheelchairAccess"),
     @Mapping(target = "shopWindowCount", source = "numeroVetrine"),
     @Mapping(target = "totalFloors", source = "numberOfFloors")
