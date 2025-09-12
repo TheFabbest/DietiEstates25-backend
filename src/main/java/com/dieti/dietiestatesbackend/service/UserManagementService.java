@@ -21,7 +21,7 @@ public class UserManagementService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(String email, String password, String username, String nome, String cognome) {
+    public User createUser(String email, String password, String username, String nome, String cognome) {
         if (userRepository.existsByEmail(email.toLowerCase()) || userRepository.existsByUsername(username)) {
             throw new IllegalStateException("Credenziali già in uso");
         }
@@ -36,6 +36,7 @@ public class UserManagementService {
         user.setManager(false);
         
         userRepository.save(user);
+        return user;
     }
 
     public void changePassword(String email, String newPassword) {

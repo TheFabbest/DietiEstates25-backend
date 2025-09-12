@@ -9,16 +9,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.dieti.dietiestatesbackend.dto.request.AuthRequest;
 import com.dieti.dietiestatesbackend.dto.request.ChangePasswordRequest;
+import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.dto.response.UserResponse;
 import com.dieti.dietiestatesbackend.entities.User;
+import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
 import com.dieti.dietiestatesbackend.service.UserService;
 
 import jakarta.validation.Valid;
@@ -50,6 +55,18 @@ public class UserController {
         }
     }
     
+    @PostMapping("/agent/create")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Object> createAgent(@RequestBody @Valid SignupRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
+        try {
+            userService.createAgent(toBeCreated, userService.getUser(manager.getId()));
+            return new ResponseEntity<>("Agent created", HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("Errore durante la creazione dell'agente", e);
+            return new ResponseEntity<>("Errore durante la creazione dell'agente: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/manager/change_password")
     public ResponseEntity<Object> changeUserPassword(@RequestBody @Valid ChangePasswordRequest authRequest) {
         String username = userService.getUsernameFromEmail(authRequest.getEmail());

@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 @Transactional
@@ -66,5 +69,17 @@ public class UserService {
 
     public void changePassword(String email, String newPassword) {
         userManagementService.changePassword(email, newPassword);
+    }
+
+    public void createAgent(SignupRequest toBeCreated, User manager) {
+        User createdUser = userManagementService.createUser(
+            toBeCreated.getEmail(),
+            toBeCreated.getPassword(),
+            toBeCreated.getUsername(),
+            toBeCreated.getName(),
+            toBeCreated.getSurname()
+        );
+        createdUser.setAgent(true);
+        createdUser.setAgency(manager.getAgency());
     }
 }
