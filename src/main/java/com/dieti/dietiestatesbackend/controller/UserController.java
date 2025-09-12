@@ -67,6 +67,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/manager/create")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Object> createManager(@RequestBody @Valid SignupRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
+        try {
+            userService.createManager(toBeCreated, userService.getUser(manager.getId()));
+            return new ResponseEntity<>("Manager created", HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("Errore durante la creazione del manager", e);
+            return new ResponseEntity<>("Errore durante la creazione del manager: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/manager/change_password")
     public ResponseEntity<Object> changeUserPassword(@RequestBody @Valid ChangePasswordRequest authRequest) {
         String username = userService.getUsernameFromEmail(authRequest.getEmail());

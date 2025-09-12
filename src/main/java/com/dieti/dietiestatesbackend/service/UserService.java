@@ -71,7 +71,7 @@ public class UserService {
         userManagementService.changePassword(email, newPassword);
     }
 
-    public void createAgent(SignupRequest toBeCreated, User manager) {
+    public void createAgent(SignupRequest toBeCreated, User creator) {
         User createdUser = userManagementService.createUser(
             toBeCreated.getEmail(),
             toBeCreated.getPassword(),
@@ -80,6 +80,18 @@ public class UserService {
             toBeCreated.getSurname()
         );
         createdUser.setAgent(true);
-        createdUser.setAgency(manager.getAgency());
+        createdUser.setAgency(creator.getAgency());
+    }
+
+    public void createManager(SignupRequest toBeCreated, User creator) {
+        User createdUser = userManagementService.createUser(
+            toBeCreated.getEmail(),
+            toBeCreated.getPassword(),
+            toBeCreated.getUsername(),
+            toBeCreated.getName(),
+            toBeCreated.getSurname()
+        );
+        createdUser.setManager(true);
+        createdUser.setAgency(creator.getAgency());
     }
 }
