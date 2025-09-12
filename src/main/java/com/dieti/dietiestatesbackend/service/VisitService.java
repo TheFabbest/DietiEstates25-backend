@@ -29,7 +29,7 @@ public class VisitService {
             .orElseThrow(() -> new EntityNotFoundException("Visit not found with id: " + id));
     }
 
-    public List<Visit> getAgentVisits(Long agentId) {
-        return visitRepository.getAgentVisits(agentId);
+    public List<Visit> getAgentVisits(Long agentID) {
+        return visitRepository.getAgentVisits(agentID);
     }
 }

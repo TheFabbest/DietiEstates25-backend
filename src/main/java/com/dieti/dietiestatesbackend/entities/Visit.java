@@ -3,6 +3,7 @@ package com.dieti.dietiestatesbackend.entities;
 import java.time.LocalDate;
 
 import com.dieti.dietiestatesbackend.enums.VisitStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,11 +29,13 @@ import lombok.AccessLevel;
 public class Visit extends BaseEntity {
 
     @NotNull
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_property", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_property"))
     private Property property;
 
     @NotNull
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_user"))
     private User user;

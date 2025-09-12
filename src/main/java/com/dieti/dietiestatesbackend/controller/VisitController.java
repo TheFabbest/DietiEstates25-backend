@@ -21,9 +21,9 @@ public class VisitController {
         this.visitService = visitService;
     }
 
-    @GetMapping("/offers/agent_visits/{id}")
-    @PreAuthorize("@securityUtil.canAccessVisitsForAgent(#authentication.principal, #agentID)")
-    public ResponseEntity<Object> getAgentVisits(@PathVariable("id") Long agentID) {
+    @GetMapping("/offers/agent_visits/{agentID}")
+    @PreAuthorize("@securityUtil.canAccessVisitsForAgent(#agentID)")
+    public ResponseEntity<Object> getAgentVisits(@PathVariable("agentID") Long agentID) {
         return ResponseEntity.ok(visitService.getAgentVisits(agentID));
     }
 }

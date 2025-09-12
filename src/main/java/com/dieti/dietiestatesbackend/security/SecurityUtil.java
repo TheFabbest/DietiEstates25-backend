@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
@@ -94,11 +96,34 @@ public class SecurityUtil {
     /**
      * Alias per visite: solo manager o l'agente specificato possono accedere.
      */
-    public boolean canAccessVisitsForAgent(AppPrincipal principal, Long agentId) {
-        boolean result = isAgentOrManager(principal, agentId);
-        logger.debug("canAccessVisitsForAgent - result: {}", result);
-        return result;
+public boolean canAccessVisitsForAgent(Long agentId) {
+    if (agentId == null) {
+        return false;
     }
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return false;
+    }
+
+    Object principal = authentication.getPrincipal();
+
+    // Check if the principal is an instance of AppPrincipal
+    if (!(principal instanceof AppPrincipal)) {
+        // This might happen if the principal is a String (e.g., "anonymousUser") or UserDetails
+        // If it's UserDetails, you might need to cast and then check its properties.
+        // For now, we'll assume it must be AppPrincipal for our specific logic.
+        return false;
+    }
+
+    AppPrincipal appPrincipal = (AppPrincipal) principal;
+
+    // Existing logic
+    if (appPrincipal.isManager()) {
+        return true;
+    }
+    return appPrincipal.getId().equals(agentId);
+}
 
     /**
      * Controllo per i contratti: al momento l'entità Contract non espone un owner diretto;
