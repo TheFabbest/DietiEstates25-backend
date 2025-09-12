@@ -22,7 +22,7 @@ public class VisitController {
     }
 
     @GetMapping("/offers/agent_visits/{agentID}")
-    @PreAuthorize("@securityUtil.canAccessVisitsForAgent(#agentID)")
+    @PreAuthorize("@securityUtil.canAccessVisitsAndOffersForAgent(#agentID)")
     public ResponseEntity<Object> getAgentVisits(@PathVariable("agentID") Long agentID) {
         return ResponseEntity.ok(visitService.getAgentVisits(agentID));
     }

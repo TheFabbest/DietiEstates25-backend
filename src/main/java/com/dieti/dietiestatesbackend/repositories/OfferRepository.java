@@ -21,8 +21,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
      * @param agentId L'ID dell'agente
      * @return Lista di offerte dell'agente
      */
-    @Query(value = "SELECT o.* FROM offers o " +
-           "JOIN users u ON o.user_id = u.id " +
-           "WHERE u.is_agent = true AND u.id = :id", nativeQuery = true)
+    @Query(value = "SELECT o FROM Offer o " +
+           "WHERE o.property.agent.id = :id")
     List<Offer> getAgentOffers(@Param("id") Long agentId);
 }

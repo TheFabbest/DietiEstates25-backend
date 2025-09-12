@@ -85,45 +85,36 @@ public class SecurityUtil {
     }
 
     /**
-     * Alias per offerte: solo manager o l'agente specificato possono accedere.
-     */
-    public boolean canAccessOffersForAgent(AppPrincipal principal, Long agentId) {
-        boolean result = isAgentOrManager(principal, agentId);
-        logger.debug("canAccessOffersForAgent - result: {}", result);
-        return result;
-    }
-
-    /**
      * Alias per visite: solo manager o l'agente specificato possono accedere.
      */
-public boolean canAccessVisitsForAgent(Long agentId) {
-    if (agentId == null) {
-        return false;
+    public boolean canAccessVisitsAndOffersForAgent(Long agentId) {
+        if (agentId == null) {
+            return false;
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        // Check if the principal is an instance of AppPrincipal
+        if (!(principal instanceof AppPrincipal)) {
+            // This might happen if the principal is a String (e.g., "anonymousUser") or UserDetails
+            // If it's UserDetails, you might need to cast and then check its properties.
+            // For now, we'll assume it must be AppPrincipal for our specific logic.
+            return false;
+        }
+
+        AppPrincipal appPrincipal = (AppPrincipal) principal;
+
+        // Existing logic
+        if (appPrincipal.isManager()) {
+            return true;
+        }
+        return appPrincipal.getId().equals(agentId);
     }
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-        return false;
-    }
-
-    Object principal = authentication.getPrincipal();
-
-    // Check if the principal is an instance of AppPrincipal
-    if (!(principal instanceof AppPrincipal)) {
-        // This might happen if the principal is a String (e.g., "anonymousUser") or UserDetails
-        // If it's UserDetails, you might need to cast and then check its properties.
-        // For now, we'll assume it must be AppPrincipal for our specific logic.
-        return false;
-    }
-
-    AppPrincipal appPrincipal = (AppPrincipal) principal;
-
-    // Existing logic
-    if (appPrincipal.isManager()) {
-        return true;
-    }
-    return appPrincipal.getId().equals(agentId);
-}
 
     /**
      * Controllo per i contratti: al momento l'entità Contract non espone un owner diretto;
