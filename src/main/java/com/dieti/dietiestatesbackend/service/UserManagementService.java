@@ -38,6 +38,13 @@ public class UserManagementService {
         userRepository.save(user);
     }
 
+    public void changePassword(String email, String newPassword) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        });
+    }
+
     public void createGoogleUser(String email, String username, String name, String surname) {
         // Validazione dei dati obbligatori
         if (email == null || email.trim().isEmpty()) {

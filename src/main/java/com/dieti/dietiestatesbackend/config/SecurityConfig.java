@@ -47,7 +47,8 @@ public class SecurityConfig {
                     SWAGGER_UI,
                     SWAGGER_UI_HTML,
                     "/api/property-types",
-                    "/api/categories"
+                    "/api/categories",
+                    "/manager/change_password"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

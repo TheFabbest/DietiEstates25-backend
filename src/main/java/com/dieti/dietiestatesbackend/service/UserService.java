@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dieti.dietiestatesbackend.entities.User;
+import com.dieti.dietiestatesbackend.repositories.UserRepository;
 
 @Service
 @Transactional
@@ -61,5 +62,9 @@ public class UserService {
      */
     public User getUserByUsername(String username) {
         return userQueryService.getUserByUsername(username);
+    }
+
+    public void changePassword(String email, String newPassword) {
+        userManagementService.changePassword(email, newPassword);
     }
 }
