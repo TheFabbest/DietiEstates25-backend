@@ -1,0 +1,20 @@
+{
+  "category": "RESIDENTIAL",
+  "contract": "sale",
+  "minPrice": 100000,
+  "maxPrice": 300000,
+  "minArea": 70,
+  "minYearBuilt": 2000,
+  "acceptedCondition": ["NEW", "GOOD_CONDITION"],
+  "minEnergyRating": "B",
+  "centerLatitude": 40.8518,
+  "centerLongitude": 14.2681,
+  "radiusInMeters": 5000,
+  "minNumberOfRooms": 2,
+  "minNumberOfBathrooms": 1,
+  "minParkingSpaces": 1,
+  "heating": "Centralized",
+  "acceptedGarden": ["PRIVATE", "ABSENT"],
+  "mustBeFurnished": false,
+  "mustHaveElevator": true
+}

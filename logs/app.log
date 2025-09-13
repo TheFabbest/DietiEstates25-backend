@@ -1,22 +1,22 @@
-2025-09-11 03:45:00.364 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
-2025-09-11 03:45:00.367 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
-2025-09-11 03:45:00.368 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
-2025-09-11 03:45:01.015 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-09-11 03:45:01.170 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 140 ms. Found 9 JPA repository interfaces.
-2025-09-11 03:45:01.674 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-09-11 03:45:01.684 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-09-11 03:45:01.685 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
-2025-09-11 03:45:01.703 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2025-09-11 03:45:01.704 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1297 ms
-2025-09-11 03:45:01.763 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
-2025-09-11 03:45:01.855 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-09-11 03:45:01.897 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
-2025-09-11 03:45:01.922 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2025-09-11 03:45:02.107 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-09-11 03:45:02.128 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2025-09-11 03:45:02.679 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2d3bb944
-2025-09-11 03:45:02.681 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2025-09-11 03:45:02.887 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2025-09-13 15:54:05.431 [main] INFO  c.d.d.DietiEstatesBackend - Starting DietiEstatesBackend v0.0.1-SNAPSHOT using Java 21.0.8 with PID 1 (/app/app.jar started by ? in /app)
+2025-09-13 15:54:05.435 [main] DEBUG c.d.d.DietiEstatesBackend - Running with Spring Boot v3.5.4, Spring v6.2.10
+2025-09-13 15:54:05.436 [main] INFO  c.d.d.DietiEstatesBackend - No active profile set, falling back to 1 default profile: "default"
+2025-09-13 15:54:06.509 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-13 15:54:06.660 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 143 ms. Found 9 JPA repository interfaces.
+2025-09-13 15:54:07.216 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-13 15:54:07.226 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-13 15:54:07.226 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-09-13 15:54:07.246 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-13 15:54:07.246 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1759 ms
+2025-09-13 15:54:07.375 [main] DEBUG c.d.d.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+2025-09-13 15:54:07.482 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-13 15:54:07.530 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-09-13 15:54:07.556 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-13 15:54:07.768 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-13 15:54:07.788 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-13 15:54:08.489 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@17d19538
+2025-09-13 15:54:08.490 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-13 15:54:08.684 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 17.5
@@ -24,43 +24,861 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-09-11 03:45:03.844 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-09-11 03:45:07.201 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-09-11 03:45:07.253 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Initializing JpaMetamodelMappingContext…
-2025-09-11 03:45:07.265 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Finished initializing JpaMetamodelMappingContext
-2025-09-11 03:45:07.539 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByUsername'
-2025-09-11 03:45:07.567 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByUsername
-2025-09-11 03:45:07.608 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmail'
-2025-09-11 03:45:07.608 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmail
-2025-09-11 03:45:07.610 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByUsername'
-2025-09-11 03:45:07.611 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByUsername
-2025-09-11 03:45:07.611 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByEmail'
-2025-09-11 03:45:07.612 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmail
-2025-09-11 03:45:07.638 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByTokenValue'
-2025-09-11 03:45:07.639 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByTokenValue
-2025-09-11 03:45:07.642 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.findByTokenValue.count
-2025-09-11 03:45:07.651 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-09-11 03:45:08.001 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByUser_Id'
-2025-09-11 03:45:08.002 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByUser_Id
-2025-09-11 03:45:08.037 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-09-11 03:45:08.059 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Contract.findByName'
-2025-09-11 03:45:08.062 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Contract.findByName
-2025-09-11 03:45:08.091 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Offer.getAgentOffers.count
-2025-09-11 03:45:08.174 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Property.findDetailedById.count
-2025-09-11 03:45:08.211 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.findByName'
-2025-09-11 03:45:08.211 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.findByName
-2025-09-11 03:45:08.212 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.existsByName'
-2025-09-11 03:45:08.213 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.existsByName
-2025-09-11 03:45:08.260 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Visit.getAgentVisits.count
-2025-09-11 03:45:08.446 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2025-09-11 03:45:08.576 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.findByName'
-2025-09-11 03:45:08.576 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.findByName
-2025-09-11 03:45:08.577 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.existsByName'
-2025-09-11 03:45:08.578 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.existsByName
-2025-09-11 03:45:08.690 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
-2025-09-11 03:45:08.697 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 8.765 seconds (process running for 9.286)
-2025-09-11 03:45:12.415 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2025-09-11 03:45:12.418 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
-2025-09-11 03:45:12.436 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-09-11 03:45:12.438 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2025-09-11 03:45:12.631 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-09-13 15:54:09.442 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-13 15:54:12.702 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-13 15:54:12.824 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Initializing JpaMetamodelMappingContext…
+2025-09-13 15:54:12.838 [main] DEBUG o.s.d.j.r.c.JpaMetamodelMappingContextFactoryBean - Finished initializing JpaMetamodelMappingContext
+2025-09-13 15:54:13.168 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByUsername'
+2025-09-13 15:54:13.220 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByUsername
+2025-09-13 15:54:13.275 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByEmail'
+2025-09-13 15:54:13.276 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByEmail
+2025-09-13 15:54:13.277 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.existsByUsername'
+2025-09-13 15:54:13.278 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.existsByUsername
+2025-09-13 15:54:13.279 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'User.findByEmail'
+2025-09-13 15:54:13.279 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query User.findByEmail
+2025-09-13 15:54:13.314 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByTokenValue'
+2025-09-13 15:54:13.315 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByTokenValue
+2025-09-13 15:54:13.320 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.findByTokenValue.count
+2025-09-13 15:54:13.332 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-13 15:54:13.664 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'RefreshToken.deleteByUser_Id'
+2025-09-13 15:54:13.664 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query RefreshToken.deleteByUser_Id
+2025-09-13 15:54:13.694 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-13 15:54:13.708 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Contract.findByName'
+2025-09-13 15:54:13.709 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Contract.findByName
+2025-09-13 15:54:13.728 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Offer.getAgentOffers.count
+2025-09-13 15:54:13.833 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Property.findDetailedById.count
+2025-09-13 15:54:13.878 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.findByName'
+2025-09-13 15:54:13.878 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.findByName
+2025-09-13 15:54:13.879 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'Heating.existsByName'
+2025-09-13 15:54:13.879 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Heating.existsByName
+2025-09-13 15:54:13.923 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query Visit.getAgentVisits.count
+2025-09-13 15:54:14.145 [main] DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-09-13 15:54:14.254 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.findByName'
+2025-09-13 15:54:14.254 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.findByName
+2025-09-13 15:54:14.255 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Looking up named query 'PropertyCategory.existsByName'
+2025-09-13 15:54:14.255 [main] DEBUG o.s.d.j.repository.query.NamedQuery - Did not find named query PropertyCategory.existsByName
+2025-09-13 15:54:14.347 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-09-13 15:54:14.353 [main] INFO  c.d.d.DietiEstatesBackend - Started DietiEstatesBackend in 9.701 seconds (process running for 10.417)
+2025-09-13 15:54:22.024 [http-nio-8080-exec-1] INFO  o.a.coyote.http11.Http11Processor - Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x020x000x010x000x010xfc0x030x03O0xf40xc9E/0x040xccP0xc8^0xafJ0x0fq0x090xfdHf0x1d0xbf0x990xa40xea+O;s00x0e#0xe20xf5 ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:403)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:271)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1769)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-09-13 15:55:07.219 [http-nio-8080-exec-7] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-13 15:55:07.226 [http-nio-8080-exec-7] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-13 15:55:07.275 [http-nio-8080-exec-7] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 49 ms
+2025-09-13 15:55:07.340 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Securing GET /agent/info
+2025-09-13 15:55:07.695 [http-nio-8080-exec-7] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:55:07.705 [http-nio-8080-exec-7] DEBUG o.s.security.web.FilterChainProxy - Secured GET /agent/info
+2025-09-13 15:55:07.712 [http-nio-8080-exec-7] WARN  o.s.web.servlet.PageNotFound - No mapping for GET /agent/info
+2025-09-13 15:55:07.733 [http-nio-8080-exec-7] WARN  c.d.d.e.GlobalExceptionHandler - Endpoint non trovato: No endpoint GET /agent/info.
+2025-09-13 15:55:11.788 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Securing GET /properties/featured
+2025-09-13 15:55:11.800 [http-nio-8080-exec-8] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:55:11.804 [http-nio-8080-exec-8] DEBUG o.s.security.web.FilterChainProxy - Secured GET /properties/featured
+2025-09-13 15:55:12.057 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    order by
+        p1_0.created_at desc 
+    fetch
+        first ? rows only
+2025-09-13 15:55:12.225 [http-nio-8080-exec-8] DEBUG org.hibernate.SQL - 
+    select
+        count(p1_0.id) 
+    from
+        dieti_estates.property p1_0
+2025-09-13 15:55:23.942 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search
+2025-09-13 15:55:23.956 [http-nio-8080-exec-9] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:55:23.958 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search
+2025-09-13 15:55:24.116 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        distinct p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    where
+        a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ? 
+    fetch
+        first ? rows only
+2025-09-13 15:55:36.607 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search
+2025-09-13 15:55:36.624 [http-nio-8080-exec-10] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:55:36.626 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search
+2025-09-13 15:55:36.690 [http-nio-8080-exec-10] DEBUG org.hibernate.SQL - 
+    select
+        distinct p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    where
+        a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ? 
+    fetch
+        first ? rows only
+2025-09-13 15:55:39.820 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /properties/details/46
+2025-09-13 15:55:39.825 [http-nio-8080-exec-1] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:55:39.826 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Secured GET /properties/details/46
+2025-09-13 15:55:39.885 [http-nio-8080-exec-1] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    where
+        p1_0.id=?
+2025-09-13 15:56:57.861 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /properties/search
+2025-09-13 15:56:57.881 [http-nio-8080-exec-4] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:56:57.882 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Secured POST /properties/search
+2025-09-13 15:56:57.932 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        distinct p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    join
+        dieti_estates.address a4_0 
+            on a4_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    where
+        a4_0.latitude between ? and ? 
+        and a4_0.longitude between ? and ? 
+    fetch
+        first ? rows only
+2025-09-13 15:57:01.394 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /properties/details/45
+2025-09-13 15:57:01.402 [http-nio-8080-exec-3] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:57:01.403 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /properties/details/45
+2025-09-13 15:57:01.437 [http-nio-8080-exec-3] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    where
+        p1_0.id=?
+2025-09-13 15:57:43.098 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /properties/featured
+2025-09-13 15:57:43.136 [http-nio-8080-exec-5] DEBUG c.d.d.s.JwtAuthenticationFilter - Authenticated principal class=com.dieti.dietiestatesbackend.security.AuthenticatedUser, id=6, isManager=false
+2025-09-13 15:57:43.138 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /properties/featured
+2025-09-13 15:57:43.214 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        p1_0.id,
+        p1_0.property_type,
+        p1_0.additional_features,
+        p1_0.id_address,
+        a3_0.id,
+        a3_0.building,
+        a3_0.city,
+        a3_0.latitude,
+        a3_0.longitude,
+        a3_0.country,
+        a3_0.created_at,
+        a3_0.province,
+        a3_0.street,
+        a3_0.street_number,
+        p1_0.id_agent,
+        a1_0.id,
+        a2_0.id,
+        a2_0.id_address,
+        a2_0.created_at,
+        a2_0.name,
+        a1_0.created_at,
+        a1_0.email,
+        a1_0.first_name,
+        a1_0.is_agent,
+        a1_0.is_manager,
+        a1_0.last_name,
+        a1_0.license,
+        a1_0.password,
+        a1_0.username,
+        p1_0.area,
+        p1_0.condition,
+        p1_0.id_contract,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        p1_0.created_at,
+        p1_0.description,
+        p1_0.energy_rating,
+        p1_0.price,
+        p1_0.id_property_category,
+        pc1_0.id,
+        pc1_0.created_at,
+        pc1_0.is_active,
+        pc1_0.name,
+        pc1_0.property_type,
+        p1_0.year_built,
+        p1_2.floor,
+        p1_2.wheelchair_access,
+        p1_2.number_of_bathrooms,
+        p1_2.number_of_floors,
+        p1_2.number_of_rooms,
+        p1_2.numero_vetrine,
+        p1_3.floor,
+        p1_3.has_surveillance,
+        p1_3.number_of_floors,
+        p1_4.accessible_from_street,
+        p1_1.floor,
+        p1_1.garden,
+        p1_1.has_elevator,
+        p1_1.id_heating,
+        h1_0.id,
+        h1_0.created_at,
+        h1_0.is_active,
+        h1_0.name,
+        p1_1.is_furnished,
+        p1_1.number_of_bathrooms,
+        p1_1.number_of_floors,
+        p1_1.number_of_rooms,
+        p1_1.parking_spaces 
+    from
+        dieti_estates.property p1_0 
+    left join
+        dieti_estates.residential_property p1_1 
+            on p1_0.id=p1_1.id 
+    left join
+        dieti_estates.commercial_property p1_2 
+            on p1_0.id=p1_2.id 
+    left join
+        dieti_estates.garage p1_3 
+            on p1_0.id=p1_3.id 
+    left join
+        dieti_estates.land p1_4 
+            on p1_0.id=p1_4.id 
+    left join
+        dieti_estates.contract c1_0 
+            on c1_0.id=p1_0.id_contract 
+    left join
+        dieti_estates.property_category pc1_0 
+            on pc1_0.id=p1_0.id_property_category 
+    left join
+        dieti_estates.user a1_0 
+            on a1_0.id=p1_0.id_agent 
+    left join
+        dieti_estates.agency a2_0 
+            on a2_0.id=a1_0.id_agency 
+    left join
+        dieti_estates.address a3_0 
+            on a3_0.id=p1_0.id_address 
+    left join
+        dieti_estates.heating h1_0 
+            on p1_0.property_type='RESIDENTIAL' 
+            and h1_0.id=p1_1.id_heating 
+    order by
+        p1_0.created_at desc 
+    fetch
+        first ? rows only
+2025-09-13 15:57:43.302 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        count(p1_0.id) 
+    from
+        dieti_estates.property p1_0

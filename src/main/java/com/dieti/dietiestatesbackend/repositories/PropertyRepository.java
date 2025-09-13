@@ -35,7 +35,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     @Query(value = "SELECT DISTINCT p FROM Property p " +
            "LEFT JOIN FETCH p.contract " +
            "LEFT JOIN FETCH p.propertyCategory " +
-           "LEFT JOIN FETCH p.agent " +
+           "LEFT JOIN FETCH p.agent a " +
+           "LEFT JOIN FETCH a.agency " +
            "LEFT JOIN FETCH p.address " +
            "LEFT JOIN FETCH TREAT(p AS ResidentialProperty).heating",
         countQuery = "select count(p) from Property p")
@@ -48,15 +49,16 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     @Query(value = "SELECT DISTINCT p FROM Property p " +
            "LEFT JOIN FETCH p.contract " +
            "LEFT JOIN FETCH p.propertyCategory " +
-           "LEFT JOIN FETCH p.agent " +
+           "LEFT JOIN FETCH p.agent a " +
+           "LEFT JOIN FETCH a.agency " +
            "LEFT JOIN FETCH p.address " +
            "LEFT JOIN FETCH TREAT(p AS ResidentialProperty).heating " +
-           "JOIN p.address a WHERE " +
-           "a.coordinates.latitude BETWEEN :minLat AND :maxLat AND " +
-           "a.coordinates.longitude BETWEEN :minLon AND :maxLon",
-        countQuery = "select count(p) from Property p JOIN p.address a WHERE " +
-                     "a.coordinates.latitude BETWEEN :minLat AND :maxLat AND " +
-                     "a.coordinates.longitude BETWEEN :minLon AND :maxLon")
+           "JOIN p.address addr WHERE " +
+           "addr.coordinates.latitude BETWEEN :minLat AND :maxLat AND " +
+           "addr.coordinates.longitude BETWEEN :minLon AND :maxLon",
+        countQuery = "select count(p) from Property p JOIN p.address addr WHERE " +
+                     "addr.coordinates.latitude BETWEEN :minLat AND :maxLat AND " +
+                     "addr.coordinates.longitude BETWEEN :minLon AND :maxLon")
     Page<Property> searchWithFiltersAndEagerFetch(
         @Param("minLat") double minLat,
         @Param("maxLat") double maxLat,
@@ -73,7 +75,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         select p from Property p
           left join fetch p.contract
           left join fetch p.propertyCategory
-          left join fetch p.agent
+          left join fetch p.agent a
+          left join fetch a.agency
           left join fetch p.address
           left join fetch treat(p as ResidentialProperty).heating
         order by p.createdAt desc
@@ -88,7 +91,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         select p from Property p
           left join fetch p.contract
           left join fetch p.propertyCategory
-          left join fetch p.agent
+          left join fetch p.agent a
+          left join fetch a.agency
           left join fetch p.address
           left join fetch treat(p as ResidentialProperty).heating
         where p.id = :id
