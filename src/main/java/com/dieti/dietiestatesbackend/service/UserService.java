@@ -6,9 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.entities.User;
-import com.dieti.dietiestatesbackend.repositories.UserRepository;
-
-import jakarta.validation.Valid;
 
 @Service
 @Transactional
@@ -93,5 +90,25 @@ public class UserService {
         );
         createdUser.setManager(true);
         createdUser.setAgency(creator.getAgency());
+    }
+
+    public void addAgentRole(String username, User user) {
+        User existingUser = userQueryService.getUserByUsername(username);
+        if (existingUser != null) {
+            existingUser.setAgent(true);
+            existingUser.setAgency(user.getAgency());
+        } else {
+            throw new IllegalStateException("Utente con username " + username + " non trovato.");
+        }
+    }
+
+    public void addManagerRole(String username, User user) {
+        User existingUser = userQueryService.getUserByUsername(username);
+        if (existingUser != null) {
+            existingUser.setManager(true);
+            existingUser.setAgency(user.getAgency());
+        } else {
+            throw new IllegalStateException("Utente con username " + username + " non trovato.");
+        }
     }
 }

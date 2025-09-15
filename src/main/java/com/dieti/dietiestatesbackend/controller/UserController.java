@@ -9,16 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import com.dieti.dietiestatesbackend.dto.request.AuthRequest;
 import com.dieti.dietiestatesbackend.dto.request.ChangePasswordRequest;
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.dto.response.UserResponse;
@@ -54,28 +50,54 @@ public class UserController {
             return new ResponseEntity<>("Agente non trovato", HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @PostMapping("/agent/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Object> createAgent(@RequestBody @Valid SignupRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
-        try {
-            userService.createAgent(toBeCreated, userService.getUser(manager.getId()));
-            return new ResponseEntity<>("Agent created", HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.error("Errore durante la creazione dell'agente", e);
-            return new ResponseEntity<>("Errore durante la creazione dell'agente: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (userService.doesUserExist(toBeCreated.getEmail())) {
+            try {
+                userService.addAgentRole(toBeCreated.getUsername(), userService.getUser(manager.getId()));
+                return new ResponseEntity<>("Agent role added to existing user", HttpStatus.OK);
+            } catch (Exception e) {
+                logger.error("Errore durante l'aggiunta del ruolo agente", e);
+                return new ResponseEntity<>("Errore durante l'aggiunta del ruolo agente: " + e.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            try {
+                userService.createAgent(toBeCreated, userService.getUser(manager.getId()));
+                return new ResponseEntity<>("Agent created", HttpStatus.CREATED);
+            } catch (Exception e) {
+                logger.error("Errore durante la creazione dell'agente", e);
+                return new ResponseEntity<>("Errore durante la creazione dell'agente: " + e.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
+
     }
 
     @PostMapping("/manager/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Object> createManager(@RequestBody @Valid SignupRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
-        try {
-            userService.createManager(toBeCreated, userService.getUser(manager.getId()));
-            return new ResponseEntity<>("Manager created", HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.error("Errore durante la creazione del manager", e);
-            return new ResponseEntity<>("Errore durante la creazione del manager: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Object> createManager(@RequestBody @Valid SignupRequest toBeCreated,
+            @AuthenticationPrincipal AuthenticatedUser manager) {
+        if (userService.doesUserExist(toBeCreated.getEmail())) {
+            try {
+                userService.addManagerRole(toBeCreated.getUsername(), userService.getUser(manager.getId()));
+                return new ResponseEntity<>("Manager role added to existing user", HttpStatus.OK);
+            } catch (Exception e) {
+                logger.error("Errore durante l'aggiunta del ruolo manager", e);
+                return new ResponseEntity<>("Errore durante l'aggiunta del ruolo manager: " + e.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            try {
+                userService.createManager(toBeCreated, userService.getUser(manager.getId()));
+                return new ResponseEntity<>("Manager created", HttpStatus.CREATED);
+            } catch (Exception e) {
+                logger.error("Errore durante la creazione del manager", e);
+                return new ResponseEntity<>("Errore durante la creazione del manager: " + e.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -84,14 +106,13 @@ public class UserController {
         String username = userService.getUsernameFromEmail(authRequest.getEmail());
         if (username == null || username.isEmpty()) {
             return new ResponseEntity<>("Credenziali non valide", HttpStatus.UNAUTHORIZED);
-        }
-        else if (userService.getUserByUsername(username) == null || !userService.getUserByUsername(username).isManager()) {
+        } else if (userService.getUserByUsername(username) == null
+                || !userService.getUserByUsername(username).isManager()) {
             return new ResponseEntity<>("Solo i manager possono cambiare la password", HttpStatus.FORBIDDEN);
         }
 
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(username, authRequest.getOldPassword())
-        );
+                new UsernamePasswordAuthenticationToken(username, authRequest.getOldPassword()));
 
         String newPassword = authRequest.getNewPassword();
         try {
