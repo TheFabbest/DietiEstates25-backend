@@ -1,5 +1,6 @@
 package com.dieti.dietiestatesbackend.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,4 +99,17 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         where p.id = :id
         """)
     Optional<Property> findDetailedById(@Param("id") Long id);
+
+
+    @Query("""
+        select p from Property p
+          left join fetch p.contract
+          left join fetch p.propertyCategory
+          left join fetch p.agent a
+          left join fetch a.agency
+          left join fetch p.address
+          left join fetch treat(p as ResidentialProperty).heating
+        where a.id = :agentID
+        """)
+    List<Property> getPropertiesByAgentId(@Param("agentID") Long agentID);
 }

@@ -85,9 +85,9 @@ public class SecurityUtil {
     }
 
     /**
-     * Alias per visite: solo manager o l'agente specificato possono accedere.
+     * Visits, Offers, Properties and similar.
      */
-    public boolean canAccessVisitsAndOffersForAgent(Long agentId) {
+    public boolean canViewAgentRelatedEntities(Long agentId) {
         if (agentId == null) {
             return false;
         }

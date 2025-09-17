@@ -16,6 +16,7 @@ import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.service.geocoding.Coordinates;
 import com.dieti.dietiestatesbackend.service.places.PlacesService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
@@ -35,6 +36,7 @@ public class PropertyService {
     private final PropertyQueryServiceInterface propertyQueryService;
     private final PropertyManagementService propertyManagementService;
     private final PlacesService placesService;
+    private final PropertyRepository propertyRepository;
  
     /**
      * Costruttore principale: tutte le dipendenze sono richieste.
@@ -42,10 +44,12 @@ public class PropertyService {
     @Autowired
     public PropertyService(PropertyQueryServiceInterface propertyQueryService,
                            PropertyManagementService propertyManagementService,
-                           PlacesService placesService) {
+                           PlacesService placesService,
+                           PropertyRepository propertyRepository) {
         this.propertyQueryService = Objects.requireNonNull(propertyQueryService, "propertyQueryService");
         this.propertyManagementService = Objects.requireNonNull(propertyManagementService, "propertyManagementService");
         this.placesService = Objects.requireNonNull(placesService, "placesService");
+        this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
     }
 
 
@@ -107,5 +111,9 @@ public class PropertyService {
         );
 
         return placesService.findNearbyPlaces(geoapifyCoordinates, radius, categories);
+    }
+
+    public List<Property> getPropertiesByAgentId(Long agentID) {
+        return propertyRepository.getPropertiesByAgentId(agentID);
     }
 }

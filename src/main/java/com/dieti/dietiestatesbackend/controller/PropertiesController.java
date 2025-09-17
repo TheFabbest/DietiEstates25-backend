@@ -170,6 +170,13 @@ public class PropertiesController {
         return ResponseEntity.ok(places);
     }
 
+    @GetMapping("/api/properties/agent_properties/{agentID}")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(#agentID)")
+    public ResponseEntity<List<Property>> getAgentProperties(@PathVariable("agentID") Long agentID) {
+        List<Property> properties = propertyService.getPropertiesByAgentId(agentID);
+        return ResponseEntity.ok(properties);
+    }
+
     // Gestione locale della validazione per restituire 400 con dettagli dei campi
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {

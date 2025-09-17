@@ -22,7 +22,7 @@ public class OfferController {
     }
 
     @GetMapping("/offers/agent_offers/{id}")
-    @PreAuthorize("@securityUtil.canAccessVisitsAndOffersForAgent(#agentID)")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(#agentID)")
     public ResponseEntity<Object> getAgentOffers(@PathVariable("id") Long agentID) {
         return ResponseEntity.ok(offerService.getAgentOffers(agentID));
     }

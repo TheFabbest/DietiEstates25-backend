@@ -2,6 +2,8 @@ package com.dieti.dietiestatesbackend.dto.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,5 +34,5 @@ public class PropertyResponse {
     private AddressResponseDTO address;
     private AgentResponseDTO agent;
     private LocalDateTime createdAt;
-    // TODO add images
+    private List<String> images;
 }
