@@ -116,4 +116,9 @@ public class PropertyService {
     public List<Property> getPropertiesByAgentId(Long agentID) {
         return propertyRepository.getPropertiesByAgentId(agentID);
     }
+
+
+    public void deleteProperty(Long id) {
+        propertyRepository.deleteById(id);
+    }
 }

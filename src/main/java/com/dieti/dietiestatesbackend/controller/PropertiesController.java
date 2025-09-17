@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -175,6 +176,17 @@ public class PropertiesController {
     public ResponseEntity<List<Property>> getAgentProperties(@PathVariable("agentID") Long agentID) {
         List<Property> properties = propertyService.getPropertiesByAgentId(agentID);
         return ResponseEntity.ok(properties);
+    }
+
+    @DeleteMapping("/properties/{id}")
+    @PreAuthorize("@securityUtil.canAccessProperty(authentication.principal, #id)")
+    public ResponseEntity<Void> deleteProperty(@PathVariable("id") Long id, Authentication authentication) {
+        Property property = propertyService.getProperty(id);
+        if (property == null) {
+            return ResponseEntity.notFound().build();
+        }
+        propertyService.deleteProperty(id);
+        return ResponseEntity.noContent().build();
     }
 
     // Gestione locale della validazione per restituire 400 con dettagli dei campi
