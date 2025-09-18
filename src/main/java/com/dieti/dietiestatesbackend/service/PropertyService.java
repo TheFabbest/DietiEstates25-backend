@@ -14,12 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
  
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
+import com.dieti.dietiestatesbackend.dto.request.PropertyHistoryRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.service.geocoding.Coordinates;
 import com.dieti.dietiestatesbackend.service.places.PlacesService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
+import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
  
 /**
  * Façade service per le operazioni sulle Property.
@@ -37,6 +39,7 @@ public class PropertyService {
     private final PropertyManagementService propertyManagementService;
     private final PlacesService placesService;
     private final PropertyRepository propertyRepository;
+    private final ResponseMapperRegistry responseMapperRegistry;
  
     /**
      * Costruttore principale: tutte le dipendenze sono richieste.
@@ -45,11 +48,13 @@ public class PropertyService {
     public PropertyService(PropertyQueryServiceInterface propertyQueryService,
                            PropertyManagementService propertyManagementService,
                            PlacesService placesService,
-                           PropertyRepository propertyRepository) {
+                           PropertyRepository propertyRepository,
+                           ResponseMapperRegistry responseMapperRegistry) {
         this.propertyQueryService = Objects.requireNonNull(propertyQueryService, "propertyQueryService");
         this.propertyManagementService = Objects.requireNonNull(propertyManagementService, "propertyManagementService");
         this.placesService = Objects.requireNonNull(placesService, "placesService");
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
+        this.responseMapperRegistry = Objects.requireNonNull(responseMapperRegistry, "responseMapperRegistry");
     }
 
 
@@ -120,5 +125,31 @@ public class PropertyService {
 
     public void deleteProperty(Long id) {
         propertyRepository.deleteById(id);
+    }
+
+    /**
+     * Recupera la cronologia degli immobili in base agli ID specificati.
+     * Metodo placeholder - la logica sarà implementata successivamente.
+     *
+     * @param request DTO contenente la lista degli ID immobili da recuperare
+     * @return lista vuota (implementazione temporanea)
+     */
+    public List<PropertyResponse> getPropertyHistory(PropertyHistoryRequest request) {
+        logger.debug("Metodo getPropertyHistory chiamato con request: {}", request);
+        Objects.requireNonNull(request, "request must not be null");
+        List<String> propertyIds = request.getPropertyIds();
+        Objects.requireNonNull(propertyIds, "propertyIds must not be null");
+
+        if (propertyIds.isEmpty()) {
+            return List.of();
+        }
+
+        // Recupera le entità Property tramite il PropertyQueryService
+        List<Property> properties = propertyQueryService.getPropertiesByIds(propertyIds);
+
+        // Mappa ogni Property in PropertyResponse usando il ResponseMapperRegistry
+        return properties.stream()
+                .map(responseMapperRegistry::map)
+                .toList();
     }
 }

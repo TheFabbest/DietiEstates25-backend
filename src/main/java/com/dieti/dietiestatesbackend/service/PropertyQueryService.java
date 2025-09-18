@@ -3,12 +3,14 @@ package com.dieti.dietiestatesbackend.service;
 import com.dieti.dietiestatesbackend.util.BoundingBoxUtility;
 import java.util.List;
 import java.util.Objects;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+ 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+ 
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
@@ -25,7 +27,8 @@ public class PropertyQueryService implements PropertyQueryServiceInterface {
 
     private final PropertyRepository propertyRepository;
     private final BoundingBoxUtility boundingBoxUtility;
-
+    private static final Logger logger = LoggerFactory.getLogger(PropertyQueryService.class);
+ 
     public PropertyQueryService(PropertyRepository propertyRepository, BoundingBoxUtility boundingBoxUtility) {
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
         this.boundingBoxUtility = Objects.requireNonNull(boundingBoxUtility, "boundingBoxUtility");
@@ -68,5 +71,35 @@ public class PropertyQueryService implements PropertyQueryServiceInterface {
     public Property getProperty(long propertyID) {
         return propertyRepository.findDetailedById(propertyID)
                 .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + propertyID));
+    }
+
+    /**
+     * Ottiene una lista di proprietà in base agli ID specificati.
+     * Restituisce solo le proprietà esistenti, ignorando gli ID non trovati.
+     *
+     * @param propertyIds lista degli ID delle proprietà da recuperare
+     * @return lista delle proprietà trovate
+     */
+    public List<Property> getPropertiesByIds(List<String> propertyIds) {
+        Objects.requireNonNull(propertyIds, "propertyIds must not be null");
+        
+        if (propertyIds.isEmpty()) {
+            return List.of();
+        }
+        
+        // Converti gli ID da String a Long, ignorando gli ID non validi
+        List<Long> ids = propertyIds.stream()
+                .map(idStr -> {
+                    try {
+                        return Long.valueOf(idStr);
+                    } catch (NumberFormatException e) {
+                        logger.warn("Invalid property id '{}' - ignoring", idStr);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+        
+        return propertyRepository.findAllDetailedByIdIn(ids);
     }
 }

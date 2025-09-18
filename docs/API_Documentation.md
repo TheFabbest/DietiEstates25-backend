@@ -536,6 +536,61 @@ Recupera i luoghi di interesse vicini a una proprietà specifica.
   }
 ]
 ```
+### **POST** [`/api/properties/history`](src/main/java/com/dieti/dietiestatesbackend/controller/PropertiesController.java:202)
+Recupera i dettagli completi per una lista di immobili, identificati dai loro ID.
+
+**URL:** `https://api.dietiestates.com/api/properties/history`
+
+**Request Body:**
+```json
+{
+  "propertyIds": ["id1", "id2", "id3"] // @Size(max=100)
+}
+```
+
+**Response Body (Successo):**
+`200 OK` con un array di oggetti [`PropertyResponse`](src/main/java/com/dieti/dietiestatesbackend/dto/response/PropertyResponse.java).
+```json
+[
+  {
+    "id": 123,
+    "description": "Appartamento luminoso in centro città",
+    "price": 250000,
+    "area": 85,
+    "yearBuilt": 2015,
+    "contract": "SALE",
+    "propertyCategory": "Apartment",
+    "condition": "GOOD_CONDITION",
+    "energyRating": "A2",
+    "address": {
+      "id": 456,
+      "country": "Italy",
+      "province": "NA",
+      "city": "Napoli",
+      "street": "Via Toledo",
+      "streetNumber": "15",
+      "building": "A",
+      "latitude": 40.8518,
+      "longitude": 14.2681
+    },
+    "agent": {
+      "id": 789,
+      "firstName": "Luigi",
+      "lastName": "Bianchi",
+      "email": "luigi.bianchi@agenzia.it",
+      "agencyId": 1,
+      "agencyName": "Dieti Immobiliare"
+    },
+    "createdAt": "2024-01-15T10:30:00"
+  }
+]
+```
+
+**Response Body (Errore):**
+*   `400 Bad Request`: per richieste non valide (es. `propertyIds` mancante, non è un array, o supera la dimensione massima di 100 elementi).
+*   `400 Bad Request`: se uno o più `propertyIds` non sono numeri validi (`NumberFormatException`).
+*   `500 Internal Server Error`: per altri errori non gestiti.
+
 
 ## 👤 **UserController** - Endpoint utenti
 

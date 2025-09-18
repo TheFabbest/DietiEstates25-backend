@@ -100,6 +100,21 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         """)
     Optional<Property> findDetailedById(@Param("id") Long id);
 
+    /**
+     * Recupera un insieme di proprietà per una lista di ID con fetch delle relazioni necessarie.
+     * Restituisce solo le proprietà esistenti (ignora gli ID non trovati).
+     */
+    @Query("""
+        select distinct p from Property p
+          left join fetch p.contract
+          left join fetch p.propertyCategory
+          left join fetch p.agent a
+          left join fetch a.agency
+          left join fetch p.address
+          left join fetch treat(p as ResidentialProperty).heating
+        where p.id in :ids
+        """)
+    List<Property> findAllDetailedByIdIn(@Param("ids") List<Long> ids);
 
     @Query("""
         select p from Property p

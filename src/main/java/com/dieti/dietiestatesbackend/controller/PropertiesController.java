@@ -25,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
+import com.dieti.dietiestatesbackend.dto.request.PropertyHistoryRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
@@ -187,6 +188,21 @@ public class PropertiesController {
         }
         propertyService.deleteProperty(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Endpoint per recuperare la cronologia degli immobili.
+     * Accetta una lista di ID immobili e restituisce i dettagli completi.
+     *
+     * @param request DTO contenente la lista degli ID immobili da recuperare
+     * @return lista di PropertyResponse con i dettagli degli immobili richiesti
+     */
+    @PostMapping("/api/properties/history")
+    public ResponseEntity<List<PropertyResponse>> getPropertyHistory(
+            @Valid @RequestBody PropertyHistoryRequest request) {
+        logger.debug("POST /api/properties/history - request: {}", request);
+        List<PropertyResponse> response = propertyService.getPropertyHistory(request);
+        return ResponseEntity.ok(response);
     }
 
     // Gestione locale della validazione per restituire 400 con dettagli dei campi

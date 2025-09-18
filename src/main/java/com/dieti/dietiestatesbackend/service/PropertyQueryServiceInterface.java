@@ -40,4 +40,13 @@ public interface PropertyQueryServiceInterface {
      * @throws com.dieti.dietiestatesbackend.exception.EntityNotFoundException se la proprietà non viene trovata
      */
     Property getProperty(long propertyID);
+
+    /**
+     * Ottiene una lista di proprietà in base agli ID specificati.
+     * Restituisce solo le proprietà esistenti, ignorando gli ID non trovati.
+     *
+     * @param propertyIds lista degli ID delle proprietà da recuperare
+     * @return lista delle proprietà trovate
+     */
+    List<Property> getPropertiesByIds(List<String> propertyIds);
 }
