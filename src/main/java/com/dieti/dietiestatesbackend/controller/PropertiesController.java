@@ -1,13 +1,9 @@
 package com.dieti.dietiestatesbackend.controller;
 
-import java.net.MalformedURLException;
-import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
@@ -34,7 +31,6 @@ import org.springframework.security.core.Authentication;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
-import com.dieti.dietiestatesbackend.util.PropertyImageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,17 +46,14 @@ public class PropertiesController {
     private static final String DEFAULT_RADIUS_SPEL = "#{T(java.lang.Integer).valueOf(${geoapify.places.radius})}";
     private static final String DEFAULT_CATEGORIES_SPEL = "#{'${geoapify.places.categories}'.split(',')}";
     private final PropertyService propertyService;
-    private final PropertyImageUtils propertyImageUtils;
     private final CategoryLookupService categoryLookupService;
     private final ResponseMapperRegistry responseMapperRegistry;
 
     @Autowired
     public PropertiesController(PropertyService propertyService,
-                                PropertyImageUtils propertyImageUtils,
                                 CategoryLookupService categoryLookupService,
                                 ResponseMapperRegistry responseMapperRegistry) {
         this.propertyService = propertyService;
-        this.propertyImageUtils = propertyImageUtils;
         this.categoryLookupService = categoryLookupService;
         this.responseMapperRegistry = responseMapperRegistry;
     }
@@ -84,38 +77,25 @@ public class PropertiesController {
         return ResponseEntity.ok(p);
     }
 
-    @GetMapping("/thumbnails/{id}")
-    public ResponseEntity<Resource> getThumbnails(@PathVariable("id") long propertyID) throws ResponseStatusException {
-        Path path = propertyImageUtils.buildThumbnailPath(propertyID);
-        Resource resource = null;
-        try {
-            resource = new UrlResource(path.toUri());
-        } catch (MalformedURLException e) {
-            logger.error("URL malformato! {}", e.getMessage());
-        }
-        return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType("image/webp"))
-            .body(resource);
-    }
-
     @GetMapping("/properties/featured")
     public ResponseEntity<Object> getFeatured() {
         return ResponseEntity.ok(propertyService.getFeatured().stream().map(responseMapperRegistry::map).toList());
     }
 
     /**
-     * Endpoint per la creazione di una nuova proprietà.
-     * Il client invia un payload JSON senza discriminatore. Viene risolto in un
-     * DTO tipizzato dal PropertyRequestResolver usando propertyCategoryName.
+     * Endpoint per la creazione di una nuova proprietà con immagini.
+     * Il client invia i dati della proprietà come JSON e le immagini come file multipart.
      */
     @PreAuthorize("@securityUtil.isAgentOrManager(authentication.principal, authentication.principal.id)")
-    @PostMapping("/properties")
+    @PostMapping(value = "/properties", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<PropertyResponse> createProperty(
-            @Valid @RequestBody CreatePropertyRequest request,
+            @RequestPart("property") @Valid CreatePropertyRequest request,
+            @RequestPart("images") List<MultipartFile> images,
             Authentication authentication) {
         logger.debug("POST /properties - request: {}", request);
+        logger.debug("Numero immagini ricevute: {}", images.size());
         logger.debug("Dettagli CreatePropertyRequest: {}", request); // Log dettagliato della request
-        PropertyResponse created = propertyService.createProperty(request);
+        PropertyResponse created = propertyService.createPropertyWithImages(request, images);
         logger.debug("Property creata id={}", created.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }

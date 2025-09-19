@@ -172,6 +172,18 @@
 	          <groupId>org.springframework.boot</groupId>
 	          <artifactId>spring-boot-starter-cache</artifactId>
 	      </dependency>
+		<!-- Per Azure Blob Storage -->
+		<dependency>
+			<groupId>com.azure</groupId>
+			<artifactId>azure-storage-blob</artifactId>
+			<version>12.31.2</version>
+		</dependency>
+		<!-- Per la generazione di ULID -->
+		<dependency>
+			<groupId>com.github.f4b6a3</groupId>
+			<artifactId>ulid-creator</artifactId>
+			<version>5.2.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

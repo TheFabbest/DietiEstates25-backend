@@ -37,7 +37,9 @@ public interface MapStructPropertyMapper {
         // 'agent' e 'address' sono gestiti dai mapper in 'uses'.
         @Mapping(target = "agent", source = "agent"),
         @Mapping(target = "address", source = "address"),
-        @Mapping(target = "createdAt", source = "createdAt")
+        @Mapping(target = "createdAt", source = "createdAt"),
+        @Mapping(target = "imageDirectoryUlid", source = "imageDirectoryUlid"),
+        @Mapping(target = "numberOfImages", source = "numberOfImages")
     })
     PropertyResponse propertyToPropertyResponse(Property property);
 

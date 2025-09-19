@@ -1,12 +1,12 @@
 package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,9 +72,10 @@ public abstract class Property extends BaseEntity {
     @Column(name = "additional_features")
     private String additionalFeatures;
 
-    @ElementCollection
-    @CollectionTable(name = "property_images", joinColumns = @JoinColumn(name = "id_property", foreignKey = @ForeignKey(name = "fk_property_images_property")))
-    @Column(name = "image_path")
-    private List<String> images = new ArrayList<>();
+    @Column(name = "image_directory_ulid", nullable = false, unique = true, length = 26)
+    private String imageDirectoryUlid;
 
+    @Min(1)
+    @Column(name = "number_of_images", nullable = false)
+    private int numberOfImages;
 }

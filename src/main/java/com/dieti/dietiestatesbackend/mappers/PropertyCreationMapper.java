@@ -52,13 +52,14 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "contract", source = "request.contractType")
     @Mapping(target = "propertyCategory", source = "request.propertyCategoryName")
     @Mapping(target = "address", source = "request.addressRequest", qualifiedBy = AddressMapping.class)
-    @Mapping(target = "images", source = "request.images")
     @Mapping(target = "heating", source = "request.heatingType")
     @Mapping(target = "numberOfFloors", source = "request.numberOfFloors")
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
     @Mapping(target = "floor", source = "request.floor") // Mappa il campo floor
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
+    @Mapping(target = "imageDirectoryUlid", ignore = true)
+    @Mapping(target = "numberOfImages", ignore = true)
     public abstract ResidentialProperty toEntity(CreateResidentialPropertyRequest request, User agent);
  
     @Mapping(target = "id", ignore = true)
@@ -66,12 +67,13 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "contract", source = "request.contractType")
     @Mapping(target = "propertyCategory", source = "request.propertyCategoryName")
     @Mapping(target = "address", source = "request.addressRequest", qualifiedBy = AddressMapping.class)
-    @Mapping(target = "images", source = "request.images")
     @Mapping(target = "hasWheelchairAccess", source = "request.hasDisabledAccess")
     @Mapping(target = "numeroVetrine", source = "request.shopWindowCount")
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
+    @Mapping(target = "imageDirectoryUlid", ignore = true)
+    @Mapping(target = "numberOfImages", ignore = true)
     public abstract CommercialProperty toEntity(CreateCommercialPropertyRequest request, User agent);
 
     @Mapping(target = "id", ignore = true)
@@ -79,11 +81,12 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "contract", source = "request.contractType")
     @Mapping(target = "propertyCategory", source = "request.propertyCategoryName")
     @Mapping(target = "address", source = "request.addressRequest", qualifiedBy = AddressMapping.class)
-    @Mapping(target = "images", source = "request.images")
     @Mapping(target = "accessibleFromStreet", source = "request.hasRoadAccess")
     @Mapping(target = "yearBuilt", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
+    @Mapping(target = "imageDirectoryUlid", ignore = true)
+    @Mapping(target = "numberOfImages", ignore = true)
     public abstract Land toEntity(CreateLandPropertyRequest request, User agent);
 
     @Mapping(target = "id", ignore = true)
@@ -91,10 +94,11 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "contract", source = "request.contractType")
     @Mapping(target = "propertyCategory", source = "request.propertyCategoryName")
     @Mapping(target = "address", source = "request.addressRequest", qualifiedBy = AddressMapping.class)
-    @Mapping(target = "images", source = "request.images")
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
+    @Mapping(target = "imageDirectoryUlid", ignore = true)
+    @Mapping(target = "numberOfImages", ignore = true)
     public abstract Garage toEntity(CreateGaragePropertyRequest request, User agent);
     
 

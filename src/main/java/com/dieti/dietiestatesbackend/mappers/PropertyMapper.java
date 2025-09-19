@@ -51,9 +51,6 @@ public class PropertyMapper {
         property.setPrice(req.getPrice());
         property.setArea(req.getArea());
         property.setYearBuilt(req.getYearBuilt());
-        if (req.getImages() != null) {
-            property.setImages(req.getImages());
-        }
         property.setCondition(req.getCondition());
         property.setEnergyRating(req.getEnergyRating());
     }

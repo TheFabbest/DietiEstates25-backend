@@ -1,11 +1,13 @@
 package com.dieti.dietiestatesbackend.service;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -51,6 +53,9 @@ public class PropertyManagementService {
      * La costruzione dell'entità specifica è delegata a PropertyCreationService,
      * che ora risolve le dipendenze e applica i campi comuni.
      */
+
+     //! ATTENZIONE, questo metodo dovrà essere deprecato a favore di createPropertyWithImages!
+     
     public PropertyResponse createProperty(CreatePropertyRequest request) {
         validationService.validate(request);
         logger.debug("Inizio creazione proprietà per categoria: {}", request.getPropertyCategoryName());
@@ -67,6 +72,35 @@ public class PropertyManagementService {
  
         Property saved = propertyRepository.save(property);
         logger.info("Property created id={}, type={}", saved.getId(), derivedPropertyType);
+        return responseMapperRegistry.map(saved);
+    }
+
+    /**
+     * Crea una proprietà con immagini a partire dal DTO unificato e una lista di file.
+     * La costruzione dell'entità specifica è delegata a PropertyCreationService,
+     * che ora risolve le dipendenze e applica i campi comuni.
+     * La gestione delle immagini sarà implementata successivamente.
+     */
+    public PropertyResponse createPropertyWithImages(CreatePropertyRequest request, List<MultipartFile> images) {
+        validationService.validate(request);
+        logger.debug("Inizio creazione proprietà con immagini per categoria: {}", request.getPropertyCategoryName());
+        logger.debug("Numero immagini ricevute: {}", images.size());
+
+        // Delego la creazione della property al servizio esistente
+        Property property = propertyCreationService.createProperty(request);
+
+        if (property.getPropertyCategory() == null) {
+            throw new IllegalArgumentException("PropertyCategory is required");
+        }
+
+        PropertyType derivedPropertyType = PropertyType.valueOf(property.getPropertyCategory().getPropertyType());
+        logger.debug("PropertyType derivato dalla categoria: {}", derivedPropertyType);
+
+        Property saved = propertyRepository.save(property);
+        logger.info("Property created with images id={}, type={}, imagesCount={}", saved.getId(), derivedPropertyType, images.size());
+        
+        // TODO: Implementare la gestione delle immagini
+        // Per ora restituiamo la proprietà senza gestire le immagini
         return responseMapperRegistry.map(saved);
     }
 }

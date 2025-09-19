@@ -2,6 +2,7 @@ package com.dieti.dietiestatesbackend.service;
  
 import java.util.List;
 import java.util.Objects;
+import org.springframework.web.multipart.MultipartFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,14 @@ public class PropertyService {
      */
     public PropertyResponse createProperty(CreatePropertyRequest request) {
         return propertyManagementService.createProperty(request);
+    }
+
+    /**
+     * Crea una proprietà con immagini a partire dal DTO unificato e una lista di file.
+     * Delega la gestione completa al PropertyManagementService.
+     */
+    public PropertyResponse createPropertyWithImages(CreatePropertyRequest request, List<MultipartFile> images) {
+        return propertyManagementService.createPropertyWithImages(request, images);
     }
 
     // Dependency resolution moved to PropertyDependencyResolver
