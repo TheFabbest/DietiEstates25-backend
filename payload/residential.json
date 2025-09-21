@@ -1,6 +1,5 @@
 {
   "propertyType":"RESIDENTIAL",
-  "agentUsername":"testuser",
   "description":"Appartamento di prova",
   "price":120000,
   "condition":"NEW",
@@ -16,7 +15,6 @@
     "street":"Piazza del Plebiscito",
     "streetNumber":"1"
   },
-  "images":["/img/1.jpg","/img/2.jpg"],
   "numberOfRooms":3,
   "numberOfBathrooms":2,
   "parkingSpaces":1,

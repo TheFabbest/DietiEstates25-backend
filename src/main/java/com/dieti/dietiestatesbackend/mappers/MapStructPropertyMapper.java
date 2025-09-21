@@ -19,10 +19,10 @@ import com.dieti.dietiestatesbackend.entities.PropertyCategory;
  * Questo approccio centralizza la logica di mapping comune, migliorando la manutenibilità e riducendo la duplicazione.
  */
 @Mapper(componentModel = "spring", uses = { AgentMapper.class, AddressMapper.class, HeatingMapper.class })
-public interface MapStructPropertyMapper {
+public abstract class MapStructPropertyMapper {
 
     @Value("${storage.image.base-url}")
-    String imageBaseUrl = ""; // MapStruct può iniettare valori nelle interfacce se sono componenti Spring
+    protected String imageBaseUrl;
 
     /**
      * Configurazione di base per il mapping da Property a PropertyResponse.
@@ -47,18 +47,18 @@ public interface MapStructPropertyMapper {
         @Mapping(target = "imageDirectoryUrl", ignore = true),
         @Mapping(target = "numberOfImages", source = "numberOfImages")
     })
-    PropertyResponse propertyToPropertyResponse(Property property);
+    public abstract PropertyResponse propertyToPropertyResponse(Property property);
 
     /**
      * Helper usati da MapStruct per convertire tipi complessi in String.
      * Questi non sono più strettamente necessari se si usa il source path diretto (es. "contract.name"),
      * ma possono essere mantenuti per chiarezza o per gestire logiche di conversione più complesse.
      */
-    default String contractToString(Contract c) {
+    String contractToString(Contract c) {
         return c == null ? null : c.getName();
     }
 
-    default String propertyCategoryToString(PropertyCategory pc) {
+    String propertyCategoryToString(PropertyCategory pc) {
         return pc == null ? null : pc.getName();
     }
 
@@ -67,7 +67,7 @@ public interface MapStructPropertyMapper {
      * dopo il mapping principale.
      */
     @AfterMapping
-    default void mapImageDirectoryUrl(Property property, @MappingTarget PropertyResponse response) {
+    void mapImageDirectoryUrl(Property property, @MappingTarget PropertyResponse response) {
         if (property.getImageDirectoryUlid() != null && imageBaseUrl != null && !imageBaseUrl.isEmpty()) {
             response.setImageDirectoryUrl(imageBaseUrl + "/" + property.getImageDirectoryUlid());
         } else {

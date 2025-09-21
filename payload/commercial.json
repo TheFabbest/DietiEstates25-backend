@@ -1,6 +1,5 @@
 {
   "propertyType": "COMMERCIAL",
-  "agentUsername": "testuser",
   "description": "Ufficio moderno in centro città",
   "price": 300000.00,
   "area": 150,
@@ -17,7 +16,6 @@
     "streetNumber": "100",
     "building": null
   },
-  "images": [],
   "numberOfRooms": 5,
   "floor": 2,
   "numberOfBathrooms": 2,

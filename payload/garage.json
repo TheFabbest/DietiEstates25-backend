@@ -1,6 +1,5 @@
 {
   "propertyType": "GARAGE",
-  "agentUsername": "testuser",
   "description": "Garage singolo in zona residenziale",
   "price": 25000.00,
   "area": 15,
@@ -17,7 +16,7 @@
     "streetNumber": "75",
     "building": null
   },
-  "images": [],
   "hasSurveillance": true,
-  "numberOfFloors": 1
+  "numberOfFloors": 1,
+  "floor": 0
 }

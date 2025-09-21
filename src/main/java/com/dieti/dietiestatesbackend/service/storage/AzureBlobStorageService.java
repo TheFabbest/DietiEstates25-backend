@@ -161,18 +161,13 @@ public class AzureBlobStorageService implements FileStorageService {
         return String.format("%s?%s", blobClient.getBlobUrl(), sasToken);
     }
 
-    private HttpRequest createUploadRequest(String sasUrl, MultipartFile file) {
+    private HttpRequest createUploadRequest(String sasUrl, MultipartFile file) throws IOException {
+        byte[] fileContent = file.getBytes(); // Legge l'intero contenuto del file in un array di byte
         return HttpRequest.newBuilder()
                 .uri(URI.create(sasUrl))
                 .header("x-ms-blob-type", "BlockBlob")
                 .header("Content-Type", file.getContentType())
-                .PUT(HttpRequest.BodyPublishers.ofInputStream(() -> {
-                    try {
-                        return file.getInputStream();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to access file input stream", e);
-                    }
-                }))
+                .PUT(HttpRequest.BodyPublishers.ofByteArray(fileContent)) // Usa ofByteArray
                 .build();
     }
 

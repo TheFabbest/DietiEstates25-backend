@@ -52,6 +52,7 @@ public sealed interface CreatePropertyRequest
     }
 
     List<String> getImages();
+    
     @AssertTrue(message = "Il tipo di proprietà non corrisponde alla categoria specificata.")
     default boolean isPropertyTypeConsistentWithCategory() {
         // Questa validazione sarà gestita a livello di servizio, non qui direttamente.

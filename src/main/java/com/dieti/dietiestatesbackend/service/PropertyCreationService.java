@@ -15,7 +15,7 @@ import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.mappers.CreationMapperRegistry;
 import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
 import com.dieti.dietiestatesbackend.service.lookup.AgentLookupService;
-import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
+
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 
 /**
@@ -28,15 +28,11 @@ public class PropertyCreationService {
     private static final Logger logger = LoggerFactory.getLogger(PropertyCreationService.class);
 
     private final AgentLookupService agentLookupService;
-    private final PropertyRepository propertyRepository;
     private final CreationMapperRegistry creationMapperRegistry;
 
-
     public PropertyCreationService(AgentLookupService agentLookupService,
-                                   PropertyRepository propertyRepository,
                                    CreationMapperRegistry creationMapperRegistry) {
         this.agentLookupService = agentLookupService;
-        this.propertyRepository = propertyRepository;
         this.creationMapperRegistry = creationMapperRegistry;
     }
 
@@ -55,10 +51,6 @@ public class PropertyCreationService {
         Property property = creationMapperRegistry.map((AbstractCreatePropertyRequest) request, agent);
         logger.debug("Property mappata prima del salvataggio: {}", property); // Log della Property mappata
 
-        property = propertyRepository.save(property);
-        logger.debug("Property salvata con successo id={} type={}", property.getId(), property.getClass().getSimpleName()); // Nuovo log
-
-        logger.debug("Created property id={} type={}", property.getId(), property.getClass().getSimpleName());
         return property;
     }
 }
