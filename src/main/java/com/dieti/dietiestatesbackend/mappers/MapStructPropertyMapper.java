@@ -1,9 +1,12 @@
 package com.dieti.dietiestatesbackend.mappers;
 
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Contract;
@@ -17,6 +20,9 @@ import com.dieti.dietiestatesbackend.entities.PropertyCategory;
  */
 @Mapper(componentModel = "spring", uses = { AgentMapper.class, AddressMapper.class, HeatingMapper.class })
 public interface MapStructPropertyMapper {
+
+    @Value("${storage.image.base-url}")
+    String imageBaseUrl = ""; // MapStruct può iniettare valori nelle interfacce se sono componenti Spring
 
     /**
      * Configurazione di base per il mapping da Property a PropertyResponse.
@@ -38,7 +44,7 @@ public interface MapStructPropertyMapper {
         @Mapping(target = "agent", source = "agent"),
         @Mapping(target = "address", source = "address"),
         @Mapping(target = "createdAt", source = "createdAt"),
-        @Mapping(target = "imageDirectoryUlid", source = "imageDirectoryUlid"),
+        @Mapping(target = "imageDirectoryUrl", ignore = true),
         @Mapping(target = "numberOfImages", source = "numberOfImages")
     })
     PropertyResponse propertyToPropertyResponse(Property property);
@@ -54,5 +60,18 @@ public interface MapStructPropertyMapper {
 
     default String propertyCategoryToString(PropertyCategory pc) {
         return pc == null ? null : pc.getName();
+    }
+
+    /**
+     * Metodo per costruire dinamicamente l'URL della directory delle immagini
+     * dopo il mapping principale.
+     */
+    @AfterMapping
+    default void mapImageDirectoryUrl(Property property, @MappingTarget PropertyResponse response) {
+        if (property.getImageDirectoryUlid() != null && imageBaseUrl != null && !imageBaseUrl.isEmpty()) {
+            response.setImageDirectoryUrl(imageBaseUrl + "/" + property.getImageDirectoryUlid());
+        } else {
+            response.setImageDirectoryUrl(null); // O una stringa vuota, a seconda della convenzione
+        }
     }
 }

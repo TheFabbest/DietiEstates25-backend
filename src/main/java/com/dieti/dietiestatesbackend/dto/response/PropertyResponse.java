@@ -31,6 +31,6 @@ public class PropertyResponse {
     private AddressResponseDTO address;
     private AgentResponseDTO agent;
     private LocalDateTime createdAt;
-    private String imageDirectoryUlid;
+    private String imageDirectoryUrl;
     private int numberOfImages;
 }

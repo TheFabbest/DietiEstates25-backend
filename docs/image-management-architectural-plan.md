@@ -21,13 +21,13 @@ Il flusso di creazione di un nuovo immobile con immagini associate seguirà un a
 ```mermaid
 graph TD
     subgraph "Backend: Transazione Atomica @Transactional"
-        B(Inizia) --> C{1. Genera imageDirectoryUlid univoco per la risorsa};
-        C --> D[2. Carica le immagini su Azure Storage usando l'ULID come path];
-        D -- Fallimento Upload --> E(ROLLBACK Transazione);
-        D -- Successo Upload --> F{3. Conta le immagini ricevute};
-        F --> G[4. Crea l'entità Property in memoria con imageDirectoryUlid e numberOfImages];
-        G --> H[5. Esegui singolo INSERT sul Database];
-        H --> I(Commit della Transazione);
+        B(Inizia) --> C{1. Genera imageDirectoryUlid univoco};
+        C --> D[2. Crea l'entità Property in memoria con ULID e numberOfImages];
+        D --> E[3. Esegui INSERT sul Database];
+        E -- Fallimento DB --> F(ROLLBACK Automatico);
+        E -- Successo DB --> G[4. Carica le immagini su Azure Storage usando l'ULID come path];
+        G -- Fallimento Upload --> H(Lancia Eccezione -> ROLLBACK Transazione DB);
+        G -- Successo Upload --> I(Commit della Transazione);
     end
 
     A[Client: POST /properties con Dati JSON + Immagini] --> B;

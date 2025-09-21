@@ -186,6 +186,44 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Gestisce l'eccezione InvalidImageException per errori di validazione delle immagini.
+     * Restituisce una risposta HTTP 400 Bad Request con messaggio descrittivo.
+     *
+     * @param ex L'eccezione InvalidImageException catturata
+     * @return ResponseEntity con status 400 e messaggio di errore
+     */
+    @ExceptionHandler(InvalidImageException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidImageException(InvalidImageException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Errore validazione immagine: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Immagine non valida",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Gestisce l'eccezione StorageException per errori durante le operazioni di storage.
+     * Restituisce una risposta HTTP 500 Internal Server Error con messaggio descrittivo.
+     *
+     * @param ex L'eccezione StorageException catturata
+     * @return ResponseEntity con status 500 e messaggio di errore
+     */
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<ErrorResponse> handleStorageException(StorageException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).error("Errore storage: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Errore durante l'operazione di storage",
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
      * Gestisce l'eccezione NoHandlerFoundException, che si verifica quando un endpoint non viene trovato.
      * Restituisce una risposta HTTP 404 Not Found con un messaggio informativo.
      *

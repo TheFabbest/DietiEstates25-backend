@@ -23,7 +23,7 @@ import com.dieti.dietiestatesbackend.service.geocoding.Coordinates;
 import com.dieti.dietiestatesbackend.service.places.PlacesService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
- 
+import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 /**
  * Façade service per le operazioni sulle Property.
  * - Entry-point unico per i controller (mantiene l'aderenza all'architettura).
@@ -41,6 +41,7 @@ public class PropertyService {
     private final PlacesService placesService;
     private final PropertyRepository propertyRepository;
     private final ResponseMapperRegistry responseMapperRegistry;
+    private final FileStorageService fileStorageService;
  
     /**
      * Costruttore principale: tutte le dipendenze sono richieste.
@@ -50,12 +51,14 @@ public class PropertyService {
                            PropertyManagementService propertyManagementService,
                            PlacesService placesService,
                            PropertyRepository propertyRepository,
-                           ResponseMapperRegistry responseMapperRegistry) {
+                           ResponseMapperRegistry responseMapperRegistry,
+                           FileStorageService fileStorageService) {
         this.propertyQueryService = Objects.requireNonNull(propertyQueryService, "propertyQueryService");
         this.propertyManagementService = Objects.requireNonNull(propertyManagementService, "propertyManagementService");
         this.placesService = Objects.requireNonNull(placesService, "placesService");
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
         this.responseMapperRegistry = Objects.requireNonNull(responseMapperRegistry, "responseMapperRegistry");
+        this.fileStorageService = Objects.requireNonNull(fileStorageService, "fileStorageService");
     }
 
 
@@ -132,8 +135,35 @@ public class PropertyService {
     }
 
 
+    @Transactional
     public void deleteProperty(Long id) {
-        propertyRepository.deleteById(id);
+        Objects.requireNonNull(id, "id must not be null");
+        var propertyOptional = propertyRepository.findById(id);
+
+        if (propertyOptional.isPresent()) {
+            Property property = propertyOptional.get();
+            String imageDir = property.getImageDirectoryUlid();
+            if (imageDir != null && !imageDir.isBlank()) {
+                logger.info("Avvio eliminazione immagini per la proprietà {} (ULID: {})", id, imageDir);
+                try {
+                    boolean deleteSuccess = fileStorageService.deleteImages(imageDir);
+                    if (!deleteSuccess) {
+                        logger.warn("L'eliminazione delle immagini per la proprietà {} è fallita, ma si procederà con l'eliminazione dal DB.", id);
+                    } else {
+                        logger.info("Immagini eliminate con successo per la proprietà {} (ULID: {})", id, imageDir);
+                    }
+                } catch (Exception e) {
+                    // Non blocchiamo l'eliminazione dal DB se lo storage fallisce; logghiamo l'errore
+                    logger.warn("Errore durante l'eliminazione delle immagini per la proprietà {} (ULID: {}): {}", id, imageDir, e.getMessage(), e);
+                }
+            }
+
+            propertyRepository.deleteById(id);
+            logger.info("Proprietà con ID {} eliminata con successo.", id);
+        } else {
+            logger.warn("Tentativo di eliminare una proprietà non esistente con ID: {}", id);
+            // Non lanciamo eccezione per compatibilità con controller attuale; considerare EntityNotFoundException se necessario
+        }
     }
 
     /**
