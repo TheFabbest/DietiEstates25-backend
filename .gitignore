@@ -34,6 +34,7 @@ build/
 
 # environments
 .env
+env
 
 # macOS stuff
 .DS_Store

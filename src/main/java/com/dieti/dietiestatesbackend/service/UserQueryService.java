@@ -31,6 +31,9 @@ public class UserQueryService {
     }
 
     public boolean doesUserExist(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
         return userRepository.existsByEmail(email.toLowerCase());
     }
 
