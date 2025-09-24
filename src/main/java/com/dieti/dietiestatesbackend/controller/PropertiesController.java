@@ -161,7 +161,7 @@ public class PropertiesController {
 
     @DeleteMapping("/properties/{id}")
     @PreAuthorize("@securityUtil.canAccessProperty(authentication.principal, #id)")
-    public ResponseEntity<Void> deleteProperty(@PathVariable("id") Long id, Authentication authentication) {
+    public ResponseEntity<Void> deleteProperty(@PathVariable("id") Long id, Authentication authentication) throws Exception {
         Property property = propertyService.getProperty(id);
         if (property == null) {
             return ResponseEntity.notFound().build();

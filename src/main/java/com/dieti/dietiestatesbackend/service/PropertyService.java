@@ -18,6 +18,7 @@ import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.request.PropertyHistoryRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.service.geocoding.Coordinates;
 import com.dieti.dietiestatesbackend.service.places.PlacesService;
@@ -162,7 +163,7 @@ public class PropertyService {
             logger.info("Proprietà con ID {} eliminata con successo.", id);
         } else {
             logger.warn("Tentativo di eliminare una proprietà non esistente con ID: {}", id);
-            // Non lanciamo eccezione per compatibilità con controller attuale; considerare EntityNotFoundException se necessario
+            throw new EntityNotFoundException("Proprietà con ID " + id + " non trovata.");
         }
     }
 
