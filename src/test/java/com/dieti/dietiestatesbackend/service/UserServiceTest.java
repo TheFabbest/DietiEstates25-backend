@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +42,24 @@ public class UserServiceTest {
         
         // Then
         assertFalse(result);
+
+        // Verify repository is never called with empty string
         verify(userRepository, never()).existsByEmail("");
+    }
+
+    @Test
+    void testUserCreationWithWeakPassword() {
+        // Given
+        String email = "test@example.com";
+        String password = "123Password";
+
+        // When
+        User createdUser = userManagementService.createUser(email, password, "Test User", "test", "user");
+
+        // Then
+        assertNull(createdUser);
+
+        // Verify repository is never called with weak password
+        verify(userRepository, never()).save(any());
     }
 }
