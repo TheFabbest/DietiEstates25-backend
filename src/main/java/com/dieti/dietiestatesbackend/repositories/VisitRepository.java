@@ -13,7 +13,7 @@ import com.dieti.dietiestatesbackend.entities.Visit;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Gets all visits from the agent
-    @Query(value = "SELECT new com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.property.agent.id = :agentID",
+    @Query(value = "SELECT new AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.property.agent.id = :agentID",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.property.agent.id = :agentID")
     Page<AgentVisitDTO> getAgentVisits(@Param("agentID") Long agentID, Pageable pageable);
 }

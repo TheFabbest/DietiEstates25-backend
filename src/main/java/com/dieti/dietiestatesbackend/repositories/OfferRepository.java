@@ -20,7 +20,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
      * @param agentId L'ID dell'agente
      * @return Lista di offerte dell'agente
      */
-    @Query(value = "SELECT o FROM Offer o WHERE o.property.agent.id = :id",
+    @Query(value = "SELECT o FROM Offer o JOIN FETCH o.property p JOIN FETCH p.agent JOIN FETCH o.user WHERE p.agent.id = :id",
            countQuery = "SELECT count(o) FROM Offer o WHERE o.property.agent.id = :id")
     Page<Offer> getAgentOffers(@Param("id") Long agentId, Pageable pageable);
 }
