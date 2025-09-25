@@ -131,8 +131,8 @@ public class PropertyService {
         return placesService.findNearbyPlaces(geoapifyCoordinates, radius, categories);
     }
 
-    public List<Property> getPropertiesByAgentId(Long agentID) {
-        return propertyRepository.getPropertiesByAgentId(agentID);
+    public Page<Property> getPropertiesByAgentId(Long agentID, Pageable pageable) {
+        return propertyRepository.getPropertiesByAgentId(agentID, pageable);
     }
 
 

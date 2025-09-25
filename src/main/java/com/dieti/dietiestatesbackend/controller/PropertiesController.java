@@ -154,9 +154,10 @@ public class PropertiesController {
 
     @GetMapping("/api/properties/agent_properties/{agentID}")
     @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(#agentID)")
-    public ResponseEntity<List<Property>> getAgentProperties(@PathVariable("agentID") Long agentID) {
-        List<Property> properties = propertyService.getPropertiesByAgentId(agentID);
-        return ResponseEntity.ok(properties);
+    public ResponseEntity<Page<PropertyResponse>> getAgentProperties(@PathVariable("agentID") Long agentID, Pageable pageable) {
+        Page<Property> properties = propertyService.getPropertiesByAgentId(agentID, pageable);
+        Page<PropertyResponse> response = properties.map(responseMapperRegistry::map);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/properties/{id}")

@@ -1,12 +1,11 @@
 package com.dieti.dietiestatesbackend.repositories;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.dieti.dietiestatesbackend.entities.Offer;
 
 @Repository
@@ -21,7 +20,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
      * @param agentId L'ID dell'agente
      * @return Lista di offerte dell'agente
      */
-    @Query(value = "SELECT o FROM Offer o " +
-           "WHERE o.property.agent.id = :id")
-    List<Offer> getAgentOffers(@Param("id") Long agentId);
+    @Query(value = "SELECT o FROM Offer o WHERE o.property.agent.id = :id",
+           countQuery = "SELECT count(o) FROM Offer o WHERE o.property.agent.id = :id")
+    Page<Offer> getAgentOffers(@Param("id") Long agentId, Pageable pageable);
 }

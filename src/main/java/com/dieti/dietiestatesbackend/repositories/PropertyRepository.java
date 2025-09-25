@@ -116,7 +116,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         """)
     List<Property> findAllDetailedByIdIn(@Param("ids") List<Long> ids);
 
-    @Query("""
+    @Query(value = """
         select p from Property p
           left join fetch p.contract
           left join fetch p.propertyCategory
@@ -125,6 +125,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
           left join fetch p.address
           left join fetch treat(p as ResidentialProperty).heating
         where a.id = :agentID
-        """)
-    List<Property> getPropertiesByAgentId(@Param("agentID") Long agentID);
+        """,
+        countQuery = "select count(p) from Property p where p.agent.id = :agentID")
+    Page<Property> getPropertiesByAgentId(@Param("agentID") Long agentID, Pageable pageable);
 }
