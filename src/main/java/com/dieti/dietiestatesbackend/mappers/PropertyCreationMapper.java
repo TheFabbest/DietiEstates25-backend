@@ -68,7 +68,6 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "propertyCategory", source = "request.propertyCategoryName")
     @Mapping(target = "address", source = "request.addressRequest", qualifiedBy = AddressMapping.class)
     @Mapping(target = "hasWheelchairAccess", source = "request.hasDisabledAccess")
-    @Mapping(target = "numeroVetrine", source = "request.shopWindowCount")
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)

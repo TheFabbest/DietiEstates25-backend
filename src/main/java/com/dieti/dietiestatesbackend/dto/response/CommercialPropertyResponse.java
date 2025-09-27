@@ -18,5 +18,4 @@ public class CommercialPropertyResponse extends PropertyResponse {
     private Integer numberOfBathrooms;
     private Integer totalFloors;
     private boolean hasDisabledAccess;
-    private Integer shopWindowCount;
 }

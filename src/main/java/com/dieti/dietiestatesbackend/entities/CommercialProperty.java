@@ -50,10 +50,6 @@ public class CommercialProperty extends Property {
     @Column(name = "wheelchair_access")
     private boolean hasWheelchairAccess = false;
  
-    @Min(0)
-    @Column(name = "numero_vetrine")
-    private Integer numeroVetrine = 0;
- 
     // Compatibility accessor: existing code expects getHasWheelchairAccess()
     public boolean getHasWheelchairAccess() { return this.hasWheelchairAccess; }
  

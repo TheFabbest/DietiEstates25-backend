@@ -49,10 +49,9 @@ public class CommercialPropertyMapperTest {
         CommercialProperty property = new CommercialProperty();
         property.setFloor(2);
         property.setHasWheelchairAccess(true);
-        property.setNumeroVetrine(3);
         property.setNumberOfFloors(5);
         property.setNumberOfRooms(2);
-        property.setNumberOfBathrooms(1); // Added for completeness
+        property.setNumberOfBathrooms(1);
         property.setAddress(new Address());
         property.setAgent(new User());
         property.setDescription("A commercial property");
@@ -61,7 +60,6 @@ public class CommercialPropertyMapperTest {
 
         assertEquals(property.getFloor(), response.getFloor());
         assertEquals(property.getHasWheelchairAccess(), response.isHasDisabledAccess());
-        assertEquals(property.getNumeroVetrine(), response.getShopWindowCount());
         assertEquals(property.getNumberOfFloors(), response.getTotalFloors());
         assertEquals(property.getNumberOfRooms(), response.getNumberOfRooms());
         assertEquals(property.getNumberOfBathrooms(), response.getNumberOfBathrooms());

@@ -75,7 +75,6 @@ public class PropertyMapper {
         cp.setNumberOfBathrooms(req.getNumberOfBathrooms());
         cp.setNumberOfFloors(req.getNumberOfFloors()); // Ora il campo esiste nel DTO
         cp.setHasWheelchairAccess(req.isHasDisabledAccess());
-        cp.setNumeroVetrine(req.getShopWindowCount() == null ? 0 : req.getShopWindowCount());
         return cp;
     }
 

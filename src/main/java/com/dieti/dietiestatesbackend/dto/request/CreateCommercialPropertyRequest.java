@@ -26,9 +26,6 @@ public final class CreateCommercialPropertyRequest extends CreateBuildingPropert
 
     private boolean hasDisabledAccess;
 
-    @Min(0)
-    private Integer shopWindowCount;
-
     private Integer numberOfFloors; // Aggiunto
 
     @Override

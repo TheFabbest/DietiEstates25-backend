@@ -20,7 +20,6 @@ public interface CommercialPropertyMapper {
     // Campi specifici
     @Mapping(target = "floor", source = "floor"),
     @Mapping(target = "hasDisabledAccess", source = "hasWheelchairAccess"),
-    @Mapping(target = "shopWindowCount", source = "numeroVetrine"),
     @Mapping(target = "totalFloors", source = "numberOfFloors")
 })
     CommercialPropertyResponse toResponse(CommercialProperty property);

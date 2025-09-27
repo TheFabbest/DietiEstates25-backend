@@ -66,7 +66,6 @@ public class FilterRequest {
     
     // Commercial
     private Boolean mustHaveWheelchairAccess;
-    private Integer minNumeroVetrine; // TODO see
     
     // Garage
     private Boolean mustHaveSurveillance;
