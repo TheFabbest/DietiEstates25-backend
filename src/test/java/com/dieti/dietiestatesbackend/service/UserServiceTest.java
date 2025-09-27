@@ -134,6 +134,7 @@ public class UserServiceTest {
         assertEquals(name, createdUser.getFirstName());
         assertEquals(surname, createdUser.getLastName());
         assertTrue(createdUser.isManager()); // Should be true after createManager sets it
+        assertFalse(createdUser.isAgent());
         assertEquals(creator.getAgency(), createdUser.getAgency());
         assertEquals(creator.getAgency().getName(), createdUser.getAgency().getName());
 
@@ -205,6 +206,7 @@ public class UserServiceTest {
 
         // Then
         assertTrue(expectedCreated.isAgent()); // Should be true after createAgent sets it
+        assertFalse(expectedCreated.isManager());
         assertEquals(creator.getAgency(), expectedCreated.getAgency());
         
         // Verify userManagementService.createUser was called
