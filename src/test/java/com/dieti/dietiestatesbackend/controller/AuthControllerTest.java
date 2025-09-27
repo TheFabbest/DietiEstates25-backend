@@ -9,9 +9,8 @@ import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
 import com.dieti.dietiestatesbackend.service.AuthenticationService;
 import com.dieti.dietiestatesbackend.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.HttpStatus;
@@ -31,6 +30,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AuthControllerTest {
 
+    @InjectMocks
     private AuthController authController;
 
     @Mock
@@ -54,22 +54,6 @@ class AuthControllerTest {
     @Mock
     private GoogleTokenValidator googleTokenValidator;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        // Manually inject the mocks instead of using @InjectMocks
-        authController = new AuthController(
-            userService, 
-            authService, 
-            scheduler, 
-            authenticationManager, 
-            refreshTokenProvider, 
-            accessTokenProvider, 
-            googleTokenValidator
-        );
-        // NOTE: You'll need to adjust the constructor parameters above 
-        // to match your actual AuthController constructor
-    }
     @Test
     void login_shouldReturnAuthResponse_whenCredentialsAreValid() {
         // Given

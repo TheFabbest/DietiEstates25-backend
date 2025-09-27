@@ -2,10 +2,8 @@ package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Offer;
-import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.OfferService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,9 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,14 +35,6 @@ class OfferControllerTest {
 
     @Mock
     private SecurityUtil securityUtil;
-
-    @BeforeEach
-    void setUp() {
-        // Mock authentication
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(1L, "test@example.com", true, List.of(new SimpleGrantedAuthority("ROLE_AGENT")));
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authenticatedUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 
     @Test
     void getAgentOffers_shouldReturnOffers_whenServiceReturnsData() {

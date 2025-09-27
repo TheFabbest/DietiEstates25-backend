@@ -2,16 +2,11 @@ package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.entities.Contract;
 import com.dieti.dietiestatesbackend.repositories.ContractRepository;
-import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,14 +22,6 @@ class ContractControllerTest {
 
     @InjectMocks
     private ContractController contractController;
-
-    @BeforeEach
-    void setUp() {
-        // Mock authentication for @PreAuthorize
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(1L, "manager@example.com", true, List.of(new SimpleGrantedAuthority("ROLE_MANAGER")));
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authenticatedUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 
     @Test
     void getAllContracts_shouldReturnContracts_whenManagerIsAuthorized() throws Exception {

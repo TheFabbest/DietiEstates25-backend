@@ -65,7 +65,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthRequest authRequest) {
-        // Prima ricava lo username associato all'email, altrimenti Spring cercherà l'email come username
         String username = userService.getUsernameFromEmail(authRequest.getEmail());
         if (username == null || username.isEmpty()) {
             return buildErrorResponse("Credenziali non valide", HttpStatus.UNAUTHORIZED);

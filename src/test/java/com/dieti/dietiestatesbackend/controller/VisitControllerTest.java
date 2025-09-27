@@ -1,10 +1,8 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
-import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.VisitService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,15 +13,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.entities.Visit;
 
 import java.util.Collections;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -39,16 +32,8 @@ class VisitControllerTest {
     @Mock
     private SecurityUtil securityUtil;
     
-    @InjectMocks  // This annotation was missing!
+    @InjectMocks
     private VisitController visitController;
-
-    @BeforeEach
-    void setUp() {
-        // Mock authentication for @PreAuthorize
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser(1L, "test@example.com", true, List.of(new SimpleGrantedAuthority("ROLE_AGENT")));
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authenticatedUser, null, authenticatedUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 
     @Test
     void getAgentVisits_shouldReturnVisits_whenAuthorized() throws Exception {
