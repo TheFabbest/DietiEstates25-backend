@@ -26,8 +26,7 @@ public class PropertyResponse {
     private String contract;
     private String propertyCategory;
     private String condition;
-    private String energyRating; // Rinomino per corrispondenza con l'entità
-    // TODO see private List<String> caratteristicheAddizionali;
+    private String energyRating;
     private AddressResponseDTO address;
     private AgentResponseDTO agent;
     private LocalDateTime createdAt;

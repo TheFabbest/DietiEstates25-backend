@@ -59,7 +59,7 @@ public class FilterRequest {
     
     // Residential
     private Integer minParkingSpaces;
-    private String heating; // TODO see regex
+    private String heating;
     private List<Garden> acceptedGarden;
     private Boolean mustBeFurnished;
     private Boolean mustHaveElevator;

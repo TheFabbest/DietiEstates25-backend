@@ -29,8 +29,6 @@ public class PropertyRequest {
     @NotNull
     private Long id_energyClass;
     
-    // TODO see private List<String> caratteristicheAddizionali;
-    
     @NotNull
     private Long id_agent;
     

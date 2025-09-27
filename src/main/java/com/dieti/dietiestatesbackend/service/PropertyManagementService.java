@@ -137,7 +137,7 @@ public class PropertyManagementService {
         return responseMapperRegistry.map(createdProperty);
     }
 
-    @Transactional // Questo metodo è ora transazionale
+    @Transactional
     private Property persistProperty(CreatePropertyRequest request, String imageDirectoryUlid, int numberOfImages) {
         Property property = propertyCreationService.createProperty(request);
 

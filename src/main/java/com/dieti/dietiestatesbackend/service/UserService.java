@@ -31,9 +31,6 @@ public class UserService {
         return userQueryService.doesUserExist(email);
     }
 
-    // Metodo getErrorMessageUserCreation rimosso come da piano di refactoring
-    // Le eccezioni verranno gestite con eccezioni più specifiche di Spring
-
     public void createUser(String email, String password, String username, String nome, String cognome) {
         userManagementService.createUser(email, password, username, nome, cognome);
     }
