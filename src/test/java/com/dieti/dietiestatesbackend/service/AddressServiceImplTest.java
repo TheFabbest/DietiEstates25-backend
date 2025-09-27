@@ -3,23 +3,23 @@ package com.dieti.dietiestatesbackend.service;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
  
-import java.math.BigDecimal; // Added import for BigDecimal
+import java.math.BigDecimal;
 import java.util.Optional;
  
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.junit.jupiter.api.BeforeEach; // Added import for BeforeEach
-import org.mockito.MockitoAnnotations; // Added import for MockitoAnnotations
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.MockitoAnnotations;
 
 import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.entities.Coordinates;
 import com.dieti.dietiestatesbackend.repositories.AddressRepository;
 import com.dieti.dietiestatesbackend.service.geocoding.GeocodingService;
-import com.dieti.dietiestatesbackend.dto.request.AddressRequest; // Added import for AddressRequest
-import com.dieti.dietiestatesbackend.exception.GeocodingException; // Added import for GeocodingException
-import org.springframework.http.HttpStatus; // Added import for HttpStatus
-import static org.junit.jupiter.api.Assertions.assertEquals; // Added import for assertEquals
-import static org.junit.jupiter.api.Assertions.assertThrows; // Added import for assertThrows
+import com.dieti.dietiestatesbackend.dto.request.AddressRequest;
+import com.dieti.dietiestatesbackend.exception.GeocodingException;
+import org.springframework.http.HttpStatus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class AddressServiceImplTest {
@@ -34,7 +34,6 @@ public class AddressServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Inject mocks into the service under test
         addressService = new AddressServiceImpl(addressRepository, geocodingService);
     }
  
