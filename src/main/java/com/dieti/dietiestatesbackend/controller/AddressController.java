@@ -1,5 +1,6 @@
 package com.dieti.dietiestatesbackend.controller;
  
+import com.dieti.dietiestatesbackend.entities.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,9 @@ public class AddressController {
     }
 
     @GetMapping("/address/{id}")
-    public ResponseEntity<Object> getAddress(@PathVariable("id") Long id) {
+    public ResponseEntity<Address> getAddress(@PathVariable("id") Long id) {
         return addressService.findById(id)
-                .map(addr -> ResponseEntity.ok().body((Object) addr))
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

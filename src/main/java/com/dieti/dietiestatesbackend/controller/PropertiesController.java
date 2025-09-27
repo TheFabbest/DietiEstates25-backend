@@ -69,7 +69,7 @@ public class PropertiesController {
     }
 
     @GetMapping("/properties/details/{id}")
-    public ResponseEntity<Object> getPropertyDetail(@PathVariable("id") long id) {
+    public ResponseEntity<PropertyResponse> getPropertyDetail(@PathVariable("id") long id) {
         PropertyResponse p = responseMapperRegistry.map(propertyService.getProperty(id));
         if (p == null) {
             return ResponseEntity.notFound().build();
