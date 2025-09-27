@@ -65,7 +65,10 @@ public class UserService {
         userManagementService.changePassword(email, newPassword);
     }
 
-    public void createAgent(SignupRequest toBeCreated, User creator) {
+    public User createAgent(SignupRequest toBeCreated, User creator) {
+        if (creator.isManager() == false) {
+            throw new IllegalStateException("Solo un manager può creare un agente.");
+        }
         User createdUser = userManagementService.createUser(
             toBeCreated.getEmail(),
             toBeCreated.getPassword(),
@@ -75,9 +78,13 @@ public class UserService {
         );
         createdUser.setAgent(true);
         createdUser.setAgency(creator.getAgency());
+        return createdUser;
     }
 
-    public void createManager(SignupRequest toBeCreated, User creator) {
+    public User createManager(SignupRequest toBeCreated, User creator) {
+        if (creator.isManager() == false) {
+            throw new IllegalStateException("Solo un manager può creare un altro manager.");
+        }
         User createdUser = userManagementService.createUser(
             toBeCreated.getEmail(),
             toBeCreated.getPassword(),
@@ -87,6 +94,7 @@ public class UserService {
         );
         createdUser.setManager(true);
         createdUser.setAgency(creator.getAgency());
+        return createdUser;
     }
 
     public void addAgentRole(String username, User user) {
