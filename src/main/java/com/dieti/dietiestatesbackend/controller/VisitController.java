@@ -1,8 +1,5 @@
 package com.dieti.dietiestatesbackend.controller;
  
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
- 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +13,6 @@ import com.dieti.dietiestatesbackend.service.VisitService;
  
 @RestController
 public class VisitController {
-    private static final Logger logger = LoggerFactory.getLogger(VisitController.class);
     private final VisitService visitService;
 
     @Autowired

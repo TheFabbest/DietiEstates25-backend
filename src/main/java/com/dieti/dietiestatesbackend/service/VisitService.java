@@ -1,7 +1,4 @@
 package com.dieti.dietiestatesbackend.service;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +14,6 @@ import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
 @Service
 @Transactional
 public class VisitService {
-    private static final Logger logger = LoggerFactory.getLogger(VisitService.class);
 
     private final VisitRepository visitRepository;
 

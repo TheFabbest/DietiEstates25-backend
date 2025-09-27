@@ -3,7 +3,7 @@ package com.dieti.dietiestatesbackend.service;
 import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
 import com.dieti.dietiestatesbackend.repositories.VisitRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,6 +13,9 @@ import static org.mockito.Mockito.*;
 
 class VisitServiceTest {
 
+    @Mock
+    Page<AgentVisitDTO> mockPage;
+
     @Test
     void testGetAgentVisits_ReturnsPage() {
         VisitRepository visitRepository = mock(VisitRepository.class);
@@ -20,7 +23,6 @@ class VisitServiceTest {
 
         Long agentId = 1L;
         Pageable pageable = mock(Pageable.class);
-        Page<AgentVisitDTO> mockPage = mock(Page.class);
 
         when(visitRepository.getAgentVisits(agentId, pageable)).thenReturn(mockPage);
 
