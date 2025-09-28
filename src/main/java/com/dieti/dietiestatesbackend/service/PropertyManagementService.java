@@ -138,7 +138,7 @@ public class PropertyManagementService {
     }
 
     @Transactional
-    private Property persistProperty(CreatePropertyRequest request, String imageDirectoryUlid, int numberOfImages) {
+    protected Property persistProperty(CreatePropertyRequest request, String imageDirectoryUlid, int numberOfImages) {
         Property property = propertyCreationService.createProperty(request);
 
         if (property.getPropertyCategory() == null) {
