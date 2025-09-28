@@ -212,4 +212,58 @@ public class UserServiceTest {
         // Verify userManagementService.createUser was called
         verify(userManagementService).createUser(email, password, username, name, surname);
     }
+
+    @Test
+    void addAgentRoleToExistingUser() {
+        // Given
+        String username = "existinguser";
+        User existingUser = new User();
+        existingUser.setUsername(username);
+        existingUser.setAgent(false);
+        existingUser.setManager(false);
+
+        User user = new User();
+        Agency agency = new Agency();
+        agency.setName("Agency1");
+        user.setAgency(agency);
+
+        when(userQueryService.getUserByUsername(username)).thenReturn(existingUser);
+
+        // When
+        userService.addAgentRole(username, user);
+
+        // Then
+        assertTrue(existingUser.isAgent());
+        assertEquals(agency, existingUser.getAgency());
+
+        // Verify userQueryService was called
+        verify(userQueryService).getUserByUsername(username);
+    }
+
+    @Test
+    void addManagerRoleToExistingUser() {
+        // Given
+        String username = "existinguser";
+        User existingUser = new User();
+        existingUser.setUsername(username);
+        existingUser.setAgent(false);
+        existingUser.setManager(false);
+
+        User user = new User();
+        Agency agency = new Agency();
+        agency.setName("Agency1");
+        user.setAgency(agency);
+
+        when(userQueryService.getUserByUsername(username)).thenReturn(existingUser);
+
+        // When
+        userService.addManagerRole(username, user);
+
+        // Then
+        assertTrue(existingUser.isManager());
+        assertEquals(agency, existingUser.getAgency());
+
+        // Verify userQueryService was called
+        verify(userQueryService).getUserByUsername(username);
+    }
 }

@@ -36,6 +36,6 @@ class ContractControllerTest {
 
         // Then
         assertEquals(1, responseEntity.size());
-        assertEquals(1L, responseEntity.get(0).getId());
+        assertEquals(contract.getId(), responseEntity.get(0).getId());
     }
 }

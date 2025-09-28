@@ -47,7 +47,11 @@ public class UserController {
             response.setFullName(user.getFirstName() + " " + user.getLastName());
             return ResponseEntity.ok(response);
         } else {
-            return new ResponseEntity<>("Agente non trovato", HttpStatus.NOT_FOUND);
+            if (user == null) {
+                return new ResponseEntity<>("Utente non trovato", HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>("L'utente non è un agente", HttpStatus.FORBIDDEN);
+            }
         }
     }
 
@@ -105,7 +109,7 @@ public class UserController {
     public ResponseEntity<Object> changeUserPassword(@RequestBody @Valid ChangePasswordRequest authRequest) {
         String username = userService.getUsernameFromEmail(authRequest.getEmail());
         if (username == null || username.isEmpty()) {
-            return new ResponseEntity<>("Credenziali non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Utente non trovato", HttpStatus.NOT_FOUND);
         } else if (userService.getUserByUsername(username) == null
                 || !userService.getUserByUsername(username).isManager()) {
             return new ResponseEntity<>("Solo i manager possono cambiare la password", HttpStatus.FORBIDDEN);
