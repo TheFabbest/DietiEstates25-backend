@@ -1,6 +1,8 @@
 package com.dieti.dietiestatesbackend.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -16,6 +18,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.dieti.dietiestatesbackend.dto.request.PropertyHistoryRequest;
+import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
+import com.dieti.dietiestatesbackend.entities.CommercialProperty;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
@@ -113,4 +118,22 @@ public class PropertyServiceTest {
         
         verify(propertyRepository).getPropertiesByAgentId(agentId, pageable);
     }
+
+    @Test
+    void getPropertyHistoryTest() {
+        // Given
+        Long propertyId = 1L;
+        Property property = new CommercialProperty();
+        PropertyHistoryRequest req = new PropertyHistoryRequest(List.of(propertyId.toString()));
+        when(propertyQueryServiceInterface.getPropertiesByIds(anyList())).thenReturn(List.of(property));
+
+        // When
+        List<PropertyResponse> result = propertyService.getPropertyHistory(req);
+
+        // Then
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        verify(propertyQueryServiceInterface).getPropertiesByIds(List.of(propertyId.toString()));
+    }
 }
+
