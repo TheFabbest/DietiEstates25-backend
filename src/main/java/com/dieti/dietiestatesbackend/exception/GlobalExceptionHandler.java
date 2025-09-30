@@ -268,6 +268,59 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Gestisce l'eccezione OverbookingException per violazioni delle regole di overbooking.
+     * Restituisce HTTP 409 Conflict con la mappa campo->messaggio contenuta nell'eccezione.
+     *
+     * @param ex L'eccezione OverbookingException catturata
+     * @return ResponseEntity con status 409 e body contenente dettagli dell'overbooking
+     */
+    @ExceptionHandler(OverbookingException.class)
+    public ResponseEntity<Map<String, String>> handleOverbookingException(OverbookingException ex) {
+        Map<String, String> errors = ex.getErrors();
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Overbooking rilevato: {} dettagli", errors != null ? errors.size() : 0, ex);
+ 
+        if (errors == null || errors.isEmpty()) {
+            // Risposta strutturata minima se l'eccezione non contiene dettagli
+            return new ResponseEntity<>(Map.of(
+                    "error", "Overbooking",
+                    "message", "La conferma della visita è in conflitto con le regole di disponibilità/overbooking"
+            ), HttpStatus.CONFLICT);
+        }
+ 
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
+    
+    /**
+     * Gestisce conflitti relativi alle disponibilità agente (AgentAvailabilityConflictException).
+     * Restituisce HTTP 409 Conflict con la mappa campo->messaggio fornita dall'eccezione.
+     */
+    @ExceptionHandler(AgentAvailabilityConflictException.class)
+    public ResponseEntity<Map<String, String>> handleAgentAvailabilityConflict(com.dieti.dietiestatesbackend.exception.AgentAvailabilityConflictException ex) {
+        Map<String, String> errors = ex.getErrors();
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Agent availability conflict: {} details", errors != null ? errors.size() : 0, ex);
+        if (errors == null || errors.isEmpty()) {
+            return new ResponseEntity<>(Map.of("error", "AgentAvailabilityConflict", "message", "Conflitto nella gestione della disponibilità agente"), HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
+ 
+    /**
+     * Gestisce il caso in cui una disponibilità agente non venga trovata.
+     * Restituisce HTTP 404 Not Found con un messaggio leggibile.
+     */
+    @ExceptionHandler(AgentAvailabilityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAgentAvailabilityNotFound(com.dieti.dietiestatesbackend.exception.AgentAvailabilityNotFoundException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).info("Agent availability not found: {}", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Disponibilità non trovata",
+                ex.getMessage(),
+                java.time.LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
      * DTO per la rappresentazione standardizzata degli errori.
      */
     public static class ErrorResponse {

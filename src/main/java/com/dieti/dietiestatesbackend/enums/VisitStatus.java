@@ -2,7 +2,8 @@ package com.dieti.dietiestatesbackend.enums;
 
 public enum VisitStatus {
     PENDING,
-    ACCEPTED,
+    CONFIRMED,
     REJECTED,
-    WITHDRAWN
+    CANCELLED,
+    COMPLETED
 }
