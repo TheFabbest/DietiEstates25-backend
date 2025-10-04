@@ -1,6 +1,7 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
+import com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO; // Aggiunto import
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.VisitService;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,19 @@ class VisitControllerTest {
         Visit visit = new Visit();
         visit.setId(1L);
         Address address = new Address();
-        AgentVisitDTO agentVisitDTO = new AgentVisitDTO(visit, "RESIDENTIAL", address);
+        // Creiamo un AddressResponseDTO dall'entità Address
+        AddressResponseDTO addressResponseDTO = new AddressResponseDTO(
+                address.getId(),
+                address.getCountry(),
+                address.getProvince(),
+                address.getCity(),
+                address.getStreet(),
+                address.getStreetNumber(),
+                address.getBuilding(),
+                address.getCoordinates().getLatitude(),
+                address.getCoordinates().getLongitude()
+        );
+        AgentVisitDTO agentVisitDTO = new AgentVisitDTO(visit, "RESIDENTIAL", addressResponseDTO);
         Page<AgentVisitDTO> visitsPage = new PageImpl<>(Collections.singletonList(agentVisitDTO));
 
         when(visitService.getAgentVisits(anyLong(), any(Pageable.class))).thenReturn(visitsPage);

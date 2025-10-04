@@ -20,21 +20,73 @@ import jakarta.persistence.LockModeType;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Gets all visits from the agent
-    @Query(value = "SELECT new AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.property.agent.id = :agentID",
+    @Query(value = "SELECT new com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO(" +
+                   "v, " +
+                   "v.property.propertyCategory.propertyType, " +
+                   "new com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO(" +
+                   "v.property.address.id, " +
+                   "v.property.address.country, " +
+                   "v.property.address.province, " +
+                   "v.property.address.city, " +
+                   "v.property.address.street, " +
+                   "v.property.address.streetNumber, " +
+                   "v.property.address.building, " +
+                   "v.property.address.coordinates.latitude, " +
+                   "v.property.address.coordinates.longitude)) " +
+                   "FROM Visit v WHERE v.property.agent.id = :agentID",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.property.agent.id = :agentID")
     Page<AgentVisitDTO> getAgentVisits(@Param("agentID") Long agentID, Pageable pageable);
 
     // Gets all visits requested by a user
-    @Query(value = "SELECT new AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.user.id = :userId",
+    @Query(value = "SELECT new com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO(" +
+                   "v, " +
+                   "v.property.propertyCategory.propertyType, " +
+                   "new com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO(" +
+                   "v.property.address.id, " +
+                   "v.property.address.country, " +
+                   "v.property.address.province, " +
+                   "v.property.address.city, " +
+                   "v.property.address.street, " +
+                   "v.property.address.streetNumber, " +
+                   "v.property.address.building, " +
+                   "v.property.address.coordinates.latitude, " +
+                   "v.property.address.coordinates.longitude)) " +
+                   "FROM Visit v WHERE v.user.id = :userId",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.user.id = :userId")
     Page<AgentVisitDTO> getUserVisits(@Param("userId") Long userId, Pageable pageable);
 
     // Gets all visits associated to a property
-    @Query(value = "SELECT new AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.property.id = :propertyId",
+    @Query(value = "SELECT new com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO(" +
+                   "v, " +
+                   "v.property.propertyCategory.propertyType, " +
+                   "new com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO(" +
+                   "v.property.address.id, " +
+                   "v.property.address.country, " +
+                   "v.property.address.province, " +
+                   "v.property.address.city, " +
+                   "v.property.address.street, " +
+                   "v.property.address.streetNumber, " +
+                   "v.property.address.building, " +
+                   "v.property.address.coordinates.latitude, " +
+                   "v.property.address.coordinates.longitude)) " +
+                   "FROM Visit v WHERE v.property.id = :propertyId",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.property.id = :propertyId")
     Page<AgentVisitDTO> getPropertyVisits(@Param("propertyId") Long propertyId, Pageable pageable);
 
-    @Query("SELECT new AgentVisitDTO(v, v.property.propertyCategory.propertyType, v.property.address) FROM Visit v WHERE v.id = :visitId")
+    @Query("SELECT new com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO(" +
+          "v, " +
+          "v.property.propertyCategory.propertyType, " +
+          "new com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO(" +
+          "v.property.address.id, " +
+          "v.property.address.country, " +
+          "v.property.address.province, " +
+          "v.property.address.city, " +
+          "v.property.address.street, " +
+          "v.property.address.streetNumber, " +
+          "v.property.address.building, " +
+          "v.property.address.coordinates.latitude, " +
+          "v.property.address.coordinates.longitude)) " +
+          "FROM Visit v WHERE v.id = :visitId")
     Optional<AgentVisitDTO> findAgentVisitById(@Param("visitId") Long visitId);
 
     /*
