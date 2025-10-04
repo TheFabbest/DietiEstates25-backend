@@ -17,10 +17,6 @@ public class CreateOfferRequest {
     @Positive(message = "L'ID della proprietà deve essere un valore positivo")
     private Long propertyId;
 
-    @NotNull(message = "L'ID dell'agente è obbligatorio")
-    @Positive(message = "L'ID dell'agente deve essere un valore positivo")
-    private Long agentId;
-
     @NotNull(message = "Il prezzo è obbligatorio")
     @Positive(message = "Il prezzo deve essere un valore positivo")
     private Double price;
