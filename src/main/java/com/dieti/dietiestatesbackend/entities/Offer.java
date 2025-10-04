@@ -1,7 +1,6 @@
 package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import com.dieti.dietiestatesbackend.enums.OfferStatus;
 
@@ -43,10 +42,6 @@ public class Offer extends BaseEntity {
     @DecimalMin(value = "0.01")
     @Column(name = "price", nullable = false, precision = 12, scale = 2)
     private BigDecimal price;
-
-    @NotNull
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
 
     @NotNull
     @Enumerated(EnumType.STRING)

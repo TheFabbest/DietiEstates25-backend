@@ -128,4 +128,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         """,
         countQuery = "select count(p) from Property p where p.agent.id = :agentID")
     Page<Property> getPropertiesByAgentId(@Param("agentID") Long agentID, Pageable pageable);
+
+    Property findByOfferId(Long offerId);
 }

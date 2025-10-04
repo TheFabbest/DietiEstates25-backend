@@ -19,7 +19,6 @@ import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.enums.OfferStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +40,6 @@ public class OfferServiceTest {
         Offer offer = new Offer();
         offer.setId(offerId);
         offer.setPrice(new BigDecimal("150000.00"));
-        offer.setDate(LocalDate.now());
         offer.setStatus(OfferStatus.PENDING);
 
         when(offerRepository.findById(offerId)).thenReturn(Optional.of(offer));
@@ -80,13 +78,11 @@ public class OfferServiceTest {
         Offer offer1 = new Offer();
         offer1.setId(1L);
         offer1.setPrice(new BigDecimal("150000.00"));
-        offer1.setDate(LocalDate.now());
         offer1.setStatus(OfferStatus.PENDING);
 
         Offer offer2 = new Offer();
         offer2.setId(2L);
         offer2.setPrice(new BigDecimal("200000.00"));
-        offer2.setDate(LocalDate.now());
         offer2.setStatus(OfferStatus.ACCEPTED);
 
         List<Offer> offers = Arrays.asList(offer1, offer2);
@@ -132,7 +128,6 @@ public class OfferServiceTest {
         Offer offer = new Offer();
         offer.setId(1L);
         offer.setPrice(new BigDecimal("150000.00"));
-        offer.setDate(LocalDate.now());
         offer.setStatus(OfferStatus.PENDING);
         offer.setCreatedAt(LocalDateTime.now());
 
@@ -143,7 +138,6 @@ public class OfferServiceTest {
         assertNotNull(result);
         assertEquals(offer.getId(), result.getId());
         assertEquals(offer.getPrice(), result.getPrice());
-        assertEquals(offer.getDate(), result.getDate());
         assertEquals(offer.getStatus(), result.getStatus());
         assertEquals(offer.getCreatedAt(), result.getCreatedAt());
         assertNull(result.getProperty()); // Property non mappato nel metodo base

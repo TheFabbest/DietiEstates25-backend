@@ -14,6 +14,7 @@ import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.repositories.VisitRepository;
 import com.dieti.dietiestatesbackend.repositories.AgentAvailabilityRepository;
 import com.dieti.dietiestatesbackend.dto.request.VisitCreationRequestDTO;
+import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.Visit;
 import com.dieti.dietiestatesbackend.enums.VisitStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -173,6 +174,22 @@ public class SecurityUtil {
         return visitRepository.findById(visitId)
                 .map(visit -> canPrincipalCancelVisit(principal, visit))
                 .orElse(false);
+    }
+
+    /**
+     * Verifica se il principal è l'agente associato all'offerta specificata.
+     * Usato per autorizzare operazioni riservate all'agente (es. accettare/rifiutare offerte).
+     */
+    public boolean isAgentOfOffer(Long offerID, AppPrincipal principal) {
+        logger.debug("isAgentOfOffer - principal: {}, offerID: {}", principal, offerID);
+        if (!isValidPrincipal(principal) || offerID == null) {
+            return false;
+        }
+        Property property = propertyRepository.findByOfferId(offerID);
+        if (property == null || property.getAgent() == null) {
+            return false;
+        }
+        return principal.getId().equals(property.getAgent().getId());
     }
 
     // ========== Helper methods ==========
