@@ -13,6 +13,8 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,7 +24,9 @@ import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
 
 @Entity
-@Table(name = "offer")
+@Table(name = "offer", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"id_property", "id_user"}, name = "uk_offer_property_user")
+})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -47,4 +51,7 @@ public class Offer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OfferStatus status = OfferStatus.PENDING;
+
+    @Version
+    private Long version;
 }

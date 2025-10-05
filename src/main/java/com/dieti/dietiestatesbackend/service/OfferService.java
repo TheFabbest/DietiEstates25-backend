@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
   
 import com.dieti.dietiestatesbackend.entities.Offer;
+import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.enums.OfferStatus;
 import com.dieti.dietiestatesbackend.repositories.OfferRepository;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
@@ -56,9 +58,18 @@ public class OfferService {
     }
 
     public Offer createOffer(CreateOfferRequest request, Long userID) {
-        Offer offer = new Offer();
-        offer.setProperty(propertyRepository.getReferenceById(request.getPropertyId()));
-        offer.setUser(userRepository.getReferenceById(userID));
+        Property property = propertyRepository.findById(request.getPropertyId())
+            .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + request.getPropertyId()));
+        User user = userRepository.findById(userID)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userID));
+
+        Offer offer = offerRepository.findByPropertyIdAndUserId(request.getPropertyId(), userID)
+            .orElse(new Offer());
+        if (offer.getStatus() == OfferStatus.ACCEPTED) {
+            throw new IllegalStateException("The agent has already accepted a previous offer");
+        }
+        offer.setProperty(property);
+        offer.setUser(user);
         offer.setPrice(BigDecimal.valueOf(request.getPrice()));
         offer.setStatus(OfferStatus.PENDING);
         return offerRepository.save(offer);
@@ -67,6 +78,9 @@ public class OfferService {
     public Offer withdrawOffer(Long propertyID, Long userID) {
         Offer offer = offerRepository.findByPropertyIdAndUserId(propertyID, userID)
             .orElseThrow(() -> new EntityNotFoundException("Offer not found for property ID: " + propertyID + " and user ID: " + userID));
+        if (offer.getStatus() != OfferStatus.PENDING) {
+            throw new IllegalStateException("Only pending offers can be withdrawn");
+        }
         offer.setStatus(OfferStatus.WITHDRAWN);
         return offerRepository.save(offer);
     }
@@ -74,6 +88,9 @@ public class OfferService {
     public Offer acceptOffer(Long offerID, Long agentID) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + offerID));
+        if (offer.getStatus() != OfferStatus.PENDING) {
+            throw new IllegalStateException("Only pending offers can be accepted");
+        }
         offer.setStatus(OfferStatus.ACCEPTED);
         return offerRepository.save(offer);
     }
@@ -81,6 +98,9 @@ public class OfferService {
     public Offer rejectOffer(Long offerID, Long agentID) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + offerID));
+        if (offer.getStatus() != OfferStatus.PENDING) {
+            throw new IllegalStateException("Only pending offers can be rejected");
+        }
         offer.setStatus(OfferStatus.REJECTED);
         return offerRepository.save(offer);
     }
