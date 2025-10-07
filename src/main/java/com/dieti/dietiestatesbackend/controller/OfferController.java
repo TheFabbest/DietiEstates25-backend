@@ -49,7 +49,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/accept/{offerID}")
-    @PreAuthorize("@securityUtil.isAgentOfOffer(#offerID, principal)")
+    @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) {
         Offer offer = offerService.acceptOffer(offerID, principal.getId());
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
@@ -57,7 +57,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/reject/{offerID}")
-    @PreAuthorize("@securityUtil.isAgentOfOffer(#offerID, principal)")
+    @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) {
         Offer offer = offerService.rejectOffer(offerID, principal.getId());
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
@@ -65,7 +65,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/counter/{offerID}")
-    @PreAuthorize("@securityUtil.isAgentOfOffer(#offerID, principal)")
+    @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) {
         Offer offer = offerService.counterOffer(offerID, principal.getId(), newPrice);
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);

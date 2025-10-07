@@ -1,7 +1,9 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
-import com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO; // Aggiunto import
+import com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO;
+import com.dieti.dietiestatesbackend.entities.Coordinates;
+import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.VisitService;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.dieti.dietiestatesbackend.entities.Address;
 import com.dieti.dietiestatesbackend.entities.Visit;
+import java.math.BigDecimal;
 
 import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,8 +45,14 @@ class VisitControllerTest {
         Long agentId = 1L;
         Visit visit = new Visit();
         visit.setId(1L);
-        Address address = new Address();
-        // Creiamo un AddressResponseDTO dall'entità Address
+        Coordinates coordinates = new Coordinates(BigDecimal.valueOf(10.0), BigDecimal.valueOf(20.0));
+        Address address = new Address("IT", "Rome", "Rome", "Via Roma", "1", "A", coordinates);
+        address.setId(1L); // L'ID viene gestito da BaseEntity, quindi lo impostiamo dopo la creazione.
+        ResidentialProperty property = new ResidentialProperty();
+        property.setId(1L);
+        property.setAddress(address);
+        visit.setProperty(property);
+
         AddressResponseDTO addressResponseDTO = new AddressResponseDTO(
                 address.getId(),
                 address.getCountry(),

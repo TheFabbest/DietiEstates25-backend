@@ -6,10 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-
 import com.dieti.dietiestatesbackend.entities.Property;
 
 /**
@@ -129,6 +128,4 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
         countQuery = "select count(p) from Property p where p.agent.id = :agentID")
     Page<Property> getPropertiesByAgentId(@Param("agentID") Long agentID, Pageable pageable);
 
-    @Query("SELECT o.property FROM Offer o WHERE o.id = :offerId")
-    Property findByOfferId(@Param("offerId") Long offerId);
 }
