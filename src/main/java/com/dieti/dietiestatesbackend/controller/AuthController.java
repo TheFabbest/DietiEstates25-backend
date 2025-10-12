@@ -30,6 +30,7 @@ import com.dieti.dietiestatesbackend.security.GoogleTokenValidator;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
 import com.dieti.dietiestatesbackend.service.AuthenticationService;
 import com.dieti.dietiestatesbackend.service.UserService;
+import com.dieti.dietiestatesbackend.service.emails.EmailService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 import jakarta.validation.Valid;
@@ -45,7 +46,8 @@ public class AuthController {
     private final RefreshTokenProvider refreshTokenProvider;
     private final AccessTokenProvider accessTokenProvider;
     private final GoogleTokenValidator googleTokenValidator;
-    
+    private final EmailService emailService;
+
     @Autowired
     public AuthController(UserService userService,
                           AuthenticationService authService,
@@ -53,7 +55,8 @@ public class AuthController {
                           AuthenticationManager authenticationManager,
                           RefreshTokenProvider refreshTokenProvider,
                           AccessTokenProvider accessTokenProvider,
-                          GoogleTokenValidator googleTokenValidator) {
+                          GoogleTokenValidator googleTokenValidator,
+                          EmailService emailService) {
         this.userService = userService;
         this.authService = authService;
         this.scheduler = scheduler;
@@ -61,6 +64,7 @@ public class AuthController {
         this.refreshTokenProvider = refreshTokenProvider;
         this.accessTokenProvider = accessTokenProvider;
         this.googleTokenValidator = googleTokenValidator;
+        this.emailService = emailService;
     }
 
     @PostMapping("/login")
@@ -91,6 +95,8 @@ public class AuthController {
         String username = payload.get("preferred_username") != null ? payload.get("preferred_username").toString() : email.split("@")[0];
         String name = payload.get("given_name").toString();
         String surname = payload.get("family_name").toString();
+
+        emailService.sendSimpleEmail(email, "Benvenuto in Dieti Estates", "Ciao " + name + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi.\n\nCordiali saluti,\nIl team di Dieti Estates");
 
         authService.handleGoogleAuth(email, username, name, surname);
 
