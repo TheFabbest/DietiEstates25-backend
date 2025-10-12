@@ -17,7 +17,7 @@ public class EmailService {
     private String sendGridApiKey;
 
     public void sendEmail(String to, String subject, String contentText) throws IOException {
-        Email from = new Email("your_verified_sender_email@yourdomain.com");
+        Email from = new Email("25dietiestates@gmail.com");
         Email toEmail = new Email(to);
         Content content = new Content("text/plain", contentText);
         Mail mail = new Mail(from, subject, toEmail, content);
