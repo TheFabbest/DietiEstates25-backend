@@ -85,8 +85,8 @@ public class AuthController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<Object> authWithGoogle(@RequestBody String googleAuthToken) throws IOException, GeneralSecurityException {
-        GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthToken);
+    public ResponseEntity<Object> authWithGoogle(@RequestBody @Valid GoogleAuthRequest googleAuthRequest) throws IOException, GeneralSecurityException {
+        GoogleIdToken.Payload payload = googleTokenValidator.validateToken(googleAuthRequest.getID_token());
         String email = payload.getEmail();
         String username = payload.get("preferred_username") != null ? payload.get("preferred_username").toString() : email.split("@")[0];
         String name = payload.get("given_name").toString();
