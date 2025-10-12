@@ -18,5 +18,5 @@ import lombok.AllArgsConstructor;
 public class GoogleAuthRequest {
 
     @NotBlank(message = "Il token Google è obbligatorio.")
-    private String ID_token;
+    private String idToken;
 }
