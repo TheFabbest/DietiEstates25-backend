@@ -1,6 +1,5 @@
 package com.dieti.dietiestatesbackend.service;
 
-import com.dieti.dietiestatesbackend.dto.request.GoogleAuthRequest;
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
@@ -48,12 +47,11 @@ public class AuthenticationService {
         return userQueryService.getUserByUsername(signupRequest.getUsername());
     }
 
-    public void handleGoogleAuth(String email, GoogleAuthRequest googleAuthRequest) {
+    public void handleGoogleAuth(String email, String username, String name, String surname) {
         if (!userQueryService.doesUserExist(email)) {
-            if (googleAuthRequest.getUsername() != null && !googleAuthRequest.getUsername().isEmpty()) {
+            if (username != null && !username.isEmpty()) {
                 try {
-                    userManagementService.createGoogleUser(email, googleAuthRequest.getUsername(),
-                                                          googleAuthRequest.getName(), googleAuthRequest.getSurname());
+                    userManagementService.createGoogleUser(email, username, name, surname);
                 } catch (IllegalStateException e) {
                     throw new IllegalStateException("Impossibile creare l'utente Google: " + e.getMessage());
                 }

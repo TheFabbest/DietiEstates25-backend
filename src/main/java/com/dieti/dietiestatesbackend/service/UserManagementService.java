@@ -1,5 +1,8 @@
 package com.dieti.dietiestatesbackend.service;
 
+import java.nio.charset.Charset;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,12 +68,16 @@ public class UserManagementService {
         
         User user = new User();
         user.setEmail(email.toLowerCase());
-        // Per gli utenti Google, non impostiamo la password (rimane null)
         user.setUsername(username);
         user.setFirstName(name);
         user.setLastName(surname);
         user.setAgent(false);
         user.setManager(false);
+        
+        byte[] array = new byte[32]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String generatedString = new String(array, Charset.forName("UTF-8"));
+        user.setPassword(generatedString);
         
         userRepository.save(user);
     }
