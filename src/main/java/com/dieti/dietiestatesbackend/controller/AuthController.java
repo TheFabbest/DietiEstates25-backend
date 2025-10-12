@@ -96,7 +96,7 @@ public class AuthController {
         String name = payload.get("given_name").toString();
         String surname = payload.get("family_name").toString();
 
-        emailService.sendSimpleEmail(email, "Benvenuto in Dieti Estates", "Ciao " + name + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi.\n\nCordiali saluti,\nIl team di Dieti Estates");
+        emailService.sendEmail(email, "Benvenuto in Dieti Estates", "Ciao " + name + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi.\n\nCordiali saluti,\nIl team di Dieti Estates");
 
         authService.handleGoogleAuth(email, username, name, surname);
 
