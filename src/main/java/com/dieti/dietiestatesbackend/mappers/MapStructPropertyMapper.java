@@ -44,7 +44,7 @@ public abstract class MapStructPropertyMapper {
         @Mapping(target = "agent", source = "agent"),
         @Mapping(target = "address", source = "address"),
         @Mapping(target = "createdAt", source = "createdAt"),
-        @Mapping(target = "imageDirectoryUrl", ignore = true),
+        @Mapping(target = "firstImageUrl", ignore = true),
         @Mapping(target = "numberOfImages", source = "numberOfImages")
     })
     public abstract PropertyResponse propertyToPropertyResponse(Property property);
@@ -63,15 +63,16 @@ public abstract class MapStructPropertyMapper {
     }
 
     /**
-     * Metodo per costruire dinamicamente l'URL della directory delle immagini
-     * dopo il mapping principale.
+     * Metodo per costruire dinamicamente l'URL della prima immagine
+     * (first image) dopo il mapping principale.
      */
     @AfterMapping
-    void mapImageDirectoryUrl(Property property, @MappingTarget PropertyResponse response) {
+    void mapFirstImageUrl(Property property, @MappingTarget PropertyResponse response) {
         if (property.getImageDirectoryUlid() != null && imageBaseUrl != null && !imageBaseUrl.isEmpty()) {
-            response.setImageDirectoryUrl(imageBaseUrl + "/" + property.getImageDirectoryUlid());
+            // Costruiamo l'URL diretto alla prima immagine (indice 0)
+            response.setFirstImageUrl(imageBaseUrl + "/" + property.getImageDirectoryUlid() + "/0");
         } else {
-            response.setImageDirectoryUrl(null); // O una stringa vuota, a seconda della convenzione
+            response.setFirstImageUrl(null);
         }
     }
 }
