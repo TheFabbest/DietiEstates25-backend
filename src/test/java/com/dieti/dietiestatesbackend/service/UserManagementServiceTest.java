@@ -1,7 +1,7 @@
 package com.dieti.dietiestatesbackend.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -102,7 +102,7 @@ class UserManagementServiceTest {
         assertEquals("guser", saved.getUsername());
         assertEquals("GoogleName", saved.getFirstName());
         assertEquals("GoogleSurname", saved.getLastName());
-        assertNull(saved.getPassword());
+        assertNotNull(saved.getPassword());
     }
 
     @Test
