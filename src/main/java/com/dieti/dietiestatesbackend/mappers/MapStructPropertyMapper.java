@@ -44,6 +44,7 @@ public abstract class MapStructPropertyMapper {
         @Mapping(target = "agent", source = "agent"),
         @Mapping(target = "address", source = "address"),
         @Mapping(target = "createdAt", source = "createdAt"),
+        @Mapping(target = "updatedAt", source = "updatedAt"),
         @Mapping(target = "firstImageUrl", ignore = true),
         @Mapping(target = "numberOfImages", source = "numberOfImages")
     })
