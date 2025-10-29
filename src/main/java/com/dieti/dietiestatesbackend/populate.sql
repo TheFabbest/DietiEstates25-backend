@@ -1,64 +1,50 @@
--- Costanti per evitare duplicazione di valori letterali
-DECLARE commercial_category CONSTANT VARCHAR := 'commercial_property';
-DECLARE residential_category CONSTANT VARCHAR := 'residential_property';
-DECLARE land_category CONSTANT VARCHAR := 'land';
-DECLARE garage_category CONSTANT VARCHAR := 'garage';
+-- INSERT INTO dieti_estates.address (id, country, province, city, street, street_number, latitude, longitude, created_at) VALUES
+-- (1, 'Italy', 'Rome', 'Rome', 'Via del Corso', '1', 41.902782, 12.483660, CURRENT_TIMESTAMP);
 
-INSERT INTO dieti_estates.address (latitude, longitude, city, country, province, street, street_number) VALUES
-    (45.123456, 12.123456, 'Fictional City', 'Country1', 'Fictional Province', 'Imaginary Street', '123'),
-    (45.654321, 12.654321, 'Dreamland', 'Country2', 'Dream Province', 'Fantasy Avenue', '456'),
-    (45.789012, 12.789012, 'Wonderland', 'Country3', 'Wonder Province', 'Magic Boulevard', '789'),
-    (45.345678, 12.345678, 'Mystic Town', 'Country4', 'Mystic Province', 'Enchanted Lane', '101'),
-    (45.987654, 12.987654, 'Fairy Village', 'Country5', 'Fairy Province', 'Pixie Path', '202');
+-- INSERT INTO dieti_estates.contract (id, name, is_active, created_at) VALUES
+-- (1, 'Sale Contract', TRUE, CURRENT_TIMESTAMP);
 
-INSERT INTO dieti_estates.agency (id_address, name) VALUES (
-    1, 'The Hobbits'
-);
+-- INSERT INTO dieti_estates.heating (id, name, is_active, created_at) VALUES
+-- (1, 'Centralized', TRUE, CURRENT_TIMESTAMP);
 
--- Agent000@
--- 123Pass!
-INSERT INTO dieti_estates.user (id_agency, is_agent, is_manager, email, password, username, first_name, last_name)  VALUES
-    (1, TRUE, TRUE, 'agent@gmail.com', '$2a$12$K5tOHLOh7nXYVuTukNf.cu0e.sf01a918YOWSjNYjBSUL0tWnfK4y', 'Agent01', 'Smith', 'Agente'),
-    (NULL, FALSE, FALSE, 'prova@gmail.com', '$2a$12$sSATIARk3Q51ZvMV1DsSIeLEXLyKlYKyWGKNk.ZURQwlGAjUMmEVu', 'User44', 'Fab', 'Apu');
+-- INSERT INTO dieti_estates.property_category (id, property_type, name, is_active, created_at) VALUES
+-- (1, 'RESIDENTIAL', 'Apartment', true, CURRENT_TIMESTAMP),
+-- (2, 'COMMERCIAL', 'Office', true, CURRENT_TIMESTAMP),
+-- (3, 'LAND', 'Building Plot', true, CURRENT_TIMESTAMP),
+-- (4, 'GARAGE', 'Single Garage', true, CURRENT_TIMESTAMP);
 
-INSERT INTO dieti_estates.property_category (category, subcategory, is_active) VALUES
-    (commercial_category, 'commercial_local', TRUE),
-    (commercial_category, 'laboratory', TRUE),
-    (commercial_category, 'commercial_activity', TRUE),
-    (commercial_category, 'storehouse', TRUE),
-    (commercial_category, 'depot', TRUE),
-    (residential_category, 'apartment', TRUE),
-    (residential_category, 'penthouse', TRUE),
-    (residential_category, 'attic', TRUE),
-    (residential_category, 'loft', TRUE),
-    (residential_category, 'detached_house', TRUE),
-    (residential_category, 'villa', TRUE),
-    (residential_category, 'terraced_house', TRUE),
-    (residential_category, 'country_house', TRUE),
-    (land_category, 'agricultural', TRUE),
-    (land_category, 'building', TRUE),
-    (land_category, 'non-building', TRUE),
-    (garage_category, 'garage', TRUE),
-    (garage_category, 'parking space', TRUE)
-;
+-- INSERT INTO dieti_estates.agency (id, name, id_address, created_at) VALUES
+-- (1, 'DietiEstates Agency', 1, CURRENT_TIMESTAMP);
 
-INSERT INTO dieti_estates.contract (name, is_active) VALUES
-    ('sale', TRUE),
-    ('rental', TRUE)
-;
+INSERT INTO dieti_estates.residential_property (id, number_of_rooms, number_of_bathrooms, parking_spaces, id_heating, garden, is_furnished, floor, number_of_floors, has_elevator) VALUES
+(1, 3, 2, 1, 1, 'PRIVATE', TRUE, 3, 5, TRUE);
 
-INSERT INTO dieti_estates.property (
-    area, price, year_built, id_address, id_agent, id_contract, id_property_category, status, energy_rating, description) VALUES
-    (150.0, 700000.00, 2024, 1, 1, 1, 10, 'UNDER_CONSTRUCTION', 'A1', 'Beautiful 3-bedroom house with modern amenities and a spacious garden.'),
-    (85.0, 400000.00, 2002, 2, 1, 1, 12, 'RENOVATED', 'D', 'Country house with rustic charm, featuring a large kitchen and scenic views.'),
-    (200.0, 1200000.00, 2018, 3, 1, 1, 10, 'NEW', 'A1', 'Luxurious villa with a private pool and high-end finishes.'),
-    (60.0, 350000.00, 2025, 4, 1, 1, 6, 'UNDER_CONSTRUCTION', 'B', 'Modern apartment in the city center with easy access to public transport.'),
-    (100.0, 500000.00, 2012, 5, 1, 1, 7, 'TO_BE_RENOVATED', 'B', 'Spacious penthouse with panoramic city views and a large terrace.');
+-- INSERT INTO dieti_estates.property (id, id_address, id_contract, id_property_category, id_agent, description, price, area, year_built, condition, energy_rating, additional_features, image_directory_ulid, number_of_images, property_type, created_at, updated_at) VALUES
+-- (2, 1, 1, 2, 1, 'Modern office space', 500000.00, 200, 2010, 'GOOD_CONDITION', 'B', 'Meeting rooms, high-speed internet', '01ARZ3NDEKTSV4RRFFQ69G52XR', 3, 'COMMERCIAL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO dieti_estates.garage (id_property, has_surveillance, number_of_floors) VALUES (
-    4, TRUE, 1
-);
+-- INSERT INTO dieti_estates.commercial_property (id, number_of_rooms, floor, number_of_bathrooms, number_of_floors, wheelchair_access) VALUES
+-- (2, 5, 2, 2, 10, TRUE);
 
-INSERT INTO dieti_estates.commercial_property (id_property, floor, number_of_bathrooms, number_of_floors, number_of_rooms, numero_vetrine, wheelchair_access) VALUES (
-    1, 0, 2, 1, 3, 1, TRUE
-);
+-- INSERT INTO dieti_estates.property (id, id_address, id_contract, id_property_category, id_agent, description, price, area, year_built, condition, energy_rating, additional_features, image_directory_ulid, number_of_images, property_type, created_at, updated_at) VALUES
+-- (3, 1, 1, 3, 1, 'Spacious building plot', 150000.00, 500, NULL, 'GOOD_CONDITION', 'NOT_APPLICABLE', 'Ready for construction', '01ARZ3NDEKTSV4RRFFQ69G52XS', 0, 'LAND', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- INSERT INTO dieti_estates.land (id, accessible_from_street) VALUES
+-- (3, TRUE);
+
+-- INSERT INTO dieti_estates.property (id, id_address, id_contract, id_property_category, id_agent, description, price, area, year_built, condition, energy_rating, additional_features, image_directory_ulid, number_of_images, property_type, created_at, updated_at) VALUES
+-- (4, 1, 1, 4, 1, 'Single garage for rent', 20000.00, 20, 1995, 'GOOD_CONDITION', 'NOT_APPLICABLE', 'Secure, automatic door', '01ARZ3NDEKTSV4RRFFQ69G52XT', 1, 'GARAGE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- INSERT INTO dieti_estates.garage (id, has_surveillance, floor, number_of_floors) VALUES
+-- (4, FALSE, 0, 1);
+
+-- INSERT INTO dieti_estates.agent_availability (id, id_agent, start_time, end_time, created_at) VALUES
+-- (1, 1, '2025-11-01 09:00:00', '2025-11-01 17:00:00', CURRENT_TIMESTAMP);
+
+-- INSERT INTO dieti_estates.offer (id, id_property, id_user, price, status, created_at) VALUES
+-- (1, 1, 3, 240000.00, 'PENDING', CURRENT_TIMESTAMP);
+
+-- INSERT INTO dieti_estates.refresh_token (id, token_value, user_id, expiry_date, created_at) VALUES
+-- (1, 'some_refresh_token_value', 3, '2025-12-31 23:59:59', CURRENT_TIMESTAMP);
+
+-- INSERT INTO dieti_estates.visit (id, id_property, id_user, id_agent, start_time, end_time, status, created_at) VALUES
+-- (1, 1, 3, 1, '2025-11-02 10:00:00', '2025-11-02 11:00:00', 'PENDING', CURRENT_TIMESTAMP);
