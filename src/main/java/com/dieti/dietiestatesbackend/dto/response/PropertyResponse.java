@@ -30,6 +30,7 @@ public class PropertyResponse {
     private AddressResponseDTO address;
     private AgentResponseDTO agent;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String firstImageUrl;
     private int numberOfImages;
 }

@@ -1,8 +1,6 @@
 package com.dieti.dietiestatesbackend.entities;
 
 import java.time.LocalDateTime;
-
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
@@ -24,10 +22,6 @@ public abstract class BaseEntity implements Serializable {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;

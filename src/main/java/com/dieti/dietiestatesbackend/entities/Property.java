@@ -1,6 +1,10 @@
 package com.dieti.dietiestatesbackend.entities;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyCondition;
 import jakarta.persistence.*;
@@ -21,6 +25,10 @@ import lombok.AccessLevel;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Property extends BaseEntity {
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @Column(name = "description")
     private String description;
