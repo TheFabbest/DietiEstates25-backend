@@ -83,8 +83,9 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) {
+    public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) throws IOException{
         User savedUser = authService.registerNewUser(signupRequest);
+        emailService.welcomeMessage(savedUser);
         return buildAuthResponseEntity(savedUser, savedUser.getUsername());
     }
 
@@ -95,12 +96,9 @@ public class AuthController {
         String username = payload.get("preferred_username") != null ? payload.get("preferred_username").toString() : email.split("@")[0];
         String name = payload.get("given_name").toString();
         String surname = payload.get("family_name").toString();
-
-        emailService.sendEmail(email, "Benvenuto in Dieti Estates", "Ciao " + name + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi.\n\nCordiali saluti,\nIl team di Dieti Estates");
-
         authService.handleGoogleAuth(email, username, name, surname);
-
         User user = userService.getUserByUsername(username);
+        emailService.welcomeMessage(user);
         return buildAuthResponseEntity(user, username);
     }
 

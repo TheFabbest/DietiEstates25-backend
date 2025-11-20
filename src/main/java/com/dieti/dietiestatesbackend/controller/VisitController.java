@@ -1,5 +1,7 @@
 package com.dieti.dietiestatesbackend.controller;
  
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import com.dieti.dietiestatesbackend.dto.request.VisitCreationRequestDTO;
 import com.dieti.dietiestatesbackend.dto.request.VisitStatusUpdateRequestDTO;
 import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
 import com.dieti.dietiestatesbackend.service.VisitService;
+import com.dieti.dietiestatesbackend.service.emails.EmailService;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
  
 import jakarta.validation.Valid;
@@ -24,10 +27,12 @@ import jakarta.validation.Valid;
 @RestController
 public class VisitController {
     private final VisitService visitService;
+    private final EmailService emailService;
  
     @Autowired
-    public VisitController(VisitService visitService) {
+    public VisitController(VisitService visitService, EmailService emailService) {
         this.visitService = visitService;
+        this.emailService = emailService;
     }
  
     @GetMapping("/visits/agent/{agentID}")
@@ -53,24 +58,27 @@ public class VisitController {
     @PostMapping("/visits")
     @PreAuthorize("@securityUtil.canCreateVisit(authentication.principal, #visitRequest)")
     public ResponseEntity<AgentVisitDTO> createVisit(@AuthenticationPrincipal AppPrincipal principal,
-                                                     @RequestBody @Valid VisitCreationRequestDTO visitRequest) {
+                                                     @RequestBody @Valid VisitCreationRequestDTO visitRequest) throws IOException {
         AgentVisitDTO createdVisit = visitService.createVisit(visitRequest, principal.getId());
+        emailService.sendVisitScheduledEmail(createdVisit);
         return ResponseEntity.ok(createdVisit);
     }
  
     @PutMapping("/visits/{visitId}/status")
     @PreAuthorize("@securityUtil.canUpdateVisitStatus(authentication.principal, #visitId, #statusRequest.status)")
     public ResponseEntity<AgentVisitDTO> updateVisitStatus(@PathVariable("visitId") Long visitId,
-                                                           @RequestBody @Valid VisitStatusUpdateRequestDTO statusRequest) {
+                                                           @RequestBody @Valid VisitStatusUpdateRequestDTO statusRequest) throws IOException {
         AgentVisitDTO updated = visitService.updateVisitStatus(visitId, statusRequest.getStatus());
+        emailService.sendVisitStatusUpdatedEmail(updated);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/visits/{visitId}")
     @PreAuthorize("@securityUtil.canCancelVisit(authentication.principal, #visitId)")
     public ResponseEntity<AgentVisitDTO> cancelVisit(@PathVariable("visitId") Long visitId,
-                                                     @AuthenticationPrincipal AppPrincipal principal) {
+                                                     @AuthenticationPrincipal AppPrincipal principal) throws IOException {
         AgentVisitDTO result = visitService.cancelVisit(visitId, principal.getId());
+        emailService.sendVisitCancelledEmail(result);
         return ResponseEntity.ok(result);
     }
 }
