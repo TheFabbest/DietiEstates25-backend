@@ -42,7 +42,7 @@ public class VisitController {
         return ResponseEntity.ok(visits);
     }
  
-    @GetMapping("visits/me/")
+    @GetMapping("/visits/me/")
     public ResponseEntity<Page<AgentVisitDTO>> getMyVisits(@AuthenticationPrincipal AppPrincipal principal, Pageable pageable) {
         Page<AgentVisitDTO> visits = visitService.getUserVisits(principal.getId(), pageable);
         return ResponseEntity.ok(visits);
