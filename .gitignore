@@ -48,3 +48,6 @@ env
 # Logs
 logs/
 *.log
+
+# Windows stuff
+*.bat
