@@ -1,9 +1,6 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +21,8 @@ import com.dieti.dietiestatesbackend.exception.AgentAvailabilityNotFoundExceptio
 import com.dieti.dietiestatesbackend.mappers.AgentAvailabilityMapper;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.AgentAvailabilityService;
+
+import jakarta.validation.Valid;
 
 /**
  * Controller leggero per la gestione degli slot di disponibilità agente.
@@ -67,7 +66,7 @@ public class AgentAvailabilityController {
         List<AgentAvailability> list = availabilityService.getAvailabilitiesForAgent(agentId);
         List<AgentAvailabilityResponseDTO> dto = list.stream()
                 .map(mapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dto);
     }
 

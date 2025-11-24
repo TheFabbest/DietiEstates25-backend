@@ -1,13 +1,18 @@
 package com.dieti.dietiestatesbackend.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,14 +32,9 @@ import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
-import org.springframework.security.core.Authentication;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -162,7 +162,7 @@ public class PropertiesController {
 
     @DeleteMapping("/properties/{id}")
     @PreAuthorize("@securityUtil.canAccessProperty(authentication.principal, #id)")
-    public ResponseEntity<Void> deleteProperty(@PathVariable("id") Long id, Authentication authentication) throws Exception {
+    public ResponseEntity<Void> deleteProperty(@PathVariable("id") Long id, Authentication authentication) {
         Property property = propertyService.getProperty(id);
         if (property == null) {
             return ResponseEntity.notFound().build();
