@@ -1,5 +1,8 @@
 package com.dieti.dietiestatesbackend.entities;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.DecimalMax;
@@ -9,8 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 /**
  * Entità per rappresentare coordinate geografiche con validazione centralizzata.
@@ -22,7 +23,9 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coordinates {
+public class Coordinates implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Digits(integer = 10, fraction = 8)
     @DecimalMin(value = "-90.0", inclusive = true, message = "La latitudine deve essere maggiore o uguale a -90.0")
