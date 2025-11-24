@@ -12,8 +12,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class DietiEstatesBackend {
     public static void main(String[] args) {
-        // print env variable "SENDGRID_API_KEY"
-        System.out.println("SENDGRID_API_KEY: " + System.getenv("SENDGRID_API_KEY"));
         SpringApplication.run(DietiEstatesBackend.class, args);
     }
 }
