@@ -179,9 +179,9 @@ public class AzureBlobStorageService implements FileStorageService {
 
     private void logUploadError(MultipartFile file, HttpResponse<String> response) {
         if (logger.isErrorEnabled()) {
-            String filename = file != null ? file.getOriginalFilename() : "unknown";
+            String filename = sanitizeForLog(file != null ? file.getOriginalFilename() : "unknown");
+            String body = sanitizeForLog(response != null ? response.body() : "null");
             int status = response != null ? response.statusCode() : -1;
-            String body = response != null ? response.body() : "null";
 
             logger.error("Upload failed for file: {}. Status: {}. Response: {}", filename, status, body);
         }
@@ -195,8 +195,11 @@ public class AzureBlobStorageService implements FileStorageService {
         if (e instanceof InterruptedException) {
             Thread.currentThread().interrupt();
         }
-        logger.error("Upload error for file: {} via SAS: {}",
-                   file.getOriginalFilename(), e.getMessage(), e);
+
+        String filename = sanitizeForLog(file != null ? file.getOriginalFilename() : "unknown");
+        String message = sanitizeForLog(e != null ? e.getMessage() : "null");
+
+        logger.error("Upload error for file: {} via SAS: {}", filename, message, e);
     }
 
     /**
@@ -242,4 +245,10 @@ public class AzureBlobStorageService implements FileStorageService {
     private void logDeletionError(String blobName, Exception e) {
         logger.error("Failed to delete blob: {} - {}", blobName, e.getMessage(), e);
     }
+
+    private String sanitizeForLog(String input) {
+        if (input == null) return "null";
+        return input.replaceAll("[\r\n\t]", "_");
+    }
+
 }
