@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mock;
@@ -129,7 +130,8 @@ class GeoapifyGeocodingServiceTest {
 
     @Test
     void geocode_throwsIllegalArgument_whenAddressIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> service.geocode(null));
+        Executable executable = () -> service.geocode(null);
+        assertThrows(IllegalArgumentException.class, executable);
         verifyNoInteractions(webClient);
         verify(geocodingProperties, never()).getProvider();
     }
@@ -183,8 +185,9 @@ class GeoapifyGeocodingServiceTest {
         );
 
         mockWebClientError(ex);
-
-        GeocodingException thrown = assertThrows(GeocodingException.class, () -> service.geocode(buildAddress()));
+        
+        Executable executable = () -> service.geocode(buildAddress());
+        GeocodingException thrown = assertThrows(GeocodingException.class, executable);
         assertTrue(thrown.getMessage().contains("Failed to call Geoapify API"));
     }
 
@@ -194,7 +197,9 @@ class GeoapifyGeocodingServiceTest {
 
         mockWebClientError(rex);
 
-        GeocodingException thrown = assertThrows(GeocodingException.class, () -> service.geocode(buildAddress()));
+        Executable executable = () -> service.geocode(buildAddress());
+        GeocodingException thrown = assertThrows(GeocodingException.class, executable);
         assertTrue(thrown.getMessage().contains("Unexpected error during geocoding"));
+
     }
 }
