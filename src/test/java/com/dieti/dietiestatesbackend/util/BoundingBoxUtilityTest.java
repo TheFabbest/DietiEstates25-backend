@@ -1,8 +1,13 @@
 package com.dieti.dietiestatesbackend.util;
 
-import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 class BoundingBoxUtilityTest {
 
@@ -80,21 +85,30 @@ class BoundingBoxUtilityTest {
         BigDecimal validLon = BigDecimal.valueOf(0.0);
 
         // null coordinates
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(null, validLon, 1000.0));
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, null, 1000.0));
+        Executable executable = () -> util.calculateBoundingBox(null, validLon, 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
+        
+        executable = () -> util.calculateBoundingBox(validLat, null, 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
 
         // invalid latitude/longitude ranges
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(BigDecimal.valueOf(91.0), validLon, 1000.0));
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(BigDecimal.valueOf(-91.0), validLon, 1000.0));
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(181.0), 1000.0));
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(-181.0), 1000.0));
-
+        executable = () -> util.calculateBoundingBox(BigDecimal.valueOf(91.0), validLon, 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
+        executable = () -> util.calculateBoundingBox(BigDecimal.valueOf(-91.0), validLon, 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
+        executable = () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(181.0), 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
+        executable = () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(-181.0), 1000.0);
+  
         // non-positive radius
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, validLon, 0.0));
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, validLon, -1.0));
+        executable = () -> util.calculateBoundingBox(validLat, validLon, 0.0);
+        assertThrows(IllegalArgumentException.class, executable);
+        executable = () -> util.calculateBoundingBox(validLat, validLon, -1.0);
+        assertThrows(IllegalArgumentException.class, executable);
 
         // NaN radius
-        assertThrows(IllegalArgumentException.class, () -> util.calculateBoundingBox(validLat, validLon, Double.NaN));
+        executable = () -> util.calculateBoundingBox(validLat, validLon, Double.NaN);
+        assertThrows(IllegalArgumentException.class, executable);
     }
 
     @Test
