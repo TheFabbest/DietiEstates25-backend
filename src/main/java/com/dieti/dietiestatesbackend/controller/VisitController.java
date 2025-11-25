@@ -77,7 +77,7 @@ public class VisitController {
     @PreAuthorize("@securityUtil.canCancelVisit(authentication.principal, #visitId)")
     public ResponseEntity<AgentVisitDTO> cancelVisit(@PathVariable("visitId") Long visitId,
                                                      @AuthenticationPrincipal AppPrincipal principal) throws IOException {
-        AgentVisitDTO result = visitService.cancelVisit(visitId, principal.getId());
+        AgentVisitDTO result = visitService.cancelVisit(visitId);
         emailService.sendVisitCancelledEmail(result);
         return ResponseEntity.ok(result);
     }

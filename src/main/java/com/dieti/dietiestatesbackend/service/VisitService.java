@@ -225,7 +225,7 @@ public class VisitService {
      *  - UnauthorizedOperationException (caller non autorizzato)
      *  - InvalidCancellationTimeException (tentativo di cancellazione oltre la finestra consentita)
      */
-    public AgentVisitDTO cancelVisit(Long visitId, Long requestingUserId) {
+    public AgentVisitDTO cancelVisit(Long visitId) {
         Visit visit = validateAndGetVisit(visitId);
         ensureNotFinalized(visit);
  
