@@ -8,16 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
   
+import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
+import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Offer;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.enums.OfferStatus;
+import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 import com.dieti.dietiestatesbackend.repositories.OfferRepository;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
-import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
-import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
-import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
  
 @Service
 @Transactional
@@ -26,6 +26,7 @@ public class OfferService {
     private final OfferRepository offerRepository;
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
+    public static final String OFFER_NOT_FOUND_MSG = "Offer not found with id: ";
 
     @Autowired
     public OfferService(OfferRepository offerRepository, PropertyRepository propertyRepository, UserRepository userRepository) {
@@ -36,7 +37,7 @@ public class OfferService {
 
     public Offer getOffer(Long id) {
         return offerRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + id));
+            .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + id));
     }
 
     public Page<Offer> getAgentOffers(Long agentId, Pageable pageable) {
@@ -87,7 +88,7 @@ public class OfferService {
 
     public Offer acceptOffer(Long offerID, Long agentID) {
         Offer offer = offerRepository.findById(offerID)
-            .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + offerID));
+            .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING) {
             throw new IllegalStateException("Only pending offers can be accepted");
         }
@@ -97,7 +98,7 @@ public class OfferService {
 
     public Offer rejectOffer(Long offerID, Long agentID) {
         Offer offer = offerRepository.findById(offerID)
-            .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + offerID));
+            .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING) {
             throw new IllegalStateException("Only pending offers can be rejected");
         }
@@ -107,7 +108,7 @@ public class OfferService {
 
     public Offer counterOffer(Long offerID, Long agentID, Double newPrice) {
         Offer offer = offerRepository.findById(offerID)
-            .orElseThrow(() -> new EntityNotFoundException("Offer not found with id: " + offerID));
+            .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (newPrice <= 0) {
             throw new IllegalArgumentException("New price must be positive");
         }
