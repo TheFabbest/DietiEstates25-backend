@@ -3,7 +3,7 @@ package com.dieti.dietiestatesbackend.entities;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddressTest {
+class AddressTest {
     
     @Test
     void testToStringOnNullFields () {

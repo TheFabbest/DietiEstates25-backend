@@ -18,7 +18,7 @@ import com.dieti.dietiestatesbackend.entities.CommercialProperty;
 import com.dieti.dietiestatesbackend.entities.User;
 
 @ExtendWith(MockitoExtension.class)
-public class CommercialPropertyMapperTest {
+class CommercialPropertyMapperTest {
 
     @Mock
     private AddressMapper addressMapper;

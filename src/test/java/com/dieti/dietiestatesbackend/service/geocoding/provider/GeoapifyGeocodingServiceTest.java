@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 @ExtendWith(MockitoExtension.class)
-public class GeoapifyGeocodingServiceTest {
+class GeoapifyGeocodingServiceTest {
 
     @Mock
     private WebClient webClient;
@@ -58,7 +58,7 @@ public class GeoapifyGeocodingServiceTest {
     private WebClient.ResponseSpec responseSpec;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         lenient().when(geocodingProperties.getProvider()).thenReturn(provider);
         lenient().when(provider.getGeoapify()).thenReturn(geoapifyProps);
         lenient().when(geoapifyProps.getApiKey()).thenReturn("test-key");
@@ -99,7 +99,7 @@ public class GeoapifyGeocodingServiceTest {
     }
 
     @Test
-    public void geocode_returnsCoordinates_whenResponseHasCoordinates() {
+    void geocode_returnsCoordinates_whenResponseHasCoordinates() {
         GeoapifyResponse response = new GeoapifyResponse();
         GeoapifyResponse.Feature feature = new GeoapifyResponse.Feature();
         GeoapifyResponse.Properties props = new GeoapifyResponse.Properties();
@@ -120,14 +120,14 @@ public class GeoapifyGeocodingServiceTest {
     }
 
     @Test
-    public void geocode_throwsIllegalArgument_whenAddressIsNull() {
+    void geocode_throwsIllegalArgument_whenAddressIsNull() {
         assertThrows(IllegalArgumentException.class, () -> service.geocode(null));
         verifyNoInteractions(webClient);
         verify(geocodingProperties, never()).getProvider();
     }
 
     @Test
-    public void geocode_returnsEmpty_whenResponseHasNoFeatures() {
+    void geocode_returnsEmpty_whenResponseHasNoFeatures() {
         GeoapifyResponse response = new GeoapifyResponse();
         response.setFeatures(Collections.emptyList());
 
@@ -139,7 +139,7 @@ public class GeoapifyGeocodingServiceTest {
     }
 
     @Test
-    public void geocode_returnsEmpty_whenPropertiesMissingOrLatLonNull() {
+    void geocode_returnsEmpty_whenPropertiesMissingOrLatLonNull() {
         GeoapifyResponse response1 = new GeoapifyResponse();
         GeoapifyResponse.Feature feature1 = new GeoapifyResponse.Feature();
         feature1.setProperties(null);
@@ -167,7 +167,7 @@ public class GeoapifyGeocodingServiceTest {
     }
 
     @Test
-    public void geocode_mapsWebClientResponseException_toGeocodingException_withBadRequestFor4xx() {
+    void geocode_mapsWebClientResponseException_toGeocodingException_withBadRequestFor4xx() {
         WebClientResponseException ex = new WebClientResponseException(
                 "Not Found",
                 404,
@@ -184,7 +184,7 @@ public class GeoapifyGeocodingServiceTest {
     }
 
     @Test
-    public void geocode_mapsOtherExceptions_toGeocodingException_internalServerError() {
+    void geocode_mapsOtherExceptions_toGeocodingException_internalServerError() {
         RuntimeException rex = new RuntimeException("boom");
         
         mockWebClientError(rex);

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class OfferServiceTest {
+class OfferServiceTest {
     
     @Mock
     private OfferRepository offerRepository;

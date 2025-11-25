@@ -23,7 +23,7 @@ import com.dieti.dietiestatesbackend.repositories.VisitRepository;
 import com.dieti.dietiestatesbackend.service.lookup.AgentLookupService;
 
 @ExtendWith(MockitoExtension.class)
-public class VisitValidatorTest {
+class VisitValidatorTest {
 
     @Mock
     VisitRepository visitRepository;

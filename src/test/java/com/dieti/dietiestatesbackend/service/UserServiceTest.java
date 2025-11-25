@@ -16,7 +16,7 @@ import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
     
     // Mock the dependencies
     @Mock 

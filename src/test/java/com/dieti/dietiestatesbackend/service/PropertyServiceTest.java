@@ -29,7 +29,7 @@ import com.dieti.dietiestatesbackend.service.places.PlacesService;
 import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 
 @ExtendWith(MockitoExtension.class)
-public class PropertyServiceTest {
+class PropertyServiceTest {
 
     @Mock
     private PropertyQueryServiceInterface propertyQueryServiceInterface;
