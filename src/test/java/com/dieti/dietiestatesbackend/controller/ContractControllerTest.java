@@ -1,17 +1,18 @@
 package com.dieti.dietiestatesbackend.controller;
 
-import com.dieti.dietiestatesbackend.entities.Contract;
-import com.dieti.dietiestatesbackend.repositories.ContractRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.dieti.dietiestatesbackend.entities.Contract;
+import com.dieti.dietiestatesbackend.repositories.ContractRepository;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +25,7 @@ class ContractControllerTest {
     private ContractController contractController;
 
     @Test
-    void getAllContracts_shouldReturnContracts_whenManagerIsAuthorized() throws Exception {
+    void getAllContracts_shouldReturnContracts_whenManagerIsAuthorized() {
         // Given
         Contract contract = new Contract();
         contract.setId(1L);

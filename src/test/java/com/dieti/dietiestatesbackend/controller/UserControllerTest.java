@@ -44,7 +44,7 @@ class UserControllerTest {
     private UserController userController;
 
     @Test
-    void getAgentInfo_shouldReturnAgentInfo_whenAgentExistsAndUserIsAuthorized() throws Exception {
+    void getAgentInfo_shouldReturnAgentInfo_whenAgentExistsAndUserIsAuthorized() {
         // Given
         Long agentId = 2L;
         User agentUser = new User();
@@ -65,7 +65,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getAgentInfo_shouldBlock_whenUserNotAgent() throws Exception {
+    void getAgentInfo_shouldBlock_whenUserNotAgent() {
         // Given
         Long agentId = 2L;
         User nonAgentUser = new User();
@@ -85,7 +85,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getAgentInfo_shouldBlock_whenUserNotFound() throws Exception {
+    void getAgentInfo_shouldBlock_whenUserNotFound() {
         // Given
         Long agentId = 2L;
 
@@ -133,7 +133,7 @@ class UserControllerTest {
         ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).addAgentRole(eq("future_agent"), eq(creator));
+        verify(userService).addAgentRole("future_agent", creator);
     }
 
     @Test
@@ -172,7 +172,7 @@ class UserControllerTest {
         ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).addAgentRole(eq("future_agent"), eq(creator));
+        verify(userService).addAgentRole("future_agent", creator);
     }
 
     // same for manager
@@ -211,7 +211,7 @@ class UserControllerTest {
         ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).addManagerRole(eq("future_agent"), eq(creator));
+        verify(userService).addManagerRole("future_agent", creator);
     }
 
     @Test
@@ -250,7 +250,7 @@ class UserControllerTest {
         ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).addManagerRole(eq("future_agent"), eq(creator));
+        verify(userService).addManagerRole("future_agent", creator);
     }
 
     @Test

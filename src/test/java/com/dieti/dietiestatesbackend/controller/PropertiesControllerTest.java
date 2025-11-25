@@ -1,5 +1,24 @@
 package com.dieti.dietiestatesbackend.controller;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
@@ -7,27 +26,7 @@ import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import com.dieti.dietiestatesbackend.service.PropertyService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
-import java.util.Arrays;
-import java.util.Collections;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +45,7 @@ class PropertiesControllerTest {
     private PropertiesController propertyController;
 
     @Test
-    void getPropertyDetail_shouldReturnProperty_whenPropertyExists() throws Exception {
+    void getPropertyDetail_shouldReturnProperty_whenPropertyExists() {
         // Given
         Long propertyId = 1L;
         Property property = new com.dieti.dietiestatesbackend.entities.ResidentialProperty();
@@ -67,7 +66,7 @@ class PropertiesControllerTest {
     }
 
     @Test
-    void getPropertyDetail_shouldReturnNotFound_whenPropertyDoesNotExist() throws Exception {
+    void getPropertyDetail_shouldReturnNotFound_whenPropertyDoesNotExist() {
         // Given
         Long propertyId = 1L;
         when(propertyService.getProperty(anyLong())).thenReturn(null);
@@ -94,7 +93,7 @@ class PropertiesControllerTest {
         org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, 10);
 
         when(propertyService.searchPropertiesWithFilters(filters, pageable)).thenReturn(new PageImpl<>(List.of(property)));
-        when(responseMapperRegistry.map(eq(property))).thenReturn(propertyResponse);
+        when(responseMapperRegistry.map(property)).thenReturn(propertyResponse);
 
         // When
         ResponseEntity<Page<PropertyResponse>> response = propertyController.getProperties(filters, pageable);
@@ -155,12 +154,12 @@ class PropertiesControllerTest {
 
         // Then
         assertEquals(3, response.getBody().size());
-        assertEquals(categories.stream().map(PropertyCategory::getName).sorted().collect(Collectors.toList()), response.getBody());
+        assertEquals(categories.stream().map(PropertyCategory::getName).sorted().toList(), response.getBody());
         assertEquals(org.springframework.http.HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    void deleteProperty_shouldDelete() throws Exception {
+    void deleteProperty_shouldDelete() {
         // Given
         Long propertyId = 1L;
         ResidentialProperty prop = new ResidentialProperty();
@@ -175,7 +174,7 @@ class PropertiesControllerTest {
     }
 
         @Test
-    void deleteProperty_ofNonExistentProperty_shouldReturnNotFound() throws Exception {
+    void deleteProperty_ofNonExistentProperty_shouldReturnNotFound() {
         // Given
         Long propertyId = 1L;
         when(propertyService.getProperty(propertyId)).thenReturn(null);
@@ -201,7 +200,7 @@ class PropertiesControllerTest {
 
         when(propertyService.getPropertiesByAgentId(eq(agentId), any(org.springframework.data.domain.Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(property)));
-        when(responseMapperRegistry.map(eq(property))).thenReturn(propertyResponse);
+        when(responseMapperRegistry.map(property)).thenReturn(propertyResponse);
 
         // When
         ResponseEntity<Page<PropertyResponse>> response = propertyController.getAgentProperties(agentId, pageable);

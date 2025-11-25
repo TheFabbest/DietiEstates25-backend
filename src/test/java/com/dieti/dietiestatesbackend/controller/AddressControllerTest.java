@@ -1,21 +1,21 @@
 package com.dieti.dietiestatesbackend.controller;
 
-import com.dieti.dietiestatesbackend.entities.Address;
-import com.dieti.dietiestatesbackend.service.AddressService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.anyLong;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.dieti.dietiestatesbackend.entities.Address;
+import com.dieti.dietiestatesbackend.service.AddressService;
 
 @ExtendWith(MockitoExtension.class)
 class AddressControllerTest {
@@ -46,10 +46,11 @@ class AddressControllerTest {
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody() != null);
-        assertEquals(address.getId(), response.getBody().getId());
-        assertEquals(address.getStreet(), response.getBody().getStreet());
-        assertEquals(address.getCity(), response.getBody().getCity());
+        var body = response.getBody();
+        assertNotNull(body);
+        assertEquals(address.getId(), body.getId());
+        assertEquals(address.getStreet(), body.getStreet());
+        assertEquals(address.getCity(), body.getCity());
     }
 
     @Test
@@ -63,6 +64,6 @@ class AddressControllerTest {
 
         // Then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertTrue(response.getBody() == null);
+        assertNotNull(response.getBody());
     }
 }
