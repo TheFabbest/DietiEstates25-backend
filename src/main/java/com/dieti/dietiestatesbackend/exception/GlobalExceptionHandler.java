@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -107,14 +109,15 @@ public class GlobalExceptionHandler {
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        // concat all error messages into a single string
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<String> fields = ex.getBindingResult().getFieldErrors().stream()
+            .map(FieldError::getField)
+            .distinct()
+            .collect(Collectors.toList());
+        
         String errors = ex.getBindingResult().getAllErrors().stream()
             .map(ObjectError::getDefaultMessage)
             .collect(Collectors.joining("; "));
-        String args = ex.getBindingResult().getFieldErrors().stream()
-            .map(error -> error.getField())
-            .collect(Collectors.joining("\",\"", "[\"", "]\""));
 
         LoggerFactory.getLogger(GlobalExceptionHandler.class).info(errors);
 
@@ -122,7 +125,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                     "message", errors,
-                    "fields", args.toString()
+                    "fields", fields
                 ));
     }
 
