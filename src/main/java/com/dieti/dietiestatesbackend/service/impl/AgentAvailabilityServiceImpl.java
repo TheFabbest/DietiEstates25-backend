@@ -84,7 +84,7 @@ public class AgentAvailabilityServiceImpl implements AgentAvailabilityService {
     @Override
     public boolean isSlotCoveringInterval(Long agentId, Instant start, Instant end) {
         if (agentId == null || start == null || end == null) return false;
-        var covering = availabilityRepository.findCoveringIntervalForAgent(agentId, start, end);
+        List<AgentAvailability> covering = availabilityRepository.findCoveringIntervalForAgent(agentId, start, end);
         return covering != null && !covering.isEmpty();
     }
 
