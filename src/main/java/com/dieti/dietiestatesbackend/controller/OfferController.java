@@ -33,7 +33,7 @@ public class OfferController {
     }
 
     @GetMapping("/offers/agent_offers/{agentID}")
-    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(#agentID)")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(principal, #agentID)")
     public ResponseEntity<Page<OfferResponseDTO>> getAgentOffers(@PathVariable("agentID") Long agentID, Pageable pageable) {
         Page<Offer> offers = offerService.getAgentOffers(agentID, pageable);
         Page<OfferResponseDTO> responseDTOs = offers.map(offerService::mapToResponseDTO);
