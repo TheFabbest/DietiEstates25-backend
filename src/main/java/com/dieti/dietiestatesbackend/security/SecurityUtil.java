@@ -1,13 +1,12 @@
 package com.dieti.dietiestatesbackend.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import lombok.RequiredArgsConstructor;
 
 import com.dieti.dietiestatesbackend.dto.request.VisitCreationRequestDTO;
 import com.dieti.dietiestatesbackend.enums.VisitStatus;
 import com.dieti.dietiestatesbackend.security.permissions.PermissionFacade;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Utility bean esposto per SpEL nelle espressioni @PreAuthorize.
@@ -17,8 +16,6 @@ import com.dieti.dietiestatesbackend.security.permissions.PermissionFacade;
 @Component("securityUtil")
 @RequiredArgsConstructor
 public class SecurityUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     private final PermissionFacade permissionFacade;
 

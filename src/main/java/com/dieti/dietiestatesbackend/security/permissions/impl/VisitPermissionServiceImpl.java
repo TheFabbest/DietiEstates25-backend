@@ -1,17 +1,19 @@
 package com.dieti.dietiestatesbackend.security.permissions.impl;
 
+import java.time.Instant;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import com.dieti.dietiestatesbackend.dto.request.VisitCreationRequestDTO;
 import com.dieti.dietiestatesbackend.entities.Visit;
 import com.dieti.dietiestatesbackend.enums.VisitStatus;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.security.permissions.VisitPermissionService;
 import com.dieti.dietiestatesbackend.service.VisitService;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Implementazione delle regole di autorizzazione per le visite.
@@ -28,9 +30,8 @@ public class VisitPermissionServiceImpl implements VisitPermissionService {
     @Override
     public boolean canCreateVisit(AppPrincipal principal, VisitCreationRequestDTO request) {
         logger.debug("canCreateVisit - principal: {}, request: {}", principal, request);
-        if (principal == null || request == null) return false;
         // Tutti gli utenti autenticati possono creare una visita
-        return true;
+        return !(principal == null || request == null);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class VisitPermissionServiceImpl implements VisitPermissionService {
                 if (status == VisitStatus.CONFIRMED) {
                     Instant start = visit.getStartTime();
                     if (start == null) return false;
-                    Instant cutoff = start.minusSeconds(24 * 3600);
+                    Instant cutoff = start.minusSeconds(24L * 3600);
                     return Instant.now().isBefore(cutoff);
                 }
             }
