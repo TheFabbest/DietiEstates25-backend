@@ -31,6 +31,9 @@ public class VisitService {
     private final UserRepository userRepository;
     private final VisitValidator visitValidator;
 
+    public static final String INVALID_TRANS_STATE_MSG = "Transizione di stato non valida da ";
+    public static final String STATUS_MSG = "status";
+
     // Backward-compatible constructor used in some unit tests
     public VisitService(VisitRepository visitRepository) {
         this(visitRepository, null, null, null);
@@ -116,7 +119,7 @@ public class VisitService {
             visit.setStatus(VisitStatus.CANCELLED);
         } else {
             throw new InvalidPayloadException(
-                    Map.of("status", "Transizione di stato non valida da " + currentStatus + " a " + newStatus));
+                    Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + currentStatus + " a " + newStatus));
         }
 
         Visit saved = visitRepository.save(visit);
@@ -132,7 +135,7 @@ public class VisitService {
         if (current == VisitStatus.PENDING) {
             if (target != VisitStatus.CONFIRMED && target != VisitStatus.REJECTED && target != VisitStatus.CANCELLED) {
                 throw new InvalidPayloadException(
-                        Map.of("status", "Transizione di stato non valida da " + current + " a " + target));
+                        Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + current + " a " + target));
             }
             return;
         }
@@ -140,13 +143,13 @@ public class VisitService {
         if (current == VisitStatus.CONFIRMED) {
             if (target != VisitStatus.CANCELLED) {
                 throw new InvalidPayloadException(
-                        Map.of("status", "Transizione di stato non valida da " + current + " a " + target));
+                        Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + current + " a " + target));
             }
             return;
         }
 
         throw new InvalidPayloadException(
-                Map.of("status", "Transizione di stato non valida da " + current + " a " + target));
+                Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + current + " a " + target));
     }
 
     private void applyPendingTransition(Visit visit, VisitStatus target) {
@@ -162,7 +165,7 @@ public class VisitService {
             visit.setStatus(VisitStatus.CANCELLED);
         } else {
             throw new InvalidPayloadException(
-                    Map.of("status", "Transizione di stato non valida da " + visit.getStatus() + " a " + target));
+                    Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + visit.getStatus() + " a " + target));
         }
     }
 
@@ -233,7 +236,7 @@ public class VisitService {
     private void ensureNotFinalized(Visit visit) {
         VisitStatus status = visit.getStatus();
         if (status == VisitStatus.CANCELLED || status == VisitStatus.COMPLETED) {
-            throw new InvalidPayloadException(Map.of("status", "La visita è già nello stato: " + status));
+            throw new InvalidPayloadException(Map.of(STATUS_MSG, "La visita è già nello stato: " + status));
         }
     }
 
