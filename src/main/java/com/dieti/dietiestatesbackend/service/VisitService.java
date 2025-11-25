@@ -153,19 +153,21 @@ public class VisitService {
     }
 
     private void applyPendingTransition(Visit visit, VisitStatus target) {
-        if (target == VisitStatus.CONFIRMED) {
-            // Validazioni di conferma delegate al validator (overlap utente/agente e regole di overbooking)
-            visitValidator.ensureUserHasNoOverlap(visit.getUser().getId(), visit.getStartTime(), visit.getEndTime());
-            visitValidator.ensureAgentAvailable(visit.getAgent().getId(), visit.getStartTime(), visit.getEndTime());
-            visitValidator.ensureOverbookingRules(visit);
-            visit.setStatus(VisitStatus.CONFIRMED);
-        } else if (target == VisitStatus.REJECTED) {
-            visit.setStatus(VisitStatus.REJECTED);
-        } else if (target == VisitStatus.CANCELLED) {
-            visit.setStatus(VisitStatus.CANCELLED);
-        } else {
+        if (null == target) {
             throw new InvalidPayloadException(
                     Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + visit.getStatus() + " a " + target));
+        } else switch (target) {
+            case CONFIRMED -> {
+                // Validazioni di conferma delegate al validator (overlap utente/agente e regole di overbooking)
+                visitValidator.ensureUserHasNoOverlap(visit.getUser().getId(), visit.getStartTime(), visit.getEndTime());
+                visitValidator.ensureAgentAvailable(visit.getAgent().getId(), visit.getStartTime(), visit.getEndTime());
+                visitValidator.ensureOverbookingRules(visit);
+                visit.setStatus(VisitStatus.CONFIRMED);
+            }
+            case REJECTED -> visit.setStatus(VisitStatus.REJECTED);
+            case CANCELLED -> visit.setStatus(VisitStatus.CANCELLED);
+            default -> throw new InvalidPayloadException(
+                        Map.of(STATUS_MSG, INVALID_TRANS_STATE_MSG + visit.getStatus() + " a " + target));
         }
     }
 
