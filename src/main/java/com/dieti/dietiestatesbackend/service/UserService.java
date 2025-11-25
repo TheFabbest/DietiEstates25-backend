@@ -66,7 +66,7 @@ public class UserService {
     }
 
     public User createAgent(SignupRequest toBeCreated, User creator) {
-        if (creator.isManager() == false) {
+        if (!creator.isManager()) {
             throw new IllegalStateException("Solo un manager può creare un agente.");
         }
         User createdUser = userManagementService.createUser(
@@ -82,7 +82,7 @@ public class UserService {
     }
 
     public User createManager(SignupRequest toBeCreated, User creator) {
-        if (creator.isManager() == false) {
+        if (!creator.isManager()) {
             throw new IllegalStateException("Solo un manager può creare un altro manager.");
         }
         User createdUser = userManagementService.createUser(
