@@ -1,5 +1,4 @@
 package com.dieti.dietiestatesbackend.mappers;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,6 +7,7 @@ import java.lang.annotation.Target;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dieti.dietiestatesbackend.dto.request.AddressRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreateCommercialPropertyRequest;
@@ -28,7 +28,7 @@ import com.dieti.dietiestatesbackend.service.lookup.AgentLookupService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.service.lookup.ContractLookupService;
 import com.dieti.dietiestatesbackend.service.lookup.HeatingLookupService;
-
+ 
 /**
  * Mapper MapStruct per la creazione di Property dalle request.
  * Convertito in classe astratta per permettere l'iniezione dei servizi di lookup necessari
@@ -37,23 +37,14 @@ import com.dieti.dietiestatesbackend.service.lookup.HeatingLookupService;
 @Mapper(componentModel = "spring", uses = {AgentLookupService.class, CategoryLookupService.class, ContractLookupService.class, HeatingLookupService.class, AddressMapper.class})
 public abstract class PropertyCreationMapper {
 
-    protected final ContractLookupService contractLookupService;
-    protected final CategoryLookupService categoryLookupService;
-    protected final AddressMapper addressMapper;
-    protected final AddressService addressService;
+    @Autowired
+    protected ContractLookupService contractLookupService;
 
-    protected PropertyCreationMapper(
-            ContractLookupService contractLookupService,
-            CategoryLookupService categoryLookupService,
-            AddressMapper addressMapper,
-            AddressService addressService
-    ) {
-        this.contractLookupService = contractLookupService;
-        this.categoryLookupService = categoryLookupService;
-        this.addressMapper = addressMapper;
-        this.addressService = addressService;
-    }
+    @Autowired
+    protected CategoryLookupService categoryLookupService;
 
+    @Autowired
+    protected AddressMapper addressMapper;
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "agent", source = "agent")
@@ -63,14 +54,14 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "heating", source = "request.heatingType")
     @Mapping(target = "numberOfFloors", source = "request.numberOfFloors")
     @Mapping(target = "yearBuilt", source = "request.yearBuilt")
-    @Mapping(target = "floor", source = "request.floor")
+    @Mapping(target = "floor", source = "request.floor") // Mappa il campo floor
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "additionalFeatures", ignore = true)
     @Mapping(target = "imageDirectoryUlid", ignore = true)
     @Mapping(target = "numberOfImages", ignore = true)
     public abstract ResidentialProperty toEntity(CreateResidentialPropertyRequest request, User agent);
-
+ 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "agent", source = "agent")
     @Mapping(target = "contract", source = "request.contractType")
@@ -111,7 +102,7 @@ public abstract class PropertyCreationMapper {
     @Mapping(target = "imageDirectoryUlid", ignore = true)
     @Mapping(target = "numberOfImages", ignore = true)
     public abstract Garage toEntity(CreateGaragePropertyRequest request, User agent);
-
+    
 
     /**
      * Metodo helper che MapStruct utilizza per mappare un nome di contratto (String) in un'entità Contract.
@@ -122,6 +113,8 @@ public abstract class PropertyCreationMapper {
         return contractLookupService.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Contract '" + name + "' not found"));
     }
+    @Autowired
+    protected AddressService addressService;
 
     @AddressMapping
     public Address mapAddress(AddressRequest addressRequest) {
@@ -134,7 +127,7 @@ public abstract class PropertyCreationMapper {
     @Retention(RetentionPolicy.CLASS)
     public @interface AddressMapping {
     }
-
+ 
     /**
      * Metodo helper che MapStruct utilizza per mappare un nome di categoria (String) in un'entità PropertyCategory.
      * L'implementazione gestisce il caso nullo e lancia un'eccezione se la categoria non viene trovata.
