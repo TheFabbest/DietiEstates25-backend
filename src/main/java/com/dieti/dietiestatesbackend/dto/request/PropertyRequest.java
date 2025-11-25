@@ -2,64 +2,75 @@ package com.dieti.dietiestatesbackend.dto.request;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class PropertyRequest {
+
     @NotBlank
     private String description;
-    
-    @NotNull @DecimalMin("0.01")
+
+    @NotNull
+    @DecimalMin("0.01")
     private BigDecimal price;
-    
-    @NotNull @Min(1)
+
+    @NotNull
+    @Min(1)
     private Integer area;
-    
+
+    @JsonProperty("id_contract")
     @NotNull
-    private Long id_contract;
-    
+    private Long contractId;
+
+    @JsonProperty("id_propertyCategory")
     @NotNull
-    private Long id_propertyCategory;
-    
+    private Long propertyCategoryId;
+
+    @JsonProperty("id_condition")
     @NotNull
-    private Long id_condition;
-    
+    private Long conditionId;
+
+    @JsonProperty("id_energyClass")
     @NotNull
-    private Long id_energyClass;
-    
+    private Long energyClassId;
+
+    @JsonProperty("id_agent")
     @NotNull
-    private Long id_agent;
-    
+    private Long agentId;
+
+    @JsonProperty("id_address")
     @NotNull
-    private Long id_address;
+    private Long addressId;
 
     // Getters and setters
+
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
     public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal prezzo) { this.price = prezzo; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
     public Integer getArea() { return area; }
-    public void setArea(Integer superficie) { this.area = superficie; }
+    public void setArea(Integer area) { this.area = area; }
 
-    public Long getIdContract() { return id_contract; }
-    public void setIdContract(Long id_contract) { this.id_contract = id_contract; }
+    public Long getContractId() { return contractId; }
+    public void setContractId(Long contractId) { this.contractId = contractId; }
 
-    public Long getIdPropertyCategory() { return id_propertyCategory; }
-    public void setIdPropertyCategory(Long id_propertyCategory) { this.id_propertyCategory = id_propertyCategory; }
+    public Long getPropertyCategoryId() { return propertyCategoryId; }
+    public void setPropertyCategoryId(Long propertyCategoryId) { this.propertyCategoryId = propertyCategoryId; }
 
-    public Long getId_condition() { return id_condition; }
-    public void setId_condition(Long id_condition) { this.id_condition = id_condition; }
+    public Long getConditionId() { return conditionId; }
+    public void setConditionId(Long conditionId) { this.conditionId = conditionId; }
 
-    public Long getId_energyClass() { return id_energyClass; }
-    public void setId_energyClass(Long id_energyClass) { this.id_energyClass = id_energyClass; }
+    public Long getEnergyClassId() { return energyClassId; }
+    public void setEnergyClassId(Long energyClassId) { this.energyClassId = energyClassId; }
 
-    public Long getId_agent() { return id_agent; }
-    public void setId_agent(Long idAgenteImmobiliare) { this.id_agent = idAgenteImmobiliare; }
+    public Long getAgentId() { return agentId; }
+    public void setAgentId(Long agentId) { this.agentId = agentId; }
 
-    public Long getId_address() { return id_address; }
-    public void setId_address(Long address) { this.id_address = address; }
+    public Long getAddressId() { return addressId; }
+    public void setAddressId(Long addressId) { this.addressId = addressId; }
 }
