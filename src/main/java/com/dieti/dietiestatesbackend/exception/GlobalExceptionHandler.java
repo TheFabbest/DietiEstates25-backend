@@ -14,6 +14,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -112,10 +113,18 @@ public class GlobalExceptionHandler {
         String errors = ex.getBindingResult().getAllErrors().stream()
             .map(ObjectError::getDefaultMessage)
             .collect(Collectors.joining("; "));
+        ArrayList<String> args = ex.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField())
+            .collect(Collectors.toCollection(ArrayList::new));
 
         LoggerFactory.getLogger(GlobalExceptionHandler.class).info("Errori di validazione: {} campi non validi", ex.getErrorCount());
-        
-        return new ResponseEntity<>(Map.of("message", errors), HttpStatus.BAD_REQUEST);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                    "message", errors,
+                    "fields", args.toString()
+                ));
     }
 
     @ExceptionHandler(IllegalStateException.class)
