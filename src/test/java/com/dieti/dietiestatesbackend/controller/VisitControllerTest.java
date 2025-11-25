@@ -4,6 +4,7 @@ import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
 import com.dieti.dietiestatesbackend.dto.response.AddressResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Coordinates;
 import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
+import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.VisitService;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,6 @@ class VisitControllerTest {
     @Test
     void getAgentVisits_shouldReturnVisits_whenAuthorized() throws Exception {
         // Given
-        Long agentId = 1L;
         Visit visit = new Visit();
         visit.setId(1L);
         Coordinates coordinates = new Coordinates(BigDecimal.valueOf(10.0), BigDecimal.valueOf(20.0));
@@ -70,7 +70,7 @@ class VisitControllerTest {
         when(visitService.getAgentVisits(anyLong(), any(Pageable.class))).thenReturn(visitsPage);
 
         // When & Then
-        ResponseEntity<Page<AgentVisitDTO>> response = visitController.getAgentVisits(agentId, Pageable.ofSize(10).withPage(1));
+        ResponseEntity<Page<AgentVisitDTO>> response = visitController.getAgentVisits(any(AppPrincipal.class), Pageable.ofSize(10).withPage(1));
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
