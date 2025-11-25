@@ -1,15 +1,30 @@
 package com.dieti.dietiestatesbackend.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.List;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dieti.dietiestatesbackend.dto.request.CreateCommercialPropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
@@ -24,12 +39,6 @@ import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 import com.dieti.dietiestatesbackend.service.storage.ImageValidationService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 class PropertyManagementServiceTest {
@@ -91,22 +100,26 @@ class PropertyManagementServiceTest {
         verify(fileStorageService, never()).deleteImages(anyString());
     }
 
-    @Test
-    void createPropertyWithImages_invalidImage_throwsInvalidImageException() throws Exception {
-        CreatePropertyRequest request = mock(CreateCommercialPropertyRequest.class);
-        MultipartFile image = mock(MultipartFile.class);
-        when(image.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[] {}));
-        when(image.getOriginalFilename()).thenReturn("bad.png");
-        when(image.getContentType()).thenReturn("image/png");
-        when(image.getSize()).thenReturn(10L);
+@Test
+void createPropertyWithImages_invalidImage_throwsInvalidImageException() throws Exception {
+    CreatePropertyRequest request = mock(CreateCommercialPropertyRequest.class);
+    MultipartFile image = mock(MultipartFile.class);
+    when(image.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[] {}));
+    when(image.getOriginalFilename()).thenReturn("bad.png");
+    when(image.getContentType()).thenReturn("image/png");
+    when(image.getSize()).thenReturn(10L);
 
-        doThrow(new IllegalArgumentException("bad")).when(imageValidationService).validateImage(any(), anyString(), anyLong());
+    doThrow(new IllegalArgumentException("bad")).when(imageValidationService).validateImage(any(), anyString(), anyLong());
 
-        assertThrows(InvalidImageException.class, () -> propertyManagementService.createPropertyWithImages(request, List.of(image)));
+    Executable executable = () -> propertyManagementService
+                                    .createPropertyWithImages(request, List.of(image));
 
-        verify(fileStorageService, never()).uploadImages(anyString(), anyList());
-        verify(propertyRepository, never()).save(any());
-    }
+    assertThrows(InvalidImageException.class, executable);
+
+    verify(fileStorageService, never()).uploadImages(anyString(), anyList());
+    verify(propertyRepository, never()).save(any());
+}
+
 
     @Test
     void createPropertyWithImages_uploadFails_throwsStorageException() throws Exception {
@@ -116,7 +129,10 @@ class PropertyManagementServiceTest {
         doNothing().when(imageValidationService).validateImage(any(), anyString(), anyLong());
         when(fileStorageService.uploadImages(anyString(), anyList())).thenReturn(false);
 
-        assertThrows(StorageException.class, () -> propertyManagementService.createPropertyWithImages(request, List.of(image)));
+        Executable executable =
+                () -> propertyManagementService.createPropertyWithImages(request, List.of(image));
+
+        assertThrows(StorageException.class, executable);
 
         verify(fileStorageService).uploadImages(anyString(), eq(List.of(image)));
         verify(propertyRepository, never()).save(any());
@@ -133,7 +149,11 @@ class PropertyManagementServiceTest {
         doThrow(new RuntimeException("DB down")).when(propertyCreationService).createProperty(request);
         when(fileStorageService.deleteImages(anyString())).thenReturn(true);
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> propertyManagementService.createPropertyWithImages(request, List.of(image)));
+        Executable executable =
+                () -> propertyManagementService.createPropertyWithImages(request, List.of(image));
+
+        RuntimeException ex = assertThrows(RuntimeException.class, executable);
+
         assertTrue(ex.getMessage().contains("Errore durante la creazione"));
 
         verify(fileStorageService).uploadImages(anyString(), eq(List.of(image)));
