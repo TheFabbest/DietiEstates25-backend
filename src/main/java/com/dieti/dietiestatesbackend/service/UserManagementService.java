@@ -1,7 +1,7 @@
 package com.dieti.dietiestatesbackend.service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import java.security.SecureRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ public class UserManagementService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final Random random = new Random();
+    private final SecureRandom random = new SecureRandom();
 
     @Autowired
     public UserManagementService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
