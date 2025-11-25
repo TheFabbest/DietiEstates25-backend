@@ -1,17 +1,20 @@
 package com.dieti.dietiestatesbackend.service.emails;
 
-import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
-import com.dieti.dietiestatesbackend.entities.Offer;
-import com.dieti.dietiestatesbackend.entities.User;
-import com.sendgrid.*;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import com.dieti.dietiestatesbackend.dto.response.AgentVisitDTO;
+import com.dieti.dietiestatesbackend.entities.Offer;
+import com.dieti.dietiestatesbackend.entities.User;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 
 @Service
 public class EmailService {
