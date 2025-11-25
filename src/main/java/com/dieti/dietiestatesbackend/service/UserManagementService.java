@@ -1,6 +1,6 @@
 package com.dieti.dietiestatesbackend.service;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,8 @@ public class UserManagementService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final Random random = new Random();
 
     @Autowired
     public UserManagementService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -75,8 +77,8 @@ public class UserManagementService {
         user.setManager(false);
         
         byte[] array = new byte[32]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        random.nextBytes(array);
+        String generatedString = new String(array, StandardCharsets.UTF_8);
         user.setPassword(generatedString);
         
         userRepository.save(user);
