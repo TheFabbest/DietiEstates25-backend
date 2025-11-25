@@ -1,6 +1,7 @@
 package com.dieti.dietiestatesbackend.mappers;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
@@ -58,7 +59,7 @@ public class PropertyMapper {
         ResidentialProperty rp = new ResidentialProperty();
         rp.setNumberOfRooms(req.getNumberOfRooms());
         rp.setNumberOfBathrooms(req.getNumberOfBathrooms());
-        rp.setParkingSpaces(req.getParkingSpaces());
+        rp.setParkingSpaces(Objects.requireNonNullElse(req.getParkingSpaces(), 0));
         rp.setFurnished(req.isFurnished());
         rp.setGarden(req.getGarden());
         rp.setNumberOfFloors(req.getNumberOfFloors());
