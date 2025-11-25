@@ -6,6 +6,8 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -34,20 +36,13 @@ class SecurityUtilTest {
         assertTrue(allowed);
     }
 
-    @Test
-    void agentCanCancelOwnVisit() {
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 4L})
+    void usersWithPermissionShouldBeAbleToCancel(long visitId) {
         AppPrincipal principal = mock(AppPrincipal.class);
-        when(permissionFacade.canCancelVisit(principal, 1L)).thenReturn(true);
+        when(permissionFacade.canCancelVisit(principal, visitId)).thenReturn(true);
 
-        assertTrue(securityUtil.canCancelVisit(principal, 1L));
-    }
-
-    @Test
-    void ownerCanCancelPendingVisit() {
-        AppPrincipal principal = mock(AppPrincipal.class);
-        when(permissionFacade.canCancelVisit(principal, 2L)).thenReturn(true);
-
-        assertTrue(securityUtil.canCancelVisit(principal, 2L));
+        assertTrue(securityUtil.canCancelVisit(principal, visitId));
     }
 
     @Test
@@ -59,19 +54,10 @@ class SecurityUtilTest {
     }
 
     @Test
-    void ownerCanCancelConfirmedMoreThan24Hours() {
-        AppPrincipal principal = mock(AppPrincipal.class);
-        when(permissionFacade.canCancelVisit(principal, 4L)).thenReturn(true);
-
-        assertTrue(securityUtil.canCancelVisit(principal, 4L));
-    }
-
-    @Test
     void nonAuthorizedCannotCancel() {
         AppPrincipal principal = mock(AppPrincipal.class);
         when(permissionFacade.canCancelVisit(principal, 5L)).thenReturn(false);
 
         assertFalse(securityUtil.canCancelVisit(principal, 5L));
     }
-
 }
