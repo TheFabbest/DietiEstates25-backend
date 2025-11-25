@@ -90,40 +90,40 @@ public class ImageValidationService {
      * Valida i magic bytes dell'immagine.
      */
     private void validateMagicBytes(InputStream inputStream, String contentType) throws IOException {
-        // Verifica se il Content-Type è supportato per la validazione dei magic bytes
         if (!magicBytesMap.containsKey(contentType)) {
-            // Se non abbiamo magic bytes configurati per questo tipo, accettiamo il file
             return;
         }
 
         byte[] expectedMagicBytes = magicBytesMap.get(contentType);
-        
-        // Utilizza BufferedInputStream per supportare mark/reset
         BufferedInputStream bis = new BufferedInputStream(inputStream);
         bis.mark(expectedMagicBytes.length + 4);
-        
+        IOException resetException = null;
+
         try {
             byte[] header = new byte[expectedMagicBytes.length];
             int bytesRead = IOUtils.read(bis, header);
-            
-            // Verifica che siano stati letti abbastanza byte
+
             if (bytesRead < expectedMagicBytes.length) {
                 throw new IllegalArgumentException("File troppo piccolo per la validazione dei magic bytes");
             }
-            
-            // Confronta i byte letti con quelli attesi
+
             for (int i = 0; i < expectedMagicBytes.length; i++) {
                 if (header[i] != expectedMagicBytes[i]) {
-                    throw new IllegalArgumentException("Il file non corrisponde al formato dichiarato (" + 
-                                                      contentType + "). Possibile tentativo di manipolazione.");
+                    throw new IllegalArgumentException(
+                        "Il file non corrisponde al formato dichiarato (" + contentType + ")"
+                    );
                 }
             }
         } finally {
             try {
-                bis.reset(); // Reset per permettere la rilettura completa
+                bis.reset();
             } catch (IOException e) {
-                throw new IOException("Impossibile resettare l'InputStream dopo la validazione", e);
+                resetException = e;
             }
+        }
+
+        if (resetException != null) {
+            throw new IOException("Impossibile resettare l'InputStream dopo la validazione", resetException);
         }
     }
 
