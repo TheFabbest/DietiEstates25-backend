@@ -42,9 +42,6 @@ public class AzureBlobStorageService implements FileStorageService {
     private HttpClient httpClient;
     private static final Logger logger = LoggerFactory.getLogger(AzureBlobStorageService.class);
 
-    public AzureBlobStorageService() {
-    }
-
     @PostConstruct
     public void initializeAzureStorageClient() {
         BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
@@ -181,8 +178,13 @@ public class AzureBlobStorageService implements FileStorageService {
     }
 
     private void logUploadError(MultipartFile file, HttpResponse<String> response) {
-        logger.error("Upload failed for file: {}. Status: {}. Response: {}",
-                   file.getOriginalFilename(), response.statusCode(), response.body());
+        if (logger.isErrorEnabled()) {
+            String filename = file != null ? file.getOriginalFilename() : "unknown";
+            int status = response != null ? response.statusCode() : -1;
+            String body = response != null ? response.body() : "null";
+
+            logger.error("Upload failed for file: {}. Status: {}. Response: {}", filename, status, body);
+        }
     }
 
     private void logSuccessfulUpload(String blobName) {
