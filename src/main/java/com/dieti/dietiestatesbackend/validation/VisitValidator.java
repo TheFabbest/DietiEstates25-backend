@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,9 +19,6 @@ import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
 import com.dieti.dietiestatesbackend.exception.OverbookingException;
 import com.dieti.dietiestatesbackend.repositories.VisitRepository;
 import com.dieti.dietiestatesbackend.service.lookup.AgentLookupService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class VisitValidator {
@@ -103,21 +102,15 @@ public class VisitValidator {
         }
 
         try {
-            Optional<Boolean> availability = agentLookupService.isAgentAvailable(agentId, start, end);
-            if (availability == null) {
-                // Defensive: treat null like empty Optional (log and assume available)
-                logger.debug("AgentLookupService returned null availability for agentId={}", agentId);
-                return;
+            Optional<Boolean> availability = Optional.ofNullable(agentLookupService.isAgentAvailable(agentId, start, end)).orElse(Optional.empty());
+            if (!availability.orElse(true)) {
+                throw new InvalidPayloadException(Map.of(FIELD_AGENT, MSG_AGENT_NO_DECLARED_AVAILABILITY));
             }
-            if (availability.isPresent()) {
-                if (!availability.get()) {
-                    throw new InvalidPayloadException(Map.of(FIELD_AGENT, MSG_AGENT_NO_DECLARED_AVAILABILITY));
-                }
-            } else {
+            if (availability.isEmpty()) {
                 logger.debug("AgentLookupService did not return availability info for agentId={}", agentId);
                 // assume available to preserve backward compatibility
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logger.warn("AgentLookupService error while checking availability for agentId={}: {}", agentId, e.getMessage());
             throw new InvalidPayloadException(Map.of(FIELD_AGENT, MSG_AGENT_CHECK_FAILED));
         }
