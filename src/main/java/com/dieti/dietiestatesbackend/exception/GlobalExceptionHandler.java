@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Gestore globale delle eccezioni per l'applicazione DietiEstates25.
@@ -108,17 +108,14 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        // concat all error messages into a single string
+        String errors = ex.getBindingResult().getAllErrors().stream()
+            .map(ObjectError::getDefaultMessage)
+            .collect(Collectors.joining("; "));
+
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).info("Errori di validazione: {} campi non validi", ex.getErrorCount());
         
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        
-        LoggerFactory.getLogger(GlobalExceptionHandler.class).info("Errori di validazione: {} campi non validi", errors.size());
-        
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Map.of("message", errors), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalStateException.class)
