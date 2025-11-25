@@ -35,10 +35,10 @@ public class VisitController {
         this.emailService = emailService;
     }
  
-    @GetMapping("/visits/agent/{agentID}")
-    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(authentication.principal, #agentID)")
-    public ResponseEntity<Page<AgentVisitDTO>> getAgentVisits(@PathVariable("agentID") Long agentID, Pageable pageable) {
-        Page<AgentVisitDTO> visits = visitService.getAgentVisits(agentID, pageable);
+    @GetMapping("/visits/agent/me")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(authentication.principal, #principal.id)")
+    public ResponseEntity<Page<AgentVisitDTO>> getAgentVisits(@AuthenticationPrincipal AppPrincipal principal, Pageable pageable) {
+        Page<AgentVisitDTO> visits = visitService.getAgentVisits(principal.getId(), pageable);
         return ResponseEntity.ok(visits);
     }
  
