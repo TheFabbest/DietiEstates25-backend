@@ -16,10 +16,6 @@ public class BoundingBoxUtility {
     private static final double METERS_PER_DEGREE_LATITUDE = 111320.0; // ~111.32 km in meters
     private static final double MIN_COS_LATITUDE = 1e-10; // Minimum cosine value to avoid division by zero
 
-    // Costruttore pubblico per Spring
-    public BoundingBoxUtility() {
-    }
-
     /**
      * Calculate precise bounding box coordinates from center point and radius.
      * Based on WGS84 ellipsoid model with proper handling of latitude-dependent longitude spacing.
