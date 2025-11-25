@@ -99,6 +99,7 @@ class BoundingBoxUtilityTest {
         executable = () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(181.0), 1000.0);
         assertThrows(IllegalArgumentException.class, executable);
         executable = () -> util.calculateBoundingBox(validLat, BigDecimal.valueOf(-181.0), 1000.0);
+        assertThrows(IllegalArgumentException.class, executable);
   
         // non-positive radius
         executable = () -> util.calculateBoundingBox(validLat, validLon, 0.0);
