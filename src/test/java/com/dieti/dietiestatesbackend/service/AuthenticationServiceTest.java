@@ -1,17 +1,21 @@
 package com.dieti.dietiestatesbackend.service;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.springframework.http.HttpStatus;
+
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider.TokenValidationResult;
 import com.dieti.dietiestatesbackend.service.AuthenticationService.LogoutResult;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 
@@ -32,7 +36,6 @@ class AuthenticationServiceTest {
         authenticationService = new AuthenticationService(
                 userQueryService,
                 userManagementService,
-                null,
                 passwordValidator,
                 refreshTokenProvider
         );

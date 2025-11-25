@@ -1,14 +1,13 @@
 package com.dieti.dietiestatesbackend.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider;
 import com.dieti.dietiestatesbackend.security.RefreshTokenProvider.TokenValidationResult;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthenticationService {
@@ -20,7 +19,6 @@ public class AuthenticationService {
 
     public AuthenticationService(UserQueryService userQueryService,
                                  UserManagementService userManagementService,
-                                 PasswordEncoder passwordEncoder,
                                  PasswordValidator passwordValidator,
                                  RefreshTokenProvider refreshTokenProvider) {
         this.userQueryService = userQueryService;
