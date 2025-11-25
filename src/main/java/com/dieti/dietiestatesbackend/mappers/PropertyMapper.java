@@ -1,7 +1,6 @@
 package com.dieti.dietiestatesbackend.mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -41,7 +40,7 @@ public class PropertyMapper {
     public List<PropertyResponse> toResponseList(List<Property> properties) {
         return properties.stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // --- Mapping helpers from Create*Request -> entities (popolano solo campi locali, non risolvono lookup) ---
@@ -59,7 +58,7 @@ public class PropertyMapper {
         ResidentialProperty rp = new ResidentialProperty();
         rp.setNumberOfRooms(req.getNumberOfRooms());
         rp.setNumberOfBathrooms(req.getNumberOfBathrooms());
-        rp.setParkingSpaces(req.getParkingSpaces() == null ? 0 : req.getParkingSpaces());
+        rp.setParkingSpaces(req.getParkingSpaces());
         rp.setFurnished(req.isFurnished());
         rp.setGarden(req.getGarden());
         rp.setNumberOfFloors(req.getNumberOfFloors());
