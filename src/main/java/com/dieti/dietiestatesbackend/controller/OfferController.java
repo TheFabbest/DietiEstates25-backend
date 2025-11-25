@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
+import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Offer;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.OfferService;
 import com.dieti.dietiestatesbackend.service.emails.EmailService;
-import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
-import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
  
 @RestController
 public class OfferController {
@@ -58,7 +59,7 @@ public class OfferController {
     @PostMapping("/offers/accept/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
-        Offer offer = offerService.acceptOffer(offerID, principal.getId());
+        Offer offer = offerService.acceptOffer(offerID);
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferAcceptedEmail(offer);
         return ResponseEntity.ok(responseDTO);
@@ -67,7 +68,7 @@ public class OfferController {
     @PostMapping("/offers/reject/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
-        Offer offer = offerService.rejectOffer(offerID, principal.getId());
+        Offer offer = offerService.rejectOffer(offerID);
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferRejectedEmail(offer);
         return ResponseEntity.ok(responseDTO);
@@ -76,7 +77,7 @@ public class OfferController {
     @PostMapping("/offers/counter/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
     public ResponseEntity<OfferResponseDTO> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) throws IOException {
-        Offer offer = offerService.counterOffer(offerID, principal.getId(), newPrice);
+        Offer offer = offerService.counterOffer(offerID, newPrice);
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferCountered(offer);
         return ResponseEntity.ok(responseDTO);

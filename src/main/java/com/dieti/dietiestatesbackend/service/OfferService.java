@@ -86,7 +86,7 @@ public class OfferService {
         return offerRepository.save(offer);
     }
 
-    public Offer acceptOffer(Long offerID, Long agentID) {
+    public Offer acceptOffer(Long offerID) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING) {
@@ -96,7 +96,7 @@ public class OfferService {
         return offerRepository.save(offer);
     }
 
-    public Offer rejectOffer(Long offerID, Long agentID) {
+    public Offer rejectOffer(Long offerID) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING) {
@@ -106,7 +106,7 @@ public class OfferService {
         return offerRepository.save(offer);
     }
 
-    public Offer counterOffer(Long offerID, Long agentID, Double newPrice) {
+    public Offer counterOffer(Long offerID, Double newPrice) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (newPrice <= 0) {
