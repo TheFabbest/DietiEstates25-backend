@@ -1,22 +1,5 @@
 package com.dieti.dietiestatesbackend.service.geocoding.provider;
 
-import com.dieti.dietiestatesbackend.config.GeoapifyConfig;
-import com.dieti.dietiestatesbackend.config.GeocodingProperties;
-import com.dieti.dietiestatesbackend.config.ProviderConfig;
-import com.dieti.dietiestatesbackend.entities.Address;
-import com.dieti.dietiestatesbackend.entities.Coordinates;
-import com.dieti.dietiestatesbackend.exception.GeocodingException;
-import com.dieti.dietiestatesbackend.service.geocoding.dto.GeoapifyResponse;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -24,11 +7,37 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-@SuppressWarnings("unchecked")
+import com.dieti.dietiestatesbackend.config.GeoapifyConfig;
+import com.dieti.dietiestatesbackend.config.GeocodingProperties;
+import com.dieti.dietiestatesbackend.config.ProviderConfig;
+import com.dieti.dietiestatesbackend.entities.Address;
+import com.dieti.dietiestatesbackend.entities.Coordinates;
+import com.dieti.dietiestatesbackend.exception.GeocodingException;
+import com.dieti.dietiestatesbackend.service.geocoding.dto.GeoapifyResponse;
+
+import reactor.core.publisher.Mono;
+
+@SuppressWarnings({"rawtypes", "unchecked"})
 @ExtendWith(MockitoExtension.class)
 class GeoapifyGeocodingServiceTest {
 
@@ -46,23 +55,23 @@ class GeoapifyGeocodingServiceTest {
 
     private GeoapifyGeocodingService service;
 
-    @SuppressWarnings("rawtypes")
-    @Mock(lenient = true)
+    @Mock
     private WebClient.RequestHeadersUriSpec uriSpec;
-    
-    @SuppressWarnings("rawtypes")
-    @Mock(lenient = true)
+
+    @Mock
     private WebClient.RequestHeadersSpec headersSpec;
-    
-    @Mock(lenient = true)
+
+    @Mock
     private WebClient.ResponseSpec responseSpec;
 
     @BeforeEach
     void setUp() {
+        // Solo questi stub specifici sono lenient per evitare errori non rilevanti
         lenient().when(geocodingProperties.getProvider()).thenReturn(provider);
         lenient().when(provider.getGeoapify()).thenReturn(geoapifyProps);
         lenient().when(geoapifyProps.getApiKey()).thenReturn("test-key");
         lenient().when(webClient.get()).thenReturn(uriSpec);
+
         when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
         when(headersSpec.header(anyString(), anyString())).thenReturn(headersSpec);
         when(headersSpec.retrieve()).thenReturn(responseSpec);
@@ -108,7 +117,6 @@ class GeoapifyGeocodingServiceTest {
         feature.setProperties(props);
         response.setFeatures(List.of(feature));
 
-        // Using the helper method for cleaner test setup
         mockWebClientSuccess(response);
 
         Optional<Coordinates> result = service.geocode(buildAddress());
@@ -134,7 +142,6 @@ class GeoapifyGeocodingServiceTest {
         mockWebClientSuccess(response);
 
         Optional<Coordinates> result = service.geocode(buildAddress());
-
         assertTrue(result.isEmpty());
     }
 
@@ -144,14 +151,13 @@ class GeoapifyGeocodingServiceTest {
         GeoapifyResponse.Feature feature1 = new GeoapifyResponse.Feature();
         feature1.setProperties(null);
         response1.setFeatures(List.of(feature1));
-        
-        mockWebClientSuccess(response1);
 
+        mockWebClientSuccess(response1);
         Optional<Coordinates> r1 = service.geocode(buildAddress());
         assertTrue(r1.isEmpty());
 
         reset(webClient, uriSpec, headersSpec, responseSpec);
-        
+
         GeoapifyResponse response2 = new GeoapifyResponse();
         GeoapifyResponse.Feature feature2 = new GeoapifyResponse.Feature();
         GeoapifyResponse.Properties props2 = new GeoapifyResponse.Properties();
@@ -159,9 +165,8 @@ class GeoapifyGeocodingServiceTest {
         props2.setLongitude(null);
         feature2.setProperties(props2);
         response2.setFeatures(List.of(feature2));
-        
-        mockWebClientSuccess(response2);
 
+        mockWebClientSuccess(response2);
         Optional<Coordinates> r2 = service.geocode(buildAddress());
         assertTrue(r2.isEmpty());
     }
@@ -176,7 +181,7 @@ class GeoapifyGeocodingServiceTest {
                 null,
                 Charset.defaultCharset()
         );
-        
+
         mockWebClientError(ex);
 
         GeocodingException thrown = assertThrows(GeocodingException.class, () -> service.geocode(buildAddress()));
@@ -186,7 +191,7 @@ class GeoapifyGeocodingServiceTest {
     @Test
     void geocode_mapsOtherExceptions_toGeocodingException_internalServerError() {
         RuntimeException rex = new RuntimeException("boom");
-        
+
         mockWebClientError(rex);
 
         GeocodingException thrown = assertThrows(GeocodingException.class, () -> service.geocode(buildAddress()));
