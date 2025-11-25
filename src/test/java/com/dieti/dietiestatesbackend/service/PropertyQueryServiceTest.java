@@ -54,7 +54,7 @@ class PropertyQueryServiceTest {
 
         assertSame(repoReturn, result);
 
-        verify(propertyRepository).findAllDetailedByIdIn(eq(Arrays.asList(1L, 2L, 42L)));
+        verify(propertyRepository).findAllDetailedByIdIn(Arrays.asList(1L, 2L, 42L));
     }
 
     @Test
@@ -67,6 +67,6 @@ class PropertyQueryServiceTest {
 
         assertSame(repoReturn, result);
 
-        verify(propertyRepository).findAllDetailedByIdIn(eq(Arrays.asList(3L, 7L)));
+        verify(propertyRepository).findAllDetailedByIdIn(Arrays.asList(3L, 7L));
     }
 }

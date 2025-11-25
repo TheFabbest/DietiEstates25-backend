@@ -91,6 +91,6 @@ class AuthenticationServiceTest {
         LogoutResult result = authenticationService.logout(refreshToken);
         assertEquals(HttpStatus.OK, result.status());
         assertTrue(result.success());
-        verify(refreshTokenProvider).deleteByTokenValue(eq(refreshToken));
+        verify(refreshTokenProvider).deleteByTokenValue(refreshToken);
     }
 }
