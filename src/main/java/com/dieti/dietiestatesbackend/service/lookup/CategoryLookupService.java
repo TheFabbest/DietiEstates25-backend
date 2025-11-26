@@ -27,11 +27,4 @@ public interface CategoryLookupService {
      * from active categories with a single optimized query.
      */
     List<String> findDistinctActivePropertyTypes();
-    
-    /**
-     * Legacy method for backward compatibility during transition.
-     * @deprecated Use findByName instead
-     */
-    @Deprecated
-    Optional<PropertyCategory> findByNameOrSubcategory(String name);
 }

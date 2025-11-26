@@ -10,7 +10,6 @@ import com.dieti.dietiestatesbackend.entities.Offer;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
-import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -38,9 +37,8 @@ public class EmailService {
         request.setEndpoint("mail/send");
         request.setBody(mail.build());
 
-        Response response = sg.api(request);
+        sg.api(request);
 
-        System.out.println("SendGrid response code: " + response.getStatusCode());
     }
 
 

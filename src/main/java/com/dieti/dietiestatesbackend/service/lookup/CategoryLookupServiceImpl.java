@@ -68,11 +68,4 @@ public class CategoryLookupServiceImpl implements CategoryLookupService {
                 String.class)
                 .getResultList();
     }
-    
-    @Override
-    @Deprecated
-    public Optional<PropertyCategory> findByNameOrSubcategory(String name) {
-        // Legacy method - delegate to findByName for backward compatibility
-        return findByName(name);
-    }
 }
