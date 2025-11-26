@@ -68,7 +68,7 @@ public class AgentLookupServiceImpl implements AgentLookupService {
             return Optional.of(false);
         }
 
-        if (hasOverlappingConfirmedVisits(agentId, start, end)) {
+        if (countOverlappingConfirmedVisits(agentId, start, end) > 1) {
             logger.debug("isAgentAvailable - overlapping confirmed visits for agentId={}", agentId);
             return Optional.of(false);
         }
@@ -92,8 +92,8 @@ public class AgentLookupServiceImpl implements AgentLookupService {
         }
     }
 
-    private boolean hasOverlappingConfirmedVisits(Long agentId, Instant start, Instant end) {
+    private int countOverlappingConfirmedVisits(Long agentId, Instant start, Instant end) {
         var overlapping = visitRepository.findOverlappingVisitsForAgent(agentId, start, end, VisitStatus.CONFIRMED);
-        return overlapping != null && !overlapping.isEmpty();
+        return overlapping != null ? overlapping.size() : 0;
     }
 }
