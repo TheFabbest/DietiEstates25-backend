@@ -37,6 +37,15 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
+    @GetMapping("/info/me")
+    public ResponseEntity<UserResponse> getMyInfo(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        User user = userService.getUser(authenticatedUser.getId());
+        UserResponse response = new UserResponse();
+        response.setEmail(user.getEmail());
+        response.setFullName(user.getFirstName() + " " + user.getLastName());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/agent/info/{id}")
     @PreAuthorize("@securityUtil.isAgentOrManager(#authentication.principal, #id)")
     public ResponseEntity<Object> getAgentInfo(@PathVariable("id") Long id) {
