@@ -35,7 +35,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
                    "v.property.address.coordinates.longitude), " +
                    "new com.dieti.dietiestatesbackend.dto.response.UserResponse(" +
                    "v.user.id, " +
-                   "CONCAT(v.user.name, ' ', v.user.surname), " +
+                   "CONCAT(v.user.firstName, ' ', v.user.lastName), " +
                    "v.user.email)) " +
                    "FROM Visit v WHERE v.property.agent.id = :agentID",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.property.agent.id = :agentID")
