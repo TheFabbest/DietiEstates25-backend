@@ -90,7 +90,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
           "v.property.address.building, " +
           "v.property.address.coordinates.latitude, " +
           "v.property.address.coordinates.longitude)) " +
-          "FROM Visit v WHERE v.id = :visitId")
+          "FROM Visit v JOIN FETCH v.user JOIN FETCH v.agent WHERE v.id = :visitId")
     Optional<AgentVisitDTO> findAgentVisitById(@Param("visitId") Long visitId);
 
     /*
