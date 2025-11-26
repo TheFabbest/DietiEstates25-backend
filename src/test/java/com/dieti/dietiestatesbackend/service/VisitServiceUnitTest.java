@@ -89,7 +89,7 @@ class VisitServiceUnitTest {
         assertNotNull(dto);
         assertEquals(VisitStatus.PENDING, dto.getVisit().getStatus());
         verify(visitValidator).validateBusinessRules(start, end);
-        verify(visitValidator).ensureUserHasNoOverlap(30L, start, end);
+        verify(visitValidator).ensureUserHasOneOrNoOverlap(30L, start, end);
         verify(visitValidator).ensureAgentAvailable(2L, start, end);
     }
 

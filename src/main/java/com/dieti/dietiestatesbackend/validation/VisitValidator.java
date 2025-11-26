@@ -87,14 +87,14 @@ public class VisitValidator {
         return instant.atZone(zoneId).toLocalDate();
     }
 
-    public void ensureUserHasNoOverlap(Long userId, Instant start, Instant end) {
+    public void ensureUserHasOneOrNoOverlap(Long userId, Instant start, Instant end) {
         List<Visit> overlapping = visitRepository.findOverlappingVisitsForUserWithLock(userId, start, end, VisitStatus.CONFIRMED);
-        throwInvalidPayloadIfNotEmpty(overlapping, FIELD_OVERLAP, MSG_USER_OVERLAP);
+        throwInvalidPayloadIfMoreThanOne(overlapping, FIELD_OVERLAP, MSG_USER_OVERLAP);
     }
 
     public void ensureAgentAvailable(Long agentId, Instant start, Instant end) {
         List<Visit> overlappingForAgent = visitRepository.findOverlappingVisitsForAgentWithLock(agentId, start, end, VisitStatus.CONFIRMED);
-        throwInvalidPayloadIfNotEmpty(overlappingForAgent, FIELD_AGENT, MSG_AGENT_UNAVAILABLE);
+        throwInvalidPayloadIfMoreThanOne(overlappingForAgent, FIELD_AGENT, MSG_AGENT_UNAVAILABLE);
 
         if (agentLookupService == null) {
             // legacy behavior: if no external service, assume available
@@ -151,8 +151,8 @@ public class VisitValidator {
         }
     }
 
-    private void throwInvalidPayloadIfNotEmpty(List<?> list, String field, String message) {
-        if (list != null && !list.isEmpty()) {
+    private void throwInvalidPayloadIfMoreThanOne(List<?> list, String field, String message) {
+        if (list != null && list.size() > 1) {
             throw new InvalidPayloadException(Map.of(field, message));
         }
     }

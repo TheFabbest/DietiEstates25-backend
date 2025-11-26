@@ -88,7 +88,7 @@ public class VisitService {
         User user = findRequestingUserOrThrow(requestingUserId);
 
         // Controlli di sovrapposizione e disponibilità sono delegati:
-        visitValidator.ensureUserHasNoOverlap(user.getId(), start, end);
+        visitValidator.ensureUserHasOneOrNoOverlap(user.getId(), start, end);
         visitValidator.ensureAgentAvailable(agent.getId(), start, end);
 
         Visit visit = buildVisit(property, agent, user, start, end);
@@ -159,7 +159,7 @@ public class VisitService {
         } else switch (target) {
             case CONFIRMED -> {
                 // Validazioni di conferma delegate al validator (overlap utente/agente e regole di overbooking)
-                visitValidator.ensureUserHasNoOverlap(visit.getUser().getId(), visit.getStartTime(), visit.getEndTime());
+                visitValidator.ensureUserHasOneOrNoOverlap(visit.getUser().getId(), visit.getStartTime(), visit.getEndTime());
                 visitValidator.ensureAgentAvailable(visit.getAgent().getId(), visit.getStartTime(), visit.getEndTime());
                 visitValidator.ensureOverbookingRules(visit);
                 visit.setStatus(VisitStatus.CONFIRMED);

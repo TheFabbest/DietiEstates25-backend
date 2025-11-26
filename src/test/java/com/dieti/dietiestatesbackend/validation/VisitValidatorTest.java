@@ -62,7 +62,7 @@ class VisitValidatorTest {
         when(visitRepository.findOverlappingVisitsForUserWithLock(any(), any(), any(), any()))
                 .thenReturn(List.of(new Visit()));
 
-        assertThrows(InvalidPayloadException.class, () -> validator.ensureUserHasNoOverlap(1L, start, end));
+        assertThrows(InvalidPayloadException.class, () -> validator.ensureUserHasOneOrNoOverlap(1L, start, end));
     }
 
     @Test
