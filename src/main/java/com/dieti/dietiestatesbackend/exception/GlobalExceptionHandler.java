@@ -1,23 +1,24 @@
 package com.dieti.dietiestatesbackend.exception;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import java.time.LocalDateTime;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Gestore globale delle eccezioni per l'applicazione DietiEstates25.
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final String MSG = "message";
 
     /**
      * Gestisce l'eccezione EntityNotFoundException.
@@ -113,7 +116,7 @@ public class GlobalExceptionHandler {
         List<String> fields = ex.getBindingResult().getFieldErrors().stream()
             .map(FieldError::getField)
             .distinct()
-            .collect(Collectors.toList());
+            .toList();
         
         String errors = ex.getBindingResult().getAllErrors().stream()
             .map(ObjectError::getDefaultMessage)
@@ -124,7 +127,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
-                    "message", errors,
+                    MSG, errors,
                     "fields", fields
                 ));
     }
@@ -309,7 +312,7 @@ public class GlobalExceptionHandler {
             // Risposta strutturata minima se l'eccezione non contiene dettagli
             return new ResponseEntity<>(Map.of(
                     "error", "Overbooking",
-                    "message", "La conferma della visita è in conflitto con le regole di disponibilità/overbooking"
+                    MSG, "La conferma della visita è in conflitto con le regole di disponibilità/overbooking"
             ), HttpStatus.CONFLICT);
         }
  
@@ -325,7 +328,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = ex.getErrors();
         LoggerFactory.getLogger(GlobalExceptionHandler.class).warn("Agent availability conflict: {} details", errors != null ? errors.size() : 0, ex);
         if (errors == null || errors.isEmpty()) {
-            return new ResponseEntity<>(Map.of("error", "AgentAvailabilityConflict", "message", "Conflitto nella gestione della disponibilità agente"), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(Map.of("error", "AgentAvailabilityConflict", MSG, "Conflitto nella gestione della disponibilità agente"), HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
@@ -350,10 +353,10 @@ public class GlobalExceptionHandler {
      * DTO per la rappresentazione standardizzata degli errori.
      */
     public static class ErrorResponse {
-        private int status;
-        private String error;
-        private String message;
-        private LocalDateTime timestamp;
+        private final int status;
+        private final String error;
+        private final String message;
+        private final LocalDateTime timestamp;
 
         public ErrorResponse(int status, String error, String message, LocalDateTime timestamp) {
             this.status = status;
