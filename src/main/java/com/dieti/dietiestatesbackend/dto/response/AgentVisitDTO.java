@@ -14,4 +14,5 @@ public class AgentVisitDTO {
     private Visit visit;
     private String propertyType;
     private AddressResponseDTO address;
+    private UserResponse userInfo;
 }

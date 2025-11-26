@@ -32,7 +32,11 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
                    "v.property.address.streetNumber, " +
                    "v.property.address.building, " +
                    "v.property.address.coordinates.latitude, " +
-                   "v.property.address.coordinates.longitude)) " +
+                   "v.property.address.coordinates.longitude)), " +
+                   "new com.dieti.dietiestatesbackend.dto.response.UserResponse(" +
+                   "v.user.id, " +
+                   "CONCAT(v.user.name, ' ', v.user.surname), " +
+                   "v.user.email)) " +
                    "FROM Visit v WHERE v.property.agent.id = :agentID",
            countQuery = "SELECT count(v) FROM Visit v WHERE v.property.agent.id = :agentID")
     Page<AgentVisitDTO> getAgentVisits(@Param("agentID") Long agentID, Pageable pageable);
