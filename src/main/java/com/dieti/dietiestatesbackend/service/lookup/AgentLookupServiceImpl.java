@@ -94,6 +94,7 @@ public class AgentLookupServiceImpl implements AgentLookupService {
 
     private int countOverlappingConfirmedVisits(Long agentId, Instant start, Instant end) {
         var overlapping = visitRepository.findOverlappingVisitsForAgent(agentId, start, end, VisitStatus.CONFIRMED);
+        logger.debug("overlapping:" + Integer.valueOf(overlapping.size()).toString());
         return overlapping != null ? overlapping.size() : 0;
     }
 }
