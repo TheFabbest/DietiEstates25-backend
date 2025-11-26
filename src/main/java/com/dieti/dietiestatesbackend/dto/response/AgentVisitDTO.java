@@ -15,4 +15,11 @@ public class AgentVisitDTO {
     private String propertyType;
     private AddressResponseDTO address;
     private UserResponse userInfo;
+
+    public AgentVisitDTO(Visit visit, String propertyType, AddressResponseDTO address) {
+        this.visit = visit;
+        this.propertyType = propertyType;
+        this.address = address;
+        this.userInfo = null;
+    }
 }
