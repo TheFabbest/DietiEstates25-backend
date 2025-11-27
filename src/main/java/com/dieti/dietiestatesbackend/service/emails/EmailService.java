@@ -38,7 +38,6 @@ public class EmailService {
         request.setBody(mail.build());
 
         sg.api(request);
-
     }
 
 
@@ -84,13 +83,14 @@ public class EmailService {
 
     public void sendVisitStatusUpdatedEmail(AgentVisitDTO visit) throws IOException {
         final String subject = "Aggiornamento stato visita";
-        String contentText = "Ciao,\n\nLo stato della visita per la proprietà in \"" + visit.getAddress() + "\" è stato aggiornato.\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime() + VISITOR + visit.getVisit().getUser().getUsername() + "\n- Nuovo stato: " + visit.getVisit().getStatus() + BOTTOM;
+        String contentText = "Ciao,\n\nLa visita per la proprietà in \"" + visit.getAddress() + "\" è ora " + visit.getVisit().getStatus() + ".\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime() + VISITOR + visit.getVisit().getUser().getUsername() + "\n - Agente: " + visit.getVisit().getAgent().getUsername() + BOTTOM;
         sendEmail(visit.getVisit().getAgent().getEmail(), subject, contentText);
+        sendEmail(visit.getVisit().getUser().getEmail(), subject, contentText);
     }
 
     public void sendVisitCancelledEmail(AgentVisitDTO visit) throws IOException {
         final String subject = "Visita annullata";
-        String contentText = "Ciao,\n\nLa visita per la proprietà in \"" + visit.getAddress() + "\" è stata annullata.\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime() + VISITOR + visit.getVisit().getUser().getUsername() + BOTTOM;
-        sendEmail(visit.getVisit().getAgent().getEmail(), subject, contentText);
+        String contentText = "Ciao,\n\nCi dispiace informarla che la visita per la proprietà in \"" + visit.getAddress() + "\" è stata annullata dal nostro agente.\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime()  + BOTTOM;
+        sendEmail(visit.getVisit().getUser().getEmail(), subject, contentText);
     }
 }
