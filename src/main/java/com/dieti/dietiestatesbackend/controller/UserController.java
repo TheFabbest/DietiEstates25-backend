@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dieti.dietiestatesbackend.dto.request.ChangePasswordRequest;
+import com.dieti.dietiestatesbackend.dto.request.CreateUserRequest;
 import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
 import com.dieti.dietiestatesbackend.dto.response.UserResponse;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
 import com.dieti.dietiestatesbackend.service.UserService;
+import com.dieti.dietiestatesbackend.service.emails.EmailService;
+import com.dieti.dietiestatesbackend.util.RandomPasswordGenerator;
 
 import jakarta.validation.Valid;
 
@@ -29,11 +32,13 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
+    private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, EmailService emailService, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.emailService = emailService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -66,7 +71,7 @@ public class UserController {
 
     @PostMapping("/agent/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Object> createAgent(@RequestBody @Valid SignupRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
+    public ResponseEntity<Object> createAgent(@RequestBody @Valid CreateUserRequest toBeCreated, @AuthenticationPrincipal AuthenticatedUser manager) {
         if (userService.doesUserExist(toBeCreated.getEmail())) {
             try {
                 userService.addAgentRole(toBeCreated.getUsername(), userService.getUser(manager.getId()));
@@ -78,7 +83,10 @@ public class UserController {
             }
         } else {
             try {
-                userService.createAgent(toBeCreated, userService.getUser(manager.getId()));
+                String generatedPassword = RandomPasswordGenerator.generateRandom();
+                SignupRequest signupRequest = new SignupRequest(toBeCreated, generatedPassword);
+                userService.createAgent(signupRequest, userService.getUser(manager.getId()));
+                emailService.sendAgentAccountCreatedEmail(signupRequest.getEmail(), signupRequest.getPassword());
                 return new ResponseEntity<>("Agent created", HttpStatus.CREATED);
             } catch (Exception e) {
                 logger.error("Errore durante la creazione dell'agente", e);
@@ -91,7 +99,7 @@ public class UserController {
 
     @PostMapping("/manager/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Object> createManager(@RequestBody @Valid SignupRequest toBeCreated,
+    public ResponseEntity<Object> createManager(@RequestBody @Valid CreateUserRequest toBeCreated,
             @AuthenticationPrincipal AuthenticatedUser manager) {
         if (userService.doesUserExist(toBeCreated.getEmail())) {
             try {
@@ -104,7 +112,10 @@ public class UserController {
             }
         } else {
             try {
-                userService.createManager(toBeCreated, userService.getUser(manager.getId()));
+                String generatedPassword = RandomPasswordGenerator.generateRandom();
+                SignupRequest signupRequest = new SignupRequest(toBeCreated, generatedPassword);
+                userService.createManager(signupRequest, userService.getUser(manager.getId()));
+                emailService.sendManagerAccountCreatedEmail(signupRequest.getEmail(), signupRequest.getPassword());
                 return new ResponseEntity<>("Manager created", HttpStatus.CREATED);
             } catch (Exception e) {
                 logger.error("Errore durante la creazione del manager", e);

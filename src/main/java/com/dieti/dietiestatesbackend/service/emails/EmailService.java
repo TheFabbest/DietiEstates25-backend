@@ -24,7 +24,7 @@ public class EmailService {
     private static final String CIAO = "Ciao ";
     private static final String VISITOR = "\n- Visitatore: ";
 
-    private void sendEmail(String to, String subject, String contentText) throws IOException {
+    private void sendEmail(String to, String subject, String contentText) {
         Email from = new Email("25dietiestates@gmail.com");
         Email toEmail = new Email(to);
         Content content = new Content("text/plain", contentText);
@@ -35,9 +35,13 @@ public class EmailService {
 
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
-        request.setBody(mail.build());
-
-        sg.api(request);
+        try {
+            request.setBody(mail.build());
+            sg.api(request);
+        } catch (IOException ex) {
+            // fail silently, email sending errors should not block main flow
+            System.err.println("Errore durante l'invio dell'email: " + ex.getMessage());
+        }
     }
 
 
@@ -92,5 +96,18 @@ public class EmailService {
         final String subject = "Visita annullata";
         String contentText = "Ciao,\n\nCi dispiace informarla che la visita per la proprietà in \"" + visit.getAddress() + "\" è stata annullata dal nostro agente.\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime()  + BOTTOM;
         sendEmail(visit.getVisit().getUser().getEmail(), subject, contentText);
+    }
+
+    public void sendAgentAccountCreatedEmail(String email, String password) {
+        final String subject = "Account agente creato";
+        String contentText = "Ciao,\n\nIl tuo account agente su Dieti Estates è stato creato con successo. Benvenuto a bordo! Usa questa password per accedere: " + password + "." + BOTTOM;
+        sendEmail(email, subject, contentText);
+    }
+
+
+    public void sendManagerAccountCreatedEmail(String email, String password) {
+        final String subject = "Account manager creato";
+        String contentText = "Ciao,\n\nIl tuo account manager su Dieti Estates è stato creato con successo. Benvenuto a bordo! Usa questa password per accedere: " + password + "." + BOTTOM;
+        sendEmail(email, subject, contentText);
     }
 }
