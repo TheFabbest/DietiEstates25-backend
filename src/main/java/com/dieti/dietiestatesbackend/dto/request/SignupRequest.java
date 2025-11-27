@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 /**
  * DTO per la registrazione utente.
@@ -16,7 +15,6 @@ import lombok.AllArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class SignupRequest extends CreateUserRequest{
     @NotBlank(message = "La password è obbligatoria.")
     @Size(min = 8, message = "La password deve essere lunga almeno 8 caratteri.")
@@ -27,6 +25,11 @@ public class SignupRequest extends CreateUserRequest{
     public SignupRequest(CreateUserRequest createUserRequest, String password) {
         super(createUserRequest.getEmail(), createUserRequest.getUsername(),
               createUserRequest.getName(), createUserRequest.getSurname());
+        this.password = password;
+    }
+
+    public SignupRequest(String email, String password, String username, String name, String surname) {
+        super(email, username, name, surname);
         this.password = password;
     }
 }
