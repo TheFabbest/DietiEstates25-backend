@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.dieti.dietiestatesbackend.dto.request.AbstractCreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.User;
@@ -48,7 +47,7 @@ public class PropertyCreationService {
                 .orElseThrow(() -> new EntityNotFoundException("Agent not found with username: " + authenticatedUser.getUsername()));
 
         // Il mapping verso l'entità concreta è responsabilità del CreationMapperRegistry
-        Property property = creationMapperRegistry.map((AbstractCreatePropertyRequest) request, agent);
+        Property property = creationMapperRegistry.map(request, agent);
         logger.debug("Property mappata prima del salvataggio: {}", property); // Log della Property mappata
 
         return property;

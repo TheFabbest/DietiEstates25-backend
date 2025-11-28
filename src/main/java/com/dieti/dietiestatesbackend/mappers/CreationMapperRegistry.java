@@ -1,7 +1,9 @@
 package com.dieti.dietiestatesbackend.mappers;
 
 import com.dieti.dietiestatesbackend.dto.request.AbstractCreatePropertyRequest;
+import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
+import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ public class CreationMapperRegistry {
         }
     }
 
-    public Property map(AbstractCreatePropertyRequest request, User agent) {
+    public Property map(CreatePropertyRequest request, User agent) {
         Objects.requireNonNull(request, "request must not be null");
 
         // try direct lookup by exact request class
@@ -43,7 +45,12 @@ public class CreationMapperRegistry {
         }
 
         if (mapper != null) {
-            return mapWithCapturedMapper(mapper, request, agent);
+            Property p = mapWithCapturedMapper(mapper, (AbstractCreatePropertyRequest) request, agent);
+            PropertyCategory cat = new PropertyCategory();
+            cat.setName(request.getPropertyCategoryName());
+            cat.setPropertyType(request.getPropertyType().name());
+            p.setPropertyCategory(cat);
+            return p;
         }
 
         throw new InvalidPayloadException(Map.of("propertyType",
