@@ -3,7 +3,6 @@ package com.dieti.dietiestatesbackend.mappers;
 import com.dieti.dietiestatesbackend.dto.request.AbstractCreatePropertyRequest;
 import com.dieti.dietiestatesbackend.dto.request.CreatePropertyRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
-import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
 
@@ -46,12 +45,7 @@ public class CreationMapperRegistry {
         }
 
         if (mapper != null) {
-            Property p = mapWithCapturedMapper(mapper, (AbstractCreatePropertyRequest) request, agent);
-            PropertyCategory cat = new PropertyCategory();
-            cat.setName(request.getPropertyCategoryName());
-            cat.setPropertyType(request.getPropertyType().name());
-            p.setPropertyCategory(cat);
-            return p;
+            return mapWithCapturedMapper(mapper, (AbstractCreatePropertyRequest) request, agent);
         }
 
         throw new InvalidPayloadException(Map.of("propertyType",
