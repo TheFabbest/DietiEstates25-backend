@@ -39,7 +39,7 @@ class AddressServiceImplTest {
  
     @Test
     void testCreateFromRequest() {
-        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A");
+        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", BigDecimal.valueOf(10), BigDecimal.valueOf(20));
         Address addressToGeocode = new Address();
         addressToGeocode.setCountry(request.getCountry());
         addressToGeocode.setProvince(request.getProvince());
@@ -75,7 +75,7 @@ class AddressServiceImplTest {
 
     @Test
     void testCreateFromRequest_GeocodingFails() {
-        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A");
+        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", BigDecimal.valueOf(10), BigDecimal.valueOf(20));
         
         when(geocodingService.geocode(any(Address.class))).thenReturn(Optional.empty());
 
@@ -101,7 +101,7 @@ class AddressServiceImplTest {
 
     @Test
     void testCreateFromRequest_CreatedAtIsSet() {
-        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A");
+        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", BigDecimal.valueOf(10), BigDecimal.valueOf(20));
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(BigDecimal.valueOf(10.0));
         coordinates.setLongitude(BigDecimal.valueOf(20.0));

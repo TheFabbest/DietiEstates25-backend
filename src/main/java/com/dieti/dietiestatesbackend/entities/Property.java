@@ -20,7 +20,6 @@ import lombok.AccessLevel;
 @Entity
 @Table(name = "property")
 @Inheritance(strategy = InheritanceType.JOINED)
-// TODO see (property_type is an arbitrary string, attribute of "Property" and independent from id_property_category)
 @DiscriminatorColumn(name = "property_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter

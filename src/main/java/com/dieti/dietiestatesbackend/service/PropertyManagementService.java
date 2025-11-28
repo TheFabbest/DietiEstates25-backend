@@ -59,33 +59,6 @@ public class PropertyManagementService {
     }
 
     /**
-     * Crea una proprietà a partire dal DTO unificato.
-     * La costruzione dell'entità specifica è delegata a PropertyCreationService,
-     * che ora risolve le dipendenze e applica i campi comuni. 
-     */
-
-     //TODO ATTENZIONE, questo metodo dovrà essere deprecato a favore di createPropertyWithImages!
-     
-    public PropertyResponse createProperty(CreatePropertyRequest request) {
-        validationService.validate(request);
-        logger.debug("Inizio creazione proprietà per categoria: {}", request.getPropertyCategoryName());
- 
-        // Delego la creazione della property al nuovo servizio (il servizio si occupa ora di risolvere agent tramite SecurityContext)
-        Property property = propertyCreationService.createProperty(request);
- 
-        if (property.getPropertyCategory() == null) {
-            throw new IllegalArgumentException("PropertyCategory is required");
-        }
- 
-        PropertyType derivedPropertyType = PropertyType.valueOf(property.getPropertyCategory().getPropertyType());
-        logger.debug("PropertyType derivato dalla categoria: {}", derivedPropertyType);
- 
-        Property saved = propertyRepository.save(property);
-        logger.info("Property created id={}, type={}", saved.getId(), derivedPropertyType);
-        return responseMapperRegistry.map(saved);
-    }
-
-    /**
      * Crea una proprietà con immagini a partire dal DTO unificato e una lista di file.
      * Implementa la strategia "Storage-First con Compensazione Sincrona":
      * 1. Prima caricamento immagini su Azure Blob Storage

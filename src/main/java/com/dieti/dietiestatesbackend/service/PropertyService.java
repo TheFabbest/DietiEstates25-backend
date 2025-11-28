@@ -89,14 +89,6 @@ public class PropertyService {
     }
 
     /**
-     * Crea una proprietà a partire dal DTO unificato.
-     * Metodo semplificato: delega la risoluzione a helper privati e mantiene la transazione.
-     */
-    public PropertyResponse createProperty(CreatePropertyRequest request) {
-        return propertyManagementService.createProperty(request);
-    }
-
-    /**
      * Crea una proprietà con immagini a partire dal DTO unificato e una lista di file.
      * Delega la gestione completa al PropertyManagementService.
      */

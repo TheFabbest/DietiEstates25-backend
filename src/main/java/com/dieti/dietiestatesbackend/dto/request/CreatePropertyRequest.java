@@ -1,7 +1,6 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyCondition;
@@ -50,8 +49,6 @@ public sealed interface CreatePropertyRequest
     default boolean isAddressValid() {
         return getAddressRequest() != null;
     }
-
-    List<String> getImages();
     
     @AssertTrue(message = "Il tipo di proprietà non corrisponde alla categoria specificata.")
     default boolean isPropertyTypeConsistentWithCategory() {
