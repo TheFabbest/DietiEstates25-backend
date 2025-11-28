@@ -63,7 +63,7 @@ public class ResidentialProperty extends Property {
     private boolean isFurnished = false;
 
     @NotNull
-    @Min(1)
+    @Min(0)
     @Column(name = "floor", nullable = false)
     private Integer floor;
 
