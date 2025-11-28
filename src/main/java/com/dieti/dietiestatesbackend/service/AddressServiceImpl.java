@@ -56,15 +56,18 @@ public class AddressServiceImpl implements AddressService {
         adr.setStreet(request.getStreet());
         adr.setStreetNumber(request.getStreetNumber());
         adr.setBuilding(request.getBuilding());
-        // Il backend è responsabile del geocoding: richiedo le coordinate al servizio.
-        // Se il geocoding non restituisce coordinate lanciamo GeocodingException e
-        // permettiamo all'eccezione di propagarsi verso il layer superiore.
-        Optional<Coordinates> opt = geocodingService.geocode(adr);
-        if (opt.isEmpty()) {
-            throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.", HttpStatus.NOT_FOUND);
+        if (request.getLatitude() != null && request.getLongitude() != null) {
+            Coordinates coords = new Coordinates();
+            coords.setLatitude(request.getLatitude());
+            coords.setLongitude(request.getLongitude());
+            adr.setCoordinates(coords);
+        } else {   
+            Optional<Coordinates> opt = geocodingService.geocode(adr);
+            if (opt.isEmpty()) {
+                throw new GeocodingException("Impossibile ottenere le coordinate per l'indirizzo fornito.", HttpStatus.NOT_FOUND);
+            }
+            adr.setCoordinates(opt.get());
         }
-        adr.setCoordinates(opt.get());
-
         adr.setCreatedAt(LocalDateTime.now());
         Address saved = addressRepository.save(adr);
         logger.debug("Indirizzo creato con id={}", saved.getId());
