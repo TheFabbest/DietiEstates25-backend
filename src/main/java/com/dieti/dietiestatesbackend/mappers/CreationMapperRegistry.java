@@ -6,6 +6,7 @@ import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.exception.InvalidPayloadException;
+
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

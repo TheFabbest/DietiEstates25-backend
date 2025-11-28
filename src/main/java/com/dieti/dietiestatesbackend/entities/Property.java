@@ -53,7 +53,7 @@ public abstract class Property extends BaseEntity {
     private Contract contract;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_property_category", nullable = false, foreignKey = @ForeignKey(name = "fk_property_propertycategory"))
     private PropertyCategory propertyCategory;
 
