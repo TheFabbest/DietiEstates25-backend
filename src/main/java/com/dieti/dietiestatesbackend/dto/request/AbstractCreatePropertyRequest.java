@@ -1,7 +1,6 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import com.dieti.dietiestatesbackend.enums.EnergyRating;
 import com.dieti.dietiestatesbackend.enums.PropertyCondition;
@@ -31,5 +30,4 @@ public abstract class AbstractCreatePropertyRequest {
     private EnergyRating energyRating;
     
     private AddressRequest addressRequest;
-    private List<String> images;
 }

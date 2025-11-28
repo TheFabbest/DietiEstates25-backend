@@ -1,5 +1,7 @@
 package com.dieti.dietiestatesbackend.dto.request;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
@@ -35,4 +37,7 @@ public class AddressRequest {
 
     private String building;
 
+    private BigDecimal latitude; // TODO inserire nel database quando si fa inserimento
+
+    private BigDecimal longitude;
 }
