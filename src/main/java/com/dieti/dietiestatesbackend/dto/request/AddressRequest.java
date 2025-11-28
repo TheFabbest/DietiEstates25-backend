@@ -37,7 +37,7 @@ public class AddressRequest {
 
     private String building;
 
-    private BigDecimal latitude; // TODO inserire nel database quando si fa inserimento
+    private BigDecimal latitude;
 
     private BigDecimal longitude;
 }

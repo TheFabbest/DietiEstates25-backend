@@ -94,7 +94,9 @@ public class PropertiesController {
             Authentication authentication) {
         logger.debug("POST /properties - request: {}", request);
         logger.debug("Numero immagini ricevute: {}", images.size());
-        logger.debug("Dettagli CreatePropertyRequest: {}", request); // Log dettagliato della request
+        logger.debug("Dettagli CreatePropertyRequest: {}", (CreatePropertyRequest) request); // Log dettagliato della request
+        logger.debug("Category name: {}", request.getPropertyCategoryName());
+        logger.debug("Property type: {}", request.getPropertyType().name());
         PropertyResponse created = propertyService.createPropertyWithImages(request, images);
         logger.debug("Property creata id={}", created.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
