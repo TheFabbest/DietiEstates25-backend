@@ -65,7 +65,6 @@ public class PropertyManagementService {
      * 2. Solo se l'upload ha successo, salvataggio nel database
      * 3. In caso di fallimento del database, eliminazione delle immagini caricate (compensazione)
      */
-    @Transactional
     public PropertyResponse createPropertyWithImages(CreatePropertyRequest request, List<MultipartFile> images) {
         validationService.validate(request);
         logger.debug("Inizio creazione proprietà con immagini per categoria: {}", request.getPropertyCategoryName());
