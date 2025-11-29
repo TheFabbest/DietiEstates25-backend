@@ -25,6 +25,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
      * @return Lista di offerte dell'agente
      */
     @Query("SELECT DISTINCT o FROM Offer o " +
+        "JOIN FETCH o.user " +
         "JOIN FETCH o.property p " +
         "JOIN FETCH p.contract " +
         "JOIN FETCH p.propertyCategory " +
