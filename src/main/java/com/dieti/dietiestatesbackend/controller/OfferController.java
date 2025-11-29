@@ -1,6 +1,8 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -81,5 +83,14 @@ public class OfferController {
         OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferCountered(offer);
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/offers")
+    public ResponseEntity<List<OfferResponseDTO>> getMyOffers(@AuthenticationPrincipal AppPrincipal principal) {
+        List<Offer> offers = offerService.getUserOffers(principal.getId());
+        List<OfferResponseDTO> responseDTOs = offers.stream()
+            .map(offerService::mapToResponseDTO)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDTOs);
     }
 }

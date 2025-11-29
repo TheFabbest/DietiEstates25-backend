@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -28,4 +29,5 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     Page<Offer> getAgentOffers(@Param("id") Long agentId, Pageable pageable);
 
     Optional<Offer> findByPropertyIdAndUserId(Long propertyId, Long userId);
+    List<Offer> findByUserId(Long userID);
 }

@@ -1,6 +1,7 @@
 package com.dieti.dietiestatesbackend.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -121,5 +122,9 @@ public class OfferService {
         offer.setPrice(BigDecimal.valueOf(newPrice));
         offer.setStatus(OfferStatus.COUNTERED);
         return offerRepository.save(offer);
+    }
+
+    public List<Offer> getUserOffers(Long userID) {
+        return offerRepository.findByUserId(userID);
     }
 }
