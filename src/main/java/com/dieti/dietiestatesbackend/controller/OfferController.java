@@ -37,10 +37,10 @@ public class OfferController {
         this.defaultMapper = defaultMapper;
     }
 
-    @GetMapping("/offers/agent_offers/{agentID}")
-    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(principal, #agentID)")
-    public ResponseEntity<Page<OfferResponseDTO>> getAgentOffers(@PathVariable("agentID") Long agentID, Pageable pageable) {
-        Page<Offer> offers = offerService.getAgentOffers(agentID, pageable);
+    @GetMapping("/offers/agent_offers")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(principal, principal.id)")
+    public ResponseEntity<Page<OfferResponseDTO>> getAgentOffers(@AuthenticationPrincipal AppPrincipal principal, Pageable pageable) {
+        Page<Offer> offers = offerService.getAgentOffers(principal.getId(), pageable);
         Page<OfferResponseDTO> responseDTOs = offers.map(offer -> {
             OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
             dto.setProperty(defaultMapper.propertyToPropertyResponse(offer.getProperty()));
