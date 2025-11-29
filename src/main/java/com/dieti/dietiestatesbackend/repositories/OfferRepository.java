@@ -24,11 +24,18 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
      * @param agentId L'ID dell'agente
      * @return Lista di offerte dell'agente
      */
-    @Query(value = "SELECT o FROM Offer o JOIN FETCH o.property p JOIN FETCH p.agent JOIN FETCH o.user WHERE p.agent.id = :id",
-           countQuery = "SELECT count(o) FROM Offer o WHERE o.property.agent.id = :id")
-    Page<Offer> getAgentOffers(@Param("id") Long agentId, Pageable pageable);
+    @Query("SELECT DISTINCT o FROM Offer o " +
+        "JOIN FETCH o.property p " +
+        "JOIN FETCH p.contract " +
+        "JOIN FETCH p.propertyCategory " +
+        "JOIN FETCH p.agent " +
+        "JOIN FETCH p.address " +
+        "WHERE p.agent.id = :agentId " +
+        "AND p.agent.isAgent = true")
+    Page<Offer> getAgentOffers(@Param("agentId") Long agentId, Pageable pageable);
 
     Optional<Offer> findByPropertyIdAndUserId(Long propertyId, Long userId);
+    
     @Query("SELECT DISTINCT o FROM Offer o " +
         "JOIN FETCH o.property p " +
         "JOIN FETCH p.contract " +
