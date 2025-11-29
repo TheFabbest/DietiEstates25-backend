@@ -1,9 +1,14 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
+import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
+import com.dieti.dietiestatesbackend.entities.CommercialProperty;
 import com.dieti.dietiestatesbackend.entities.Offer;
+import com.dieti.dietiestatesbackend.mappers.MapStructPropertyMapper;
+import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.OfferService;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,14 +39,21 @@ class OfferControllerTest {
     private OfferService offerService;
 
     @Mock
+    private MapStructPropertyMapper defaultMapper;
+
+    @Mock
     private SecurityUtil securityUtil;
 
     @Test
     void getAgentOffers_shouldReturnOffers_whenServiceReturnsData() {
         // Given
         Long agentId = 1L;
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(agentId);
+        
         Offer offer = new Offer();
         offer.setId(1L);
+        offer.setProperty(new CommercialProperty()); 
         Page<Offer> offersPage = new PageImpl<>(Collections.singletonList(offer));
         
         OfferResponseDTO offerResponseDTO = new OfferResponseDTO();
@@ -49,9 +61,10 @@ class OfferControllerTest {
 
         when(offerService.getAgentOffers(anyLong(), any(Pageable.class))).thenReturn(offersPage);
         when(offerService.mapToResponseDTO(any(Offer.class))).thenReturn(offerResponseDTO);
+        when(defaultMapper.propertyToPropertyResponse(any())).thenReturn(new PropertyResponse());
 
         // When
-        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(agentId, PageRequest.of(0, 1));
+        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(principal, PageRequest.of(0, 1));
         
         // Then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -70,11 +83,14 @@ class OfferControllerTest {
         // Given
         Long agentId = 1L;
         Page<Offer> emptyPage = new PageImpl<>(Collections.emptyList());
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(agentId);
         
         when(offerService.getAgentOffers(anyLong(), any(Pageable.class))).thenReturn(emptyPage);
+        when(defaultMapper.propertyToPropertyResponse(any())).thenReturn(new PropertyResponse());
 
         // When
-        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(agentId, PageRequest.of(0, 1));
+        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(principal, PageRequest.of(0, 1));
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -96,7 +112,10 @@ class OfferControllerTest {
         offer2.setId(2L);
         
         Page<Offer> offersPage = new PageImpl<>(List.of(offer1, offer2));
-        
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(agentId);
+        when(defaultMapper.propertyToPropertyResponse(any())).thenReturn(new PropertyResponse());
+
         OfferResponseDTO dto1 = new OfferResponseDTO();
         dto1.setId(1L);
         OfferResponseDTO dto2 = new OfferResponseDTO();
@@ -107,7 +126,7 @@ class OfferControllerTest {
         when(offerService.mapToResponseDTO(offer2)).thenReturn(dto2);
 
         // When
-        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(agentId, PageRequest.of(0, 10));
+        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(principal, PageRequest.of(0, 10));
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -139,11 +158,15 @@ class OfferControllerTest {
         OfferResponseDTO dto = new OfferResponseDTO();
         dto.setId(6L);
 
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(agentId);
+
         when(offerService.getAgentOffers(agentId, pageable)).thenReturn(offersPage);
         when(offerService.mapToResponseDTO(offer)).thenReturn(dto);
+        when(defaultMapper.propertyToPropertyResponse(any())).thenReturn(new PropertyResponse());
 
         // When
-        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(agentId, pageable);
+        ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(principal, pageable);
         
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
