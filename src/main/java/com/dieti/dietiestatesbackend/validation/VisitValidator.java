@@ -136,18 +136,20 @@ public class VisitValidator {
         Long propertyId = visit.getProperty().getId();
         Long agentId = visit.getAgent().getId();
 
-        // Vincolo 5: Massimo visite confermate sulla stessa proprietà
-        long confirmedOnSameProperty = visitRepository.countConfirmedVisitsForPropertyWithLock(propertyId, start, end, VisitStatus.CONFIRMED);
+        // Vincolo 5: Massimo visite confermate o pending sulla stessa proprietà
+        long confirmedOnSameProperty = visitRepository.countConfirmedAndPendingVisitsForPropertyWithLock(
+                propertyId, start, end, List.of(VisitStatus.CONFIRMED, VisitStatus.PENDING));
         if (confirmedOnSameProperty >= maxConfirmedSameProperty) {
             throw new OverbookingException(Map.of("overbooking",
-                    "Overbooking sulla stessa proprietà: massimo " + maxConfirmedSameProperty + " visite confermate simultanee. L'agente deve scegliere quali confermare/annullare."));
+                    "Overbooking sulla stessa proprietà: massimo " + maxConfirmedSameProperty + " visite confermate o in attesa simultanee. L'agente deve scegliere quali confermare/annullare."));
         }
-
-        // Vincolo 6: Massimo visite confermate su proprietà diverse per l'agente
-        long distinctProperties = visitRepository.countDistinctConfirmedPropertiesForAgentWithLock(agentId, propertyId, start, end, VisitStatus.CONFIRMED);
+ 
+        // Vincolo 6: Massimo visite confermate o pending su proprietà diverse per l'agente
+        long distinctProperties = visitRepository.countDistinctConfirmedAndPendingPropertiesForAgentWithLock(
+                agentId, propertyId, start, end, List.of(VisitStatus.CONFIRMED, VisitStatus.PENDING));
         if (distinctProperties >= maxDistinctPropertiesForAgent) {
             throw new OverbookingException(Map.of("overbooking",
-                    "Overbooking agente su proprietà diverse: massimo " + maxDistinctPropertiesForAgent + " visite confermate simultanee su proprietà diverse. L'agente deve risolvere i conflitti."));
+                    "Overbooking agente su proprietà diverse: massimo " + maxDistinctPropertiesForAgent + " visite confermate o in attesa simultanee su proprietà diverse. L'agente deve risolvere i conflitti."));
         }
     }
 
