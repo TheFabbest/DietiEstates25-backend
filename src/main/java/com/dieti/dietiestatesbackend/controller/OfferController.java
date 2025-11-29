@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
 import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
+import com.dieti.dietiestatesbackend.dto.response.UserResponse;
 import com.dieti.dietiestatesbackend.entities.Offer;
 import com.dieti.dietiestatesbackend.mappers.MapStructPropertyMapper;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
@@ -44,6 +45,8 @@ public class OfferController {
         Page<OfferResponseDTO> responseDTOs = offers.map(offer -> {
             OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
             dto.setProperty(defaultMapper.propertyToPropertyResponse(offer.getProperty()));
+            UserResponse userResponse = new UserResponse(offer.getUser());
+            dto.setUser(userResponse);
             return dto;
         });
         return ResponseEntity.ok(responseDTOs);

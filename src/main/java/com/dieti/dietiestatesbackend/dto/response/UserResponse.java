@@ -1,5 +1,7 @@
 package com.dieti.dietiestatesbackend.dto.response;
 
+import com.dieti.dietiestatesbackend.entities.User;
+
 public class UserResponse {
     private Long id = null;
     private String fullName;
@@ -16,6 +18,12 @@ public class UserResponse {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
+    }
+
+    public UserResponse(User user) {
+        this.id = user.getId();
+        this.fullName = user.getFirstName() + " " + user.getLastName();
+        this.email = user.getEmail();
     }
 
     public Long getId() {
