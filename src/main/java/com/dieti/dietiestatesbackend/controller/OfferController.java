@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
 import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Offer;
-import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
+import com.dieti.dietiestatesbackend.mappers.MapStructPropertyMapper;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.OfferService;
 import com.dieti.dietiestatesbackend.service.emails.EmailService;
@@ -28,13 +28,13 @@ import com.dieti.dietiestatesbackend.service.emails.EmailService;
 public class OfferController {
     private final OfferService offerService;
     private final EmailService emailService;
-    private final ResponseMapperRegistry responseMapperRegistry;
+    private final MapStructPropertyMapper defaultMapper;
 
     @Autowired
-    public OfferController(OfferService offerService, EmailService emailService, ResponseMapperRegistry responseMapperRegistry) {
+    public OfferController(OfferService offerService, EmailService emailService, MapStructPropertyMapper defaultMapper) {
         this.offerService = offerService;
         this.emailService = emailService;
-        this.responseMapperRegistry = responseMapperRegistry;
+        this.defaultMapper = defaultMapper;
     }
 
     @GetMapping("/offers/agent_offers/{agentID}")
@@ -43,7 +43,7 @@ public class OfferController {
         Page<Offer> offers = offerService.getAgentOffers(agentID, pageable);
         Page<OfferResponseDTO> responseDTOs = offers.map(offer -> {
             OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
-            dto.setProperty(responseMapperRegistry.map(offer.getProperty()));
+            dto.setProperty(defaultMapper.propertyToPropertyResponse(offer.getProperty()));
             return dto;
         });
         return ResponseEntity.ok(responseDTOs);
@@ -98,7 +98,7 @@ public class OfferController {
         List<OfferResponseDTO> responseDTOs = offers.stream()
             .map(offer -> {
                 OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
-                dto.setProperty(responseMapperRegistry.map(offer.getProperty()));
+                dto.setProperty(defaultMapper.propertyToPropertyResponse(offer.getProperty()));
                 return dto;
             })
             .collect(Collectors.toList());
