@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dieti.dietiestatesbackend.dto.request.CreateOfferRequest;
 import com.dieti.dietiestatesbackend.dto.response.OfferResponseDTO;
 import com.dieti.dietiestatesbackend.entities.Offer;
+import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.OfferService;
 import com.dieti.dietiestatesbackend.service.emails.EmailService;
@@ -27,18 +28,24 @@ import com.dieti.dietiestatesbackend.service.emails.EmailService;
 public class OfferController {
     private final OfferService offerService;
     private final EmailService emailService;
+    private final ResponseMapperRegistry responseMapperRegistry;
 
     @Autowired
-    public OfferController(OfferService offerService, EmailService emailService) {
+    public OfferController(OfferService offerService, EmailService emailService, ResponseMapperRegistry responseMapperRegistry) {
         this.offerService = offerService;
         this.emailService = emailService;
+        this.responseMapperRegistry = responseMapperRegistry;
     }
 
     @GetMapping("/offers/agent_offers/{agentID}")
     @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(principal, #agentID)")
     public ResponseEntity<Page<OfferResponseDTO>> getAgentOffers(@PathVariable("agentID") Long agentID, Pageable pageable) {
         Page<Offer> offers = offerService.getAgentOffers(agentID, pageable);
-        Page<OfferResponseDTO> responseDTOs = offers.map(offerService::mapToResponseDTO);
+        Page<OfferResponseDTO> responseDTOs = offers.map(offer -> {
+            OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
+            dto.setProperty(responseMapperRegistry.map(offer.getProperty()));
+            return dto;
+        });
         return ResponseEntity.ok(responseDTOs);
     }
 
@@ -89,7 +96,11 @@ public class OfferController {
     public ResponseEntity<List<OfferResponseDTO>> getMyOffers(@AuthenticationPrincipal AppPrincipal principal) {
         List<Offer> offers = offerService.getUserOffers(principal.getId());
         List<OfferResponseDTO> responseDTOs = offers.stream()
-            .map(offerService::mapToResponseDTO)
+            .map(offer -> {
+                OfferResponseDTO dto = offerService.mapToResponseDTO(offer);
+                dto.setProperty(responseMapperRegistry.map(offer.getProperty()));
+                return dto;
+            })
             .collect(Collectors.toList());
         return ResponseEntity.ok(responseDTOs);
     }
