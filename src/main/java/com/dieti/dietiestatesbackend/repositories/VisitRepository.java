@@ -152,7 +152,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
                                                  @Param("startTime") Instant startTime,
                                                  @Param("endTime") Instant endTime,
                                                  @Param("status") VisitStatus status);
-
+ 
     /**
      * Conta il numero di proprietà distinte per le quali l'agente ha visite confermate
      * che si sovrappongono all'intervallo dato, escludendo la proprietà corrente.
@@ -165,4 +165,23 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
                                                           @Param("startTime") Instant startTime,
                                                           @Param("endTime") Instant endTime,
                                                           @Param("status") VisitStatus status);
+ 
+    /**
+     * Metodi: includono nel conteggio sia le visite CONFIRMED che PENDING.
+     * Mantengono il lock pessimista per evitare race condition durante la creazione/conferma della visita.
+     */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT COUNT(v) FROM Visit v WHERE v.property.id = :propertyId AND v.status IN :statuses AND NOT (v.endTime <= :startTime OR v.startTime >= :endTime)")
+    long countConfirmedAndPendingVisitsForPropertyWithLock(@Param("propertyId") Long propertyId,
+                                                          @Param("startTime") Instant startTime,
+                                                          @Param("endTime") Instant endTime,
+                                                          @Param("statuses") List<VisitStatus> statuses);
+ 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT COUNT(DISTINCT v.property.id) FROM Visit v WHERE v.agent.id = :agentId AND v.status IN :statuses AND v.property.id <> :propertyId AND NOT (v.endTime <= :startTime OR v.startTime >= :endTime)")
+    long countDistinctConfirmedAndPendingPropertiesForAgentWithLock(@Param("agentId") Long agentId,
+                                                                    @Param("propertyId") Long propertyId,
+                                                                    @Param("startTime") Instant startTime,
+                                                                    @Param("endTime") Instant endTime,
+                                                                    @Param("statuses") List<VisitStatus> statuses);
 }
