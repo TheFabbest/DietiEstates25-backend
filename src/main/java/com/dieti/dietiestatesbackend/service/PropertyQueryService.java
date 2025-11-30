@@ -1,20 +1,21 @@
 package com.dieti.dietiestatesbackend.service;
 
-import com.dieti.dietiestatesbackend.util.BoundingBoxUtility;
 import java.util.List;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
- 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
- 
+import org.springframework.data.jpa.domain.Specification;
+
 import com.dieti.dietiestatesbackend.dto.request.FilterRequest;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
+import com.dieti.dietiestatesbackend.specifications.PropertySpecifications;
 
 /**
  * Service dedicated to read-only queries for Property.
@@ -26,12 +27,10 @@ import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 public class PropertyQueryService implements PropertyQueryServiceInterface {
 
     private final PropertyRepository propertyRepository;
-    private final BoundingBoxUtility boundingBoxUtility;
     private static final Logger logger = LoggerFactory.getLogger(PropertyQueryService.class);
- 
-    public PropertyQueryService(PropertyRepository propertyRepository, BoundingBoxUtility boundingBoxUtility) {
+
+    public PropertyQueryService(PropertyRepository propertyRepository) {
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
-        this.boundingBoxUtility = Objects.requireNonNull(boundingBoxUtility, "boundingBoxUtility");
     }
 
 
@@ -44,18 +43,12 @@ public class PropertyQueryService implements PropertyQueryServiceInterface {
     public Page<Property> searchPropertiesWithFilters(FilterRequest filters, Pageable pageable) {
         Objects.requireNonNull(filters, "filters must not be null");
         Objects.requireNonNull(pageable, "pageable must not be null");
-        
-        // Calculate bounding box for geographic filtering using utility class
-        double[] bounds = boundingBoxUtility.calculateBoundingBoxAsDouble(
-            filters.getCenterLatitude(),
-            filters.getCenterLongitude(),
-            filters.getRadiusInMeters()
-        );
-        
-        // Use custom query with eager loading and geographic filtering
-        return propertyRepository.searchWithFiltersAndEagerFetch(
-            bounds[0], bounds[1], bounds[2], bounds[3], pageable
-        );
+
+        // Costruisci la Specification dinamicamente utilizzando la classe PropertySpecifications
+        Specification<Property> spec = PropertySpecifications.buildFromFilters(filters);
+
+        // Usa il repository con Specification
+        return propertyRepository.findAll(spec, pageable);
     }
 
     /**

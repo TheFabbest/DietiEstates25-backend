@@ -28,7 +28,14 @@ public class FilterRequest {
     // Common
     @Pattern(regexp = "COMMERCIAL|RESIDENTIAL|LAND|GARAGE", message = "Property category must be COMMERCIAL, RESIDENTIAL, LAND or GARAGE")
     private String category;
-
+    
+    /**
+     * Nome specifico della sottocategoria (es. Apartment, Villa, Office).
+     * Se specificato insieme a category, filtra per entrambi.
+     * Se specificato da solo, trova la sottocategoria indipendentemente dalla macro-categoria.
+     */
+    private String propertySubcategoryName;
+    
     @Pattern(regexp = "SALE|RENT", message = "Contract must be SALE or RENT")
     private String contract;
 
