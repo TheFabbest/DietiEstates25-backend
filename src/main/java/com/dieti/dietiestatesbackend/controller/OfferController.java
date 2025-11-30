@@ -63,36 +63,32 @@ public class OfferController {
     @PostMapping("/offers/withdraw/{propertyID}")
     public ResponseEntity<OfferResponseDTO> withdrawOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long propertyID) throws IOException {
         Offer offer = offerService.withdrawOffer(propertyID, principal.getId());
-        OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferWithdrawnEmail(offer);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/offers/accept/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<OfferResponseDTO> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
+    public ResponseEntity<Void> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
         Offer offer = offerService.acceptOffer(offerID);
-        OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferAcceptedEmail(offer);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/offers/reject/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<OfferResponseDTO> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
+    public ResponseEntity<Void> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
         Offer offer = offerService.rejectOffer(offerID);
-        OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferRejectedEmail(offer);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/offers/counter/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<OfferResponseDTO> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) throws IOException {
+    public ResponseEntity<Void> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) throws IOException {
         Offer offer = offerService.counterOffer(offerID, newPrice);
-        OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferCountered(offer);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/offers")
