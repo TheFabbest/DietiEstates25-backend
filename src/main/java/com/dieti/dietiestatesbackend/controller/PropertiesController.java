@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +33,7 @@ import com.dieti.dietiestatesbackend.dto.response.PropertyResponse;
 import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
+import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 import com.dieti.dietiestatesbackend.service.places.dto.PlaceDTO;
@@ -154,9 +156,11 @@ public class PropertiesController {
         return ResponseEntity.ok(places);
     }
 
-    @GetMapping("/api/properties/agent_properties/{agentID}")
-    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(#agentID)")
-    public ResponseEntity<Page<PropertyResponse>> getAgentProperties(@PathVariable("agentID") Long agentID, Pageable pageable) {
+    // take agentID from principal
+    @GetMapping("/api/properties/agent_properties/")
+    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(principal, principal.id)")
+    public ResponseEntity<Page<PropertyResponse>> getAgentProperties(@AuthenticationPrincipal AppPrincipal principal, Pageable pageable) {
+        Long agentID = principal.getId();
         Page<Property> properties = propertyService.getPropertiesByAgentId(agentID, pageable);
         Page<PropertyResponse> response = properties.map(responseMapperRegistry::map);
         return ResponseEntity.ok(response);
