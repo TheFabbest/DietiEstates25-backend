@@ -108,7 +108,7 @@ public class OfferService {
     }
 
     public Offer counterOffer(Long offerID, Double newPrice) {
-        Offer offer = offerRepository.findById(offerID)
+        Offer offer = offerRepository.findByIdWithUser(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (newPrice <= 0) {
             throw new IllegalArgumentException("New price must be positive");
@@ -118,6 +118,9 @@ public class OfferService {
         }
         else if (offer.getPrice().compareTo(BigDecimal.valueOf(newPrice)) >= 0) {
             throw new IllegalArgumentException("Counter offer price must be higher than the original offer price");
+        }
+        else if (offer.getProperty().getPrice().compareTo(BigDecimal.valueOf(newPrice)) < 0) {
+            throw new IllegalArgumentException("Counter offer price cannot exceed the property's asking price");
         }
         offer.setPrice(BigDecimal.valueOf(newPrice));
         offer.setStatus(OfferStatus.COUNTERED);
