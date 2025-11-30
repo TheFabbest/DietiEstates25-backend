@@ -35,7 +35,8 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
         "AND p.agent.isAgent = true")
     Page<Offer> getAgentOffers(@Param("agentId") Long agentId, Pageable pageable);
 
-    Optional<Offer> findByPropertyIdAndUserId(Long propertyId, Long userId);
+    @Query("SELECT o FROM Offer o JOIN FETCH o.user JOIN FETCH o.property p WHERE o.property.id = :propertyId AND o.user.id = :userId")
+    Optional<Offer> findByPropertyIdAndUserId(@Param("propertyId") Long propertyId, @Param("userId") Long userId);
     
     @Query("SELECT DISTINCT o FROM Offer o " +
         "JOIN FETCH o.property p " +
