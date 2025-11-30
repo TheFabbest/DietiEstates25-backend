@@ -12,6 +12,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.PropertyCategory;
 import com.dieti.dietiestatesbackend.entities.ResidentialProperty;
 import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
+import com.dieti.dietiestatesbackend.security.AppPrincipal;
 import com.dieti.dietiestatesbackend.service.PropertyService;
 import com.dieti.dietiestatesbackend.service.lookup.CategoryLookupService;
 
@@ -201,9 +204,11 @@ class PropertiesControllerTest {
         when(propertyService.getPropertiesByAgentId(eq(agentId), any(org.springframework.data.domain.Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(property)));
         when(responseMapperRegistry.map(property)).thenReturn(propertyResponse);
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(agentId);
 
         // When
-        ResponseEntity<Page<PropertyResponse>> response = propertyController.getAgentProperties(agentId, pageable);
+        ResponseEntity<Page<PropertyResponse>> response = propertyController.getAgentProperties(principal, pageable);
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
