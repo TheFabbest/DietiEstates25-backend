@@ -90,8 +90,8 @@ public class OfferService {
     public Offer acceptOffer(Long offerID) {
         Offer offer = offerRepository.findById(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
-        if (offer.getStatus() != OfferStatus.PENDING) {
-            throw new IllegalStateException("Only pending offers can be accepted");
+        if (offer.getStatus() != OfferStatus.PENDING && offer.getStatus() != OfferStatus.COUNTERED) {
+            throw new IllegalStateException("Only pending or countered offers can be accepted");
         }
         offer.setStatus(OfferStatus.ACCEPTED);
         return offerRepository.save(offer);
