@@ -79,6 +79,9 @@ public class OfferService {
     }
 
     public Offer createExternalOffer(Double price, Long propertyID, Long agentID) {
+        if (offerRepository.findByPropertyIdAndUserId(propertyID, null).isPresent()) {
+            throw new IllegalStateException("An external offer for the specified property already exists");
+        }
         Offer offer = new Offer();
         Property property = propertyRepository.findById(propertyID)
             .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + propertyID));

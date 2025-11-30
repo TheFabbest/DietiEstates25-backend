@@ -38,7 +38,7 @@ public class Offer extends BaseEntity {
     private Property property;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "fk_offer_user"))
+    @JoinColumn(name = "id_user", nullable = true, foreignKey = @ForeignKey(name = "fk_offer_user"))
     private User user;
 
     @NotNull
