@@ -76,4 +76,9 @@ public class PermissionFacadeImpl implements PermissionFacade {
     public boolean canAccessContract(AppPrincipal principal, Long contractId) {
         return contractPermissionService.canAccessContract(principal, contractId);
     }
+
+    @Override
+    public boolean isAgentOfProperty(AppPrincipal principal, Long propertyId) {
+        return propertyPermissionService.isAgentOfProperty(principal, propertyId);
+    }
 }

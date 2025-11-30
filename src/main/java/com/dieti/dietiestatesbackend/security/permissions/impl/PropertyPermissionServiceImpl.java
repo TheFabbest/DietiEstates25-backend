@@ -42,4 +42,19 @@ public class PropertyPermissionServiceImpl implements PropertyPermissionService 
         // Stessa regola di accesso alla property per vedere le visite
         return canAccessProperty(principal, propertyId);
     }
+
+    @Override
+    public boolean isAgentOfProperty(AppPrincipal principal, Long propertyId) {
+        logger.debug("PropertyPermissionServiceImpl.isAgentOfProperty - principal: {}, propertyId: {}", principal, propertyId);
+        if (principal == null || propertyId == null) return false;
+
+        try {
+            Property property = propertyService.getProperty(propertyId);
+            if (property == null || property.getAgent() == null) return false;
+            return principal.getId() != null && principal.getId().equals(property.getAgent().getId());
+        } catch (Exception e) {
+            logger.debug("isAgentOfProperty - errore recuperando property {}: {}", propertyId, e.getMessage());
+            return false;
+        }
+    }
 }

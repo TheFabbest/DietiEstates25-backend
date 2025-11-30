@@ -58,4 +58,8 @@ public class SecurityUtil {
     public boolean canAccessContract(AppPrincipal principal, Long contractId) {
         return permissionFacade.canAccessContract(principal, contractId);
     }
+
+    public boolean isAgentOfProperty(AppPrincipal principal, Long propertyId) {
+        return permissionFacade.isAgentOfProperty(principal, propertyId);
+    }
 }

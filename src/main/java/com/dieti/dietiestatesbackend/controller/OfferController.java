@@ -59,6 +59,13 @@ public class OfferController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/offers/create/external")
+    @PreAuthorize("@securityUtil.isAgentOfProperty(principal, #request.userId)")
+    public ResponseEntity<OfferResponseDTO> createOfferExternal(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) throws IOException {
+        offerService.createExternalOffer(request.getPrice(), request.getPropertyId(), principal.getId());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/offers/withdraw/{propertyID}")
     public ResponseEntity<OfferResponseDTO> withdrawOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long propertyID) throws IOException {
         Offer offer = offerService.withdrawOffer(propertyID, principal.getId());

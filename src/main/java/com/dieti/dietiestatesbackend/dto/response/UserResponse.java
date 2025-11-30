@@ -21,6 +21,9 @@ public class UserResponse {
     }
 
     public UserResponse(User user) {
+        if (user == null) {
+            return;
+        }
         this.id = user.getId();
         this.fullName = user.getFirstName() + " " + user.getLastName();
         this.email = user.getEmail();

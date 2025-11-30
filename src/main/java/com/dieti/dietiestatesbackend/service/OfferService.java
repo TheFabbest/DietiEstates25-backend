@@ -16,6 +16,7 @@ import com.dieti.dietiestatesbackend.entities.Property;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.enums.OfferStatus;
 import com.dieti.dietiestatesbackend.exception.EntityNotFoundException;
+import com.dieti.dietiestatesbackend.exception.UnauthorizedOperationException;
 import com.dieti.dietiestatesbackend.repositories.OfferRepository;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.repositories.UserRepository;
@@ -74,6 +75,21 @@ public class OfferService {
         offer.setUser(user);
         offer.setPrice(BigDecimal.valueOf(request.getPrice()));
         offer.setStatus(OfferStatus.PENDING);
+        return offerRepository.save(offer);
+    }
+
+    public Offer createExternalOffer(Double price, Long propertyID, Long agentID) {
+        Offer offer = new Offer();
+        Property property = propertyRepository.findById(propertyID)
+            .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + propertyID));
+        offer.setProperty(property);
+        User agent = userRepository.findById(agentID)
+            .orElseThrow(() -> new EntityNotFoundException("Agent not found with id: " + agentID));
+        if (!agent.getId().equals(agentID)){
+            throw new UnauthorizedOperationException("Agent is not authorized to create an external offer for this property");
+        }
+        offer.setPrice(BigDecimal.valueOf(price));
+        offer.setStatus(OfferStatus.ACCEPTED);
         return offerRepository.save(offer);
     }
 

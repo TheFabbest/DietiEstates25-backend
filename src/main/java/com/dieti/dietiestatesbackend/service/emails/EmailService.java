@@ -51,30 +51,45 @@ public class EmailService {
 
     public void sendOfferCreatedEmail(Offer offer) throws IOException {
         final String subject = "Nuova offerta creata per la proprietà";
+        if (offer.getUser() == null) {
+            return;
+        }
         String contentText = "Ciao,\n\nÈ stata creata una nuova offerta per la tua proprietà in \"" + offer.getProperty().getAddress() + "\".\n\nDettagli dell'offerta:\n- Importo: " + offer.getPrice() + "\n- Proposto da: " + offer.getUser().getUsername() + BOTTOM;
         sendEmail(offer.getProperty().getAgent().getEmail(), subject, contentText);
     }
 
     public void sendOfferWithdrawnEmail(Offer offer) throws IOException {
         final String subject = "Offerta ritirata per la proprietà";
+        if (offer.getUser() == null) {
+            return;
+        }
         String contentText = "Ciao,\n\nL'offerta per la tua proprietà in \"" + offer.getProperty().getAddress() + "\" è stata ritirata.\n\nDettagli dell'offerta ritirata:\n- Importo: " + offer.getPrice() + "\n- Proposto da: " + offer.getUser().getUsername() + BOTTOM;
         sendEmail(offer.getProperty().getAgent().getEmail(), subject, contentText);
     }
 
     public void sendOfferAcceptedEmail(Offer offer) throws IOException {
         final String subject = "Offerta accettata per la proprietà";
+        if (offer.getUser() == null) {
+            return;
+        }
         String contentText = CIAO + offer.getUser().getFirstName() + ",\n\nCongratulazioni! La tua offerta per la proprietà in \"" + offer.getProperty().getAddress() + "\" è stata accettata.\n\nDettagli dell'offerta accettata:\n- Importo: " + offer.getPrice() + BOTTOM;
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }
 
     public void sendOfferRejectedEmail(Offer offer) throws IOException {
         final String subject = "Offerta rifiutata per la proprietà";
+        if (offer.getUser() == null) {
+            return;
+        }
         String contentText = CIAO + offer.getUser().getFirstName() + ",\n\nSiamo spiacenti di informarti che la tua offerta per la proprietà in \"" + offer.getProperty().getAddress() + "\" è stata rifiutata.\n\nDettagli dell'offerta rifiutata:\n- Importo: " + offer.getPrice() + BOTTOM;
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }
 
     public void sendOfferCountered(Offer offer) throws IOException {
         final String subject = "Offerta controproposta per la proprietà";
+        if (offer.getUser() == null) {
+            return;
+        }
         String contentText = CIAO + offer.getUser().getFirstName() + ",\n\nLa tua offerta per la proprietà in \"" + offer.getProperty().getAddress() + "\" ha ricevuto una controproposta.\n\nDettagli della controproposta:\n- Nuovo importo: " + offer.getPrice() + BOTTOM;
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }

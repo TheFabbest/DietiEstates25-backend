@@ -12,4 +12,6 @@ public interface PropertyPermissionService {
     boolean canAccessProperty(AppPrincipal principal, Long propertyId);
 
     boolean canViewPropertyVisits(AppPrincipal principal, Long propertyId);
+
+    boolean isAgentOfProperty(AppPrincipal principal, Long propertyId);
 }

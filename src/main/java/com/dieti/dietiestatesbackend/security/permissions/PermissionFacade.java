@@ -13,6 +13,7 @@ public interface PermissionFacade {
     // #region Property Permissions
     boolean canAccessProperty(AppPrincipal principal, Long propertyId);
     boolean canViewPropertyVisits(AppPrincipal principal, Long propertyId);
+    boolean isAgentOfProperty(AppPrincipal principal, Long propertyId);
     // #endregion
 
     // #region Agent Permissions
