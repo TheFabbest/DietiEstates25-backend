@@ -60,7 +60,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/create/external")
-    @PreAuthorize("@securityUtil.isAgentOfProperty(principal, #request.userId)")
+    @PreAuthorize("@securityUtil.isAgentOfProperty(principal, #request.propertyId)")
     public ResponseEntity<OfferResponseDTO> createOfferExternal(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) throws IOException {
         offerService.createExternalOffer(request.getPrice(), request.getPropertyId(), principal.getId());
         return ResponseEntity.noContent().build();
