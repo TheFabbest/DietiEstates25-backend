@@ -55,9 +55,8 @@ public class OfferController {
     @PostMapping("/offers/create")
     public ResponseEntity<OfferResponseDTO> createOffer(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) throws IOException {
         Offer offer = offerService.createOffer(request, principal.getId());
-        OfferResponseDTO responseDTO = offerService.mapToResponseDTO(offer);
         emailService.sendOfferCreatedEmail(offer);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/offers/withdraw/{propertyID}")
