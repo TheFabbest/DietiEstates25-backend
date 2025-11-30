@@ -88,7 +88,7 @@ public class OfferService {
     }
 
     public Offer acceptOffer(Long offerID) {
-        Offer offer = offerRepository.findById(offerID)
+        Offer offer = offerRepository.findByIdWithUser(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING && offer.getStatus() != OfferStatus.COUNTERED) {
             throw new IllegalStateException("Only pending or countered offers can be accepted");
@@ -98,7 +98,7 @@ public class OfferService {
     }
 
     public Offer rejectOffer(Long offerID) {
-        Offer offer = offerRepository.findById(offerID)
+        Offer offer = offerRepository.findByIdWithUser(offerID)
             .orElseThrow(() -> new EntityNotFoundException(OFFER_NOT_FOUND_MSG + offerID));
         if (offer.getStatus() != OfferStatus.PENDING) {
             throw new IllegalStateException("Only pending offers can be rejected");
