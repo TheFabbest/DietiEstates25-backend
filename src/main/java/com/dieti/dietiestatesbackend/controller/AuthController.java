@@ -83,7 +83,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) throws IOException{
+    public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest) {
         User savedUser = authService.registerNewUser(signupRequest);
         emailService.welcomeMessage(savedUser);
         return buildAuthResponseEntity(savedUser, savedUser.getUsername());

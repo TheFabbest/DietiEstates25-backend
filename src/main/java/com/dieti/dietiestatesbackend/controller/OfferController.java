@@ -1,6 +1,5 @@
 package com.dieti.dietiestatesbackend.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/create")
-    public ResponseEntity<OfferResponseDTO> createOffer(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) throws IOException {
+    public ResponseEntity<OfferResponseDTO> createOffer(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) {
         Offer offer = offerService.createOffer(request, principal.getId());
         emailService.sendOfferCreatedEmail(offer);
         return ResponseEntity.noContent().build();
@@ -60,13 +59,13 @@ public class OfferController {
 
     @PostMapping("/offers/create/external")
     @PreAuthorize("@securityUtil.isAgentOfProperty(principal, #request.propertyId)")
-    public ResponseEntity<OfferResponseDTO> createOfferExternal(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) throws IOException {
+    public ResponseEntity<OfferResponseDTO> createOfferExternal(@AuthenticationPrincipal AppPrincipal principal, @RequestBody CreateOfferRequest request) {
         offerService.createExternalOffer(request.getPrice(), request.getPropertyId(), principal.getId());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/offers/withdraw/{propertyID}")
-    public ResponseEntity<OfferResponseDTO> withdrawOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long propertyID) throws IOException {
+    public ResponseEntity<OfferResponseDTO> withdrawOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long propertyID) {
         Offer offer = offerService.withdrawOffer(propertyID, principal.getId());
         emailService.sendOfferWithdrawnEmail(offer);
         return ResponseEntity.noContent().build();
@@ -74,7 +73,7 @@ public class OfferController {
 
     @PostMapping("/offers/accept/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<Void> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
+    public ResponseEntity<Void> acceptOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) {
         Offer offer = offerService.acceptOffer(offerID);
         emailService.sendOfferAcceptedEmail(offer);
         return ResponseEntity.noContent().build();
@@ -82,7 +81,7 @@ public class OfferController {
 
     @PostMapping("/offers/reject/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<Void> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) throws IOException {
+    public ResponseEntity<Void> rejectOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID) {
         Offer offer = offerService.rejectOffer(offerID);
         emailService.sendOfferRejectedEmail(offer);
         return ResponseEntity.noContent().build();
@@ -90,7 +89,7 @@ public class OfferController {
 
     @PostMapping("/offers/counter/{offerID}")
     @PreAuthorize("@securityUtil.isAgentOfOffer(principal, #offerID)")
-    public ResponseEntity<Void> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) throws IOException {
+    public ResponseEntity<Void> counterOffer(@AuthenticationPrincipal AppPrincipal principal, @PathVariable Long offerID, @RequestBody Double newPrice) {
         Offer offer = offerService.counterOffer(offerID, newPrice);
         emailService.sendOfferCountered(offer);
         return ResponseEntity.noContent().build();

@@ -1,6 +1,4 @@
 package com.dieti.dietiestatesbackend.controller;
- 
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,7 +56,7 @@ public class VisitController {
     @PostMapping("/visits")
     @PreAuthorize("@securityUtil.canCreateVisit(authentication.principal, #visitRequest)")
     public ResponseEntity<AgentVisitDTO> createVisit(@AuthenticationPrincipal AppPrincipal principal,
-                                                     @RequestBody @Valid VisitCreationRequestDTO visitRequest) throws IOException {
+                                                     @RequestBody @Valid VisitCreationRequestDTO visitRequest) {
         AgentVisitDTO createdVisit = visitService.createVisit(visitRequest, principal.getId());
         emailService.sendVisitScheduledEmail(createdVisit);
         return ResponseEntity.ok(createdVisit);
@@ -67,7 +65,7 @@ public class VisitController {
     @PutMapping("/visits/{visitId}/status")
     @PreAuthorize("@securityUtil.canUpdateVisitStatus(authentication.principal, #visitId, #statusRequest.status)")
     public ResponseEntity<AgentVisitDTO> updateVisitStatus(@PathVariable("visitId") Long visitId,
-                                                           @RequestBody @Valid VisitStatusUpdateRequestDTO statusRequest) throws IOException {
+                                                           @RequestBody @Valid VisitStatusUpdateRequestDTO statusRequest) {
         AgentVisitDTO updated = visitService.updateVisitStatus(visitId, statusRequest.getStatus());
         emailService.sendVisitStatusUpdatedEmail(updated);
         return ResponseEntity.ok(updated);
@@ -76,7 +74,7 @@ public class VisitController {
     @DeleteMapping("/visits/{visitId}")
     @PreAuthorize("@securityUtil.canCancelVisit(authentication.principal, #visitId)")
     public ResponseEntity<AgentVisitDTO> cancelVisit(@PathVariable("visitId") Long visitId,
-                                                     @AuthenticationPrincipal AppPrincipal principal) throws IOException {
+                                                     @AuthenticationPrincipal AppPrincipal principal) {
         AgentVisitDTO result = visitService.cancelVisit(visitId);
         emailService.sendVisitCancelledEmail(result);
         return ResponseEntity.ok(result);

@@ -43,7 +43,7 @@ public class EmailService {
             sg.api(request);
         } catch (IOException ex) {
             // fail silently, email sending errors should not block main flow
-            logger.error("Errore durante l'invio dell'email: ", ex.getMessage());
+            logger.error("Errore durante l'invio dell'email: {}", ex.getMessage());
         }
     }
 
