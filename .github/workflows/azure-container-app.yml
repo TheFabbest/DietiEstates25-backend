@@ -80,6 +80,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
+          targetPort: 8080
           registryUrl: ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io
           registryUsername: ${{ secrets.DIETIESTATES2025_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.DIETIESTATES2025_REGISTRY_PASSWORD }}
