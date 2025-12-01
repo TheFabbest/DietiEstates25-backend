@@ -61,7 +61,7 @@ public class OfferService {
     }
 
     public Offer createOffer(CreateOfferRequest request, Long userID) {
-        Property property = propertyRepository.findById(request.getPropertyId())
+        Property property = propertyRepository.findDetailedById(request.getPropertyId())
             .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + request.getPropertyId()));
         User user = userRepository.findById(userID)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userID));
@@ -83,7 +83,7 @@ public class OfferService {
             throw new IllegalStateException("An external offer for the specified property already exists");
         }
         Offer offer = new Offer();
-        Property property = propertyRepository.findById(propertyID)
+        Property property = propertyRepository.findDetailedById(propertyID)
             .orElseThrow(() -> new EntityNotFoundException("Property not found with id: " + propertyID));
         offer.setProperty(property);
         User agent = userRepository.findById(agentID)
