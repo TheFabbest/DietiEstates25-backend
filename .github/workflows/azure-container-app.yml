@@ -100,14 +100,14 @@ jobs:
           # from your local .env file.
           #
           environmentVariables: |
-            DB_URL=${{ secrets.DB_URL }}
-            DB_USERNAME=${{ secrets.DB_USERNAME }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
-            REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
-            AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-            AZURE_CONTAINER_NAME=${{ secrets.AZURE_CONTAINER_NAME }}
-            GEOAPIFY_API_KEY=${{ secrets.GEOAPIFY_API_KEY }}
-            STORAGE_IMAGE_URL=${{ secrets.STORAGE_IMAGE_URL }}
-            SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+            DB_URL=${{ secrets.DIETIESTATES2025_DB_URL }}
+            DB_USERNAME=${{ secrets.DIETIESTATES2025_DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DIETIESTATES2025_DB_PASSWORD }}
+            JWT_SECRET=${{ secrets.DIETIESTATES2025_JWT_SECRET }}
+            ACCESS_TOKEN_SECRET_KEY=${{ secrets.DIETIESTATES2025_ACCESS_TOKEN_SECRET_KEY }}
+            REFRESH_TOKEN_SECRET_KEY=${{ secrets.DIETIESTATES2025_REFRESH_TOKEN_SECRET_KEY }}
+            AZURE_STORAGE_CONNECTION_STRING=${{ secrets.DIETIESTATES2025_AZURE_STORAGE_CONNECTION_STRING }}
+            AZURE_CONTAINER_NAME=${{ secrets.DIETIESTATES2025_AZURE_CONTAINER_NAME }}
+            GEOAPIFY_API_KEY=${{ secrets.DIETIESTATES2025_GEOAPIFY_API_KEY }}
+            STORAGE_IMAGE_URL=${{ secrets.DIETIESTATES2025_STORAGE_IMAGE_URL }}
+            SENDGRID_API_KEY=${{ secrets.DIETIESTATES2025_SENDGRID_API_KEY }}
