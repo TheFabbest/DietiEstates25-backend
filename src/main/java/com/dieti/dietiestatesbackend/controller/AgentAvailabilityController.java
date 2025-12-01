@@ -59,7 +59,6 @@ public class AgentAvailabilityController {
     }
 
     @GetMapping("/agents/{agentId}/availabilities")
-    @PreAuthorize("@securityUtil.canViewAgentRelatedEntities(authentication.principal, #agentId)")
     public ResponseEntity<List<AgentAvailabilityResponseDTO>> getAvailabilitiesForAgent(
             @PathVariable("agentId") Long agentId) {
 
