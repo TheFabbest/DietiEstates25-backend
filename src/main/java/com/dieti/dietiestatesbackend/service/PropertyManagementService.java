@@ -36,7 +36,7 @@ import jakarta.persistence.PersistenceException;
 @Service
 public class PropertyManagementService {
     @Resource
-    private PropertyManagementService propertyManagementService;
+    private PropertyManagementService propertyManagementServiceInstance;
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyManagementService.class);
 
@@ -99,7 +99,7 @@ public class PropertyManagementService {
         // 4. Persistenza nel database (IN UNA NUOVA TRANSAZIONE)
         Property createdProperty;
         try {
-            createdProperty = propertyManagementService.persistProperty(request, imageDirectoryUlid, images.size());
+            createdProperty = propertyManagementServiceInstance.persistProperty(request, imageDirectoryUlid, images.size());
         } catch (Exception dbException) {
             // Compensazione: elimina le immagini caricate se il salvataggio DB fallisce
             boolean deleteSuccess = fileStorageService.deleteImages(imageDirectoryUlid);

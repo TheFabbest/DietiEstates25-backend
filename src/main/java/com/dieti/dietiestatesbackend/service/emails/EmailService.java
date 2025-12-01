@@ -43,7 +43,7 @@ public class EmailService {
             sg.api(request);
         } catch (IOException ex) {
             // fail silently, email sending errors should not block main flow
-            logger.error("Errore durante l'invio dell'email: " + ex.getMessage());
+            logger.error("Errore durante l'invio dell'email: ", ex.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class EmailService {
         sendEmail(user.getEmail(), "Benvenuto in Dieti Estates", CIAO + user.getFirstName() + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi." + BOTTOM);
     }
 
-    public void sendOfferCreatedEmail(Offer offer) throws IOException {
+    public void sendOfferCreatedEmail(Offer offer) {
         final String subject = "Nuova offerta creata per la proprietà";
         if (offer.getUser() == null) {
             return;
@@ -61,7 +61,7 @@ public class EmailService {
         sendEmail(offer.getProperty().getAgent().getEmail(), subject, contentText);
     }
 
-    public void sendOfferWithdrawnEmail(Offer offer) throws IOException {
+    public void sendOfferWithdrawnEmail(Offer offer) {
         final String subject = "Offerta ritirata per la proprietà";
         if (offer.getUser() == null) {
             return;
@@ -70,7 +70,7 @@ public class EmailService {
         sendEmail(offer.getProperty().getAgent().getEmail(), subject, contentText);
     }
 
-    public void sendOfferAcceptedEmail(Offer offer) throws IOException {
+    public void sendOfferAcceptedEmail(Offer offer) {
         final String subject = "Offerta accettata per la proprietà";
         if (offer.getUser() == null) {
             return;
@@ -79,7 +79,7 @@ public class EmailService {
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }
 
-    public void sendOfferRejectedEmail(Offer offer) throws IOException {
+    public void sendOfferRejectedEmail(Offer offer) {
         final String subject = "Offerta rifiutata per la proprietà";
         if (offer.getUser() == null) {
             return;
@@ -88,7 +88,7 @@ public class EmailService {
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }
 
-    public void sendOfferCountered(Offer offer) throws IOException {
+    public void sendOfferCountered(Offer offer) {
         final String subject = "Offerta controproposta per la proprietà";
         if (offer.getUser() == null) {
             return;
@@ -97,20 +97,20 @@ public class EmailService {
         sendEmail(offer.getUser().getEmail(), subject, contentText);
     }
 
-    public void sendVisitScheduledEmail(AgentVisitDTO visit) throws IOException {
+    public void sendVisitScheduledEmail(AgentVisitDTO visit) {
         final String subject = "Visita programmata";
         String contentText = "Ciao,\n\nUna nuova visita è stata programmata per la proprietà in \"" + visit.getAddress() + "\".\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime() + VISITOR + visit.getVisit().getUser().getUsername() + BOTTOM;
         sendEmail(visit.getVisit().getAgent().getEmail(), subject, contentText);
     }
 
-    public void sendVisitStatusUpdatedEmail(AgentVisitDTO visit) throws IOException {
+    public void sendVisitStatusUpdatedEmail(AgentVisitDTO visit) {
         final String subject = "Aggiornamento stato visita";
         String contentText = "Ciao,\n\nLa visita per la proprietà in \"" + visit.getAddress() + "\" è ora " + visit.getVisit().getStatus() + ".\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime() + VISITOR + visit.getVisit().getUser().getUsername() + "\n - Agente: " + visit.getVisit().getAgent().getUsername() + BOTTOM;
         sendEmail(visit.getVisit().getAgent().getEmail(), subject, contentText);
         sendEmail(visit.getVisit().getUser().getEmail(), subject, contentText);
     }
 
-    public void sendVisitCancelledEmail(AgentVisitDTO visit) throws IOException {
+    public void sendVisitCancelledEmail(AgentVisitDTO visit) {
         final String subject = "Visita annullata";
         String contentText = "Ciao,\n\nCi dispiace informarla che la visita per la proprietà in \"" + visit.getAddress() + "\" è stata annullata dal nostro agente.\n\nDettagli della visita:\n- Data e ora: " + visit.getVisit().getStartTime() + "-" + visit.getVisit().getEndTime()  + BOTTOM;
         sendEmail(visit.getVisit().getUser().getEmail(), subject, contentText);
