@@ -2,7 +2,6 @@ package com.dieti.dietiestatesbackend.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -106,7 +105,7 @@ public class OfferController {
                 dto.setProperty(defaultMapper.propertyToPropertyResponse(offer.getProperty()));
                 return dto;
             })
-            .collect(Collectors.toList());
+            .toList();
         return ResponseEntity.ok(responseDTOs);
     }
 }

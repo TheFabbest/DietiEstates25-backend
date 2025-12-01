@@ -2,6 +2,8 @@ package com.dieti.dietiestatesbackend.service.emails;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 
 @Service
 public class EmailService {
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Value("${SENDGRID_API_KEY}")
     private String sendGridApiKey;
@@ -40,12 +43,12 @@ public class EmailService {
             sg.api(request);
         } catch (IOException ex) {
             // fail silently, email sending errors should not block main flow
-            System.err.println("Errore durante l'invio dell'email: " + ex.getMessage());
+            logger.error("Errore durante l'invio dell'email: " + ex.getMessage());
         }
     }
 
 
-    public void welcomeMessage(User user) throws IOException {
+    public void welcomeMessage(User user) {
         sendEmail(user.getEmail(), "Benvenuto in Dieti Estates", CIAO + user.getFirstName() + ",\n\nBenvenuto in Dieti Estates! Siamo felici di averti con noi." + BOTTOM);
     }
 

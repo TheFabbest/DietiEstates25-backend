@@ -24,6 +24,9 @@ import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 import com.dieti.dietiestatesbackend.service.storage.ImageValidationService;
 import com.github.f4b6a3.ulid.UlidCreator;
 
+import jakarta.annotation.Resource;
+import jakarta.persistence.PersistenceException;
+
 /**
  * Service responsabile delle operazioni di scrittura/gestione sulle Property.
  * Metodi di creazione/aggiornamento rimossi da PropertyService sono stati
@@ -32,6 +35,8 @@ import com.github.f4b6a3.ulid.UlidCreator;
  */
 @Service
 public class PropertyManagementService {
+    @Resource
+    private PropertyManagementService propertyManagementService;
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyManagementService.class);
 
@@ -94,17 +99,15 @@ public class PropertyManagementService {
         // 4. Persistenza nel database (IN UNA NUOVA TRANSAZIONE)
         Property createdProperty;
         try {
-            createdProperty = persistProperty(request, imageDirectoryUlid, images.size());
+            createdProperty = propertyManagementService.persistProperty(request, imageDirectoryUlid, images.size());
         } catch (Exception dbException) {
-            logger.error("Errore durante il salvataggio della proprietà nel database, attivando compensazione per ULID: {}", imageDirectoryUlid, dbException);
             // Compensazione: elimina le immagini caricate se il salvataggio DB fallisce
             boolean deleteSuccess = fileStorageService.deleteImages(imageDirectoryUlid);
             if (!deleteSuccess) {
                 logger.error("Fallita la compensazione: impossibile eliminare le immagini caricate per l'ULID: {}", imageDirectoryUlid);
                 // Considerare meccanismi di retry o alerting per questo scenario
             }
-            // Rilancia l'eccezione originale o un'eccezione custom che la wrappa
-            throw new RuntimeException("Errore durante la creazione della proprietà. Immagini caricate rimosse.", dbException);
+            throw new PersistenceException("Errore durante la creazione della proprietà. Immagini caricate rimosse.", dbException);
         }
 
         return responseMapperRegistry.map(createdProperty);

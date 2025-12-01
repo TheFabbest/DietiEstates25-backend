@@ -13,6 +13,10 @@ public class RandomPasswordGenerator {
     private static final String SPECIAL_CHARACTERS = "@#$%^&+=!";
     private static final Random rand=new Random();
 
+    private RandomPasswordGenerator() {
+        // Prevent instantiation
+    }
+
     public static String generateRandom() {
         List<Character> characters = new ArrayList<>();
         int randIndex;
@@ -31,9 +35,8 @@ public class RandomPasswordGenerator {
 
     private static String shuffleString(List<Character> input) {
         Collections.shuffle(input);
-        String str = input.stream()
+        return input.stream()
                   .map(e->e.toString())
                   .collect(Collectors.joining());
-        return str;
     }
 }
