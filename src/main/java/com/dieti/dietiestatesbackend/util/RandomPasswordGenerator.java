@@ -11,9 +11,9 @@ public class RandomPasswordGenerator {
     private static final String LOWERCASE_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
     private static final String DIGITS = "0123456789";
     private static final String SPECIAL_CHARACTERS = "@#$%^&+=!";
+    private static final Random rand=new Random();
 
     public static String generateRandom() {
-        Random rand=new Random();
         List<Character> characters = new ArrayList<>();
         int randIndex;
         for (int i = 0; i < 4; i++) {

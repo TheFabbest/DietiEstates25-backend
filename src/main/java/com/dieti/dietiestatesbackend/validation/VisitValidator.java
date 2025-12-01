@@ -103,11 +103,6 @@ public class VisitValidator {
 
         try {
             Optional<Boolean> availability = agentLookupService.isAgentAvailable(agentId, start, end);
-            if (availability == null) {
-                // Defensive: treat null like empty Optional (log and assume available)
-                logger.debug("AgentLookupService returned null availability for agentId={}", agentId);
-                return;
-            }
             if (availability.isPresent()) {
                 if (!availability.get()) {
                     throw new InvalidPayloadException(Map.of(FIELD_AGENT, MSG_AGENT_NO_DECLARED_AVAILABILITY));
