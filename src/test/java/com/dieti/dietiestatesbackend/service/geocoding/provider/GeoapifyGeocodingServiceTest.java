@@ -73,11 +73,6 @@ class GeoapifyGeocodingServiceTest {
         lenient().when(geoapifyProps.getApiKey()).thenReturn("test-key");
         lenient().when(webClient.get()).thenReturn(uriSpec);
 
-        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
-        when(headersSpec.header(anyString(), anyString())).thenReturn(headersSpec);
-        when(headersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-
         service = new GeoapifyGeocodingService(webClient, geocodingProperties);
     }
 

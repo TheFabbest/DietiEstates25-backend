@@ -87,7 +87,6 @@ class OfferControllerTest {
         when(principal.getId()).thenReturn(agentId);
         
         when(offerService.getAgentOffers(anyLong(), any(Pageable.class))).thenReturn(emptyPage);
-        when(defaultMapper.propertyToPropertyResponse(any())).thenReturn(new PropertyResponse());
 
         // When
         ResponseEntity<Page<OfferResponseDTO>> response = offerController.getAgentOffers(principal, PageRequest.of(0, 1));

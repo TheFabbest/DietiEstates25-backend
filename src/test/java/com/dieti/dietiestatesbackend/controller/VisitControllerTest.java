@@ -25,6 +25,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -47,11 +48,13 @@ class VisitControllerTest {
         visit.setId(1L);
         Coordinates coordinates = new Coordinates(BigDecimal.valueOf(10.0), BigDecimal.valueOf(20.0));
         Address address = new Address("IT", "Rome", "Rome", "Via Roma", "1", "A", coordinates);
-        address.setId(1L); // L'ID viene gestito da BaseEntity, quindi lo impostiamo dopo la creazione.
+        address.setId(1L);
         ResidentialProperty property = new ResidentialProperty();
         property.setId(1L);
         property.setAddress(address);
         visit.setProperty(property);
+        AppPrincipal principal = mock(AppPrincipal.class);
+        when(principal.getId()).thenReturn(1L);
 
         AddressResponseDTO addressResponseDTO = new AddressResponseDTO(
                 address.getId(),
@@ -70,7 +73,7 @@ class VisitControllerTest {
         when(visitService.getAgentVisits(anyLong(), any(Pageable.class))).thenReturn(visitsPage);
 
         // When & Then
-        ResponseEntity<Page<AgentVisitDTO>> response = visitController.getAgentVisits(any(AppPrincipal.class), Pageable.ofSize(10).withPage(1));
+        ResponseEntity<Page<AgentVisitDTO>> response = visitController.getAgentVisits(principal, Pageable.ofSize(10).withPage(1));
 
         // Then
         assertEquals(HttpStatus.OK, response.getStatusCode());

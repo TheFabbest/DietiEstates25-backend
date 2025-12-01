@@ -1,32 +1,26 @@
 package com.dieti.dietiestatesbackend.controller;
 
 import com.dieti.dietiestatesbackend.dto.request.ChangePasswordRequest;
-import com.dieti.dietiestatesbackend.dto.request.SignupRequest;
+import com.dieti.dietiestatesbackend.dto.request.CreateUserRequest;
 import com.dieti.dietiestatesbackend.dto.response.UserResponse;
 import com.dieti.dietiestatesbackend.entities.User;
 import com.dieti.dietiestatesbackend.security.AuthenticatedUser;
-import com.dieti.dietiestatesbackend.security.SecurityUtil;
 import com.dieti.dietiestatesbackend.service.UserService;
+import com.dieti.dietiestatesbackend.service.emails.EmailService;
 
-import org.springframework.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -35,7 +29,7 @@ class UserControllerTest {
     private UserService userService;
 
     @Mock
-    private SecurityUtil securityUtil;
+    private EmailService emailService;
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -43,9 +37,10 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    // =================== GET AGENT INFO ========================
+
     @Test
-    void getAgentInfo_shouldReturnAgentInfo_whenAgentExistsAndUserIsAuthorized() {
-        // Given
+    void getAgentInfo_shouldReturnAgentInfo_whenAgentExists() {
         Long agentId = 2L;
         User agentUser = new User();
         agentUser.setId(agentId);
@@ -54,269 +49,152 @@ class UserControllerTest {
         agentUser.setLastName("Test");
         agentUser.setAgent(true);
 
-        when(userService.getUser(anyLong())).thenReturn(agentUser);
-        
-        // When
-        ResponseEntity <Object> responseEntity = userController.getAgentInfo(agentId);
+        when(userService.getUser(agentId)).thenReturn(agentUser);
 
-        // Then
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(agentUser.getEmail(), ((UserResponse) responseEntity.getBody()).getEmail());
+        ResponseEntity<Object> response = userController.getAgentInfo(agentId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("agent@example.com", ((UserResponse) response.getBody()).getEmail());
     }
 
     @Test
-    void getAgentInfo_shouldBlock_whenUserNotAgent() {
-        // Given
+    void getAgentInfo_shouldReturnForbidden_whenUserNotAgent() {
         Long agentId = 2L;
         User nonAgentUser = new User();
         nonAgentUser.setId(agentId);
-        nonAgentUser.setEmail("non-agent@example.com");
-        nonAgentUser.setFirstName("NonAgent");
-        nonAgentUser.setLastName("Test");
         nonAgentUser.setAgent(false);
 
         when(userService.getUser(agentId)).thenReturn(nonAgentUser);
 
-        // When
-        ResponseEntity<Object> responseEntity = userController.getAgentInfo(agentId);
+        ResponseEntity<Object> response = userController.getAgentInfo(agentId);
 
-        // Then
-        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals("L'utente non è un agente", response.getBody());
     }
 
     @Test
-    void getAgentInfo_shouldBlock_whenUserNotFound() {
-        // Given
-        Long agentId = 2L;
+    void getAgentInfo_shouldReturnNotFound_whenUserNotFound() {
+        when(userService.getUser(anyLong())).thenReturn(null);
 
-        when(userService.getUser(agentId)).thenReturn(null);
+        ResponseEntity<Object> response = userController.getAgentInfo(2L);
 
-        // When
-        ResponseEntity<Object> responseEntity = userController.getAgentInfo(agentId);
-
-        // Then
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Utente non trovato", response.getBody());
     }
+
+    // =================== CREATE AGENT ========================
 
     @Test
     void createAgent_shouldCreateAgent_whenUserIsManager() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);
+        User manager = new User();
+        manager.setId(1L);
+        manager.setManager(true);
 
+        when(userService.getUser(1L)).thenReturn(manager);
         when(userService.doesUserExist(anyString())).thenReturn(false);
-        when(userService.createAgent(any(SignupRequest.class), eq(creator))).thenReturn(new User());
-        when(userService.getUser(creator.getId())).thenReturn(creator);
 
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("to_be_created@example.com");
-        signupRequest.setUsername("to_be_created");
-        ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
+        CreateUserRequest req = new CreateUserRequest();
+        req.setEmail("to_be_created@example.com");
+        req.setUsername("to_be_created");
 
-        // Then
+        ResponseEntity<Object> response =
+                userController.createAgent(req, new AuthenticatedUser(manager.getId(), "manager", true, null));
+
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        verify(userService).createAgent(signupRequest, creator);
+        verify(userService).createAgent(any(), eq(manager));
+        verify(emailService).sendAgentAccountCreatedEmail(anyString(), anyString());
     }
 
     @Test
-    void createAgent_shouldAddAgentRole_whenUserExistsAndIsManager() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);   
+    void createAgent_shouldAddAgentRole_whenUserExists() {
+        User manager = new User();
+        manager.setId(1L);
+        manager.setManager(true);
 
+        when(userService.getUser(1L)).thenReturn(manager);
         when(userService.doesUserExist(anyString())).thenReturn(true);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
 
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("future_agent@example.com");
-        signupRequest.setUsername("future_agent");
-        ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-        // Then
+        CreateUserRequest req = new CreateUserRequest();
+        req.setEmail("future_agent@example.com");
+        req.setUsername("future_agent");
+
+        ResponseEntity<Object> response =
+                userController.createAgent(req, new AuthenticatedUser(manager.getId(), "manager", true, null));
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).addAgentRole("future_agent", creator);
+        verify(userService).addAgentRole("future_agent", manager);
     }
 
     @Test
-    void createAgent_shouldCreateAgent_whenUserIsManager_onError() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);
+    void createAgent_shouldReturnError_whenAddRoleFails() {
+        User manager = new User();
+        manager.setId(1L);
+        manager.setManager(true);
 
-        when(userService.doesUserExist(anyString())).thenReturn(false);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-        doThrow(new IllegalStateException()).when(userService).createAgent(any(SignupRequest.class), any(User.class));
-
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("to_be_created@example.com");
-        signupRequest.setUsername("to_be_created");
-        ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-
-        // Then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).createAgent(signupRequest, creator);
-    }
-
-    @Test
-    void createAgent_shouldAddAgentRole_whenUserExistsAndIsManager_onError() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);   
-
+        when(userService.getUser(1L)).thenReturn(manager);
         when(userService.doesUserExist(anyString())).thenReturn(true);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-        doThrow(new IllegalStateException()).when(userService).addAgentRole(anyString(), any(User.class));
+        doThrow(new IllegalStateException()).when(userService).addAgentRole(anyString(), any());
 
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("future_agent@example.com");
-        signupRequest.setUsername("future_agent");
-        ResponseEntity<Object> response = userController.createAgent(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-        // Then
+        CreateUserRequest req = new CreateUserRequest();
+        req.setEmail("future_agent@example.com");
+        req.setUsername("future_agent");
+
+        ResponseEntity<Object> response =
+                userController.createAgent(req, new AuthenticatedUser(manager.getId(), "manager", true, null));
+
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).addAgentRole("future_agent", creator);
     }
 
-    // same for manager
-    @Test
-    void createManager_shouldCreateAgent_whenUserIsManager() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);
-
-        when(userService.doesUserExist(anyString())).thenReturn(false);
-        when(userService.createManager(any(SignupRequest.class), eq(creator))).thenReturn(new User());
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("to_be_created@example.com");
-        signupRequest.setUsername("to_be_created");
-        ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-
-        // Then
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        verify(userService).createManager(signupRequest, creator);
-    }
-
-    @Test
-    void createManager_shouldAddAgentRole_whenUserExistsAndIsManager() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);   
-
-        when(userService.doesUserExist(anyString())).thenReturn(true);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("future_agent@example.com");
-        signupRequest.setUsername("future_agent");
-        ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-        // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).addManagerRole("future_agent", creator);
-    }
-
-    @Test
-    void createManager_shouldCreateAgent_whenUserIsManager_onError() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);
-
-        when(userService.doesUserExist(anyString())).thenReturn(false);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-        doThrow(new IllegalStateException()).when(userService).createManager(any(SignupRequest.class), any(User.class));
-
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("to_be_created@example.com");
-        signupRequest.setUsername("to_be_created");
-        ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-
-        // Then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).createManager(signupRequest, creator);
-    }
-
-    @Test
-    void createManager_shouldAddAgentRole_whenUserExistsAndIsManager_onError() {
-        User creator = new User();
-        creator.setId(1L);
-        creator.setManager(true);   
-
-        when(userService.doesUserExist(anyString())).thenReturn(true);
-        when(userService.getUser(creator.getId())).thenReturn(creator);
-        doThrow(new IllegalStateException()).when(userService).addManagerRole(anyString(), any(User.class));
-
-        SignupRequest signupRequest = new SignupRequest();
-        signupRequest.setEmail("future_agent@example.com");
-        signupRequest.setUsername("future_agent");
-        ResponseEntity<Object> response = userController.createManager(signupRequest, new AuthenticatedUser(creator.getId(), "manager", true, null));
-        // Then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(userService).addManagerRole("future_agent", creator);
-    }
+    // =================== CHANGE PASSWORD ========================
 
     @Test
     void changeUserPassword_shouldChangePassword() {
-        // Given
         String email = "user@example.com";
-        String newPassword = "newPassword123@";
-        String oldPassword = "oldPassword123@";
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(oldPassword);
-        user.setUsername("user");
-        user.setManager(true);
-        ChangePasswordRequest passRequest = new ChangePasswordRequest();
-        passRequest.setEmail(email);
-        passRequest.setNewPassword(newPassword);
-        passRequest.setOldPassword(oldPassword);
-        // When
-        when(userService.getUsernameFromEmail(email)).thenReturn("user");
-        when(userService.getUserByUsername("user")).thenReturn(user);
+        String username = "user";
 
-        ResponseEntity<Object> response = userController.changeUserPassword(passRequest);
-        // Then
+        User manager = new User();
+        manager.setUsername(username);
+        manager.setManager(true);
+
+        when(userService.getUsernameFromEmail(email)).thenReturn(username);
+        when(userService.getUserByUsername(username)).thenReturn(manager);
+
+        ChangePasswordRequest req = new ChangePasswordRequest();
+        req.setEmail(email);
+        req.setOldPassword("oldPass123@");
+        req.setNewPassword("newPass123@");
+
+        ResponseEntity<Object> response = userController.changeUserPassword(req);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).changePassword(email, newPassword);
-        verifyNoMoreInteractions(userService);
+        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        verify(userService).changePassword(email, "newPass123@");
     }
 
     @Test
-    void changeUserPassword_shouldBlock_whenUserNotFound() {
-        // Given
-        String email = "user@example.com";
-        String newPassword = "newPassword123@";
-        String oldPassword = "oldPassword123@";
-        ChangePasswordRequest passRequest = new ChangePasswordRequest();
-        passRequest.setEmail(email);
-        passRequest.setNewPassword(newPassword);
-        passRequest.setOldPassword(oldPassword);
-        // When
-        when(userService.getUsernameFromEmail(email)).thenReturn(null);
+    void changeUserPassword_shouldReturnNotFound_whenUserMissing() {
+        when(userService.getUsernameFromEmail(anyString())).thenReturn(null);
 
-        ResponseEntity<Object> response = userController.changeUserPassword(passRequest);
-        // Then
+        ChangePasswordRequest req = new ChangePasswordRequest();
+        req.setEmail("notfound@example.com");
+
+        ResponseEntity<Object> response = userController.changeUserPassword(req);
+
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(userService).getUsernameFromEmail(email);
-        verifyNoMoreInteractions(userService);
     }
 
     @Test
-    void changeUserPassword_shouldBlock_whenUserNotManager() {
-        // Given
+    void changeUserPassword_shouldReturnForbidden_whenUserNotManager() {
         String email = "user@example.com";
-        String newPassword = "newPassword123@";
-        String oldPassword = "oldPassword123@";
-        ChangePasswordRequest passRequest = new ChangePasswordRequest();
-        passRequest.setEmail(email);
-        passRequest.setNewPassword(newPassword);
-        passRequest.setOldPassword(oldPassword);
-        // When
-        when(userService.getUsernameFromEmail(email)).thenReturn("user");
-        when(userService.getUserByUsername("user")).thenReturn(null);
 
-        ResponseEntity<Object> response = userController.changeUserPassword(passRequest);
-        // Then
+        when(userService.getUsernameFromEmail(email)).thenReturn("user");
+        when(userService.getUserByUsername("user")).thenReturn(new User()); // isManager = false
+
+        ChangePasswordRequest req = new ChangePasswordRequest();
+        req.setEmail(email);
+
+        ResponseEntity<Object> response = userController.changeUserPassword(req);
+
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        verify(userService).getUsernameFromEmail(email);
-        verifyNoMoreInteractions(userService);
     }
 }

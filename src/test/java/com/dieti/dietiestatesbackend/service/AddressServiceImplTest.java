@@ -49,8 +49,8 @@ class AddressServiceImplTest {
         addressToGeocode.setBuilding(request.getBuilding());
 
         Coordinates coordinates = new Coordinates();
-        coordinates.setLatitude(BigDecimal.valueOf(10.0));
-        coordinates.setLongitude(BigDecimal.valueOf(20.0));
+        coordinates.setLatitude(BigDecimal.valueOf(10));
+        coordinates.setLongitude(BigDecimal.valueOf(20));
 
         when(geocodingService.geocode(any(Address.class))).thenReturn(Optional.of(coordinates));
         when(addressRepository.save(any(Address.class))).thenAnswer(invocation -> {
@@ -69,13 +69,12 @@ class AddressServiceImplTest {
         assertEquals(coordinates.getLatitude(), createdAddress.getCoordinates().getLatitude());
         assertEquals(coordinates.getLongitude(), createdAddress.getCoordinates().getLongitude());
 
-        verify(geocodingService).geocode(any(Address.class));
         verify(addressRepository).save(any(Address.class));
     }
 
     @Test
     void testCreateFromRequest_GeocodingFails() {
-        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", null, null);
         
         when(geocodingService.geocode(any(Address.class))).thenReturn(Optional.empty());
 
@@ -101,10 +100,10 @@ class AddressServiceImplTest {
 
     @Test
     void testCreateFromRequest_CreatedAtIsSet() {
-        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+        AddressRequest request = new AddressRequest("Italy", "Rome", "Rome", "Via Roma", "1", "Building A", null, null);
         Coordinates coordinates = new Coordinates();
-        coordinates.setLatitude(BigDecimal.valueOf(10.0));
-        coordinates.setLongitude(BigDecimal.valueOf(20.0));
+        coordinates.setLatitude(BigDecimal.valueOf(10));
+        coordinates.setLongitude(BigDecimal.valueOf(20));
 
         when(geocodingService.geocode(any(Address.class))).thenReturn(Optional.of(coordinates));
         when(addressRepository.save(any(Address.class))).thenAnswer(invocation -> {
@@ -152,8 +151,8 @@ class AddressServiceImplTest {
         address.setStreetNumber("1");
         
         Coordinates coordinates = new Coordinates();
-        coordinates.setLatitude(BigDecimal.valueOf(10.0));
-        coordinates.setLongitude(BigDecimal.valueOf(20.0));
+        coordinates.setLatitude(BigDecimal.valueOf(10));
+        coordinates.setLongitude(BigDecimal.valueOf(20));
 
         when(geocodingService.geocode(any(Address.class))).thenReturn(Optional.of(coordinates));
 

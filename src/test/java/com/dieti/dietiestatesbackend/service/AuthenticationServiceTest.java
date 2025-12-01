@@ -64,7 +64,7 @@ class AuthenticationServiceTest {
 
     @Test
     void registerNewUser_shouldCreateUserAndReturnUser() {
-        SignupRequest request = new SignupRequest("test@example.com", "testuser", "Password1@", "Test", "User");
+        SignupRequest request = new SignupRequest("test@example.com", "Password1@", "testuser", "Test", "User");
         when(userQueryService.doesUserExist("test@example.com")).thenReturn(false);
 
         User expectedUser = new User();

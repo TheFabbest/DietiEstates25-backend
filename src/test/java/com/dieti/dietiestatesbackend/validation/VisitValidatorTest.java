@@ -1,6 +1,7 @@
 package com.dieti.dietiestatesbackend.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.Instant;
@@ -55,12 +56,12 @@ class VisitValidatorTest {
     }
 
     @Test
-    void ensureUserHasNoOverlap_whenRepositoryReturnsOverlap_shouldThrow() {
+    void ensureUserHasOneOrNoOverlap_whenRepositoryReturnsOverlap_shouldThrow() {
         Instant start = Instant.now().plus(2, ChronoUnit.DAYS);
         Instant end = start.plus(1, ChronoUnit.HOURS);
 
         when(visitRepository.findOverlappingVisitsForUserWithLock(any(), any(), any(), any()))
-                .thenReturn(List.of(new Visit()));
+                .thenReturn(List.of(new Visit(), new Visit()));
 
         assertThrows(InvalidPayloadException.class, () -> validator.ensureUserHasOneOrNoOverlap(1L, start, end));
     }
@@ -94,8 +95,8 @@ class VisitValidatorTest {
         Instant start = Instant.now().plus(2, ChronoUnit.DAYS);
         Instant end = start.plus(1, ChronoUnit.HOURS);
 
-        when(visitRepository.countConfirmedVisitsForPropertyWithLock(any(), any(), any(), any()))
-                .thenReturn(3L);
+        when(visitRepository.countConfirmedAndPendingVisitsForPropertyWithLock(any(), any(), any(), any()))
+                .thenReturn(3L); // equal to limit → should throw
 
         Visit v = new Visit();
         ResidentialProperty prop = new ResidentialProperty();
@@ -115,10 +116,11 @@ class VisitValidatorTest {
         Instant start = Instant.now().plus(2, ChronoUnit.DAYS);
         Instant end = start.plus(1, ChronoUnit.HOURS);
 
-        when(visitRepository.countConfirmedVisitsForPropertyWithLock(any(), any(), any(), any()))
+        when(visitRepository.countConfirmedAndPendingVisitsForPropertyWithLock(any(), any(), any(), any()))
                 .thenReturn(0L);
-        when(visitRepository.countDistinctConfirmedPropertiesForAgentWithLock(any(), any(), any(), any(), any()))
-                .thenReturn(2L);
+        when(visitRepository.countDistinctConfirmedAndPendingPropertiesForAgentWithLock(any(), any(), any(), any(),
+                any()))
+                .thenReturn(2L); // equal to limit → should throw
 
         Visit v = new Visit();
         ResidentialProperty prop = new ResidentialProperty();
@@ -132,4 +134,5 @@ class VisitValidatorTest {
 
         assertThrows(OverbookingException.class, () -> validator.ensureOverbookingRules(v));
     }
+
 }
