@@ -21,9 +21,11 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dieti.dietiestatesbackend.dto.request.CreateCommercialPropertyRequest;
@@ -39,6 +41,8 @@ import com.dieti.dietiestatesbackend.mappers.ResponseMapperRegistry;
 import com.dieti.dietiestatesbackend.repositories.PropertyRepository;
 import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 import com.dieti.dietiestatesbackend.service.storage.ImageValidationService;
+
+import jakarta.persistence.PersistenceException;
 
 @ExtendWith(MockitoExtension.class)
 class PropertyManagementServiceTest {
@@ -69,6 +73,18 @@ class PropertyManagementServiceTest {
 
     @Test
     void createPropertyWithImages_success_mapsResponse() throws Exception {
+        PropertyManagementService realService = new PropertyManagementService(
+            propertyRepository,
+            propertyCreationService,
+            validationService,
+            responseMapperRegistry,
+            fileStorageService,
+            imageValidationService,
+            null  // self will be set below
+        );
+        PropertyManagementService spyService = spy(realService);
+        ReflectionTestUtils.setField(spyService, "self", spyService);
+
         CreatePropertyRequest request = mock(CreateCommercialPropertyRequest.class);
         MultipartFile image = mockImage();
 
@@ -88,7 +104,7 @@ class PropertyManagementServiceTest {
         PropertyResponse expectedResponse = mock(PropertyResponse.class);
         when(responseMapperRegistry.map(saved)).thenReturn(expectedResponse);
 
-        PropertyResponse result = propertyManagementService.createPropertyWithImages(request, List.of(image));
+        PropertyResponse result = spyService.createPropertyWithImages(request, List.of(image));
 
         assertSame(expectedResponse, result);
         verify(validationService).validate(request); // Added verification for validation service
@@ -146,13 +162,12 @@ void createPropertyWithImages_invalidImage_throwsInvalidImageException() throws 
         doNothing().when(imageValidationService).validateImage(any(), anyString(), anyLong());
         when(fileStorageService.uploadImages(anyString(), anyList())).thenReturn(true);
 
-        doThrow(new RuntimeException("DB down")).when(propertyCreationService).createProperty(request);
         when(fileStorageService.deleteImages(anyString())).thenReturn(true);
 
         Executable executable =
                 () -> propertyManagementService.createPropertyWithImages(request, List.of(image));
 
-        RuntimeException ex = assertThrows(RuntimeException.class, executable);
+        PersistenceException ex = assertThrows(PersistenceException.class, executable);
 
         assertTrue(ex.getMessage().contains("Errore durante la creazione"));
 
