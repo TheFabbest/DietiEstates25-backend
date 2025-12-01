@@ -133,7 +133,7 @@ public class VisitValidator {
 
         // Vincolo 5: Massimo visite confermate o pending sulla stessa proprietà
         long confirmedOnSameProperty = visitRepository.countConfirmedAndPendingVisitsForPropertyWithLock(
-                propertyId, start, end, List.of(VisitStatus.CONFIRMED, VisitStatus.PENDING));
+                propertyId, start, end, List.of(VisitStatus.CONFIRMED));
         if (confirmedOnSameProperty >= maxConfirmedSameProperty) {
             throw new OverbookingException(Map.of("overbooking",
                     "Overbooking sulla stessa proprietà: massimo " + maxConfirmedSameProperty + " visite confermate o in attesa simultanee. L'agente deve scegliere quali confermare/annullare."));
