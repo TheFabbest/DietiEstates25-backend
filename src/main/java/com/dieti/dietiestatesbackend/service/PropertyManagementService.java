@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.context.annotation.Lazy;
 import com.dieti.dietiestatesbackend.exception.InvalidImageException;
 import com.dieti.dietiestatesbackend.exception.StorageException;
 
@@ -24,7 +25,6 @@ import com.dieti.dietiestatesbackend.service.storage.FileStorageService;
 import com.dieti.dietiestatesbackend.service.storage.ImageValidationService;
 import com.github.f4b6a3.ulid.UlidCreator;
 
-import jakarta.annotation.Resource;
 import jakarta.persistence.PersistenceException;
 
 /**
@@ -35,8 +35,7 @@ import jakarta.persistence.PersistenceException;
  */
 @Service
 public class PropertyManagementService {
-    @Resource
-    private PropertyManagementService propertyManagementServiceInstance;
+    private final PropertyManagementService self;
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyManagementService.class);
 
@@ -54,13 +53,15 @@ public class PropertyManagementService {
                                      ValidationService validationService,
                                      ResponseMapperRegistry responseMapperRegistry,
                                      FileStorageService fileStorageService,
-                                     ImageValidationService imageValidationService) {
+                                     ImageValidationService imageValidationService,
+                                     @Lazy PropertyManagementService self) {
         this.propertyRepository = Objects.requireNonNull(propertyRepository, "propertyRepository");
         this.propertyCreationService = Objects.requireNonNull(propertyCreationService, "propertyCreationService");
         this.validationService = Objects.requireNonNull(validationService, "validationService");
         this.responseMapperRegistry = Objects.requireNonNull(responseMapperRegistry, "responseMapperRegistry");
         this.fileStorageService = Objects.requireNonNull(fileStorageService, "fileStorageService");
         this.imageValidationService = Objects.requireNonNull(imageValidationService, "imageValidationService");
+        this.self = self;
     }
 
     /**
@@ -99,7 +100,7 @@ public class PropertyManagementService {
         // 4. Persistenza nel database (IN UNA NUOVA TRANSAZIONE)
         Property createdProperty;
         try {
-            createdProperty = propertyManagementServiceInstance.persistProperty(request, imageDirectoryUlid, images.size());
+            createdProperty = self.persistProperty(request, imageDirectoryUlid, images.size());
         } catch (Exception dbException) {
             // Compensazione: elimina le immagini caricate se il salvataggio DB fallisce
             boolean deleteSuccess = fileStorageService.deleteImages(imageDirectoryUlid);

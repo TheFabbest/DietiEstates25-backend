@@ -1,9 +1,9 @@
 package com.dieti.dietiestatesbackend.util;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RandomPasswordGenerator {
@@ -11,7 +11,7 @@ public class RandomPasswordGenerator {
     private static final String LOWERCASE_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
     private static final String DIGITS = "0123456789";
     private static final String SPECIAL_CHARACTERS = "@#$%^&+=!";
-    private static final Random rand=new Random();
+    private static final SecureRandom rand=new SecureRandom();
 
     private RandomPasswordGenerator() {
         // Prevent instantiation
