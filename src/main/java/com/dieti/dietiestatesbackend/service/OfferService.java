@@ -135,8 +135,8 @@ public class OfferService {
         else if (offer.getStatus() != OfferStatus.PENDING) {
             throw new IllegalStateException("Only pending offers can be countered");
         }
-        else if (offer.getPrice().compareTo(BigDecimal.valueOf(newPrice)) >= 0) {
-            throw new IllegalArgumentException("Counter offer price must be higher than the original offer price");
+        else if (offer.getPrice().compareTo(BigDecimal.valueOf(newPrice)) <= 0) {
+            throw new IllegalArgumentException("Counter offer price must be lower than the original offer price");
         }
         else if (offer.getProperty().getPrice().compareTo(BigDecimal.valueOf(newPrice)) < 0) {
             throw new IllegalArgumentException("Counter offer price cannot exceed the property's asking price");
