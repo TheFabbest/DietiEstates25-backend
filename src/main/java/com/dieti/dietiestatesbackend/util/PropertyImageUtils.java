@@ -26,7 +26,7 @@ public class PropertyImageUtils {
     private String thumbnailExtensionValue;
     private String thumbnailPrefixValue;
  
-    @Value("${property.images.base-path:/data/resources/listings/}")
+    @Value("${property.images.base-path:}")
     private String baseResourcesPath;
  
     @Value("${property.images.thumbnail-extension:.webp}")
@@ -48,7 +48,14 @@ public class PropertyImageUtils {
      * @param propertyID l'ID della proprietà
      * @return il Path completo della thumbnail
      */
+    public boolean isLocalStorageEnabled() {
+        return baseResourcesPathValue != null && !baseResourcesPathValue.isBlank();
+    }
+
     public Path buildThumbnailPath(long propertyID) {
+        if (!isLocalStorageEnabled()) {
+            throw new IllegalStateException("Local property image storage is disabled. Configure 'property.images.base-path' or use AzureBlobStorageService.");
+        }
         return Paths.get(baseResourcesPathValue + propertyID + "/" + thumbnailPrefixValue + thumbnailExtensionValue);
     }
     
@@ -60,6 +67,9 @@ public class PropertyImageUtils {
      * @return il Path completo dell'immagine
      */
     public Path buildImagePath(long propertyID, String imageIndex) {
+        if (!isLocalStorageEnabled()) {
+            throw new IllegalStateException("Local property image storage is disabled. Configure 'property.images.base-path' or use AzureBlobStorageService.");
+        }
         return Paths.get(baseResourcesPathValue + propertyID + "/" + imageIndex + thumbnailExtensionValue);
     }
     
@@ -70,6 +80,9 @@ public class PropertyImageUtils {
      * @return il Path base delle immagini della proprietà
      */
     public Path buildPropertyImagesBasePath(long propertyID) {
+        if (!isLocalStorageEnabled()) {
+            throw new IllegalStateException("Local property image storage is disabled. Configure 'property.images.base-path' or use AzureBlobStorageService.");
+        }
         return Paths.get(baseResourcesPathValue + propertyID);
     }
 }

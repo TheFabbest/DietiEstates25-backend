@@ -1,0 +1,114 @@
+# This workflow will build and push a Spring Boot application to an Azure Container Registry and deploy it to Azure Container Apps.
+#
+# To use this workflow, you need to complete the following setup steps:
+#
+# 1. Azure Credentials:
+#    - Create a Service Principal in Azure with the "Contributor" role on your subscription.
+#    - Add the following secrets to your GitHub repository:
+#      - AZURE_CLIENT_ID: The client ID of the Service Principal.
+#      - AZURE_TENANT_ID: The tenant ID of your Azure Active Directory.
+#      - AZURE_SUBSCRIPTION_ID: Your Azure subscription ID.
+#
+# 2. Container Registry Credentials:
+#    - Enable the admin user for your Azure Container Registry.
+#    - Add the following secrets to your GitHub repository:
+#      - REGISTRY_USERNAME: The username for your Azure Container Registry.
+#      - REGISTRY_PASSWORD: The password for your Azure Container Registry.
+#
+# 3. Environment Variables for the Workflow:
+#    - In the 'env' section of the 'build-and-deploy' job, update the following
+#      variables with your specific Azure resource names:
+#      - CONTAINER_REGISTRY_NAME: The name of your Azure Container Registry.
+#      - CONTAINER_APP_NAME: The name of your Azure Container App.
+#      - RESOURCE_GROUP: The name of the resource group containing your resources.
+#      - IMAGE_NAME: The name for your container image.
+
+name: Build and Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+      - 'Dockerfile'
+      - '.github/workflows/azure-container-app.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for OIDC login to Azure
+      contents: read
+
+    env:
+      # Customize these variables for your environment
+      CONTAINER_REGISTRY_NAME: "your-registry-name" # e.g., dieti25estates
+      CONTAINER_APP_NAME: "your-app-name"           # e.g., dieti-estates-2025
+      RESOURCE_GROUP: "your-resource-group"       # e.g., DefaultResourceGroup-CCAN
+      IMAGE_NAME: "your-image-name"               # e.g., dieti-estates-2025
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          registryUrl: ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io
+          registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          imageToBuild: ${{ env.CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # --------------------------------------------------------------------------
+          # IMPORTANT: Environment Variables
+          # --------------------------------------------------------------------------
+          # The following environment variables are passed to the container.
+          # For this workflow to run correctly, you MUST create corresponding
+          # secrets in your GitHub repository.
+          #
+          # To add secrets, go to your repository's "Settings" > "Secrets and variables" > "Actions".
+          #
+          # For each variable listed below, create a new repository secret with the
+          # same name (e.g., DB_URL, DB_USERNAME, etc.). The value should be copied
+          # from your local .env file.
+          #
+          environmentVariables: |
+            DB_URL=${{ secrets.DB_URL }}
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+            REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
+            AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+            AZURE_CONTAINER_NAME=${{ secrets.AZURE_CONTAINER_NAME }}
+            GEOAPIFY_API_KEY=${{ secrets.GEOAPIFY_API_KEY }}
+            STORAGE_IMAGE_URL=${{ secrets.STORAGE_IMAGE_URL }}
+            SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <springProperty scope="context" name="LOG_TIMEZONE" source="app.timezone" defaultValue="Europe/Rome"/>
+
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+  <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp>
+          <timeZone>${LOG_TIMEZONE}</timeZone>
+        </timestamp>
+        <loggerName/>
+        <threadName/>
+        <logLevel/>
+        <message/>
+        <mdc/>
+        <stackTrace>
+          <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter"/>
+        </stackTrace>
+        <arguments/>
+      </providers>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="JSON_CONSOLE"/>
+  </root>
+
+  <logger name="com.dieti.dietiestatesbackend" level="DEBUG" additivity="false">
+    <appender-ref ref="JSON_CONSOLE"/>
+  </logger>
+</configuration>

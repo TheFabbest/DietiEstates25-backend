@@ -131,6 +131,47 @@ I valori per il tipo di contratto (come da contesto):
 *   `"RENT"`
 *   `"SALE"`
 
+## Applicabilità dei Filtri per Categoria di Proprietà
+
+I filtri disponibili nell'oggetto `FilterRequest` possono essere categorizzati in base alla loro applicabilità ai diversi tipi di proprietà. È fondamentale comprendere quali filtri sono validi per ciascuna `PropertyCategory` per costruire query di ricerca efficaci.
+
+### Filtri Comuni (applicabili a tutte le proprietà):
+*   [`category`](#) (per selezionare il tipo generale di proprietà: `RESIDENTIAL`, `COMMERCIAL`, `GARAGE`, `LAND`)
+*   [`propertySubcategoryName`](#) (applicabile se la categoria ha sottocategorie, es. `RESIDENTIAL` -> `Apartment`)
+*   [`contract`](#)
+*   [`minPrice`](#)
+*   [`maxPrice`](#)
+*   [`minArea`](#)
+*   [`minYearBuilt`](#)
+*   [`acceptedCondition`](#)
+*   [`minEnergyRating`](#)
+*   [`centerLatitude`](#) (obbligatorio)
+*   [`centerLongitude`](#) (obbligatorio)
+*   [`radiusInMeters`](#) (obbligatorio)
+
+### Filtri Specifici per Proprietà Residenziali (`PropertyCategory.RESIDENTIAL`):
+*   [`minNumberOfFloors`](#)
+*   [`minNumberOfRooms`](#)
+*   [`minNumberOfBathrooms`](#)
+*   [`minParkingSpaces`](#)
+*   [`heating`](#)
+*   [`acceptedGarden`](#)
+*   [`mustBeFurnished`](#)
+*   [`mustHaveElevator`](#)
+
+### Filtri Specifici per Proprietà Commerciali (`PropertyCategory.COMMERCIAL`):
+*   [`minNumberOfFloors`](#)
+*   [`minNumberOfRooms`](#)
+*   [`minNumberOfBathrooms`](#)
+*   [`mustHaveWheelchairAccess`](#)
+
+### Filtri Specifici per Garage (`PropertyCategory.GARAGE`):
+*   [`minNumberOfFloors`](#)
+*   [`mustHaveSurveillance`](#)
+
+### Filtri Specifici per Terreni (`PropertyCategory.LAND`):
+*   [`mustBeAccessibleFromStreet`](#)
+
 ## Esempi Pratici di Filtri e Possibilità di Ricerca
 
 Il sistema consente una ricerca flessibile combinando filtri comuni, specifici per categoria e geografici. La ricerca geografica (`centerLatitude`, `centerLongitude`, `radiusInMeters`) è obbligatoria per tutte le query di filtro.

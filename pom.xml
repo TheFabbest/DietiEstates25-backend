@@ -185,24 +185,38 @@
 	          <groupId>org.springframework.boot</groupId>
 	          <artifactId>spring-boot-starter-cache</artifactId>
 	      </dependency>
-		<!-- Per Azure Blob Storage -->
-		<dependency>
-			<groupId>com.azure</groupId>
-			<artifactId>azure-storage-blob</artifactId>
-			<version>12.31.2</version>
-		</dependency>
-		<!-- Per la generazione di ULID -->
-		<dependency>
-			<groupId>com.github.f4b6a3</groupId>
-			<artifactId>ulid-creator</artifactId>
-			<version>5.2.3</version>
-		</dependency>
-		<!-- Apache Commons IO per la manipolazione di InputStream, ci serve per controllare il tipo di file -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.20.0</version>
-		</dependency>
+	
+	    <!-- Actuator: expose health/info endpoints for container orchestration -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-actuator</artifactId>
+	    </dependency>
+	
+	    <!-- Logback JSON encoder (for structured logging to stdout) -->
+	    <dependency>
+	        <groupId>net.logstash.logback</groupId>
+	        <artifactId>logstash-logback-encoder</artifactId>
+	        <version>7.4</version>
+	    </dependency>
+	
+	    <!-- Per Azure Blob Storage -->
+	    <dependency>
+	        <groupId>com.azure</groupId>
+	        <artifactId>azure-storage-blob</artifactId>
+	        <version>12.31.2</version>
+	    </dependency>
+	    <!-- Per la generazione di ULID -->
+	    <dependency>
+	        <groupId>com.github.f4b6a3</groupId>
+	        <artifactId>ulid-creator</artifactId>
+	        <version>5.2.3</version>
+	    </dependency>
+	    <!-- Apache Commons IO per la manipolazione di InputStream, ci serve per controllare il tipo di file -->
+	    <dependency>
+	        <groupId>commons-io</groupId>
+	        <artifactId>commons-io</artifactId>
+	        <version>2.20.0</version>
+	    </dependency>
 	</dependencies>
 
 	<build>
