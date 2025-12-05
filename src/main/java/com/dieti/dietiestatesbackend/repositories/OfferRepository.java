@@ -36,6 +36,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     Page<Offer> getAgentOffers(@Param("agentId") Long agentId, Pageable pageable);
 
     @Query("SELECT o FROM Offer o " +
+        "LEFT JOIN FETCH o.user " +
         "JOIN FETCH o.property p " +
         "JOIN FETCH p.contract " +
         "JOIN FETCH p.propertyCategory " +
