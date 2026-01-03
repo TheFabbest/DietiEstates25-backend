@@ -18,15 +18,10 @@ public final class CreateCommercialPropertyRequest extends CreateBuildingPropert
     @NotNull @Min(1)
     private Integer numberOfRooms;
 
-    @NotNull
-    private Integer floor;
-
     @NotNull @Min(1)
     private Integer numberOfBathrooms;
 
     private boolean hasDisabledAccess;
-
-    private Integer numberOfFloors; // Aggiunto
 
     @Override
     public com.dieti.dietiestatesbackend.enums.PropertyType getPropertyType() {

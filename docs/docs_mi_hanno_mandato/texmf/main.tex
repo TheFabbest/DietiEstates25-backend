@@ -1,0 +1,886 @@
+\documentclass{book}
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{uninafrontespizio}
+\usepackage[italian]{babel}
+\usepackage{svg}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+
+
+\Universita{Università degli Studi di Napoli Federico II}
+\Facolta{Scuola Politecnica e delle Scienze di Base}
+\Dipartimento{Dipartimento di Ingegneria Elettrica e Tecnologie dell'Informazione}
+\CorsoDiLaurea{Corso di Laurea Triennale in Informatica}
+\Materia{Progetto di Ingegneria del Software}
+\AnnoAccademico{Anno Accademico 2024--2025}
+\Titolo{DietiEstates25}
+\Studente{Luca Barrella}
+\Studente{Fabrizio Apuzzo}
+\Studente{Maria Della Valle}
+\StudenteLabel{Studenti}
+\Professore{Sergio Di Martino}
+\Professore{Luigi Libero Lucio Starace}
+\ProfessoreLabel{Professori}
+\Logo{figures/logo-federico-II.pdf}
+\LogoWidth{3.5cm}
+\LogoPosition{below-uni}
+
+\begin{document}
+
+\pagestyle{empty}
+\makefrontpage
+\pagestyle{headings}
+\tableofcontents
+\setcounter{chapter}{-1}
+
+\chapter{Introduzione}
+
+\textbf{DietiEstates25} è una piattaforma dedicata alla gestione di servizi immobiliari che consente alle agenzie di pubblicare annunci di proprietà ed agli utenti di visualizzare gli immobili disponibili ed effettuare offerte di acquisto o locazione.\\\\
+Il presente documento illustra dettagliatamente il processo di sviluppo del sistema DietiEstates25 dall'analisi dei requisiti, alle scelte progettuali, per concludersi con i test di verifica all'implementazione e con la valutazione dell'usabilità della piattaforma.
+
+\section{Struttura del Documento}
+
+Il documento è organizzato in tre capitoli che seguono il processo di sviluppo del sistema DietiEstates25:
+
+\begin{itemize}
+    \item Il \textbf{Capitolo 1 - Analisi e Specifica dei Requisiti Software} presenta un'analisi delle funzionalità del sistema attraverso diagrammi UML, descrizioni testuali strutturate secondo i template di A. Cockburn e prototipi delle interfacce utente. Include inoltre una definizione degli utenti target e modelli di dominio per la formalizzazione del problema.
+
+    \item Il \textbf{Capitolo 2 - Progettazione del Sistema} illustra le scelte architetturali e le tecnologiche adottate, con l'ausilio di notazioni UML. Particolare attenzione è dedicata alla progettazione delle interfacce utente e alla motivazione delle scelte progettuali effettuate.
+
+    \item Il \textbf{Capitolo 3 - Testing e Valutazione dell'Usabilità} presenta la fase di verifica del sistema attraverso test automatici. Include inoltre una valutazione dell'usabilità condotta mediante ispezioni sistematiche e test con utenti reali, completata da un'analisi dei risultati dei questionari di valutazione.
+\end{itemize}
+
+\chapter{Analisi e Specifica dei Requisiti Software}
+
+Il primo passo per la creazione del sistema DietiEstates25 è l'identificazione dei requisiti con successiva analiisi. Quest'ultima è strutturata partendo dalla definizione degli utenti target. Segue la modellazione dei casi d'uso con l'ausilio di Use Case Diagram, descrizioni testuali e prototipi rapidi di interfacce utente.
+
+\section{Individuazione dei Target}
+
+Un sistema di annunci immobiliari come DietiEstates25 può avere come target diversi gruppi di utenti. Sono state identificate però tre distinte categorie principali, ognuna con specifiche necessità e livelli di accesso alle funzionalità della piattaforma:
+\begin{itemize}
+    \item Clienti
+    \item Agenti immobiliari
+    \item Amministratori
+\end{itemize}
+Segue una definizione di ciascuno di essi, accompagnata da esempi di utenti tipici di ognuna delle categorie, illustrati tramite \textit{Personas}.
+
+\subsection{Clienti}
+Utilizzatori principali dei servizi offerti da DietiEstates25, i clienti si configurano come il gruppo più ampio degli utenti. Si tratta di soggetti interessati all'acquisto di immobili, motivati dall'opportunità di ottenere prezzi vantaggiosi tramite il sistema di offerte. Possono appartenere a qualsiasi fascia di età o classe economica e ognuno ha esigenze differenti.
+
+\begin{figure}[!htb]
+    \includegraphics[width=\textwidth]{figures/youngclientPersona.pdf}
+    \centering
+    \caption{Esempio di \textit{Persona} rappresentativa di una cliente}
+\end{figure}
+
+\begin{figure}[!htb]
+    \includegraphics[width=\textwidth]{figures/oldclientPersona.pdf}
+    \centering
+    \caption{Esempio di \textit{Persona} rappresentativa di un cliente}
+\end{figure}
+
+\cleardoublepage
+
+\subsection{Agenti immobiliari}
+Un altro segmento significativo dell'utenza della piattaforma è rappresentato dagli agenti immobiliari, professionisti del settore, ingaggiati dalle agenzie che hanno scelto DietiEstates25. Dotati di una conoscenza approfondita degli immobili loro affidati, questi operatori interagiscono con i potenziali clienti attraverso il sistema di gestione delle offerte.
+
+\begin{figure}[!htb]
+    \includegraphics[width=\textwidth]{figures/reagentPersona.pdf}
+    \centering
+    \caption{Esempio di \textit{Persona} rappresentativa di un'agente immobiliare}
+\end{figure}
+
+\clearpage
+
+\subsection{Amministratori}
+La categoria con più privilegi è costituita dai gestori delle agenzie immobiliari. Dotati di accesso a funzionalità avanzate, hanno la possibilità di abilitare altri gestori e agenti immobiliari all'utilizzo della piattaforma.
+
+\begin{figure}[!htb]
+    \includegraphics[width=\textwidth]{figures/adminPersona.pdf}
+    \centering
+    \caption{Esempio di \textit{Persona} rappresentativa di un amministratore}
+\end{figure}
+
+\section{Modellazione dei casi d'uso}
+Individuati gli utenti target, si descrivono e schematizzano di seguito le funzionalità di DietiEstates25 e gli attori che ne prendono parte.
+
+\subsection{Descrizione dei casi d'uso}
+Gli \textbf{utenti} sono i principali attori della piattaforma, se ancora sono \textbf{non registrati} hanno la possiilità di:
+\begin{itemize}
+    \item \textbf{Registrarsi tramite email}: L'utente compila un form con le informazioni richieste per la creazione di un account e il sistema verifica la validità dei dati inseriti, creando il nuovo profilo.
+    \item \textbf{Registrarsi tramite Google}: L'utente si registra utilizzando il proprio account Google. Viene reindirizzato alla pagina di autenticazione di Google, dove concede i permessi necessari.
+\end{itemize}
+Una volta \textbf{registrati}, possono:
+\begin{itemize}
+    \item \textbf{Autenticarsi tramite email}: L'utente inserisce le proprie credenziali nel form di login. Il sistema verifica la correttezza delle informazioni e, in caso positivo, concede l'accesso alla sua area riservata.
+    \item \textbf{Autenticarsi tramite Google}: L'utente accede utilizzando il proprio account Google. Viene reindirizzato alla pagina di autenticazione di Google, dove concede i permessi necessari.
+    \item \textbf{Ricercare immobili}: L'utente utilizza i filtri disponibili per cercare immobili. Il sistema elabora la richiesta e presenta i risultati corrispondenti ai parametri specificati.
+    \item \textbf{Fare un'offerta su un immobile}: L'utente, selezionato un immobile, fa un'offerta per acquistarlo. Il sistema registra l'offerta e notifica l'agente immobiliare che ha caricato l'immobile.
+    \item \textbf{Visualizzare immobili ricercati}: L'utente accede ad una sezione contenente la cronologia degli immobili visualizzati di recente.
+    \item \textbf{Accettare un'offerta}: L'utente visualizza la controproposta ricevuta riguardo un'offerta fatta in precedenza e la accetta. Il sistema aggiorna lo stato dell'offerta e invia una notifica e-mail all'agente immobiliare che ha inviato la controproposta.
+    \item \textbf{Rifiutare un'offerta}: L'utente esamina la controproposta ricevuta riguardo un'offerta fatta in precedenza e la rifiuta. Il sistema aggiorna lo stato dell'offerta e notifica l'agente immobiliare che ha inviato la controproposta.
+    \item \textbf{Fare una controproposta ad un'offerta}: L'utente seleziona un'offerta ricevuta dall'agente immobiliare e propone una controproposta. Il sistema registra la controproposta e invia una notifica all'agente immobiliare.
+    \item \textbf{Visualizzare le offerte fatte}: L'utente accede a una sezione dove può consultare l'elenco cronologico di tutte le offerte effettuate o ricevute, con i relativi dettagli.
+    \item \textbf{Prenotare una visita per un immobile}: L'utente seleziona un immobile e sceglie una data e un orario per la visita nelle successive due settimane, compatibilmente con le disponibilità dell'agente. Il sistema registra la prenotazione e invia una notifica all'agente immobiliare.
+    \item \textbf{Visualizzare le visite prenotate}: L'utente accede a una sezione dove può vedere l'elenco delle visite prenotate, con i dettagli relativi a ciascuna di esse.
+\end{itemize}
+Gli \textbf{agenti immobiliari}, oltre alle funzionalità degli \textbf{utenti}, possono:
+\begin{itemize}
+    \item \textbf{Caricare un annuncio}: L'agente immobiliare inserisce le immagini e le informazioni relative ad un immobile da vendere tramite un apposito form. Il sistema convalida le informazioni e pubblica l'annuncio sulla piattaforma.
+    \item \textbf{Inserire un'offerta dall'esterno}: L'agente immobiliare registra manualmente un'offerta ricevuta all'esterno della piattaforma. Il sistema la registra nello storico.
+    \item \textbf{Accettare una prenotazione}: L'agente immobiliare visualizza le proposte di prenotazione e accetta una di esse. Il sistema aggiorna lo stato della visita e invia una notifica all'utente che l'ha richiesta.
+    \item \textbf{Rifiutare una prenotazione}: L'agente immobiliare esamina le proposte di prenotazione e rifiuta una di esse. Il sistema aggiorna lo stato della visita e notifica l'utente che l'ha richiesta.
+\end{itemize}
+Infine, i \textbf{gestori}, oltre alle funzionalità degli \textbf{agenti}, possono:
+\begin{itemize}
+    \item \textbf{Modificare la password di amministrazione}: Il gestore accede alle impostazioni dell'account e modifica la propria password. Il sistema verifica e salva la nuova password.
+    \item \textbf{Creare account di supporto amministrazione}: Il gestore crea un nuovo account per nuovi amministratori. Il sistema genera le credenziali e imposta i permessi relativi.
+    \item \textbf{Creare account per agenti immobiliari}: Il gestore crea un profilo per un nuovo agente immobiliare. Il sistema genera le credenziali e imposta i permessi relativi.
+\end{itemize}
+
+\subsection{Diagramma dei casi d'uso}
+Tutti i casi d'uso individuati possono essere riassunti in un \textit{Use Case Diagram} UML\@.
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\textwidth, trim=2cm 1cm 7cm 1cm, clip]{diagram/UseCaseDiagram.pdf}
+    \caption{Use Case Diagram UML}
+    \label{fig:usecase}
+\end{figure}
+
+\newpage
+
+\section{Descrizione dei requisiti non funzionali e di dominio}
+Descritti i requisiti funzionali di DietiEstates25, è necessario specificare i requisiti non funzionali e i requisiti di dominio, altrettanto importanti.
+
+\subsection{Requisiti non funzionali}
+I requisiti non funzionali fanno riferimento a caratteristiche del sistema come qualità, prestazioni, affidabilità e sicurezza.\\
+Il Committente richiede che l'applicazione sia performante ed affidabile, attraverso cui gli utenti possano fruire delle funzionalità in modo intuitivo, rapido e piacevole. Tali richieste possono essere suddivise in più sezioni e tradotte nel seguente modo.
+\subsubsection{Requisiti di performance}
+La performance riguarda la capacità del sistema di elaborare e restituire informazioni in modo rapido, efficiente e fluido, garantendo tempi di risposta minimi. Assumendo condizioni di connettività ad internet ottimali, si individuano e rispettano i seguenti requisiti:
+\begin{itemize}
+    \item L'applicazione deve garantire un caricamento delle pagine rapido e immediato, non superiore a 2 secondi.
+    \item Il sistema deve restituire risultati alla ricerca di immobili in modo istantaneo, con un tempo massimo di 5 secondi.
+    \item Il caricamento degli immobili deve avvenire velocemente, entro 10 secondi dalla conferma.
+\end{itemize}
+
+\subsubsection{Requisiti di affidabilità}
+L'affidabilità misura la capacità del sistema di funzionare correttamente e continuativamente, gestendo eventuali errori senza perdita di dati o interruzione del servizio. Si individuano rispettano i seguenti requisiti:
+\begin{itemize}
+    \item L'applicazione deve garantire una disponibilità del servizio pressoché totale, con un uptime non inferiore al 99.5\%.
+    \item In caso di malfunzionamento, il sistema deve ripristinarsi completamente in meno di 10 secondi.
+    \item Il sistema deve gestire eventuali errori in modo trasparente, senza interrompere l'esperienza di navigazione dell'utente se non in casi di malfunzionamento critico.
+    \item L'applicazione deve possedere meccanismi di ripristino che consentano il recupero completo dei dati in caso di guasto.
+\end{itemize}
+
+\subsubsection{Requisiti di usabilità}
+L'usabilità valuta la facilità di utilizzo dell'applicazione, misurando quanto l'interfaccia sia intuitiva, comprensibile e piacevole per l'utente finale. Si individuano rispettano i seguenti requisiti:
+\begin{itemize}
+    \item L'interfaccia utente deve consentire di completare qualsiasi azione principale con non più di 4 click.
+    \item L'applicazione deve adattarsi perfettamente a schermi di qualsiasi dimensione, garantendo una visualizzazione ottimale.
+    \item L'applicazione deve rispettare le linee guida di accessibilità WCAG livello AA\@.
+    \item Il design deve garantire chiarezza assoluta di bottoni e menu, rendendone immediata la comprensione.
+\end{itemize}
+
+\subsubsection{Requisiti di sicurezza}
+La sicurezza riguarda la protezione del sistema e dei dati degli utenti da manomissioni e violazioni della privacy. Si individuano rispettano i seguenti requisiti:
+\begin{itemize}
+    \item L'applicazione deve implementare una comunicazione sicura che protegga totalmente i dati personali degli utenti.
+    \item Il sistema deve possedere protezioni avanzate contro ogni tipo di attacco informatico.
+    \item L'applicazione deve conservare le password degli utenti in forma crittografata e sicura anche in caso di violazione dei dati.
+    \item Il sistema deve essere totalmente conforme alle normative GDPR per la protezione dei dati personali.
+    \item L'applicazione deve chiudere automaticamente le sessioni dopo 15 minuti di inattività per prevenire accessi non autorizzati.
+\end{itemize}
+
+\subsection{Requisiti di dominio}
+I requisiti di dominio di DietiEstates25 sono specifiche derivanti dalla conoscenza del contesto operativo e professionale del settore immobiliare. Rappresentano l'insieme degli standard e delle normative tipiche del settore e vanno necessariamente incorporate nel sistema. Si individuano rispettano i seguenti requisiti:
+\begin{itemize}
+    \item Il sistema deve raccogliere esclusivamente i dati personali strettamente necessari, in conformità con l'Art. 5 del GDPR che prevede la minimizzazione dei dati.
+    \item L'applicazione deve limitare la raccolta di informazioni solo agli elementi essenziali per la gestione dell'annuncio immobiliare.
+    \item Deve essere implementata un'informativa privacy chiara e comprensibile, nel rispetto dell'Art. 13 del GDPR\@.
+    \item L'applicazione deve implementare controlli di base per verificare la completezza e la coerenza dei dati inseriti negli annunci immobiliari.
+    \item Il sistema fornirà linee guida chiare per la compilazione degli annunci, richiamando i principi di trasparenza previsti dal Codice Civile in materia di compravendita.
+    \item Le credenziali di accesso saranno protette mediante tecniche di hashing, in linea con le best practice di sicurezza informatica.
+    \item L'applicazione limiterà l'accesso ai dati personali, garantendo la protezione delle informazioni sensibili.
+\end{itemize}
+
+\section{Esempi di casi d'uso}
+Per illustrare meglio il funzionamento del sistema, si formalizzano di seguito alcuni esempi di casi d'uso, secondo una descrizione testuale strutturata, realizzata utilizzando i template di Cockburn, e secondo la prototipazione visuale via Mock-up delle relative interfacce utente, tramite lo strumento di rapid prototyping Figma.
+
+\subsection{Caso d'uso \#1: Caricamento Annuncio}
+
+\subsubsection{Template di Cockburn}
+\begin{table}[H]
+
+    \def\arraystretch{1.5}
+    
+    \begin{tabularx}{\linewidth}{|l|X|X|X|}
+    
+    \hline Use Case \#1 & \multicolumn{3}{l|}{Caricamento Annuncio Immobiliare} \\
+    \hline Goal in Context & \multicolumn{3}{>{\hsize=\dimexpr 3\hsize+4\tabcolsep+2\arrayrulewidth\relax}X|}{%
+    L'agente immobiliare desidera pubblicare un nuovo annuncio sulla piattaforma, includendo dettagli tecnici e immagini della proprietà.%
+    } \\
+    \hline Preconditions & \multicolumn{3}{l|}{Agente autenticato e autorizzato (ruolo AGENT o MANAGER).} \\
+    \hline Success End Conditions & \multicolumn{3}{l|}{Annuncio pubblicato, immagini salvate su Azure e visibili agli utenti.} \\
+    \hline Failed End Conditions & \multicolumn{3}{l|}{L'annuncio non viene creato; eventuale rollback dei file caricati.} \\
+    \hline Primary Actor & \multicolumn{3}{l|}{Agente Immobiliare} \\
+    \hline Trigger & \multicolumn{3}{l|}{L'agente seleziona la funzione di inserimento nuova proprietà.} \\
+    
+    \hline \multirow{4}{*}{Description} & Step & User Action & System \\
+    \cline{2-4} & 1 & Compila il form con i dati dell'immobile e seleziona le immagini. & Valida i dati sintatticamente. \\
+    \cline{2-4} & 2 & Conferma l'invio dell'annuncio. & Esegue l'upload delle immagini su Azure Blob Storage. \\
+    \cline{2-4} & 3 & & Persiste i dati della proprietà e i link alle immagini nel database. \\
+    \cline{2-4} & 4 & & Conferma l'avvenuta pubblicazione. \\
+    \hline \multirow{3}{*}{Extensions} & 1a & Timeout o crash del browser durante la compilazione. & Recupera la bozza dal LocalStorage al riavvio (Restore Draft). \\
+    \cline{2-4} & 2a & Errore durante l'upload delle immagini. & Notifica l'errore e interrompe la procedura. \\
+    \cline{2-4} & 3a & Errore salvataggio DB (es. vincoli integrità). & Esegue rollback immagini su Azure e notifica errore. \\
+    \hline \multirow{1}{*}{Subvariations} & & & \\
+    \hline Notes & \multicolumn{3}{l|}{L'upload utilizza SAS token temporanei per garantire la sicurezza.} \\
+    \hline
+
+    \end{tabularx}
+    
+\end{table}
+
+\subsubsection{Mock-up}
+
+\subsection{Caso d'uso \#2: Ricerca Avanzata}
+
+\subsubsection{Template di Cockburn}
+
+\begin{table}[H]
+
+    \def\arraystretch{1.5}
+    
+    \begin{tabularx}{\linewidth}{|l|X|X|X|}
+    
+    \hline Use Case \#2 & \multicolumn{3}{l|}{Ricerca Avanzata Immobili} \\
+    \hline Goal in Context & \multicolumn{3}{>{\hsize=\dimexpr 3\hsize+4\tabcolsep+2\arrayrulewidth\relax}X|}{%
+    L'utente desidera individuare immobili che soddisfino criteri specifici, inclusa la vicinanza geografica.%
+    } \\
+    \hline Preconditions & \multicolumn{3}{l|}{Nessuna (accessibile anche ad utenti non registrati).} \\
+    \hline Success End Conditions & \multicolumn{3}{l|}{Il sistema mostra gli immobili filtrati in base ai parametri inseriti.} \\
+    \hline Failed End Conditions & \multicolumn{3}{l|}{Nessun risultato trovato o parametri di ricerca non validi.} \\
+    \hline Primary Actor & \multicolumn{3}{l|}{Cliente (Registrato o Visitatore)} \\
+    \hline Trigger & \multicolumn{3}{l|}{L'utente accede alla sezione di ricerca.} \\
+    
+    \hline \multirow{3}{*}{Description} & Step & User Action & System \\
+    \cline{2-4} & 1 & Inserisce i filtri (prezzo, tipologia) e/o posizione geografica (lat/long e raggio). & Valida i parametri di ricerca. \\
+    \cline{2-4} & 2 & Avvia la ricerca. & Esegue query dinamica con filtri geografici nel DB. \\
+    \cline{2-4} & 3 & & Restituisce la lista paginata dei risultati. \\
+    \hline \multirow{1}{*}{Extensions} & 1a & Coordinate geografiche malformate. & Notifica errore di validazione. \\
+    \hline \multirow{2}{*}{Subvariations} & 1a & Ricerca solo testuale/per filtri. & Omette il calcolo della distanza geografica. \\
+    \cline{2-4} & 1b & Ricerca per mappa. & Utilizza lat/long e raggio per il bounding box. \\
+    \hline Notes & \multicolumn{3}{l|}{La ricerca geografica è ottimizzata tramite indici spaziali.} \\
+    \hline
+
+    \end{tabularx}
+    
+\end{table}
+
+\subsubsection{Mock-up}
+
+\subsection{Caso d'uso \#3: Prenotazione Visita}
+
+\subsubsection{Template di Cockburn}
+
+\begin{table}[H]
+
+    \def\arraystretch{1.5}
+    
+    \begin{tabularx}{\linewidth}{|l|X|X|X|}
+    
+    \hline Use Case \#3 & \multicolumn{3}{l|}{Prenotazione Visita Immobile} \\
+    \hline Goal in Context & \multicolumn{3}{>{\hsize=\dimexpr 3\hsize+4\tabcolsep+2\arrayrulewidth\relax}X|}{%
+    L'utente vuole prenotare un appuntamento per visionare un immobile di suo interesse.%
+    } \\
+    \hline Preconditions & \multicolumn{3}{l|}{Utente autenticato; immobile e agente disponibili.} \\
+    \hline Success End Conditions & \multicolumn{3}{l|}{Richiesta di visita creata in stato PENDING e notifica inviata all'agente.} \\
+    \hline Failed End Conditions & \multicolumn{3}{l|}{Prenotazione rifiutata per indisponibilità o conflitti orari.} \\
+    \hline Primary Actor & \multicolumn{3}{l|}{Cliente} \\
+    \hline Trigger & \multicolumn{3}{l|}{L'utente seleziona "Prenota Visita" nei dettagli di un immobile.} \\
+    
+    \hline \multirow{4}{*}{Description} & Step & User Action & System \\
+    \cline{2-4} & 1 & Seleziona data e ora per la visita. & Verifica disponibilità dell'agente e sovrapposizioni. \\
+    \cline{2-4} & 2 & Invia la richiesta. & Crea il record della visita in stato PENDING. \\
+    \cline{2-4} & 3 & & Invia notifica e-mail all'agente immobiliare. \\
+    \cline{2-4} & 4 & & Il sistema notifica l'agente e pone la richiesta in stato PENDING\_APPROVAL. \\
+    \hline \multirow{2}{*}{Extensions} & 1a & Conflitto orario per l'utente o l'agente. & Notifica l'impossibilità di prenotare in quello slot. \\
+    \cline{2-4} & 4a & L'agente rifiuta la visita. & Aggiorna lo stato in REJECTED e notifica l'utente. \\
+    \hline \multirow{1}{*}{Subvariations} & & & \\
+    \hline Notes & \multicolumn{3}{l|}{Il cambio di stato da PENDING a CONFIRMED avviene in modo asincrono, triggerato dall'agente.} \\
+    \hline
+
+    \end{tabularx}
+    
+\end{table}
+
+\subsubsection{Mock-up}
+
+\subsection{Caso d'uso \#4: Gestione Offerte}
+
+\subsubsection{Template di Cockburn}
+
+\begin{table}[H]
+
+    \def\arraystretch{1.5}
+    
+    \begin{tabularx}{\linewidth}{|l|X|X|X|}
+    
+    \hline Use Case \#4 & \multicolumn{3}{l|}{Negoziazione Offerta Immobiliare} \\
+    \hline Goal in Context & \multicolumn{3}{>{\hsize=\dimexpr 3\hsize+4\tabcolsep+2\hsize\relax}X|}{%
+    L'utente desidera proporre un prezzo per l'acquisto o locazione; l'agente può accettare, rifiutare o controproporre.%
+    } \\
+    \hline Preconditions & \multicolumn{3}{l|}{Utente autenticato; immobile disponibile per offerte.} \\
+    \hline Success End Conditions & \multicolumn{3}{l|}{L'offerta viene accettata (ACCEPTED) o controproposta (COUNTERED).} \\
+    \hline Failed End Conditions & \multicolumn{3}{l|}{L'offerta viene rifiutata o ritirata.} \\
+    \hline Primary Actor & \multicolumn{3}{l|}{Cliente / Agente Immobiliare} \\
+    \hline Trigger & \multicolumn{3}{l|}{L'utente invia un'offerta tramite il tasto "Fai un'offerta".} \\
+    
+    \hline \multirow{4}{*}{Description} & Step & User Action & System \\
+    \cline{2-4} & 1 & Inserisce il prezzo proposto e conferma. & Registra l'offerta come PENDING e notifica l'agente. \\
+    \cline{2-4} & 2 & L'agente esamina l'offerta. & Presenta opzioni: Accetta, Rifiuta, Controproposta. \\
+    \cline{2-4} & 3 & L'agente effettua una controproposta. & Aggiorna stato in COUNTERED e notifica l'utente. \\
+    \cline{2-4} & 4 & L'utente accetta la controproposta. & Aggiorna stato in ACCEPTED e notifica l'agente. \\
+    \hline \multirow{3}{*}{Extensions} & 2a & L'agente accetta direttamente. & Aggiorna stato in ACCEPTED e notifica l'utente. \\
+    \cline{2-4} & 2b & L'agente rifiuta l'offerta. & Aggiorna stato in REJECTED e notifica l'utente. \\
+    \cline{2-4} & 3a & L'utente rifiuta la controproposta. & L'offerta rimane in stato COUNTERED o viene chiusa. \\
+    \hline \multirow{1}{*}{Subvariations} & 1a & Inserimento offerta esterna. & L'agente registra un'offerta ricevuta fuori piattaforma. \\
+    \hline Notes & \multicolumn{3}{l|}{Il sistema impedisce controproposte con prezzo superiore a quello originale.} \\
+    \hline
+
+    \end{tabularx}
+    
+\end{table}
+
+\subsubsection{Mock-up}
+
+\section{Glossario}
+Sono di seguito definiti alcuni termini che sono stati utilizzati nel corso del capitolo.
+\begin{itemize}
+  \item \textbf{Figma}: Strumento di progettazione di interfacce utente e prototipazione basato sul web, utilizzato per creare i mock-up.
+  \item \textbf{GDPR (General Data Protection Regulation)}: Regolamento europeo che disciplina il trattamento dei dati personali e la protezione della privacy.
+  \item \textbf{Hashing}: Processo che trasforma dati di lunghezza arbitraria in una stringa di lunghezza fissa; usato per memorizzare password in modo non reversibile.
+  \item \textbf{Mock-up}: Rappresentazione grafica e non funzionante dell'interfaccia utente, usata per validare layout e flussi prima dell'implementazione.
+  \item \textbf{Persona}: Profilo sintetico di un utente tipo (obiettivi, bisogni, contesto) usato per guidare scelte di design e priorità funzionali.
+  \item \textbf{UML (Unified Modeling Language)}: Linguaggio standard per la modellazione di sistemi software (diagrammi di casi d'uso, classi, sequenze, ecc.).
+  \item \textbf{Use Case (Caso d'uso)}: Descrizione di una sequenza di interazioni tra attori e sistema che raggiungono uno scopo utile; usato per definire requisiti funzionali.
+  \item \textbf{Uptime}: Percentuale di tempo in cui il servizio è disponibile e funzionante.
+  \item \textbf{SAS Token (Shared Access Signature)}: Chiave temporanea che permette all'app mobile di caricare file su Azure Storage in modo sicuro, riducendo il carico sul server.
+  \item \textbf{WCAG AA}: Linee guida per l'accessibilità dei contenuti web; il livello AA indica requisiti di accessibilità intermediamente stringenti.
+\end{itemize}
+
+
+\chapter{Progettazione del Sistema}
+\section{Obiettivi di Progettazione}
+TODO
+Tra gli attributi di qualità del software, il sistema è stato progettato per garantire la piena \textbf{funzionalità} e \textbf{usabilità} da parte degli utenti finali, senza mai ignorare la \textbf{manutenibilità} e la \textbf{scalabilità}. L'\textbf{affidabilità}, l'\textbf{efficienza}, la \textbf{sicurezza} e l'\textbf{accessibilità}, seppur importanti e non trascurate, non sono state considerate altrettanto cruciali nella fase di progettazione.
+
+\section{Architettura del Sistema}
+Il sistema è stato progettato seguendo un'architettura a tre livelli: livello di presentazione, livello logico e livello di dati. Ogni livello è stato progettato per essere indipendente dagli altri, consentendo una maggiore flessibilità e facilità di manutenzione.\\\
+Il livello di presentazione è responsabile dell'interfaccia utente e della gestione delle interazioni con l'utente. È stato progettato per essere intuitivo e facile da usare, con un design responsivo che si adatta a diversi dispositivi e che garantisce accessibilità.\\
+Il livello logico gestisce la logica di business del sistema, elaborando le richieste degli utenti e interagendo con il livello di dati. È stato progettato per essere scalabile e modulare, consentendo l'aggiunta di nuove funzionalità senza influire sulle parti esistenti del sistema.\\
+Il livello di dati è responsabile della gestione e dell'archiviazione delle informazioni. È stato progettato per garantire l'integrità e la sicurezza dei dati, con prestazioni ragionevoli e una struttura scalabile, in modo da supportare la crescita del sistema.\\
+Inoltre, sono state adottate tecnologie moderne e best practice di sviluppo software per garantire che il sistema sia robusto, sicuro e performante. Tra queste, l'uso di framework professionali per lo sviluppo, la gestione del versionamento del codice e l'implementazione di test automatici per garantire la qualità del software.\\
+Di seguito, vengono illustrate in dettaglio le scelte progettuali e tecnologiche adottate per ciascun livello del sistema.
+
+\newpage
+\subsection{Front-End}
+
+Il front-end del sistema è progettato come applicazione mobile multipiattaforma, sviluppata in \textbf{React Native} con \textbf{TypeScript}. Questa scelta tecnologica è motivata dalla necessità di garantire:
+\begin{itemize}
+    \item \textbf{portabilità}, permettendo l’esecuzione su dispositivi iOS e Android tramite un unico codebase;
+    \item \textbf{elevata manutenibilità}, grazie al typing statico fornito da TypeScript;
+    \item \textbf{buona efficienza} in termini di prestazioni e reattività dell’interfaccia;
+    \item \textbf{rapidità di sviluppo}, resa possibile dall’ecosistema React e dalla disponibilità di componenti già ottimizzati per dispositivi mobili.
+\end{itemize}
+
+L’architettura adottata segue i principi di \textbf{separation of concerns}, \textbf{scalabilità} e \textbf{testabilità}, strutturando l’applicazione in strati logici chiaramente definiti. Tale scelta consente di minimizzare l’accoppiamento tra componenti, facilitare l’evoluzione del sistema e supportare la manutenzione a lungo termine.
+
+\subsubsection{Strato di Presentazione (Presentation Layer)}
+Questo livello contiene tutti i componenti relativi alla visualizzazione e all’interazione con l’utente. I principi di design adottati seguono linee guida di \textbf{usabilità}, \textbf{consistenza} e \textbf{responsività}.
+\begin{itemize}
+    \item \textbf{Schermate principali}: rappresentano le viste dell’app, strutturate in modo da favorire la comprensione immediata delle funzionalità.
+    \item \textbf{Componenti UI riutilizzabili}: progettati per garantire uniformità visiva e ridurre la ridondanza.
+    \item \textbf{Stili e risorse grafiche globali}: definiscono il design system dell’applicazione.
+\end{itemize}
+Le scelte di design dell’interfaccia utente privilegiano semplicità, chiarezza e accessibilità, con l’obiettivo di ridurre la curva di apprendimento e migliorare l’esperienza dell’utente finale.
+
+\subsubsection{Strato Logico e di Gestione dello Stato (Logic and State Management Layer)}
+In questo livello risiede la logica applicativa non direttamente legata alla visualizzazione. Esso è progettato secondo criteri di \textbf{modularità} e \textbf{riuso}.
+\begin{itemize}
+    \item \textbf{Moduli di logica riutilizzabili}: incapsulano comportamenti specifici del dominio.
+    \item \textbf{Contesti globali di stato}: gestiscono informazioni condivise tra più schermate.
+    \item \textbf{Validazione dei dati}: garantisce la correttezza degli input del sistema.
+\end{itemize}
+
+\subsubsection{Strato dei Servizi (Service Layer)}
+Questo strato gestisce la comunicazione con il back-end attraverso API RESTful. La scelta di separare questo livello facilita i test, riduce l’accoppiamento e consente di isolare cambiamenti nelle API.
+\begin{itemize}
+    \item \textbf{Client API}: implementano le chiamate al back-end.
+    \item \textbf{Servizi di business}: orchestrano operazioni complesse lato client.
+    \item \textbf{DTO}: definiscono i formati dei dati scambiati con il server.
+\end{itemize}
+
+\subsubsection{Strato di Persistenza Locale (Persistence Layer)}
+Il front-end utilizza un meccanismo di persistenza locale per migliorare l’esperienza utente, ridurre la latenza e supportare funzionalità offline, tramite la libreria AsyncStorage.
+\begin{itemize}
+    \item \textbf{Repository}: astrazioni per l’accesso a dati remoti o locali.
+    \item \textbf{Gestione sicura dei token}: garantisce la protezione di credenziali sensibili, attraverso la libreria Expo SecureStore.
+\end{itemize}
+
+\subsubsection{Strato di Navigazione (Navigation Layer)}
+La navigazione è organizzata secondo un modello gerarchico e dichiarativo, che permette di gestire flussi complessi e protezione delle rotte.
+\begin{itemize}
+    \item \textbf{Router logico}: definisce le relazioni tra schermate.
+    \item \textbf{Protezione delle rotte}: limita l’accesso alle sezioni riservate agli utenti autenticati.
+    \item \textbf{Pattern di navigazione}: supporto a tab, stack o navigazione annidata.
+\end{itemize}
+
+L’architettura descritta consente una netta separazione delle responsabilità, supporta la crescita del progetto e assicura un’elevata qualità del codice.
+
+% ================================================================
+% ================================================================
+
+\subsection{Back-End}
+Il back-end del sistema è sviluppato in \textbf{Java} utilizzando il framework \textbf{Spring Boot}, scelto per la sua architettura solida, scalabile e modulare. Tale framework fornisce un insieme di funzionalità integrate, quali gestione delle dipendenze, configurazione automatica e meccanismi di sicurezza preconfigurati, che consentono di ridurre la complessità infrastrutturale e di concentrare l’attenzione sulla logica applicativa e sulle esigenze del dominio. \\
+Spring Boot supporta nativamente la creazione di \textbf{API RESTful}, che costituiscono l’interfaccia di comunicazione tra il front-end, sviluppato in \textbf{React Native}, e il back-end. L’architettura adottata segue un approccio multilivello (Controller–Service–Repository), che garantisce una chiara separazione delle responsabilità, migliorando manutenibilità e testabilità.
+
+\subsubsection{Strato di Presentazione (Controller Layer)}
+Questo livello espone le funzionalità applicative tramite endpoint REST:
+\begin{itemize}
+    \item \textbf{Controller REST}: gestiscono le richieste HTTP e restituiscono risposte strutturate.
+    \item \textbf{DTO} (Data Transfer Object): assicurano lo scambio sicuro e controllato di dati con il front-end.
+    \item \textbf{Gestione centralizzata degli errori}: uniforma il formato delle risposte in caso di eccezioni.
+\end{itemize}
+
+\subsubsection{Strato di Logica di Business (Service Layer)}
+Comprende le regole applicative e il coordinamento tra presentazione e persistenza:
+\begin{itemize}
+    \item \textbf{Servizi di business}: implementano le operazioni del dominio.
+    \item \textbf{Validazione}: garantisce la correttezza e la coerenza dei dati in ingresso.
+    \item \textbf{Mapper}: trasformano automaticamente DTO ed entità di dominio.
+\end{itemize}
+
+\subsubsection{Strato di Persistenza (Repository Layer)}
+Per la gestione dei dati è impiegato un database relazionale \textbf{PostgreSQL}. La persistenza è implementata tramite \textbf{Hibernate} come framework ORM, integrato con la \textbf{Jakarta Persistence API (JPA)}:
+\begin{itemize}
+    \item \textbf{Entità JPA}: modellano le tabelle del database.
+    \item \textbf{Repository Spring Data JPA}: permettono l’accesso ai dati tramite interfacce e query astratte.
+    \item \textbf{Hibernate ORM}: gestisce la conversione tra oggetti Java e rappresentazione relazionale, riducendo la complessità operativa.
+\end{itemize}
+Questo approccio offre un alto livello di astrazione, migliorando portabilità e coerenza tra livello applicativo e schema dati.
+
+\subsubsection{Strato di Sicurezza}
+Il sistema di sicurezza è implementato tramite \textbf{Spring Security}, che garantisce un modello robusto di autenticazione e autorizzazione:
+\begin{itemize}
+    \item \textbf{Filtri di sicurezza}: applicano controlli sugli endpoint sensibili.
+    \item \textbf{Autenticazione JWT}: consente un approccio stateless, scalabile e sicuro.
+    \item \textbf{Gestione ruoli e permessi}: definisce i livelli di accesso alle varie funzionalità.
+\end{itemize}
+
+\subsubsection{Gestione dei Contenuti Multimediali}
+Per la memorizzazione e gestione di contenuti multimediali (come immagini o file di documentazione) è utilizzato \textbf{Azure Blob Storage}, una soluzione di archiviazione a oggetti scalabile e sicura. Il back-end integra questo servizio tramite SDK ufficiali, consentendo:
+\begin{itemize}
+    \item caricamento e download dei file;
+    \item generazione di URL sicuri e temporanei;
+    \item gestione efficiente di contenuti di grandi dimensioni.
+\end{itemize}
+
+\subsubsection{Deployment e Infrastruttura}
+Il processo di deployment è basato su una pipeline containerizzata:
+\begin{itemize}
+    \item \textbf{Docker}: consente la creazione di container isolati e riproducibili per il back-end.
+    \item \textbf{Microsoft Azure}: piattaforma cloud utilizzata per la distribuzione, garantisce scalabilità, alta disponibilità e monitoraggio continuo.
+    \item \textbf{Ambienti separati} (sviluppo, test, produzione): supportano una gestione strutturata del ciclo di vita dell’applicazione.
+\end{itemize}
+
+\subsubsection{Testing}
+La qualità e la stabilità del sistema sono assicurate tramite test automatici eseguiti con \textbf{JUnit}, che permettono:
+\begin{itemize}
+    \item verifica delle unità funzionali;
+    \item individuazione rapida di regressioni;
+    \item supporto all’integrazione continua.
+\end{itemize}
+
+L’architettura descritta garantisce robustezza, scalabilità e una chiara separazione delle responsabilità, assicurando al sistema un’elevata manutenibilità e predisposizione all’evoluzione futura.
+
+\subsection{Database}
+Il database è progettato per essere scalabile e performante, utilizzando PostgreSQL.\\
+PostgreSQL è scelto per la sua robustezza, e l'ottimo supporto alla gestione dei dati geospaziali (indispensabili per alcune funzionalità dell'applicazione).\\
+La struttura del database è progettata per ottimizzare le prestazioni delle query senza mai compromettere l'integrità dei dati, anche impiegando l'indicizzazione.\\
+Inoltre, sono implementate misure di sicurezza per proteggere i dati sensibili, come l'hashing dinamico delle password (tramite \textbf{BCrypt}).
+
+
+\chapter{Testing e Valutazione dell'Usabilità}
+Per garantire la qualità del sistema DietiEstates25, sono stati implementati test automatici e condotte valutazioni di usabilità.\\
+I test automatici sono stati realizzati utilizzando JUnit per il back-end e Jest e React Testing Library per il front-end, coprendo le funzionalità principali e verificando la correttezza del comportamento del sistema.\\
+La valutazione dell'usabilità è stata condotta attraverso ispezioni sistematiche e test con utenti volontari interessati all'applicazione.\\
+Inoltre sono stati impiegati SonarQube per l'analisi della qualità del codice, individuando potenziali problemi e aree di miglioramento.\\
+I risultati dei test automatici e delle valutazioni di usabilità sono stati analizzati per identificare eventuali problemi e apportare le necessarie correzioni al sistema, al fine di garantire un'esperienza utente fluida, intuitiva, accessibile mantenendo un elevato livello di affidabilità.\\
+Di seguito, vengono presentati i dettagli dei test automatici e della valutazione dell'usabilità condotta.
+
+\section{Test Automatici}
+I test automatici sono stati implementati per garantire la qualità del codice e il corretto funzionamento del sistema.\\
+A seguire, sono analizzate le tecniche di progettazione e gli strumenti utilizzati per il testing del back-end.
+
+\subsubsection{Strumenti Utilizzati}
+Per la stesura dei test è stato utilizzato il framework per applicazioni Java \textbf{JUnit 5}. Esso fornisce annotazioni e asserzioni per scrivere ed eseguire test in modo strutturato.\\
+Per poter testare classi in isolamento, è stato utilizzato il framework di mocking per Java \textbf{Mockito}. Il suo scopo è creare "oggetti finti" (mock) di dipendenze esterne di una classe. Ciò permette di testare classi con dipendenze complesse senza doverle effettivamente istanziare.
+
+\subsubsection{Esempi}
+Nelle sezioni seguenti, vengono analizzati quattro esempi di metodi testati non banali e con almeno due parametri, illustrando le strategie adottate per la progettazione, tra cui le classi di equivalenza individuate e coperte e i criteri di copertura strutturale per ogni singolo esempio.
+\clearpage
+
+\subsection{Metodo 1: \texttt{createPropertyWithImages}}
+
+\subsubsection{Contesto}
+\begin{itemize}
+\item \textbf{Metodo testato}: \texttt{createPropertyWithImages(CreatePropertyRequest request,\\
+ List<MultipartFile> images)}
+\item \textbf{Scopo}: Creare una nuova proprietà caricando le immagini fornite, validandole, caricandole su Azure Blob Storage e salvando i dati della proprietà nel database. In caso di errore nella persistenza, il metodo esegue una logica di compensazione eliminando le immagini già caricate.
+\item \textbf{Test case}: \texttt{createPropertyWithImages\_dbSaveFails\_compensatesAndThrowsRuntimeException}
+\end{itemize}
+
+\subsubsection{Strategia}
+Il test verifica il comportamento del sistema in presenza di un errore nella fase di persistenza su database. L’obiettivo non è validare un output, ma assicurarsi che il flusso in condizioni di fallimento attivi correttamente la logica di compensazione e propaghi l’eccezione prevista.
+
+\begin{itemize}
+
+\item \textbf{Classi di equivalenza individuate}: 
+Le classi di equivalenza sono definite sui parametri del metodo:
+\begin{itemize}
+    \item \textbf{\texttt{request}}:
+    \begin{itemize}
+        \item CE-R1 (valida): request è non null e contiene tutti i campi necessari (classe valida del DTO).
+        \item CE-R2 (non valida): request è malformata → la validazione solleva un’eccezione.
+        \item CE-R3 (null): request = null → validazione fallisce immediatamente.
+    \end{itemize}
+    \item \textbf{\texttt{images}}:
+    \begin{itemize}
+        \item CE-I1 (lista vuota): images.size() == 0.
+        \item CE-I2 (lista con immagini valide): ogni elemento passa la validateImage().
+        \item CE-I3 (lista con almeno un'immagine non valida): la validazione solleva eccezione.
+        \item CE-I4 (lista null): images == null.
+    \end{itemize}
+\end{itemize}
+\item \textbf{Classi coperte dal test}:
+\begin{itemize}
+    \item CE-R1 e CE-I2: request valida e immagini valide.
+\end{itemize}
+
+\item \textbf{Copertura strutturale}:
+Il test esercita il ramo di gestione dell’eccezione generata durante la fase di persistenza, verificando l’esecuzione del blocco \texttt{catch} che implementa la compensazione. Questo garantisce la copertura del ramo alternativo (\textbf{branch coverage}) associato al fallimento del salvataggio su database.
+
+\item \textbf{Verifica}:
+La correttezza del comportamento è accertata tramite:
+
+\begin{itemize}
+\item \texttt{assertThrows()}, che conferma la propagazione della \texttt{PersistenceException} generata dal fallimento della persistenza;
+\item \texttt{verify(uploadImages)}, che attesta che l’upload è stato effettivamente tentato prima dell’errore;
+\item \texttt{verify(deleteImages)}, che verifica che la logica di compensazione sia stata eseguita a seguito dell’eccezione.
+\end{itemize}
+
+
+\end{itemize}
+
+\subsection{Metodo 2: \texttt{getAgentOffers}}
+
+\subsubsection{Contesto}
+\begin{itemize}
+\item \textbf{Metodo testato}: \texttt{getAgentOffers(Long agentId, Pageable pageable)}
+\item \textbf{Scopo}: Recuperare una pagina di offerte associate a un agente specifico, arricchendo i dati con informazioni sulla proprietà e sull’utente.
+\item \textbf{Test case}: \texttt{testGetAgentOffers\_Success}
+\end{itemize}
+
+\subsubsection{Strategia}
+Il test verifica lo stato restituito dal servizio, assicurandosi che i dati della pagina di offerte siano completi, corretti e correttamente mappati nei DTO di risposta, incluse le relazioni verso utente e proprietà.
+
+\begin{itemize}
+
+\item \textbf{Classi di equivalenza individuate}:  
+Le classi di equivalenza sono definite sui parametri del metodo:
+
+\begin{itemize}
+    \item \textbf{\texttt{agentId}}:
+    \begin{itemize}
+        \item CE-A1: \texttt{agentId} valido e corrispondente a un agente presente nel sistema.
+        \item CE-A2: \texttt{agentId} non valido o inesistente, cioè la query restituisce una pagina vuota.
+        \item CE-A3: \texttt{agentId} nullo.
+    \end{itemize}
+    \item \textbf{\texttt{pageable}}:
+    \begin{itemize}
+        \item CE-P1: paginazione valida (dimensione pagina e indice validi).
+        \item CE-P2: paginazione con dimensione zero o negativa.
+    \end{itemize}
+\end{itemize}
+
+\item \textbf{Classi coperte dal test}:
+\begin{itemize}
+    \item CE-A1 – \texttt{agentId} valido
+    \item CE-P1 – paginazione valida
+\end{itemize}
+
+\item \textbf{Verifica}:  
+La correttezza del metodo è accertata tramite:
+\begin{itemize}
+    \item \texttt{assertNotNull(result)} e \texttt{assertEquals(size, ...)} per validare la pagina e il numero di offerte.
+    \item Asserzioni sui singoli elementi della pagina per verificare:
+    \begin{itemize}
+        \item correttezza degli ID delle offerte,
+        \item presenza e correttezza delle relazioni verso utente (\texttt{User}) e proprietà (\texttt{Property}),
+        \item coerenza dei dati rispetto al mock configurato.
+    \end{itemize}
+    \item \texttt{verify(offerRepository, times(1))} per garantire che la query verso il repository sia stata effettivamente invocata.
+\end{itemize}
+
+
+\end{itemize}
+\clearpage
+
+\subsection{Metodo 3: \texttt{calculateBoundingBox}}
+
+\subsubsection{Contesto}
+\begin{itemize}
+\item \textbf{Metodo testato}: \texttt{calculateBoundingBox(BigDecimal centerLatitude,\\
+BigDecimal centerLongitude, double radiusMeters)}
+\item \textbf{Scopo}: Calcolare il bounding box di un cerchio definito da una latitudine, longitudine e raggio in metri, considerando il caso particolare del passaggio dell'antimeridiano.
+\item \textbf{Test case}: \texttt{testAntimeridianCrossingAndContainment}
+\end{itemize}
+
+\subsubsection{Strategia}
+Il test è un test di unità puro, focalizzato sui valori limite e sui casi particolari geografici. L’obiettivo è verificare sia la correttezza numerica del bounding box sia la gestione dei punti rispetto al passaggio dell’antimeridiano.
+
+\begin{itemize}
+
+\item \textbf{Classi di equivalenza}:  
+Le classi di equivalenza sono definite sui parametri del metodo:
+
+\begin{itemize}
+    \item \textbf{\texttt{centerLatitude}}:
+    \begin{itemize}
+        \item CE-L1: latitudine valida compresa tra -90° e 90°.
+        \item CE-L2: latitudine ai limiti ±90°.
+        \item CE-L3: latitudine nulla o fuori range.
+    \end{itemize}
+
+    \item \textbf{\texttt{centerLongitude}}:
+    \begin{itemize}
+        \item CE-Lo1: longitudine valida compresa tra -180° e 180°.
+        \item CE-Lo2: longitudine vicino ai limiti ±180° (test passaggio antimeridiano).
+        \item CE-Lo3: longitudine nulla o fuori range.
+    \end{itemize}
+
+    \item \textbf{\texttt{radiusMeters}}:
+    \begin{itemize}
+        \item CE-R1: raggio positivo e non nullo.
+        \item CE-R2: raggio nullo o negativo.
+    \end{itemize}
+\end{itemize}
+
+\item \textbf{Classi coperte dal test}:
+\begin{itemize}
+    \item CE-L1 – latitudine valida all’equatore (0°)
+    \item CE-Lo2 – longitudine vicina a 180° per verificare il passaggio dell’antimeridiano
+    \item CE-R1 – raggio positivo sufficiente a coprire il passaggio dell’antimeridiano
+\end{itemize}
+
+\item \textbf{Strategia di verifica}:  
+La correttezza è verificata attraverso:
+\begin{itemize}
+    \item Controllo del bounding box generato, in particolare \texttt{minLon > maxLon} per rilevare il passaggio dell’antimeridiano.
+    \item Verifica che punti all’interno del raggio (vicino a ±179.95°) siano inclusi nel bounding box (\texttt{isPointInBoundingBox()}).
+\end{itemize}
+
+\end{itemize}
+\clearpage
+
+\subsection{Metodo 4: \texttt{getAgentVisits}}
+
+\subsubsection{Contesto}
+\begin{itemize}
+\item \textbf{Metodo testato}: \texttt{getAgentVisits(Long agentId, Pageable pageable)}
+\item \textbf{Scopo}: Restituire una pagina di visite associate a un agente specifico, arricchendo i dati con informazioni sulla proprietà, indirizzo e utente, gestendo la paginazione.
+\item \textbf{Test case}: \texttt{testGetAgentVisits\_ReturnsPage}
+\end{itemize}
+
+\subsubsection{Strategia}
+Il test verifica l’interazione tra il servizio e il repository, assicurandosi che la pagina restituita contenga le informazioni corrette e che il repository venga interrogato con i parametri appropriati.
+
+\begin{itemize}
+
+\item \textbf{Classi di equivalenza}: 
+Le classi di equivalenza sono definite sui parametri del metodo:
+
+\begin{itemize}
+    \item \textbf{\texttt{agentId}}:
+    \begin{itemize}
+        \item CE-A1: \texttt{agentId} valido corrispondente a un agente esistente.
+        \item CE-A2: \texttt{agentId} non valido o inesistente → restituzione di pagina vuota.
+        \item CE-A3: \texttt{agentId} nullo → comportamento dipendente dal servizio/repository (potenziale eccezione).
+    \end{itemize}
+
+    \item \textbf{\texttt{pageable}}:
+    \begin{itemize}
+        \item CE-P1: paginazione valida (dimensione pagina e indice validi).
+        \item CE-P2: paginazione con dimensione zero o negativa → gestione prevista dal framework.
+    \end{itemize}
+\end{itemize}
+
+\item \textbf{Classi coperte dal test}:
+\begin{itemize}
+    \item CE-A1 – \texttt{agentId} valido
+    \item CE-P1 – paginazione valida
+\end{itemize}
+
+\item \textbf{Copertura strutturale}:  
+Il test copre l’unico percorso logico del metodo, garantendo la \textbf{statement coverage} dell’interazione tra servizio e repository.
+
+\item \textbf{Verifica}:  
+La correttezza è accertata tramite:
+\begin{itemize}
+    \item \texttt{assertEquals(result, mockPage)} per confermare che il servizio restituisca la pagina attesa;
+    \item \texttt{verify(visitRepository).getAgentVisits(agentId, pageable)} per garantire che il repository sia stato invocato con i parametri corretti.
+\end{itemize}
+
+\end{itemize}
+\clearpage
+
+\section{Valutazione dell'Usabilità}
+La valutazione dell'usabilità è un processo fondamentale per garantire che un sistema software non solo sia funzionale, ma anche efficace, efficiente e soddisfacente per l'utente finale. Per DietiEstates25, è stato adottato un approccio multi-metodo che combina ispezioni euristiche condotte da esperti (noi) con test di usabilità che coinvolgono utenti reali. Questo approccio ha permesso di raccogliere dati sia qualitativi che quantitativi, offrendo una visione completa dei punti di forza dell'applicazione.
+
+\subsection{Expert Review (Ispezione Euristica)}
+L'ispezione euristica è una tecnica di valutazione in cui uno o più esperti esaminano l'interfaccia utente e la confrontano con un insieme di principi di usabilità riconosciuti. Per questa valutazione, sono state utilizzate le 10 euristiche di usabilità di Nielsen-Molich, adattate al contesto di DietiEstates25.
+
+\subsubsection{Checklist Euristica e Risultati}
+La checklist è stata applicata sistematicamente a tutte le principali funzionalità dell'applicazione, dalla registrazione alla gestione delle offerte. I risultati sono riassunti nella tabella seguente.
+
+\begin{table}[H]
+    \centering
+    \def\arraystretch{1.5}
+    \begin{tabularx}{\linewidth}{|p{3cm}|X|}
+        \hline
+        \textbf{Euristica} & \textbf{Risultati e Osservazioni per DietiEstates25} \\
+        \hline
+        \textbf{Dialoghi semplici e naturali} & \textit{Conforme.} L'interfaccia è pulita e priva di elementi superflui. Le informazioni sono presentate in modo chiaro, focalizzando l'attenzione sui contenuti rilevanti (es. dettagli dell'immobile, offerte). \\
+        \hline
+        \textbf{Parlare la lingua dell'utente} & \textit{Conforme.} Il linguaggio utilizzato (es. "offerta", "visita", "annuncio") è familiare per il dominio immobiliare. Le icone sono intuitive e universalmente riconosciute dagli utenti. \\
+        \hline
+        \textbf{Minimizzare il carico di memoria dell'utente} & \textit{Conforme.} Le informazioni importanti sono sempre accessibili, ad esempio nello storico, riducendo il carico cognitivo dell'utente. \\
+        \hline
+        \textbf{Consistenza} & \textit{Conforme.} L'applicazione mantiene una forte consistenza visiva e comportamentale. I pulsanti di azione primaria sono sempre posizionati in modo simile e il design system è applicato uniformemente in tutte le schermate. \\
+        \hline
+        \textbf{Feedback} & \textit{Conforme.} L'applicazione fornisce feedback costanti ma non invadenti sulle operazioni. Ad esempio, un indicatore di caricamento è sempre visibile durante le chiamate di rete e messaggi di conferma appaiono dopo azioni importanti come l'invio di un'offerta. \\
+        \hline
+        \textbf{Uscite chiaramente definite} & \textit{Conforme.} Gli utenti possono sempre facilmente annullare operazioni come la compilazione di un form. \\
+        \hline
+        \textbf{Shortcuts} & \textit{Non applicabile.} L'interfaccia è sufficientemente semplice per i neofiti. Non sono presenti scorciatoie per utenti esperti, ma data la natura dell'app non sono considerate essenziali. \\
+        \hline
+        \textbf{Buoni messaggi di errore} & \textit{Conforme.} I messaggi di errore sono chiari e costruttivi. Ad esempio, se il login fallisce, il sistema specifica se il problema è la password o l'username, senza essere vago. \\
+        \hline
+        \textbf{Prevenzione degli errori} & \textit{Conforme.} La validazione dei form previene molti errori comuni (es. formato email non valido). Ci sono inoltre controlli di conferma prima di azioni importanti. \\
+        \hline
+        \textbf{Aiuto e documentazione} & \textit{Non applicabile.} Non è presente una sezione di aiuto dedicata. Tuttavia, la semplicità dell'applicazione e le etichette chiare rendono il suo utilizzo autoesplicativo, minimizzando la necessità di una documentazione formale per l'utente finale. \\
+        \hline
+    \end{tabularx}
+    \caption{Risultati dell'ispezione euristica.}
+    \label{tab:euristiche}
+\end{table}
+
+\subsection{Test con Utenti}
+Per integrare i risultati dell'analisi euristica, è stato condotto un esperimento con un piccolo gruppo di utenti potenziali rappresentativi delle principali fasce di età.
+
+\subsubsection{Soggetti Reclutati}
+Nel gruppo di test sono stati coinvolti 5 utenti, di età compresa tra i 20 e i 60 anni, con familiarità nell'uso di applicazioni mobile ma senza esperienza specifica nel settore immobiliare. Essi rappresentano un campione diversificato di utenti potenziali.
+
+\subsubsection{Procedura Sperimentale}
+A ciascun utente è stato chiesto di eseguire una serie di compiti sull'applicazione, utilizzando il protocollo \textit{think-aloud} (pensare a voce alta) per verbalizzare i propri pensieri e le proprie difficoltà. Le sessioni, della durata media di 15 minuti, sono state osservate da un membro del team. I compiti assegnati (con rispettivi tempi di completamento) erano:
+\begin{enumerate}
+    \item Effettuare la registrazione di un nuovo account come cliente.
+    \item Eseguire una ricerca per un immobile di tipo "Appartamento" con svariati filtri.
+    \item Selezionare un immobile dai risultati e visualizzarne i dettagli.
+    \item Prenotare una visita per l'immobile scelto.
+    \item Inviare un'offerta di acquisto per lo stesso immobile.
+\end{enumerate}
+
+\subsubsection{Metriche Considerate}
+Sono state raccolte le seguenti metriche:
+\begin{itemize}
+    \item \textbf{Tasso di successo dei compiti}: Percentuale di utenti che ha completato con successo ciascun compito.
+    \item \textbf{Tempo di completamento}: Tempo impiegato per portare a termine ogni compito.
+    \item \textbf{Numero di errori}: Numero di azioni errate o vicoli ciechi incontrati.
+    \item \textbf{Feedback soggettivo}: Commenti, critiche e suggerimenti raccolti durante il protocollo \textit{think-aloud}.
+\end{itemize}
+
+\subsubsection{Survey}
+Al termine della sessione, a ogni partecipante è stato chiesto di compilare un breve questionario di valutazione basato su una scala Likert (1 = Per niente d'accordo, 5 = Pienamente d'accordo). Di seguito sono riportate le affermazioni e i relativi punteggi medi raccolti:
+\begin{itemize}
+    \item \textbf{Q1 (Semplicità d'uso)}: Ho trovato l'applicazione semplice da usare. 4.6 / 5
+    \item \textbf{Q2 (Necessità di supporto)}: Penso che avrei bisogno di supporto tecnico per essere in grado di usare questa applicazione. 1.2 / 5 
+    \item \textbf{Q3 (Integrazione delle funzioni)}: Ho trovato le varie funzioni in questa applicazione ben integrate tra loro. 4.8 / 5
+    \item \textbf{Q4 (Piacevolezza grafica)}: Ho trovato l'interfaccia graficamente piacevole. 4.8 / 5
+    \item \textbf{Q5 (Comfort d'uso)}: Mi sono sentito a mio agio nell'utilizzare l'applicazione. 5 / 5
+\end{itemize}
+
+\subsubsection{Risultati finali}
+I risultati del test sono positivi. Tutti e 5 gli utenti (100\%) sono riusciti a completare con successo tutti i compiti. Un solo utente meno pratico ha richiesto assistenza per i compiti 1 e 4.\\
+I tempi di completamento medi brevi sono indice di un'interfaccia intuitiva e ben progettata.\\
+I commenti qualitativi hanno evidenziato un apprezzamento generale per la pulizia dell'interfaccia e la fluidità della navigazione.\\
+I risultati del survey, infine, confermano l'elevata usabilità percepita dagli utenti.
+
+
+
+\section{SonarQube}
+Lo strumento di analisi della qualità del codice SonarQube è stato utilizzato per il lato back-end di DietiEstates, individuando potenziali problemi e aree di miglioramento.\\
+L'analisi ha permesso di identificare vulnerabilità, code smells e duplicazioni, contribuendo a mantenere un codice pulito, facilmente manutenibile e scalabile.\\
+I risultati dell'analisi sono stati integrati nel processo di sviluppo, consentendo di apportare le necessarie correzioni e miglioramenti al codice. \\
+Il report corrente suggerisce che non sono presenti issue aperte e che il Quality Gate è stato superato, come visibile attraverso \href{https://sonarcloud.io/project/overview?id=TheFabbest\_DietiEstates25-backend}{SonarCloud}.
+
+\begin{figure}[!htb]
+    \includegraphics[width=\textwidth]{figures/SonarQubeReport.png}
+    \centering
+    \caption{\textit{Report} di SonarCloud per il back-end}
+\end{figure}
+
+
+\section{Accessibilità}
+TODO
+Per garantire l'accessibilità dell'applicazione, sono state adottate le linee guida WCAG livello AA\@.\\
+Sono stati usati strumenti automatici per verificare la conformità alle linee guida, ad esempio nella scelta dei colori, identificando e correggendo eventuali problemi di accessibilità.\\
+TODO aggiungere palette
+TODO traduzioni
+
+\appendix
+\chapter{Evidenza di versioning}
+Il versioning del codice sorgente è stato gestito tramite \textbf{Git} con hosting del repository su \textbf{GitHub}. \\
+Git è un sistema di versionamento distribuito che registra in modo incrementale lo stato dei file tramite commit, mantenendo uno storico completo e permettendo branching e merging. Ogni copia locale è un repository completo. GitHub è invece una piattaforma remota che ospita repository Git, aggiungendo funzionalità di collaborazione come pull request e issue tracking. Il suo utilizzo ha permesso di tracciare la storia delle modifiche, facilitare la collaborazione tra i membri del team e integrare il controllo qualità con SonarQube.\\
+E' possibile visualizzare i repository del \href{https://github.com/TheFabbest/DietiEstates25-backend}{back-end} e del \href{https://github.com/LucaBarrella/INGSW-Project}{front-end} pubblicamente.
+
+\subsubsection{Dati riepilogativi} TODO
+\begin{itemize}
+    \item \textbf{Numero di contributors}:
+    \item \textbf{Numero di commit}: 
+    \item \textbf{Frequenza dei commit}:
+\end{itemize}
+
+TODO sistemare impaginazione
+
+\clearpage
+
+\end{document}

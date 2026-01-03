@@ -1,0 +1,31 @@
+REQUISITI SOFTWARE
+glossario
+use case diagrams
+personas
+requisiti non funzionali e di dominio
+use case tabulari idk
+mockup
+
+DESIGN DEL SISTEMA
+obiettivi di design - qualità del software
+architettura
+database - tecnologia, schema ecc.
+back-end - architettura, tecnologie, api rest, sicurezza, pattern
+front-end - tecnologia, architettura/pattern, material design?, riutilizzabilità/modularità
+
+TESTING E USABILITÀ
+tecnologie xUnit
+strategia di testing/copertura
+riporta alcuni test e scelte di copertura, divisione classi ecc.
+checklist sistematica
+utenti reali
+
+
+# cose da fare inserite da Luca.
+
+[ x ] ⁠Use Case Diagram
+[ ] ⁠Mock-up
+[ ] 4 Cockburn
+[ ] Class Diagramm
+[ ] Sequence Diagramm
+[ ] ⁠Sezione sul versioning (GitHub)

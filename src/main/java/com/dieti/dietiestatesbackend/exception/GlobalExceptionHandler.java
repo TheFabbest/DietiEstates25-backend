@@ -271,6 +271,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(jakarta.persistence.PersistenceException.class)
+    public ResponseEntity<ErrorResponse> handlePersistenceException(jakarta.persistence.PersistenceException ex) {
+        LoggerFactory.getLogger(GlobalExceptionHandler.class).error("Errore persistenza: {}", ex.getMessage());
+        String message = ex.getMessage();
+        if (ex.getCause() != null) {
+            message += " | Causa: " + ex.getCause().getMessage();
+        }
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Errore durante il salvataggio",
+                message,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         // Log the full exception for debugging purposes
@@ -279,7 +295,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Errore interno del server",
-                "Si è verificato un errore imprevisto. Riprovare più tardi.",
+                "Si è verificato un errore imprevisto. Riprovare più tardi. Dettaglio: " + ex.getMessage(),
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

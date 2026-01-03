@@ -15,4 +15,8 @@ public abstract sealed class CreateBuildingPropertyRequest extends AbstractCreat
         permits CreateResidentialPropertyRequest, CreateCommercialPropertyRequest, CreateGaragePropertyRequest {
 
     private Integer numberOfFloors;
+
+    private Integer floor;
+
+    private Integer yearBuilt;
 }

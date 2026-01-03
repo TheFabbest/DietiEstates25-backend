@@ -1,0 +1,31 @@
+{
+  "addressRequest": {
+    "building": "Scala A",
+    "city": "Roma",
+    "country": "Italia",
+    "latitude": 41.8933203,
+    "longitude": 12.4829321,
+    "province": "RO",
+    "street": "Viale delle ginestre",
+    "streetNumber": "49"
+  },
+  "area": 324234,
+  "condition": "RENOVATED",
+  "contractType": "SALE",
+  "description": "dffsfdsfsfgjsdngfdngdfjfjgdjgfdgfdgfdgd",
+  "energyRating": "E",
+  "floor": 0,
+  "garden": "ABSENT",
+  "hasElevator": true,
+  "heatingType": "Centralized",
+  "isFurnished": true,
+  "numberOfBathrooms": 1,
+  "numberOfFloors": 1,
+  "numberOfRooms": 1,
+  "parkingSpaces": 0,
+  "pool": true,
+  "price": 342,
+  "propertyCategoryName": "Apartment",
+  "propertyType": "RESIDENTIAL",
+  "yearBuilt": 1990
+}

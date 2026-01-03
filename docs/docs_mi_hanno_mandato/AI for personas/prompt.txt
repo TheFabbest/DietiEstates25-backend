@@ -1,0 +1,14 @@
+colorful ((studio portrait)) of 35-year-old Italian woman, ((Squinch pose)), ((celestial blue)) color background with copy space, studio light, highly detailed, hyper-realistic, symmetric face, white short hair, smiling, wearing glasses, wearing white shirt
+
+seed: 1178382856
+model: realisticvision
+clip skip: enabled
+inference steps: 21
+guidance scale: 7
+prompt strength: 0.8
+image quality: 95
+fix incorrect faces and eyes: GFPGANv1.4
+
+
+
+cropped: 585, 585

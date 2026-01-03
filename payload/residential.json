@@ -6,7 +6,7 @@
   "energyRating":"A1",
   "area":80,
   "yearBuilt":1998,
-  "contractType":"sale",
+  "contractType":"SALE",
   "propertyCategoryName":"Apartment",
   "addressRequest":{
     "country":"Italy",
@@ -18,7 +18,7 @@
   "numberOfRooms":3,
   "numberOfBathrooms":2,
   "parkingSpaces":1,
-  "heatingType":"gas",
+  "heatingType":"Centralized",
   "garden":"ABSENT",
   "floor":1,
   "numberOfFloors":2,

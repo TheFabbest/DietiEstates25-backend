@@ -38,12 +38,6 @@ public final class CreateResidentialPropertyRequest extends CreateBuildingProper
 
     private boolean isFurnished;
 
-    @NotNull @Min(0) // Piano (0 = piano terra)
-    private Integer floor;
-
-    @NotNull @Min(1)
-    private Integer numberOfFloors;
-
     private boolean hasElevator;
 
 
